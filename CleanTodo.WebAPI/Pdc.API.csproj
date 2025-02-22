@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CleanTodo.Application\CleanTodo.Application.csproj" />
-    <ProjectReference Include="..\CleanTodo.Infrastructure\CleanTodo.Infrastructure.csproj" />
+    <ProjectReference Include="..\CleanTodo.Application\Pdc.Application.csproj" />
+    <ProjectReference Include="..\CleanTodo.Infrastructure\Pdc.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

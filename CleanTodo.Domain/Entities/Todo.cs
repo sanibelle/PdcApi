@@ -7,10 +7,6 @@ public class Todo
     public bool IsCompleted { get; set; }
     public DateTime Date { get; set; }
 
-    /// <summary>
-    /// Constructeur qui crée mon guid, date
-    /// </summary>
-    /// <param name="text">Le texte du todo.</param>
     public Todo(string text)
     {
         Text = text;
