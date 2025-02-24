@@ -1,5 +1,4 @@
-﻿using Pdc.Application.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 public class AppDbContext : DbContext
 {
@@ -7,7 +6,7 @@ public class AppDbContext : DbContext
         : base(options)
     {
     }
-    public DbSet<Todo> Todos { get; set; }
+    //public DbSet<Todo> Todos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,5 +1,5 @@
-﻿using Pdc.Application.DTOS;
-using FluentValidation;
+﻿using FluentValidation;
+using Pdc.Application.DTOS;
 
 namespace Pdc.Application.Validators;
 
@@ -8,8 +8,8 @@ public class CreateTodoValidation : AbstractValidator<CreateTodoDto>
 {
     public CreateTodoValidation()
     {
-        RuleFor(x => x.Title)
-            .NotEmpty()
-            .MaximumLength(200);
+        //RuleFor(x => x.Title)
+        //    .NotEmpty()
+        //    .MaximumLength(200);
     }
 }

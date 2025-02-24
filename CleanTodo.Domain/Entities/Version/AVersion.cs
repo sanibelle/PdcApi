@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Pdc.Domain.Entities.Version;
 
-namespace Pdc.Domain.Entities.Version
+public abstract class AVersion
 {
-    internal class AVersion
-    {
-    }
+    public required Guid Id { get; set; }
+    public required DateTime CreatedAt { get; set; }
+    public required AVersion NextVersion { get; set; }
+    public IList<Change>? Changes { get; set; }
 }

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Pdc.Domain.Entities.Syllabus;
 
-namespace Pdc.Domain.Entities.Syllabus
+public class Module
 {
-    internal class Module
-    {
-    }
+    public required Guid Id { get; set; }
+    public required string Name { get; set; }
+    public required string Description { get; set; }
+    public required int Position { get; set; }
 }

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Pdc.Domain.Entities.Version;
 
-namespace Pdc.Domain.Entities.Version
+public class MinisterialSpecificationVersion : AVersion
 {
-    internal class MinisterialSpecificationVersion
-    {
-    }
+    public required string YearOfRevision { get; set; } // 2021
 }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Pdc.Domain.Entities.Version;
 
-namespace Pdc.Domain.Entities.Version
+public class MasterCoursePlanVersion : AVersion
 {
-    internal class MasterCoursePlanVersion
-    {
-    }
+    public required string Description { get; set; } // On a retiré xyz.
+
+    //TODO une liste des modifications (CRUD) avec les différents changements effectués.
 }

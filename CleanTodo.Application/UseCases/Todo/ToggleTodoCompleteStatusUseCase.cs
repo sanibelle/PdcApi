@@ -15,9 +15,9 @@ public class ToggleTodoCompleteStatusUseCase : IToggleTodoCompleteStatusUseCase
         _todoService = todoService;
     }
 
-    public async Task Execute(Guid id)
-    {
-        await _todoService.FindById(id);
-        await _todoRepository.ToggleCompleteStatus(id);
-    }
+    //public async Task Execute(Guid id)
+    //{
+    //    await _todoService.FindById(id);
+    //    await _todoRepository.ToggleCompleteStatus(id);
+    //}
 }

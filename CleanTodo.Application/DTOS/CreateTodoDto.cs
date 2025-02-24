@@ -2,8 +2,8 @@
 
 public class CreateTodoDto
 {
-    public string Title { get; set; }
+    //public string Title { get; set; }
 
-    public CreateTodoDto() { }
+    //public CreateTodoDto() { }
 
 }

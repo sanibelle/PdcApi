@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Pdc.Domain.Entities.Version;
 
-namespace Pdc.Domain.Entities.Syllabus
+namespace Pdc.Domain.Entities.Syllabus;
+
+public class Syllabus
 {
-    internal class Syllabus
-    {
-    }
+    public required Guid Id { get; set; }
+    public required CourseFramework.CourseFramework MasterCoursePlan { get; set; }
+    public required SyllabusVersion SyllabusVersion { get; set; }
+    public required IList<Module> Modules { get; set; }
 }
