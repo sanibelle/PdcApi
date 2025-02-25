@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Pdc.Domain.Entities.CourseFramework;
 
 public class AppDbContext : DbContext
 {
@@ -6,10 +7,20 @@ public class AppDbContext : DbContext
         : base(options)
     {
     }
-    //public DbSet<Todo> Todos { get; set; }
+
+    public DbSet<ProgramOfStudy> ProgramOfStudies { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
+        // If you need additional configuration for abstract classes or TPH inheritance
+        //modelBuilder.Entity<ContentElement>()
+        //    .HasDiscriminator<string>("ContentElementType")
+        //    .HasValue<CourseFrameworkContentElement>(nameof(CourseFrameworkContentElement));
+
+        //modelBuilder.Entity<ContentSpecification>()
+        //    .HasDiscriminator<string>("ContentSpecificationType")
+        //    .HasValue<CourseFrameworkContentSpecification>(nameof(CourseFrameworkContentSpecification));
     }
 }
