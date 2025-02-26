@@ -3,11 +3,11 @@ using Pdc.Application.DTOS;
 
 namespace Pdc.Application.Validators;
 
-// Valide automatiquement CreateTodoDto quand il est créé dans le controller
-public class CreateTodoValidation : AbstractValidator<CreateTodoDto>
+public class reateProgramOfStudyValidation : AbstractValidator<CreateProgramOfStudyDto>
 {
-    public CreateTodoValidation()
+    public reateProgramOfStudyValidation()
     {
+        //TODO
         //RuleFor(x => x.Title)
         //    .NotEmpty()
         //    .MaximumLength(200);

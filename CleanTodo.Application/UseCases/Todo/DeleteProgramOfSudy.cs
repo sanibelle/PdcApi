@@ -1,14 +1,11 @@
-﻿using Pdc.Application.Service.Todo;
-using Pdc.Domain.Interfaces.Repositories;
+﻿namespace Pdc.Application.UseCase;
 
-namespace Pdc.Application.UseCase;
-
-public class DeleteTodoUseCase : IDeleteTodoUseCase
+public class DeleteProgramOfSudy : IDeleteTodoUseCase
 {
     private readonly ITodoRepository _todoRepository;
     private readonly ITodoService _todoService;
 
-    public DeleteTodoUseCase(ITodoRepository todoRepository, ITodoService todoService)
+    public DeleteProgramOfSudy(ITodoRepository todoRepository, ITodoService todoService)
     {
         _todoRepository = todoRepository;
         _todoService = todoService;

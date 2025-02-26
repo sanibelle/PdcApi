@@ -12,9 +12,9 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddScoped<ITodoService, TodoService>();
-        services.AddScoped<ICreateTodoUseCase, CreateTodoUseCase>();
-        services.AddScoped<IDeleteTodoUseCase, DeleteTodoUseCase>();
-        services.AddScoped<IGetAllTodosUseCase, GetAllTodosUseCase>();
+        services.AddScoped<ICreateTodoUseCase, CreateProgramOfSudy>();
+        services.AddScoped<IDeleteTodoUseCase, DeleteProgramOfSudy>();
+        services.AddScoped<IGetAllProgramOfSudyUseCase, GetAllProgramOfSudy>();
         services.AddScoped<IToggleTodoCompleteStatusUseCase, ToggleTodoCompleteStatusUseCase>();
 
         return services;

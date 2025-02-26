@@ -1,6 +1,6 @@
 ﻿namespace Pdc.Application.Service.Todo;
 
-public interface ITodoService
+public interface IProgramOfSudyService
 {
     //public Task<TodoDto> FindById(Guid id);
 

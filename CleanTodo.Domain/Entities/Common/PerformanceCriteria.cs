@@ -3,5 +3,5 @@
 public abstract class PerformanceCriteria : Changeable
 {
     public required int Position { get; set; }
-    public required IEnumerable<ContentSpecification> ContentElements { get; set; }
+    public required IEnumerable<ContentSpecification> ContentSpecifications { get; set; }
 }

@@ -17,7 +17,7 @@ public static class DependencyInjection
                 b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
 
         // Register Repositories
-        services.AddScoped<ITodoRepository, TodoRepository>();
+        services.AddScoped<IProgramOfStudyRespository, ProgramOfStudyRespository>();
 
         return services;
     }

@@ -2,13 +2,13 @@
 
 namespace Pdc.Application.UseCase;
 
-public class CreateTodoUseCase : ICreateTodoUseCase
+public class CreateProgramOfSudy : IProgramOfStudyUseCase
 {
-    private readonly ITodoRepository _todoRepository;
+    private readonly IProgramOfStudyRespository _programOfStudyRespository;
 
-    public CreateTodoUseCase(ITodoRepository todoRepository)
+    public CreateProgramOfSudy(IProgramOfStudyRespository programOfStudyRespository)
     {
-        _todoRepository = todoRepository;
+        _programOfStudyRespository = programOfStudyRespository;
     }
 
     //public async Task<TodoDto> Execute(CreateTodoDto createTodoDto)
