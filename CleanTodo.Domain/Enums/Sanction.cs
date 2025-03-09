@@ -1,6 +1,6 @@
 ﻿namespace Pdc.Domain.Enums;
 
-public enum SacntionType
+public enum SanctionType
 {
     DEC,
     PREU,

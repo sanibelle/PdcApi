@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Infrastructure.Data;
+using Pdc.Infrastructure.Repositories;
 
 namespace Pdc.Infrastructure;
 public static class DependencyInjection

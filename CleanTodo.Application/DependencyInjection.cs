@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using Pdc.Application.Service.Todo;
+using Pdc.Application.Mappings;
 using Pdc.Application.UseCase;
+using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Infrastructure.Repositories;
 using System.Reflection;
 
 namespace Pdc.Application;
@@ -11,11 +13,12 @@ public static class DependencyInjection
     {
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        services.AddScoped<ITodoService, TodoService>();
-        services.AddScoped<ICreateTodoUseCase, CreateProgramOfSudy>();
-        services.AddScoped<IDeleteTodoUseCase, DeleteProgramOfSudy>();
-        services.AddScoped<IGetAllProgramOfSudyUseCase, GetAllProgramOfSudy>();
-        services.AddScoped<IToggleTodoCompleteStatusUseCase, ToggleTodoCompleteStatusUseCase>();
+        services.AddScoped<IProgramOfStudyRespository, ProgramOfStudyRespository>();
+        services.AddScoped<ICreateProgramOfStudyUseCase, CreateProgramOfSudy>();
+        services.AddScoped<IDeleteProgramOfStudyUseCase, DeleteProgramOfSudy>();
+        services.AddScoped<IGetAllProgramOfStudyUseCase, GetAllProgramOfSudy>();
+
+        services.AddAutoMapper(typeof(MappingProfile));
 
         return services;
     }

@@ -14,7 +14,7 @@ public class ProgramOfSudyService : IProgramOfSudyService
         _programOfStudyRespository = programOfStudyRespository;
     }
 
-    public async Task<ProgramOfStudyDto> FindById(Guid id)
+    public async Task<ProgramOfStudyDTO> FindById(Guid id)
     {
         var programOfStudy = await _programOfStudyRespository.FindById(id);
         if (programOfStudy == null)
@@ -22,7 +22,7 @@ public class ProgramOfSudyService : IProgramOfSudyService
             throw new NotFoundException();
         }
         //TODO automapper
-        return new ProgramOfStudyDto
+        return new ProgramOfStudyDTO
         {
             Id = programOfStudy.Id,
             Code = programOfStudy.Code,
@@ -41,11 +41,11 @@ public class ProgramOfSudyService : IProgramOfSudyService
         await _programOfStudyRespository.Delete(id);
     }
 
-    public async Task<IList<ProgramOfStudyDto>> GetAll()
+    public async Task<IList<ProgramOfStudyDTO>> GetAll()
     {
         var programsOfStudy = await _programOfStudyRespository.GetAll();
         //TODO automapper
-        return programsOfStudy.Select(x => new ProgramOfStudyDto
+        return programsOfStudy.Select(x => new ProgramOfStudyDTO
         {
             Id = x.Id,
             Code = x.Code,

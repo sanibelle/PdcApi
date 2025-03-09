@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pdc.Domain.Entities.MinisterialSpecification;
+namespace Pdc.Infrastructure.Data.Configurations;
 
 public class MinisterialCompetencyConfiguration : IEntityTypeConfiguration<MinisterialCompetency>
 {

@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Pdc.Domain.Entities.CourseFramework;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Infrastructure.Data;
+
+namespace Pdc.Infrastructure.Repositories;
 
 public class ProgramOfStudyRespository : IProgramOfStudyRespository
 {

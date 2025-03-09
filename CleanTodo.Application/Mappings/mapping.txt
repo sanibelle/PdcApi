@@ -1,3 +1,0 @@
-﻿Pour le projet, on va utiliser automapper.
-
-Pour rendre plus simple notre OpenId en conception, on va oublier ce bout la.

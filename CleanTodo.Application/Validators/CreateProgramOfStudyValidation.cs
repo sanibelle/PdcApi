@@ -3,9 +3,9 @@ using Pdc.Application.DTOS;
 
 namespace Pdc.Application.Validators;
 
-public class reateProgramOfStudyValidation : AbstractValidator<CreateProgramOfStudyDto>
+public class CreateProgramOfStudyValidation : AbstractValidator<CreateProgramOfStudyDTO>
 {
-    public reateProgramOfStudyValidation()
+    public CreateProgramOfStudyValidation()
     {
         //TODO
         //RuleFor(x => x.Title)

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pdc.Domain.Entities.CourseFramework;
+namespace Pdc.Infrastructure.Data;
 
 public class AppDbContext : DbContext
 {

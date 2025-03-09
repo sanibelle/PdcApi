@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pdc.Domain.Entities.CourseFramework;
+namespace Pdc.Infrastructure.Data.Configurations;
 
 public class ProgramOfStudyConfiguration : IEntityTypeConfiguration<ProgramOfStudy>
 {
