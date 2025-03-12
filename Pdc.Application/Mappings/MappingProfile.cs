@@ -9,7 +9,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<ProgramOfStudy, ProgramOfStudyDTO>().ReverseMap();
-        CreateMap<CreateProgramOfStudyDTO, ProgramOfStudy>().ReverseMap();
+        CreateMap<UpsertProgramOfStudyDTO, ProgramOfStudy>().ReverseMap();
 
     }
 }

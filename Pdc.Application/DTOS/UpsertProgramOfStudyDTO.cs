@@ -2,7 +2,7 @@
 
 namespace Pdc.Application.DTOS;
 
-public class CreateProgramOfStudyDTO
+public class UpsertProgramOfStudyDTO
 {
     public required string Code { get; set; } //420.B0
     public required string Name { get; set; } //Techniques de l'informatique
@@ -12,5 +12,5 @@ public class CreateProgramOfStudyDTO
     public int TotalDurationHours { get; set; } // 5730
     public DateOnly PublishedOn { get; set; }
 
-    public CreateProgramOfStudyDTO() { }
+    public UpsertProgramOfStudyDTO() { }
 }

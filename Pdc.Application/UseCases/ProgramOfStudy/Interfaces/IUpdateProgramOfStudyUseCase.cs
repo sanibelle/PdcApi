@@ -4,5 +4,5 @@ namespace Pdc.Application.UseCase;
 
 public interface IUpdateProgramOfStudyUseCase
 {
-    Task Execute(ProgramOfStudyDTO programOfStudy);
+    Task<ProgramOfStudyDTO> Execute(Guid id, UpsertProgramOfStudyDTO programOfStudy);
 }

@@ -31,7 +31,7 @@ namespace Pdc.E2ETests
         public async Task GivenNewProgram_WhenCreateProgramOfStudy_ThenShouldAddNewProgram()
         {
             // Arrange
-            CreateProgramOfStudyDTO newProgram = new CreateProgramOfStudyDTO()
+            UpsertProgramOfStudyDTO newProgram = new UpsertProgramOfStudyDTO()
             {
                 Code = "420.B0",
                 Name = "Techniques de l'informatique",
@@ -63,7 +63,7 @@ namespace Pdc.E2ETests
         public async Task GivenExistingProgram_WhenDeleteProgramOfStudy_ThenShouldRemoveProgram()
         {
             // Arrange
-            CreateProgramOfStudyDTO newProgram = new CreateProgramOfStudyDTO()
+            UpsertProgramOfStudyDTO newProgram = new UpsertProgramOfStudyDTO()
             {
                 Code = "420.B0",
                 Name = "Techniques de l'informatique",
@@ -86,6 +86,48 @@ namespace Pdc.E2ETests
             // Assert - Verify the program was deleted
             var getResponse = await _client.GetAsync($"/api/programofstudy/{createdProgram.Id}");
             Assert.That(getResponse.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
+        }
+
+        [Test]
+        public async Task GivenExistingProgram_WhenUpdateProgramOfStudy_ThenShouldUpdateProgram()
+        {
+            // Arrange
+            UpsertProgramOfStudyDTO newProgram = new UpsertProgramOfStudyDTO()
+            {
+                Code = "420.B0",
+                Name = "Techniques de l'informatique",
+                Sanction = Pdc.Domain.Enums.SanctionType.DEC,
+                MonthsDuration = 36,
+                SpecificDurationHours = 2010,
+                TotalDurationHours = 5730,
+                PublishedOn = DateOnly.FromDateTime(DateTime.Now)
+            };
+
+            ProgramOfStudyDTO updatedProgramData = new ProgramOfStudyDTO()
+            {
+                Code = "421.B0",
+                Name = "Techniques de l'informatique 2.0",
+                Sanction = Pdc.Domain.Enums.SanctionType.AEC,
+                MonthsDuration = 35,
+                SpecificDurationHours = 53,
+                TotalDurationHours = 35,
+                PublishedOn = DateOnly.FromDateTime(DateTime.Now)
+            };
+
+            // Act - Create the program
+            var createResponse = await _client.PostAsJsonAsync("/api/programofstudy", newProgram);
+            createResponse.EnsureSuccessStatusCode();
+            var createdProgram = await createResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
+
+            // Act - Uodate the program
+            updatedProgramData.Id = createdProgram.Id;
+            var updateResponse = await _client.PutAsJsonAsync($"/api/programofstudy/{updatedProgramData.Id}", updatedProgramData);
+            updateResponse.EnsureSuccessStatusCode();
+            var updatedProgram = await updateResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
+
+
+            updatedProgram.Should().NotBeEquivalentTo(createdProgram, options =>
+                options.ExcludingMissingMembers());
         }
 
     }

@@ -28,6 +28,13 @@ public class ProgramOfStudyRespository : IProgramOfStudyRespository
         return newProgramOfStudy.Entity;
     }
 
+    public async Task<ProgramOfStudy> Update(ProgramOfStudy programOfStudy)
+    {
+        EntityEntry<ProgramOfStudy> updatedProgram = _context.ProgramOfStudies.Update(programOfStudy);
+        await _context.SaveChangesAsync();
+        return updatedProgram.Entity;
+    }
+
     public async Task Delete(Guid id)
     {
         ProgramOfStudy programOfStudy = await FindById(id);
