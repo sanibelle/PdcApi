@@ -4,5 +4,5 @@ namespace Pdc.Application.UseCase;
 
 public interface ICreateProgramOfStudyUseCase
 {
-    Task<ProgramOfStudyDTO> Execute(UpsertProgramOfStudyDTO programOfStudy);
+    Task<ProgramOfStudyDTO> Execute(CreateProgramOfStudyDTO programOfStudy);
 }

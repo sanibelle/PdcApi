@@ -7,12 +7,12 @@ using Pdc.Domain.Interfaces.Repositories;
 
 namespace Pdc.Application.UseCase;
 
-public class GetProgramOfSudy : IGetProgramOfStudyUseCase
+public class GetProgramOfStudy : IGetProgramOfStudyUseCase
 {
     private readonly IProgramOfStudyRespository _programOfStudyRespository;
     private readonly IMapper _mapper;
 
-    public GetProgramOfSudy(IProgramOfStudyRespository programOfStudyRespository, IMapper mapper)
+    public GetProgramOfStudy(IProgramOfStudyRespository programOfStudyRespository, IMapper mapper)
     {
         _programOfStudyRespository = programOfStudyRespository;
         _mapper = mapper;
@@ -25,7 +25,7 @@ public class GetProgramOfSudy : IGetProgramOfStudyUseCase
             ProgramOfStudy program = await _programOfStudyRespository.FindById(id);
             return _mapper.Map<ProgramOfStudyDTO>(program);
         }
-        catch (EntityNotFoundException ex)
+        catch (EntityNotFoundException)
         {
             throw new NotFoundException();
         }

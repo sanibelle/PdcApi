@@ -3,11 +3,11 @@ using Pdc.Domain.Interfaces.Repositories;
 
 namespace Pdc.Application.UseCase;
 
-public class DeleteProgramOfSudy : IDeleteProgramOfStudyUseCase
+public class DeleteProgramOfStudy : IDeleteProgramOfStudyUseCase
 {
     private readonly IProgramOfStudyRespository _programOfStudyRespository;
 
-    public DeleteProgramOfSudy(IProgramOfStudyRespository programOfStudyRespository)
+    public DeleteProgramOfStudy(IProgramOfStudyRespository programOfStudyRespository)
     {
         _programOfStudyRespository = programOfStudyRespository;
     }

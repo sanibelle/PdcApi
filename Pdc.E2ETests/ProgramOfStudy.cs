@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using Pdc.Application.DTOS;
+using Pdc.Domain.Entities.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace Pdc.E2ETests
         public async Task GivenNewProgram_WhenCreateProgramOfStudy_ThenShouldAddNewProgram()
         {
             // Arrange
-            UpsertProgramOfStudyDTO newProgram = new UpsertProgramOfStudyDTO()
+            CreateProgramOfStudyDTO newProgram = new CreateProgramOfStudyDTO()
             {
                 Code = "420.B0",
                 Name = "Techniques de l'informatique",
@@ -39,7 +40,9 @@ namespace Pdc.E2ETests
                 MonthsDuration = 36,
                 SpecificDurationHours = 2010,
                 TotalDurationHours = 5730,
-                PublishedOn = DateOnly.FromDateTime(DateTime.Now)
+                PublishedOn = DateOnly.FromDateTime(DateTime.Now),
+                OptionnalUnits = new Units(16, 2, 3),
+                SpecificUnits = new Units(26, 2, 3)
             };
 
             // Act
@@ -55,7 +58,7 @@ namespace Pdc.E2ETests
             getResponse.EnsureSuccessStatusCode();
             var program = await getResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
-            program.Should().BeEquivalentTo(createdProgram, options =>
+            createdProgram.Should().BeEquivalentTo(program, options =>
                 options.ExcludingMissingMembers());
         }
 
@@ -63,7 +66,7 @@ namespace Pdc.E2ETests
         public async Task GivenExistingProgram_WhenDeleteProgramOfStudy_ThenShouldRemoveProgram()
         {
             // Arrange
-            UpsertProgramOfStudyDTO newProgram = new UpsertProgramOfStudyDTO()
+            CreateProgramOfStudyDTO newProgram = new CreateProgramOfStudyDTO()
             {
                 Code = "420.B0",
                 Name = "Techniques de l'informatique",
@@ -71,7 +74,9 @@ namespace Pdc.E2ETests
                 MonthsDuration = 36,
                 SpecificDurationHours = 2010,
                 TotalDurationHours = 5730,
-                PublishedOn = DateOnly.FromDateTime(DateTime.Now)
+                PublishedOn = DateOnly.FromDateTime(DateTime.Now),
+                OptionnalUnits = new Units(16, 2, 3),
+                SpecificUnits = new Units(26, 2, 3)
             };
 
             // Act - Create the program
@@ -92,26 +97,33 @@ namespace Pdc.E2ETests
         public async Task GivenExistingProgram_WhenUpdateProgramOfStudy_ThenShouldUpdateProgram()
         {
             // Arrange
-            UpsertProgramOfStudyDTO newProgram = new UpsertProgramOfStudyDTO()
+            CreateProgramOfStudyDTO newProgram = new CreateProgramOfStudyDTO()
             {
-                Code = "420.B0",
-                Name = "Techniques de l'informatique",
+                Code = "420.B1",
+                Name = "Techniques de l'informatique intensive",
                 Sanction = Pdc.Domain.Enums.SanctionType.DEC,
                 MonthsDuration = 36,
                 SpecificDurationHours = 2010,
                 TotalDurationHours = 5730,
-                PublishedOn = DateOnly.FromDateTime(DateTime.Now)
+                PublishedOn = DateOnly.FromDateTime(DateTime.Now),
+                OptionnalUnits = new Units(16, 2, 3),
+                SpecificUnits = new Units(26, 2, 3)
             };
 
             ProgramOfStudyDTO updatedProgramData = new ProgramOfStudyDTO()
             {
+                Id = new Guid(),
                 Code = "421.B0",
                 Name = "Techniques de l'informatique 2.0",
                 Sanction = Pdc.Domain.Enums.SanctionType.AEC,
                 MonthsDuration = 35,
                 SpecificDurationHours = 53,
                 TotalDurationHours = 35,
-                PublishedOn = DateOnly.FromDateTime(DateTime.Now)
+                PublishedOn = DateOnly.FromDateTime(DateTime.Now),
+                OptionnalUnits = new Units(16, 2, 3),
+                SpecificUnits = new Units(26, 2, 3),
+                ComplementaryUnits = new Units(0),
+                GeneralUnits = new Units(0)
             };
 
             // Act - Create the program

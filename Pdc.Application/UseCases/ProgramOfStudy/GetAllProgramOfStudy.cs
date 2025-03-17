@@ -4,12 +4,12 @@ using Pdc.Domain.Interfaces.Repositories;
 
 namespace Pdc.Application.UseCase;
 
-public class GetAllProgramOfSudy : IGetAllProgramOfStudyUseCase
+public class GetAllProgramOfStudy : IGetAllProgramOfStudyUseCase
 {
     private readonly IProgramOfStudyRespository _programOfStudyRespository;
     private readonly IMapper _mapper;
 
-    public GetAllProgramOfSudy(IProgramOfStudyRespository programOfStudyRespository, IMapper mapper)
+    public GetAllProgramOfStudy(IProgramOfStudyRespository programOfStudyRespository, IMapper mapper)
     {
         _programOfStudyRespository = programOfStudyRespository;
         _mapper = mapper;

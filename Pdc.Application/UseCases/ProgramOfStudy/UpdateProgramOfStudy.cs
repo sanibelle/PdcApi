@@ -6,22 +6,22 @@ using Pdc.Domain.Interfaces.Repositories;
 
 namespace Pdc.Application.UseCase;
 
-public class UpdateProgramOfSudy : IUpdateProgramOfStudyUseCase
+public class UpdateProgramOfStudy : IUpdateProgramOfStudyUseCase
 {
-    private readonly IValidator<UpsertProgramOfStudyDTO> _validator;
+    private readonly IValidator<CreateProgramOfStudyDTO> _validator;
     private readonly IProgramOfStudyRespository _programOfStudyRespository;
     private readonly IMapper _mapper;
 
-    public UpdateProgramOfSudy(IProgramOfStudyRespository programOfStudyRespository,
+    public UpdateProgramOfStudy(IProgramOfStudyRespository programOfStudyRespository,
                                IMapper mapper,
-                               IValidator<UpsertProgramOfStudyDTO> validator)
+                               IValidator<CreateProgramOfStudyDTO> validator)
     {
         _programOfStudyRespository = programOfStudyRespository;
         _mapper = mapper;
         _validator = validator;
     }
 
-    public async Task<ProgramOfStudyDTO> Execute(Guid id, UpsertProgramOfStudyDTO updateProgramOfStudyDto)
+    public async Task<ProgramOfStudyDTO> Execute(Guid id, CreateProgramOfStudyDTO updateProgramOfStudyDto)
     {
         var validationResult = await _validator.ValidateAsync(updateProgramOfStudyDto);
         if (!validationResult.IsValid)

@@ -1,7 +1,9 @@
-﻿namespace Pdc.Domain.Entities.Common;
+﻿using Pdc.Domain.Entities.Versioning;
 
-public class PerformanceCriteria : Changeable
+namespace Pdc.Domain.Entities.Common;
+
+public class PerformanceCriteria : AChangeable
 {
     public required int Position { get; set; }
-    public required IEnumerable<ContentSpecification> ContentSpecifications { get; set; }
+    public required IEnumerable<ComplementaryInformations> ContentSpecifications { get; set; }
 }

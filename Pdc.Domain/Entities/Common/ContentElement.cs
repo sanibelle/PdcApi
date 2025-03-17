@@ -1,8 +1,10 @@
-﻿namespace Pdc.Domain.Entities.Common;
+﻿using Pdc.Domain.Entities.Versioning;
 
-public class ContentElement : Changeable
+namespace Pdc.Domain.Entities.Common;
+
+public class ContentElement : AChangeable
 {
     // Name Diagrammes UML
-    public required IEnumerable<ContentSpecification> ContentSpecifications { get; set; } //colonne 4.
+    public required IEnumerable<ComplementaryInformations> ContentSpecifications { get; set; } //colonne 4.
 
 }

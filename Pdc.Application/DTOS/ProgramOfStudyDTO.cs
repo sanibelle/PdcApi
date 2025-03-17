@@ -1,18 +1,19 @@
-﻿using Pdc.Domain.Enums;
+﻿using Pdc.Domain.Entities.Common;
 
 namespace Pdc.Application.DTOS;
 
-public class ProgramOfStudyDTO
+public class ProgramOfStudyDTO : CreateProgramOfStudyDTO
 {
-    public Guid Id { get; set; }
-    public required string Code { get; set; } //420.B0
-    public required string Name { get; set; } //Techniques de l'informatique
-    public required SanctionType Sanction { get; set; } //DEC, PRE-U
-    public double MonthsDuration { get; set; } // 36 mois
-    public int SpecificDurationHours { get; set; } // 2010
-    public int TotalDurationHours { get; set; } // 5730
-    public DateOnly PublishedOn { get; set; }
-
-    public ProgramOfStudyDTO() { }
-
+    public required Guid Id { get; set; }
+    /// <summary>
+    /// Les unités des cours généraux
+    /// </summary>
+    public required Units GeneralUnits { get; set; }
+    /// <summary>
+    /// Les unités des cours complémentaires
+    /// </summary>
+    public required Units ComplementaryUnits { get; set; }
+    public ProgramOfStudyDTO()
+    {
+    }
 }

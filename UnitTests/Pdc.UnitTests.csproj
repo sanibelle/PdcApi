@@ -25,6 +25,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Pdc.Application\Pdc.Application.csproj" />
+    <ProjectReference Include="..\Pdc.Domain\Pdc.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="NUnit.Framework" />
   </ItemGroup>
 

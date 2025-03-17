@@ -3,7 +3,7 @@ using Pdc.Application.DTOS;
 
 namespace Pdc.Application.Validators;
 
-public class UpsertProgramOfStudyValidation : AbstractValidator<UpsertProgramOfStudyDTO>
+public class UpsertProgramOfStudyValidation : AbstractValidator<CreateProgramOfStudyDTO>
 {
     public UpsertProgramOfStudyValidation()
     {
@@ -28,6 +28,12 @@ public class UpsertProgramOfStudyValidation : AbstractValidator<UpsertProgramOfS
             .GreaterThan(0);
 
         RuleFor(x => x.PublishedOn)
+            .NotEmpty();
+
+        RuleFor(x => x.OptionnalUnits)
+            .NotEmpty();
+
+        RuleFor(x => x.SpecificUnits)
             .NotEmpty();
     }
 }

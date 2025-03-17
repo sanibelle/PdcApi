@@ -14,11 +14,11 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddScoped<IProgramOfStudyRespository, ProgramOfStudyRespository>();
-        services.AddScoped<ICreateProgramOfStudyUseCase, CreateProgramOfSudy>();
-        services.AddScoped<IDeleteProgramOfStudyUseCase, DeleteProgramOfSudy>();
-        services.AddScoped<IGetAllProgramOfStudyUseCase, GetAllProgramOfSudy>();
-        services.AddScoped<IUpdateProgramOfStudyUseCase, UpdateProgramOfSudy>();
-        services.AddScoped<IGetProgramOfStudyUseCase, GetProgramOfSudy>();
+        services.AddScoped<ICreateProgramOfStudyUseCase, CreateProgramOfStudy>();
+        services.AddScoped<IDeleteProgramOfStudyUseCase, DeleteProgramOfStudy>();
+        services.AddScoped<IGetAllProgramOfStudyUseCase, GetAllProgramOfStudy>();
+        services.AddScoped<IUpdateProgramOfStudyUseCase, UpdateProgramOfStudy>();
+        services.AddScoped<IGetProgramOfStudyUseCase, GetProgramOfStudy>();
 
         services.AddAutoMapper(typeof(MappingProfile));
 

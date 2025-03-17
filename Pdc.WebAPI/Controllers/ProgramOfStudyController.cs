@@ -35,7 +35,7 @@ public class ProgramOfStudyController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ProgramOfStudyDTO>> Create([FromBody] UpsertProgramOfStudyDTO createProgramOfStudyDTO)
+    public async Task<ActionResult<ProgramOfStudyDTO>> Create([FromBody] CreateProgramOfStudyDTO createProgramOfStudyDTO)
     {
         var programOfStudy = await _createUseCase.Execute(createProgramOfStudyDTO);
 
@@ -60,7 +60,7 @@ public class ProgramOfStudyController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpsertProgramOfStudyDTO programOfStudyDTO)
+    public async Task<IActionResult> Update(Guid id, [FromBody] CreateProgramOfStudyDTO programOfStudyDTO)
     {
         try
         {

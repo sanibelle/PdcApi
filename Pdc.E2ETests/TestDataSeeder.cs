@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
+using Pdc.Domain.Entities.Common;
 using Pdc.Domain.Entities.CourseFramework;
 using Pdc.Domain.Enums;
 using Pdc.Infrastructure.Data;
@@ -35,7 +36,9 @@ public class TestDataSeeder
                 SpecificDurationHours = 1800,
                 TotalDurationHours = 4500,
                 PublishedOn = DateOnly.FromDateTime(DateTime.Now),
-                Competencies = []
+                Competencies = [],
+                OptionnalUnits = new Units(10, 1, 2),
+                SpecificUnits = new Units(60)
             });
 
             await _context.SaveChangesAsync();
