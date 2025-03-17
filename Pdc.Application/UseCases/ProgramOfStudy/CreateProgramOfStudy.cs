@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using FluentValidation.Results;
 using Pdc.Application.DTOS;
 using Pdc.Domain.Entities.CourseFramework;
 using Pdc.Domain.Interfaces.Repositories;
@@ -21,7 +22,7 @@ public class CreateProgramOfStudy : ICreateProgramOfStudyUseCase
 
     public async Task<ProgramOfStudyDTO> Execute(CreateProgramOfStudyDTO createProgramOfStudyDto)
     {
-        var validationResult = await _validator.ValidateAsync(createProgramOfStudyDto);
+        ValidationResult validationResult = await _validator.ValidateAsync(createProgramOfStudyDto);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);

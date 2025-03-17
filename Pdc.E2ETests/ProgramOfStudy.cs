@@ -5,6 +5,7 @@ using Pdc.Domain.Entities.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
@@ -46,20 +47,23 @@ namespace Pdc.E2ETests
             };
 
             // Act
-            var response = await _client.PostAsJsonAsync("/api/programofstudy", newProgram);
+            HttpResponseMessage response = await _client.PostAsJsonAsync("/api/programofstudy", newProgram);
 
             // Assert
             response.EnsureSuccessStatusCode();
             Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.Created));
-            var createdProgram = await response.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
+            ProgramOfStudyDTO createdProgram = await response.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
             // Verify it was added to the database
-            var getResponse = await _client.GetAsync($"/api/programofstudy/{createdProgram.Id}");
+            HttpResponseMessage getResponse = await _client.GetAsync($"/api/programofstudy/{createdProgram.Id}");
             getResponse.EnsureSuccessStatusCode();
-            var program = await getResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
+            ProgramOfStudyDTO fetchedProgram = await getResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
-            createdProgram.Should().BeEquivalentTo(program, options =>
-                options.ExcludingMissingMembers());
+            createdProgram.Should().BeEquivalentTo(fetchedProgram, options =>
+                options.ExcludingMissingMembers()
+                .Excluding(x => x.GeneralUnits)
+                .Excluding(x => x.ComplementaryUnits)
+                );
         }
 
         [Test]

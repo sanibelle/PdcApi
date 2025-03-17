@@ -12,7 +12,7 @@ using Pdc.Infrastructure.Data;
 namespace Pdc.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250311140001_InitialCreate")]
+    [Migration("20250317031118_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -49,7 +49,7 @@ namespace Pdc.Infrastructure.Migrations
                     b.ToTable("CompetencyElement");
                 });
 
-            modelBuilder.Entity("Pdc.Domain.Entities.Common.ContentSpecification", b =>
+            modelBuilder.Entity("Pdc.Domain.Entities.Common.ComplementaryInformations", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -67,7 +67,7 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.HasIndex("ContentElementId");
 
-                    b.ToTable("ContentSpecification");
+                    b.ToTable("ComplementaryInformations");
                 });
 
             modelBuilder.Entity("Pdc.Domain.Entities.Common.PerformanceCriteria", b =>
@@ -94,6 +94,26 @@ namespace Pdc.Infrastructure.Migrations
                     b.ToTable("PerformanceCriteria");
                 });
 
+            modelBuilder.Entity("Pdc.Domain.Entities.Common.Units", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Denominator")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Numerator")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WholeUnits")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Units");
+                });
+
             modelBuilder.Entity("Pdc.Domain.Entities.CourseFramework.ProgramOfStudy", b =>
                 {
                     b.Property<Guid>("Id")
@@ -105,6 +125,12 @@ namespace Pdc.Infrastructure.Migrations
                         .HasMaxLength(8)
                         .HasColumnType("nvarchar(8)");
 
+                    b.Property<Guid>("ComplementaryUnitsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GeneralUnitsId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<double>("MonthsDuration")
                         .HasColumnType("float");
 
@@ -112,6 +138,9 @@ namespace Pdc.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<Guid?>("OptionnalUnitsId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly>("PublishedOn")
                         .HasColumnType("date");
@@ -122,10 +151,27 @@ namespace Pdc.Infrastructure.Migrations
                     b.Property<int>("SpecificDurationHours")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("SpecificUnitsId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("TotalDurationHours")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ComplementaryUnitsId")
+                        .IsUnique();
+
+                    b.HasIndex("GeneralUnitsId")
+                        .IsUnique();
+
+                    b.HasIndex("OptionnalUnitsId")
+                        .IsUnique()
+                        .HasFilter("[OptionnalUnitsId] IS NOT NULL");
+
+                    b.HasIndex("SpecificUnitsId")
+                        .IsUnique()
+                        .HasFilter("[SpecificUnitsId] IS NOT NULL");
 
                     b.ToTable("ProgramOfStudies");
                 });
@@ -141,6 +187,12 @@ namespace Pdc.Infrastructure.Migrations
                         .HasMaxLength(4)
                         .HasColumnType("nvarchar(4)");
 
+                    b.Property<bool>("IsMandatory")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOptionnal")
+                        .HasColumnType("bit");
+
                     b.Property<Guid?>("ProgramOfStudyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -149,9 +201,14 @@ namespace Pdc.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<Guid?>("UnitsId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProgramOfStudyId");
+
+                    b.HasIndex("UnitsId");
 
                     b.ToTable("MinisterialCompetency");
                 });
@@ -184,7 +241,7 @@ namespace Pdc.Infrastructure.Migrations
                         .HasForeignKey("MinisterialCompetencyId");
                 });
 
-            modelBuilder.Entity("Pdc.Domain.Entities.Common.ContentSpecification", b =>
+            modelBuilder.Entity("Pdc.Domain.Entities.Common.ComplementaryInformations", b =>
                 {
                     b.HasOne("Pdc.Domain.Entities.Common.PerformanceCriteria", null)
                         .WithMany("ContentSpecifications")
@@ -198,11 +255,50 @@ namespace Pdc.Infrastructure.Migrations
                         .HasForeignKey("CompetencyElementId");
                 });
 
+            modelBuilder.Entity("Pdc.Domain.Entities.CourseFramework.ProgramOfStudy", b =>
+                {
+                    b.HasOne("Pdc.Domain.Entities.Common.Units", "ComplementaryUnits")
+                        .WithOne()
+                        .HasForeignKey("Pdc.Domain.Entities.CourseFramework.ProgramOfStudy", "ComplementaryUnitsId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("Pdc.Domain.Entities.Common.Units", "GeneralUnits")
+                        .WithOne()
+                        .HasForeignKey("Pdc.Domain.Entities.CourseFramework.ProgramOfStudy", "GeneralUnitsId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("Pdc.Domain.Entities.Common.Units", "OptionnalUnits")
+                        .WithOne()
+                        .HasForeignKey("Pdc.Domain.Entities.CourseFramework.ProgramOfStudy", "OptionnalUnitsId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.HasOne("Pdc.Domain.Entities.Common.Units", "SpecificUnits")
+                        .WithOne()
+                        .HasForeignKey("Pdc.Domain.Entities.CourseFramework.ProgramOfStudy", "SpecificUnitsId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.Navigation("ComplementaryUnits");
+
+                    b.Navigation("GeneralUnits");
+
+                    b.Navigation("OptionnalUnits");
+
+                    b.Navigation("SpecificUnits");
+                });
+
             modelBuilder.Entity("Pdc.Domain.Entities.MinisterialSpecification.MinisterialCompetency", b =>
                 {
                     b.HasOne("Pdc.Domain.Entities.CourseFramework.ProgramOfStudy", null)
                         .WithMany("Competencies")
                         .HasForeignKey("ProgramOfStudyId");
+
+                    b.HasOne("Pdc.Domain.Entities.Common.Units", "Units")
+                        .WithMany()
+                        .HasForeignKey("UnitsId");
+
+                    b.Navigation("Units");
                 });
 
             modelBuilder.Entity("Pdc.Domain.Entities.MinisterialSpecification.MinisterialRealisationContext", b =>

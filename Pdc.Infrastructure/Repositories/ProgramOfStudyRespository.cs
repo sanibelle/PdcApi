@@ -45,6 +45,10 @@ public class ProgramOfStudyRespository : IProgramOfStudyRespository
     public async Task<ProgramOfStudy> FindById(Guid id)
     {
         ProgramOfStudy? program = await _context.ProgramOfStudies
+            .Include(p => p.GeneralUnits)
+            .Include(p => p.ComplementaryUnits)
+            .Include(p => p.SpecificUnits)
+            .Include(p => p.OptionnalUnits)
             .SingleOrDefaultAsync(x => x.Id == id);
         if (program == null)
         {

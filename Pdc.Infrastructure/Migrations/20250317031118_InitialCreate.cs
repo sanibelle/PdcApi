@@ -12,10 +12,28 @@ namespace Pdc.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Units",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WholeUnits = table.Column<int>(type: "int", nullable: false),
+                    Numerator = table.Column<int>(type: "int", nullable: true),
+                    Denominator = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Units", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProgramOfStudies",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SpecificUnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    OptionnalUnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    GeneralUnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ComplementaryUnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Code = table.Column<string>(type: "nvarchar(8)", maxLength: 8, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Sanction = table.Column<int>(type: "int", nullable: false),
@@ -27,6 +45,26 @@ namespace Pdc.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProgramOfStudies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProgramOfStudies_Units_ComplementaryUnitsId",
+                        column: x => x.ComplementaryUnitsId,
+                        principalTable: "Units",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ProgramOfStudies_Units_GeneralUnitsId",
+                        column: x => x.GeneralUnitsId,
+                        principalTable: "Units",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ProgramOfStudies_Units_OptionnalUnitsId",
+                        column: x => x.OptionnalUnitsId,
+                        principalTable: "Units",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ProgramOfStudies_Units_SpecificUnitsId",
+                        column: x => x.SpecificUnitsId,
+                        principalTable: "Units",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -35,6 +73,9 @@ namespace Pdc.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: false),
+                    UnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsMandatory = table.Column<bool>(type: "bit", nullable: false),
+                    IsOptionnal = table.Column<bool>(type: "bit", nullable: false),
                     StatementOfCompetency = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     ProgramOfStudyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
@@ -45,6 +86,11 @@ namespace Pdc.Infrastructure.Migrations
                         name: "FK_MinisterialCompetency_ProgramOfStudies_ProgramOfStudyId",
                         column: x => x.ProgramOfStudyId,
                         principalTable: "ProgramOfStudies",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_MinisterialCompetency_Units_UnitsId",
+                        column: x => x.UnitsId,
+                        principalTable: "Units",
                         principalColumn: "Id");
                 });
 
@@ -105,7 +151,7 @@ namespace Pdc.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ContentSpecification",
+                name: "ComplementaryInformations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -114,9 +160,9 @@ namespace Pdc.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContentSpecification", x => x.Id);
+                    table.PrimaryKey("PK_ComplementaryInformations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ContentSpecification_PerformanceCriteria_ContentElementId",
+                        name: "FK_ComplementaryInformations_PerformanceCriteria_ContentElementId",
                         column: x => x.ContentElementId,
                         principalTable: "PerformanceCriteria",
                         principalColumn: "Id");
@@ -128,14 +174,19 @@ namespace Pdc.Infrastructure.Migrations
                 column: "MinisterialCompetencyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContentSpecification_ContentElementId",
-                table: "ContentSpecification",
+                name: "IX_ComplementaryInformations_ContentElementId",
+                table: "ComplementaryInformations",
                 column: "ContentElementId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MinisterialCompetency_ProgramOfStudyId",
                 table: "MinisterialCompetency",
                 column: "ProgramOfStudyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MinisterialCompetency_UnitsId",
+                table: "MinisterialCompetency",
+                column: "UnitsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MinisterialRealisationContext_MinisterialCompetencyId",
@@ -146,13 +197,39 @@ namespace Pdc.Infrastructure.Migrations
                 name: "IX_PerformanceCriteria_CompetencyElementId",
                 table: "PerformanceCriteria",
                 column: "CompetencyElementId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProgramOfStudies_ComplementaryUnitsId",
+                table: "ProgramOfStudies",
+                column: "ComplementaryUnitsId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProgramOfStudies_GeneralUnitsId",
+                table: "ProgramOfStudies",
+                column: "GeneralUnitsId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProgramOfStudies_OptionnalUnitsId",
+                table: "ProgramOfStudies",
+                column: "OptionnalUnitsId",
+                unique: true,
+                filter: "[OptionnalUnitsId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProgramOfStudies_SpecificUnitsId",
+                table: "ProgramOfStudies",
+                column: "SpecificUnitsId",
+                unique: true,
+                filter: "[SpecificUnitsId] IS NOT NULL");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ContentSpecification");
+                name: "ComplementaryInformations");
 
             migrationBuilder.DropTable(
                 name: "MinisterialRealisationContext");
@@ -168,6 +245,9 @@ namespace Pdc.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProgramOfStudies");
+
+            migrationBuilder.DropTable(
+                name: "Units");
         }
     }
 }

@@ -2,7 +2,7 @@
 
 public class Units
 {
-    public Guid Id { get; set; } = new Guid();
+    public Guid Id { get; set; }
     public int WholeUnits { get; set; }
     public int? Numerator { get; set; }
     public int? Denominator { get; set; }

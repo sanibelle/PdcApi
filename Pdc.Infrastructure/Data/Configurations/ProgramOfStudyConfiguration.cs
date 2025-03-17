@@ -38,5 +38,26 @@ public class ProgramOfStudyConfiguration : IEntityTypeConfiguration<ProgramOfStu
         builder.HasMany(x => x.Competencies)
             .WithOne()
             .HasForeignKey("ProgramOfStudyId");
+
+        // Add these new configurations to fix the cascade delete issue
+        builder.HasOne(p => p.GeneralUnits)
+            .WithOne()
+            .HasForeignKey<ProgramOfStudy>("GeneralUnitsId")
+            .OnDelete(DeleteBehavior.ClientCascade); // Shadow property
+
+        builder.HasOne(p => p.ComplementaryUnits)
+            .WithOne()
+            .HasForeignKey<ProgramOfStudy>("ComplementaryUnitsId")
+            .OnDelete(DeleteBehavior.ClientCascade); // Shadow property;
+
+        builder.HasOne(p => p.SpecificUnits)
+            .WithOne()
+            .HasForeignKey<ProgramOfStudy>("SpecificUnitsId")
+            .OnDelete(DeleteBehavior.ClientCascade); // Shadow property;
+
+        builder.HasOne(p => p.OptionnalUnits)
+            .WithOne()
+            .HasForeignKey<ProgramOfStudy>("OptionnalUnitsId")
+            .OnDelete(DeleteBehavior.ClientCascade); // Shadow property;
     }
 }
