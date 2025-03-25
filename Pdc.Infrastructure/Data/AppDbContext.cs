@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Pdc.Domain.Entities.Common;
 using Pdc.Domain.Entities.CourseFramework;
+using Pdc.Domain.Entities.MinisterialSpecification;
 namespace Pdc.Infrastructure.Data;
 
 public class AppDbContext : DbContext
@@ -11,6 +11,7 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<ProgramOfStudy> ProgramOfStudies { get; set; }
+    public DbSet<Competency> Competencies { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

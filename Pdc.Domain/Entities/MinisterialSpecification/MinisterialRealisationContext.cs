@@ -2,7 +2,7 @@
 
 namespace Pdc.Domain.Entities.MinisterialSpecification;
 
-public class MinisterialRealisationContext : AChangeable
+public class MinisterialRealisationContext : Changeable
 {
     // Name À partir de la documentation technique.
 }

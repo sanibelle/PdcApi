@@ -3,16 +3,13 @@
 public class ChangeHistory
 {
     public required Guid Id { get; set; }
+    private ICollection<ChangeDetail> _changeDetails { get; set; } = new List<ChangeDetail>();
     /// <summary>
-    /// The initiator of the change
+    /// The version before
     /// </summary>
-    public required AChangeable Initiator { get; set; } // TODO : Et si je passais <T>, pour être plus générique ? COmment le gérer dans la base de données ?
+    public required ChangeRecord From { get; set; }
     /// <summary>
-    /// The impacted entity by the change
+    /// The version with the changes
     /// </summary>
-    public required ChangeVersion From { get; set; }
-    public required ChangeVersion To { get; set; }
-    public required AChangeable Impacted { get; set; }
-    public required DateTime CreatedOn { get; set; }
-    public required List<ChangeDetails> Changes { get; set; }
+    public required ChangeRecord To { get; set; }
 }

@@ -9,7 +9,7 @@ public class UnitsConfiguration : IEntityTypeConfiguration<Units>
     {
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.WholeUnits)
+        builder.Property(x => x.WholeUnit)
             .IsRequired();
     }
 }

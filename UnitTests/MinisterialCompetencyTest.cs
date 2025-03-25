@@ -12,7 +12,7 @@ using Pdc.Domain.Enums;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 
-namespace TodoApplicationTests;
+namespace UnitTests;
 
 public class StudyProgramTest
 {
@@ -23,12 +23,11 @@ public class StudyProgramTest
     IUpdateProgramOfStudyUseCase _updateProgramOfStudyUseCase;
     IMapper _mapper;
     IValidator<CreateProgramOfStudyDTO> _validator;
-    Guid idOfAFakeProgram = Guid.NewGuid();
+    string codeOfAFakeProgram = "FakeCode";
 
 
     private ProgramOfStudy program1 = new()
     {
-        Id = Guid.NewGuid(),
         Code = "420.B0",
         Name = "Techniques de l'informatique",
         Sanction = SanctionType.DEC,
@@ -36,12 +35,11 @@ public class StudyProgramTest
         SpecificDurationHours = 2010,
         TotalDurationHours = 5730,
         PublishedOn = new DateOnly(2020, 01, 01),
-        Competencies = new List<MinisterialCompetency>(),
+        Competencies = new List<Competency>(),
     };
 
     private ProgramOfStudy program2 = new()
     {
-        Id = Guid.NewGuid(),
         Code = "570.G0",
         Name = "Techniques de design graphique",
         Sanction = SanctionType.DEC,
@@ -49,7 +47,7 @@ public class StudyProgramTest
         SpecificDurationHours = 1980,
         TotalDurationHours = 5670,
         PublishedOn = new DateOnly(2020, 01, 02),
-        Competencies = new List<MinisterialCompetency>()
+        Competencies = new List<Competency>()
     };
 
     [SetUp]
@@ -66,11 +64,11 @@ public class StudyProgramTest
 
         // Arrange
         _programOfStudyRepositoryMock.Setup(repo => repo.Add(It.IsAny<ProgramOfStudy>())).ReturnsAsync(program1);
-        _programOfStudyRepositoryMock.Setup(repo => repo.Delete(It.IsAny<Guid>()));
+        _programOfStudyRepositoryMock.Setup(repo => repo.Delete(It.IsAny<string>()));
         _programOfStudyRepositoryMock.Setup(repo => repo.Update(It.IsAny<ProgramOfStudy>())).ReturnsAsync(program1);
         _programOfStudyRepositoryMock.Setup(repo => repo.GetAll()).ReturnsAsync(new List<ProgramOfStudy> { program1, program2 });
-        _programOfStudyRepositoryMock.Setup(repo => repo.FindById(It.IsIn(program1.Id))).ReturnsAsync(program1);
-        _programOfStudyRepositoryMock.Setup(repo => repo.FindById(It.IsIn(idOfAFakeProgram))).Throws(new EntityNotFoundException(nameof(ProgramOfStudy), idOfAFakeProgram));
+        _programOfStudyRepositoryMock.Setup(repo => repo.FindById(It.IsIn(program1.Code))).ReturnsAsync(program1);
+        _programOfStudyRepositoryMock.Setup(repo => repo.FindById(It.IsIn(codeOfAFakeProgram))).Throws(new EntityNotFoundException(nameof(ProgramOfStudy), codeOfAFakeProgram));
     }
 
     [Test]
@@ -92,7 +90,7 @@ public class StudyProgramTest
         var result = await _createProgramOfStudyUseCase.Execute(createProgramDto);
 
         // Assert
-        Assert.That(program1.Id == result.Id, "Program is returned");
+        Assert.That(program1.Code == result.Code, "Program is returned");
         Assert.That(program1.Name == result.Name, "Same name");
     }
 
@@ -100,10 +98,10 @@ public class StudyProgramTest
     public async Task DeleteProgramOfStudy_ShouldCallRepositoryDelete()
     {
         // Act
-        await _deleteProgramOfStudyUseCase.Execute(program1.Id);
+        await _deleteProgramOfStudyUseCase.Execute(program1.Code);
 
         // Assert
-        _programOfStudyRepositoryMock.Verify(repo => repo.Delete(program1.Id), Times.Once);
+        _programOfStudyRepositoryMock.Verify(repo => repo.Delete(program1.Code), Times.Once);
     }
 
     [Test]
@@ -114,8 +112,8 @@ public class StudyProgramTest
 
         // Assert
         Assert.That(result.Count == 2, "Got 2 programs");
-        Assert.That(program1.Id == result[0].Id, "Both programs are returned");
-        Assert.That(program2.Id == result[1].Id, "Both programs are returned");
+        Assert.That(program1.Code == result[0].Code, "Both programs are returned");
+        Assert.That(program2.Code == result[1].Code, "Both programs are returned");
     }
 
     [Test]
@@ -136,10 +134,10 @@ public class StudyProgramTest
         };
 
         // Act
-        var result = await _updateProgramOfStudyUseCase.Execute(program1.Id, updateProgramDto);
+        var result = await _updateProgramOfStudyUseCase.Execute(program1.Code, updateProgramDto);
 
         // Assert
-        _programOfStudyRepositoryMock.Verify(repo => repo.Update(It.Is<ProgramOfStudy>(p => p.Id == program1.Id && p.Name == updateProgramDto.Name)), Times.Once);
+        _programOfStudyRepositoryMock.Verify(repo => repo.Update(It.Is<ProgramOfStudy>(p => p.Code == program1.Code && p.Name == updateProgramDto.Name)), Times.Once);
         Assert.That(result.Name == program1.Name, "Program name is updated");
     }
 }

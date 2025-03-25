@@ -35,24 +35,24 @@ public class ProgramOfStudyRespository : IProgramOfStudyRespository
         return updatedProgram.Entity;
     }
 
-    public async Task Delete(Guid id)
+    public async Task Delete(string code)
     {
-        ProgramOfStudy programOfStudy = await FindById(id);
+        ProgramOfStudy programOfStudy = await FindById(code);
         _context.ProgramOfStudies.Remove(programOfStudy);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<ProgramOfStudy> FindById(Guid id)
+    public async Task<ProgramOfStudy> FindById(string code)
     {
         ProgramOfStudy? program = await _context.ProgramOfStudies
             .Include(p => p.GeneralUnits)
             .Include(p => p.ComplementaryUnits)
             .Include(p => p.SpecificUnits)
             .Include(p => p.OptionnalUnits)
-            .SingleOrDefaultAsync(x => x.Id == id);
+            .SingleOrDefaultAsync(x => x.Code == code);
         if (program == null)
         {
-            throw new EntityNotFoundException(nameof(ProgramOfStudy), id);
+            throw new EntityNotFoundException(nameof(ProgramOfStudy), code);
         }
         return program;
     }

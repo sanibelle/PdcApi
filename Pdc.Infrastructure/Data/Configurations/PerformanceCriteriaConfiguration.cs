@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pdc.Domain.Entities.Common;
+using Pdc.Domain.Entities.MinisterialSpecification;
 namespace Pdc.Infrastructure.Data.Configurations;
 
 public class PerformanceCriteriasConfiguration : IEntityTypeConfiguration<PerformanceCriteria>
@@ -11,9 +11,5 @@ public class PerformanceCriteriasConfiguration : IEntityTypeConfiguration<Perfor
 
         builder.Property(x => x.Position)
             .IsRequired();
-
-        builder.HasMany(x => x.ContentSpecifications)
-            .WithOne()
-            .HasForeignKey("ContentElementId");
     }
 }

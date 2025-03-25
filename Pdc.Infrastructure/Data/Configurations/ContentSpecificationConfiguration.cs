@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pdc.Domain.Entities.Common;
+using Pdc.Domain.Entities.Versioning;
 namespace Pdc.Infrastructure.Data.Configurations;
 
-public class ContentSpecificationConfiguration : IEntityTypeConfiguration<ComplementaryInformations>
+public class ContentSpecificationConfiguration : IEntityTypeConfiguration<ComplementaryInformation>
 {
-    public void Configure(EntityTypeBuilder<ComplementaryInformations> builder)
+    public void Configure(EntityTypeBuilder<ComplementaryInformation> builder)
     {
-        builder.ConfigureChangeable(1000);
+        //builder.ConfigureChangeable(1000);
     }
 }

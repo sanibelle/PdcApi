@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pdc.Domain.Entities.Common;
+using Pdc.Domain.Entities.MinisterialSpecification;
 
 namespace Pdc.Infrastructure.Data.Configurations;
 public class CompetencyElementConfiguration : IEntityTypeConfiguration<CompetencyElement>

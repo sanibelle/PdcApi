@@ -1,12 +1,7 @@
-﻿using Pdc.Domain.Entities.Common;
-using Pdc.Domain.Entities.Versioning;
-using Pdc.Domain.Enums;
+﻿namespace Pdc.Domain.Entities.CourseFramework;
 
-namespace Pdc.Domain.Entities.CourseFramework;
-
-public class CourseFrameworkContentElement : ContentElement
+public class CourseFrameworkContentElement
 {
-    // Name Diagrammes UML
-    public required ElementSpecification ElementSpecification { get; set; } // enseigné, vu plus tard, etc... 
-    public required ChangeVersion MasterCoursePlanVersion { get; set; }
+    public required ContentElement ContentElement { get; set; }
+    public required CourseFramework CourseFramework { get; set; }
 }

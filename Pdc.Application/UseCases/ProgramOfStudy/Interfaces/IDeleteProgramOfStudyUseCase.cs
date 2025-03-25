@@ -2,5 +2,5 @@
 
 public interface IDeleteProgramOfStudyUseCase
 {
-    Task Execute(Guid id);
+    Task Execute(string code);
 }

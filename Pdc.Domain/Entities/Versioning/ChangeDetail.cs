@@ -1,0 +1,16 @@
+﻿using Pdc.Domain.Enums;
+
+namespace Pdc.Domain.Entities.Versioning;
+
+public class ChangeDetail
+{
+    public required Guid Id { get; set; }
+    public required ChangeHistory History { get; set; }
+    public required Changeable OldVersion { get; set; }
+    public required ChangeType ChangeType { get; set; }
+    /// <summary>
+    /// Holds the old value of the property when updated or deleted.
+    /// </summary>
+    public string? OldValue { get; set; }
+}//TODO quand je vais tester. Un delete après un update devrait montrer la version initiale (pas l'entre deux)
+// voir le diagramme UML pour comprendre.AncientValue : "Valeur initiale"

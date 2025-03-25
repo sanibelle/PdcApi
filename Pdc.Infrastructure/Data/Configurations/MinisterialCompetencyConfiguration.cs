@@ -3,15 +3,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pdc.Domain.Entities.MinisterialSpecification;
 namespace Pdc.Infrastructure.Data.Configurations;
 
-public class MinisterialCompetencyConfiguration : IEntityTypeConfiguration<MinisterialCompetency>
+public class CompetencyConfiguration : IEntityTypeConfiguration<Competency>
 {
-    public void Configure(EntityTypeBuilder<MinisterialCompetency> builder)
+    public void Configure(EntityTypeBuilder<Competency> builder)
     {
-        builder.HasKey(x => x.Id);
-
-        builder.Property(x => x.Code)
-            .IsRequired()
-            .HasMaxLength(4);
+        builder.HasKey(x => x.Code);
 
         builder.Property(x => x.StatementOfCompetency)
             .IsRequired()
@@ -19,10 +15,10 @@ public class MinisterialCompetencyConfiguration : IEntityTypeConfiguration<Minis
 
         builder.HasMany(x => x.RealisationContexts)
             .WithOne()
-            .HasForeignKey("MinisterialCompetencyId");
+            .HasForeignKey("CompetencyId");
 
         builder.HasMany(x => x.CompetencyElements)
             .WithOne()
-            .HasForeignKey("MinisterialCompetencyId");
+            .HasForeignKey("CompetencyId");
     }
 }

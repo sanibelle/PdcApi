@@ -1,0 +1,27 @@
+﻿using Pdc.Application.Exceptions;
+using Pdc.Domain.Interfaces.Repositories;
+
+namespace Pdc.Application.UseCase;
+
+public class DeleteCompetency : IDeleteCompetencyUseCase
+{
+    private readonly ICompetencyRespository _programOfStudyRespository;
+
+    public DeleteCompetency(ICompetencyRespository programOfStudyRespository)
+    {
+        _programOfStudyRespository = programOfStudyRespository;
+    }
+
+    public async Task Execute(string code)
+    {
+        try
+        {
+            await _programOfStudyRespository.FindByCode(code);
+        }
+        catch
+        {
+            throw new NotFoundException();
+        }
+        await _programOfStudyRespository.Delete(code);
+    }
+}

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -71,7 +70,6 @@ namespace Pdc.Infrastructure.Migrations
                 name: "MinisterialCompetency",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Code = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: false),
                     UnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IsMandatory = table.Column<bool>(type: "bit", nullable: false),
@@ -81,7 +79,7 @@ namespace Pdc.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MinisterialCompetency", x => x.Id);
+                    table.PrimaryKey("PK_MinisterialCompetency", x => x.Code);
                     table.ForeignKey(
                         name: "FK_MinisterialCompetency_ProgramOfStudies_ProgramOfStudyId",
                         column: x => x.ProgramOfStudyId,

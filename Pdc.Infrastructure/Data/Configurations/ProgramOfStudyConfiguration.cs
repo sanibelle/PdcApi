@@ -7,11 +7,10 @@ public class ProgramOfStudyConfiguration : IEntityTypeConfiguration<ProgramOfStu
 {
     public void Configure(EntityTypeBuilder<ProgramOfStudy> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(x => x.Code);
 
         builder.Property(x => x.Code)
-            .IsRequired()
-            .HasMaxLength(8);
+            .IsRequired();
 
         builder.Property(x => x.Name)
             .IsRequired()

@@ -3,7 +3,7 @@
 public class Units
 {
     public Guid Id { get; set; }
-    public int WholeUnits { get; set; }
+    public int WholeUnit { get; set; }
     public int? Numerator { get; set; }
     public int? Denominator { get; set; }
 
@@ -13,12 +13,12 @@ public class Units
 
     public Units(int wholeUnits)
     {
-        WholeUnits = wholeUnits;
+        WholeUnit = wholeUnits;
     }
 
     public Units(int wholeUnits, int numerator, int denominator)
     {
-        WholeUnits = wholeUnits;
+        WholeUnit = wholeUnits;
         Numerator = numerator;
         Denominator = denominator;
     }

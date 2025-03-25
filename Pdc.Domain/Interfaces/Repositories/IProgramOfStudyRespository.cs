@@ -5,8 +5,8 @@ namespace Pdc.Domain.Interfaces.Repositories;
 public interface IProgramOfStudyRespository
 {
     Task<List<ProgramOfStudy>> GetAll();
-    Task<ProgramOfStudy> FindById(Guid id);
+    Task<ProgramOfStudy> FindById(string code);
     Task<ProgramOfStudy> Add(ProgramOfStudy entity);
     Task<ProgramOfStudy> Update(ProgramOfStudy entity);
-    Task Delete(Guid id);
+    Task Delete(string code);
 }

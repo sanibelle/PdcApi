@@ -4,5 +4,5 @@ namespace Pdc.Application.UseCase;
 
 public interface IGetProgramOfStudyUseCase
 {
-    Task<ProgramOfStudyDTO> Execute(Guid id);
+    Task<ProgramOfStudyDTO> Execute(string code);
 }

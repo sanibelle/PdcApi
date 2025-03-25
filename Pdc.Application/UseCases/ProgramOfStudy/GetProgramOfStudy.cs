@@ -18,11 +18,11 @@ public class GetProgramOfStudy : IGetProgramOfStudyUseCase
         _mapper = mapper;
     }
 
-    public async Task<ProgramOfStudyDTO> Execute(Guid id)
+    public async Task<ProgramOfStudyDTO> Execute(string code)
     {
         try
         {
-            ProgramOfStudy program = await _programOfStudyRespository.FindById(id);
+            ProgramOfStudy program = await _programOfStudyRespository.FindById(code);
             return _mapper.Map<ProgramOfStudyDTO>(program);
         }
         catch (EntityNotFoundException)

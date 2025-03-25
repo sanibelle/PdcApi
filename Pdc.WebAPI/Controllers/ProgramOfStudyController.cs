@@ -9,6 +9,7 @@ namespace Pdc.WebAPI.Controllers;
 public class ProgramOfStudyController : ControllerBase
 {
     private ICreateProgramOfStudyUseCase _createUseCase;
+    private ICreateCompetencyUseCase _createCompetencyUseCase;
     private IDeleteProgramOfStudyUseCase _deleteUseCase;
     private IGetAllProgramOfStudyUseCase _getAllUseCase;
     private IUpdateProgramOfStudyUseCase _updateUseCase;
@@ -18,15 +19,18 @@ public class ProgramOfStudyController : ControllerBase
                                     IDeleteProgramOfStudyUseCase deleteUseCase,
                                     IGetProgramOfStudyUseCase getUseCase,
                                     IGetAllProgramOfStudyUseCase getAllUseCase,
-                                    IUpdateProgramOfStudyUseCase updateUseCase)
+                                    IUpdateProgramOfStudyUseCase updateUseCase,
+                                    ICreateCompetencyUseCase createCompetencyUseCase)
     {
         _createUseCase = createUseCase;
         _deleteUseCase = deleteUseCase;
         _getAllUseCase = getAllUseCase;
         _getUseCase = getUseCase;
         _updateUseCase=updateUseCase;
+        _createCompetencyUseCase = createCompetencyUseCase;
     }
 
+    #region ProgramOfStudy
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProgramOfStudyDTO>>> GetAll()
     {
@@ -45,12 +49,12 @@ public class ProgramOfStudyController : ControllerBase
             programOfStudy);
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Get(Guid id)
+    [HttpGet("{code}")]
+    public async Task<IActionResult> Get(string code)
     {
         try
         {
-            var program = await _getUseCase.Execute(id);
+            var program = await _getUseCase.Execute(code);
             return Ok(program);
         }
         catch (NotFoundException)
@@ -59,12 +63,12 @@ public class ProgramOfStudyController : ControllerBase
         }
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] CreateProgramOfStudyDTO programOfStudyDTO)
+    [HttpPut("{code}")]
+    public async Task<IActionResult> Update(string code, [FromBody] CreateProgramOfStudyDTO programOfStudyDTO)
     {
         try
         {
-            var program = await _updateUseCase.Execute(id, programOfStudyDTO);
+            var program = await _updateUseCase.Execute(code, programOfStudyDTO);
             return Ok(program);
         }
         catch (NotFoundException)
@@ -73,12 +77,12 @@ public class ProgramOfStudyController : ControllerBase
         }
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete("{code}")]
+    public async Task<IActionResult> Delete(string code)
     {
         try
         {
-            await _deleteUseCase.Execute(id);
+            await _deleteUseCase.Execute(code);
             return NoContent();
         }
         catch (NotFoundException)
@@ -86,4 +90,17 @@ public class ProgramOfStudyController : ControllerBase
             return NotFound();
         }
     }
+    #endregion
+    #region Competency
+    [HttpPost("{code}/competency")]
+    public async Task<ActionResult<ProgramOfStudyDTO>> AddCompetency(string code, [FromBody] CreateCompetencyDTO createCompetencyDTO)
+    {
+        var competency = await _createCompetencyUseCase.Execute(code, createCompetencyDTO);
+
+        return CreatedAtAction(
+            nameof(Get),
+            new { id = competency.Code },
+            competency);
+    }
+    #endregion
 }

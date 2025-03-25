@@ -12,16 +12,16 @@ public class DeleteProgramOfStudy : IDeleteProgramOfStudyUseCase
         _programOfStudyRespository = programOfStudyRespository;
     }
 
-    public async Task Execute(Guid id)
+    public async Task Execute(string code)
     {
         try
         {
-            await _programOfStudyRespository.FindById(id);
+            await _programOfStudyRespository.FindById(code);
         }
         catch
         {
             throw new NotFoundException();
         }
-        await _programOfStudyRespository.Delete(id);
+        await _programOfStudyRespository.Delete(code);
     }
 }
