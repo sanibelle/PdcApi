@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Pdc.Domain.Entities.Common;
 using Pdc.Domain.Entities.CourseFramework;
 using Pdc.Domain.Entities.MinisterialSpecification;
+using Pdc.Domain.Entities.Versioning;
 namespace Pdc.Infrastructure.Data;
 
 public class AppDbContext : DbContext
@@ -17,6 +19,9 @@ public class AppDbContext : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
+        // Changeable sera directement intégré dans les classes qui l'utilisent
+        modelBuilder.Entity<Changeable>().ToTable("Changeables");
+        modelBuilder.Entity<Weighting>().UseTpcMappingStrategy();
         modelBuilder.Entity<CompetencyElement>();
 
 

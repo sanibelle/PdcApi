@@ -8,6 +8,7 @@ namespace Pdc.Domain.Entities.CourseFramework;
 /// </summary>
 public class CourseFrameworkCompetencyElement
 {
+    public required Guid Id { get; set; } = Guid.NewGuid();
     public required CompetencyElement CompetencyElement { get; set; }
     public required CourseFramework CourseFramework { get; set; }
     public required int Hours { get; set; }
@@ -15,10 +16,10 @@ public class CourseFrameworkCompetencyElement
     {
         get
         {
-            return ReachedLevel == BloomTaxonomy.Creating;
+            return ReachedTaxonomyLevel == BloomTaxonomy.Creating;
         }
     }
-    public BloomTaxonomy ReachedLevel { get; set; }
-    public bool IsTeached { get; set; } = true;
+    public BloomTaxonomy ReachedTaxonomyLevel { get; set; }
     public TeachedLevelType TeachedLevel { get; set; }
+    public bool IsAssedElement { get; set; } = false;
 }

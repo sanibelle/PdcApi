@@ -11,9 +11,5 @@ public class CompetencyElementConfiguration : IEntityTypeConfiguration<Competenc
 
         builder.Property(x => x.Position)
             .IsRequired();
-
-        builder.HasMany(x => x.PerformanceCriterias)
-            .WithOne()
-            .HasForeignKey("CompetencyElementId");
     }
 }

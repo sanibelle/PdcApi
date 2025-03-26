@@ -5,7 +5,8 @@
 /// </summary>
 public class ChangeRecord
 {
-    private ICollection<ComplementaryInformation> complementaryInformations { get; set; } = new List<ComplementaryInformation>();
+    private IEnumerable<ComplementaryInformation> _complementaryInformations { get; set; } = new List<ComplementaryInformation>();
+    private IEnumerable<ChangeDetail> _changeDetails { get; set; } = new List<ChangeDetail>();
     public Guid Id { get; set; }
     public DateTime CreatedOn { get; set; }
     /// <summary>
@@ -13,7 +14,14 @@ public class ChangeRecord
     /// </summary>
     public bool IsDraft { get; set; }
     //UTILISATEUR CreatedBy
-    public required string VersionNumber { get; set; }
+    public int VersionNumber { get; set; }
     public string? Description { get; set; }
-    public required ChangeHistory ChangeHistory { get; set; }
+    /// <summary>
+    /// The version before
+    /// </summary>
+    public ChangeRecord? ParentVersion { get; set; }
+    /// <summary>
+    /// The version with the changes
+    /// </summary>
+    public ChangeRecord? NextVersion { get; set; }
 }

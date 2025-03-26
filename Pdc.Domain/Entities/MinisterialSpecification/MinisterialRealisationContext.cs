@@ -4,5 +4,5 @@ namespace Pdc.Domain.Entities.MinisterialSpecification;
 
 public class MinisterialRealisationContext : Changeable
 {
-    // Name À partir de la documentation technique.
+    public required CompetencyElement CompetencyElement { get; set; }
 }

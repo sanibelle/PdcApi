@@ -7,8 +7,6 @@ public class PerformanceCriteriasConfiguration : IEntityTypeConfiguration<Perfor
 {
     public void Configure(EntityTypeBuilder<PerformanceCriteria> builder)
     {
-        builder.ConfigureChangeable(1000);
-
         builder.Property(x => x.Position)
             .IsRequired();
     }

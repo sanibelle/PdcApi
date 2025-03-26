@@ -6,10 +6,9 @@ namespace Pdc.Domain.Entities.CourseFramework;
 
 public class CourseFramework : Versionable
 {
-    private ICollection<CourseFrameworkCompetency> _courseFrameworkCompetencyElements { get; set; } = new List<CourseFrameworkCompetency>();
-    private ICollection<CourseFrameworkContentElement> _courseFrameworkContentElement { get; set; } = new List<CourseFrameworkContentElement>();
-    private ICollection<CourseFramework> _prerequisites = new List<CourseFramework>();
-    public required ChangeRecord CurrentVersion { get; set; }
+    private IEnumerable<CourseFrameworkCompetency> _courseFrameworkCompetencyElements { get; set; } = new List<CourseFrameworkCompetency>();
+    private IEnumerable<CourseFrameworkContentElement> _courseFrameworkContentElement { get; set; } = new List<CourseFrameworkContentElement>();
+    private IEnumerable<CourseFramework> _prerequisites = new List<CourseFramework>();
     public required string Name { get; set; }
     public required string CourseCode { get; set; }
     public required Weighting Weighting { get; set; }

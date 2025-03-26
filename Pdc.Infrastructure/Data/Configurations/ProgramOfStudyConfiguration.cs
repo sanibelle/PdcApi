@@ -9,9 +9,6 @@ public class ProgramOfStudyConfiguration : IEntityTypeConfiguration<ProgramOfStu
     {
         builder.HasKey(x => x.Code);
 
-        builder.Property(x => x.Code)
-            .IsRequired();
-
         builder.Property(x => x.Name)
             .IsRequired()
             .HasMaxLength(255);
@@ -31,12 +28,10 @@ public class ProgramOfStudyConfiguration : IEntityTypeConfiguration<ProgramOfStu
         builder.Property(x => x.PublishedOn)
             .IsRequired();
 
-        builder.Property(x => x.PublishedOn)
-            .IsRequired();
-
-        builder.HasMany(x => x.Competencies)
-            .WithOne()
-            .HasForeignKey("ProgramOfStudyId");
+        builder
+            .HasMany(x => x.Competencies)
+            .WithOne(c => c.ProgramOfStudy)
+            .HasForeignKey("ProgramOfStudyCode");
 
         // Add these new configurations to fix the cascade delete issue
         builder.HasOne(p => p.GeneralUnits)

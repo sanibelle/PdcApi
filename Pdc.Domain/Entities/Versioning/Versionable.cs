@@ -2,5 +2,5 @@
 
 public abstract class Versionable
 {
-    public required ChangeRecord Version { get; set; }
+    public required ChangeRecord CurrentVersion { get; set; }
 }

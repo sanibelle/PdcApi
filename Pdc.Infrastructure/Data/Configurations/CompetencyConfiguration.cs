@@ -11,11 +11,11 @@ public class CompetencyConfiguration : IEntityTypeConfiguration<Competency>
 
         builder.Property(x => x.StatementOfCompetency)
             .IsRequired()
-            .HasMaxLength(500);
+            .HasMaxLength(1500);
 
         builder.HasMany(x => x.RealisationContexts)
             .WithOne()
-            .HasForeignKey("CompetencyId");
+            .HasForeignKey("CompetencyCode");
 
         builder.HasMany(x => x.CompetencyElements)
             .WithOne()

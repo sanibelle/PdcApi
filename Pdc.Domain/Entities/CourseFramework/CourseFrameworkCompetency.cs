@@ -8,6 +8,7 @@ namespace Pdc.Domain.Entities.CourseFramework;
 /// </summary>
 public class CourseFrameworkCompetency
 {
+    public required Guid Id { get; set; } = Guid.NewGuid();
     public required Competency Competency { get; set; }
     public required CourseFramework CourseFramework { get; set; }
     public required int Hours { get; set; }
@@ -15,10 +16,11 @@ public class CourseFrameworkCompetency
     {
         get
         {
-            return ReachedLevel == BloomTaxonomy.Creating;
+            return ReachedTaxonomyLevel == BloomTaxonomy.Creating;
         }
     }
-    public BloomTaxonomy ReachedLevel { get; set; }
+    // TODO inférer le niveau d'enseignement en fonction des niveaux atteints par les éléments de compétences
+    public BloomTaxonomy ReachedTaxonomyLevel { get; set; }
     /// <summary>
     /// Requise si la compétence est étalée sur plusieurs cours
     /// </summary>
