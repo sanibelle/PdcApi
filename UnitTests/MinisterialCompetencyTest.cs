@@ -35,7 +35,7 @@ public class StudyProgramTest
         SpecificDurationHours = 2010,
         TotalDurationHours = 5730,
         PublishedOn = new DateOnly(2020, 01, 01),
-        Competencies = new List<Competency>(),
+        Competencies = new List<MinisterialCompetency>(),
     };
 
     private ProgramOfStudy program2 = new()
@@ -47,7 +47,7 @@ public class StudyProgramTest
         SpecificDurationHours = 1980,
         TotalDurationHours = 5670,
         PublishedOn = new DateOnly(2020, 01, 02),
-        Competencies = new List<Competency>()
+        Competencies = new List<MinisterialCompetency>()
     };
 
     [SetUp]

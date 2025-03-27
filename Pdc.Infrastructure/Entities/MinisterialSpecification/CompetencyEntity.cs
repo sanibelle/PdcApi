@@ -15,7 +15,7 @@ public class CompetencyEntity : VersionableEntity
     public bool IsMandatory { get; set; } // true
     public bool IsOptionnal { get; set; } // true
     public string StatementOfCompetency { get; set; } // Effectuer le déploiement de serveurs intranet
-    public IEnumerable<MinisterialRealisationContextEntity> RealisationContexts { get; set; } // Critères de performance liés à l’ensemble de la compétence
+    public IEnumerable<RealisationContextEntity> RealisationContexts { get; set; } // Critères de performance liés à l’ensemble de la compétence
     public IEnumerable<CompetencyElementEntity> CompetencyElements { get; set; }
 
     public CompetencyEntity()

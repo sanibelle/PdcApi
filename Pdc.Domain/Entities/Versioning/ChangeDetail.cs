@@ -6,7 +6,7 @@ public class ChangeDetail
 {
     public required Guid Id { get; set; }
     public required ChangeRecord ChangeRecord { get; set; }
-    public required Changeable Changeable { get; set; }
+    public required AChangeable Changeable { get; set; }
     public required ChangeType ChangeType { get; set; }
     /// <summary>
     /// Holds the old value of the property when updated or deleted.

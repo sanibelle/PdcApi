@@ -3,11 +3,11 @@ using Pdc.Infrastructure.Entities.Versioning;
 
 namespace Pdc.Infrastructure.Entities.CourseFramework;
 
-public class CourseFrameworkEntityEntity : VersionableEntity
+public class CourseFrameworkEntity : VersionableEntity
 {
     private IEnumerable<CourseFrameworkCompetencyEntity> _courseFrameworkCompetencyElements { get; set; } = new List<CourseFrameworkCompetencyEntity>();
     private IEnumerable<CourseFrameworkPerformanceCriteriaEntity> _CourseFrameworkPerformanceCriterias { get; set; } = new List<CourseFrameworkPerformanceCriteriaEntity>();
-    private IEnumerable<CourseFrameworkEntityEntity> _prerequisites = new List<CourseFrameworkEntityEntity>();
+    private IEnumerable<CourseFrameworkEntity> _prerequisites = new List<CourseFrameworkEntity>();
     public required string Name { get; set; }
     public required string CourseCode { get; set; }
     public required Weighting Weighting { get; set; }

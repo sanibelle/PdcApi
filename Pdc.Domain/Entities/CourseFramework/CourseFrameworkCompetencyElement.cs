@@ -6,12 +6,10 @@ namespace Pdc.Domain.Entities.CourseFramework;
 /// <summary>
 /// La Value perment d'y inscrire le texte en lien avec le cours.
 /// </summary>
-public class CourseFrameworkCompetencyElement
+public class CourseFrameworkCompetencyElement : CompetencyElement
 {
-    public required Guid Id { get; set; } = Guid.NewGuid();
-    public required CompetencyElement CompetencyElement { get; set; }
-    public required CourseFramework CourseFramework { get; set; }
-    public required int Hours { get; set; }
+    public IEnumerable<CourseFrameworkPerformanceCriteria> PerformanceCriterias { get; set; } = new List<CourseFrameworkPerformanceCriteria>();
+
     public bool IsTerminalyEvaluated
     {
         get

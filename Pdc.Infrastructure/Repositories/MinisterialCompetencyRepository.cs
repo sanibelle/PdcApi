@@ -20,27 +20,27 @@ public class MinisterialCompetencyRepository : ICompetencyRespository
         _mapper = mapper;
     }
 
-    public async Task<List<Competency>> GetAll()
+    public async Task<List<MinisterialCompetency>> GetAll()
     {
         List<CompetencyEntity> entities = await _context.Competencies.ToListAsync();
-        return _mapper.Map<List<Competency>>(entities);
+        return _mapper.Map<List<MinisterialCompetency>>(entities);
     }
 
-    public async Task<Competency> Add(Competency competency)
+    public async Task<MinisterialCompetency> Add(MinisterialCompetency competency)
     {
         EntityEntry<CompetencyEntity> entity = await _context.Competencies.AddAsync(_mapper.Map<CompetencyEntity>(competency));
         await _context.SaveChangesAsync();
-        return _mapper.Map<Competency>(entity.Entity);
+        return _mapper.Map<MinisterialCompetency>(entity.Entity);
     }
 
-    public async Task<Competency> Update(Competency competency)
+    public async Task<MinisterialCompetency> Update(MinisterialCompetency competency)
     {
 
         CompetencyEntity entity = await FindEntityByCode(competency.Code);
         _mapper.Map(competency, entity);
         EntityEntry<CompetencyEntity> updatedCompetencyEntityEntry = _context.Competencies.Update(entity);
         await _context.SaveChangesAsync();
-        return _mapper.Map<Competency>(updatedCompetencyEntityEntry.Entity);
+        return _mapper.Map<MinisterialCompetency>(updatedCompetencyEntityEntry.Entity);
     }
 
     public async Task Delete(string code)
@@ -50,9 +50,9 @@ public class MinisterialCompetencyRepository : ICompetencyRespository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Competency> FindByCode(string code)
+    public async Task<MinisterialCompetency> FindByCode(string code)
     {
-        return _mapper.Map<Competency>(await FindEntityByCode(code));
+        return _mapper.Map<MinisterialCompetency>(await FindEntityByCode(code));
     }
 
     private async Task<CompetencyEntity> FindEntityByCode(string code)
@@ -61,7 +61,7 @@ public class MinisterialCompetencyRepository : ICompetencyRespository
             .SingleOrDefaultAsync(x => x.Code == code);
         if (entity == null)
         {
-            throw new EntityNotFoundException(nameof(Competency), code);
+            throw new EntityNotFoundException(nameof(MinisterialCompetency), code);
         }
         return entity;
     }

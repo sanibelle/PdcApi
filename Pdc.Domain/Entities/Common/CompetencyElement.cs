@@ -2,7 +2,7 @@
 
 namespace Pdc.Domain.Entities.MinisterialSpecification;
 
-public class PerformanceCriteria : Changeable
+public class CompetencyElement : AChangeable
 {
     public required int Position { get; set; }
 }

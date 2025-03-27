@@ -9,4 +9,5 @@ public class CourseFrameworkPerformanceCriteriaEntity
     public required CourseFrameworkEntity CourseFramework { get; set; }
     private IEnumerable<ContentElementEntity> _contentElements { get; set; } = new List<ContentElementEntity>();
     public required TeachedLevelType TeachedLevel { get; set; }
+    public bool IsAssedElement { get; set; } = false;
 }

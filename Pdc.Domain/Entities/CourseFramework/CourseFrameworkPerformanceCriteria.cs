@@ -1,12 +1,12 @@
-﻿using Pdc.Domain.Enums;
+﻿using Pdc.Domain.Entities.Common;
+using Pdc.Domain.Entities.MinisterialSpecification;
+using Pdc.Domain.Enums;
 
 namespace Pdc.Domain.Entities.CourseFramework;
 
-public class CourseFrameworkPerformanceCriteria
+public class CourseFrameworkPerformanceCriteria : PerformanceCriteria
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public required ContentElement ContentElement { get; set; }
-    public required CourseFramework CourseFramework { get; set; }
-    private IEnumerable<ContentElement> _contentElements { get; set; } = new List<ContentElement>();
+    public IEnumerable<ContentElement> ContentElements { get; set; } = new List<ContentElement>();
     public required TeachedLevelType TeachedLevel { get; set; }
+    public bool IsAssedElement { get; set; } = false;
 }

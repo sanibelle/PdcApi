@@ -7,6 +7,5 @@ public class ContentSpecificationConfiguration : IEntityTypeConfiguration<Comple
 {
     public void Configure(EntityTypeBuilder<ComplementaryInformationEntity> builder)
     {
-        //builder.ConfigureChangeable(1000);
     }
 }

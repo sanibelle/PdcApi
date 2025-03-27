@@ -13,8 +13,8 @@ public class MappingProfile : Profile
         CreateMap<ProgramOfStudy, ProgramOfStudyDTO>().ReverseMap();
         CreateMap<CreateProgramOfStudyDTO, ProgramOfStudy>().ReverseMap();
         // Comptency
-        CreateMap<CompetencyDTO, Competency>().ReverseMap();
-        CreateMap<CreateCompetencyDTO, Competency>().ReverseMap();
+        CreateMap<CompetencyDTO, MinisterialCompetency>().ReverseMap();
+        CreateMap<CreateCompetencyDTO, MinisterialCompetency>().ReverseMap();
 
     }
 }

@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pdc.Domain.Entities.CourseFramework;
 using Pdc.Domain.Enums;
+using Pdc.Infrastructure.Entities.CourseFramework;
 
 namespace Pdc.Infrastructure.Data.Configurations;
-public class CourseFrameworkCompetencyConfiguration : IEntityTypeConfiguration<CourseFrameworkCompetency>
+public class CourseFrameworkCompetencyConfiguration : IEntityTypeConfiguration<CourseFrameworkCompetencyEntity>
 {
-    public void Configure(EntityTypeBuilder<CourseFrameworkCompetency> builder)
+    public void Configure(EntityTypeBuilder<CourseFrameworkCompetencyEntity> builder)
     {
         builder.HasKey(x => x.Id);
 

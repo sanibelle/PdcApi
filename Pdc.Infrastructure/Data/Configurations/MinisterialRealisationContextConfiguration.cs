@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 namespace Pdc.Infrastructure.Data.Configurations;
 
-public class MinisterialRealisationContextConfiguration : IEntityTypeConfiguration<MinisterialRealisationContextEntity>
+public class MinisterialRealisationContextConfiguration : IEntityTypeConfiguration<RealisationContextEntity>
 {
-    public void Configure(EntityTypeBuilder<MinisterialRealisationContextEntity> builder)
+    public void Configure(EntityTypeBuilder<RealisationContextEntity> builder)
     {
     }
 }

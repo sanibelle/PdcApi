@@ -3,7 +3,7 @@
 public class ComplementaryInformation  // Informations supplémentaires comme des notes. Utilisé comme 4ieme colonne des éléments de contenu
 {
     public Guid Id { get; set; }
-    public required Changeable Changeable { get; set; }
+    public required AChangeable Changeable { get; set; }
     //UTILISATEUR
     /// <summary>
     /// Version à laquelle l'information a été ajoutée

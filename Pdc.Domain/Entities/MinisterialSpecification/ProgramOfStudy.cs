@@ -6,6 +6,7 @@ namespace Pdc.Domain.Entities.CourseFramework;
 
 public class ProgramOfStudy // toujours issu d'un devis ministeriel
 {
+    public IEnumerable<MinisterialCompetency> Competencies { get; set; } = new List<MinisterialCompetency>();
     /// <summary>
     /// Code unique de la formation
     /// </summary>
@@ -27,10 +28,13 @@ public class ProgramOfStudy // toujours issu d'un devis ministeriel
     /// </summary>
     public Units ComplementaryUnits { get; set; } = new Units(4);
     public required string Name { get; set; } //Techniques de l'informatique
-    public required SanctionType Sanction { get; set; } //DEC, PRE-U
+    public SanctionType Sanction { get; set; } //DEC, PRE-U
     public int MonthsDuration { get; set; } // 36 mois
     public int SpecificDurationHours { get; set; } // 2010
     public int TotalDurationHours { get; set; } // 5730
     public DateOnly PublishedOn { get; set; }
-    public required IList<Competency> Competencies { get; set; }
+
+    public ProgramOfStudy()
+    {
+    }
 }

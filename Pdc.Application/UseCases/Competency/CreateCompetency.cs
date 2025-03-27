@@ -28,8 +28,8 @@ public class CreateCompetency : ICreateCompetencyUseCase
             throw new ValidationException(validationResult.Errors);
         }
 
-        Competency programOfStudy = _mapper.Map<Competency>(createCompetencyDto);
-        Competency savedCompetency = await _competencyRepository.Add(programOfStudy);
+        MinisterialCompetency programOfStudy = _mapper.Map<MinisterialCompetency>(createCompetencyDto);
+        MinisterialCompetency savedCompetency = await _competencyRepository.Add(programOfStudy);
 
         return _mapper.Map<CompetencyDTO>(savedCompetency);
     }

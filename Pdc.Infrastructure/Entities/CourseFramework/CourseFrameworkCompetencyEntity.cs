@@ -26,4 +26,6 @@ public class CourseFrameworkCompetencyEntity
     /// </summary>
     public string? CompetencyDistribution { get; set; }
     //TODO ajouter une logique dans le code pour aller chercher le nombre d'heure totale de la compétence
+    public bool IsAssedElement { get; set; } = false;
+
 }

@@ -1,16 +1,9 @@
-﻿using Pdc.Domain.Entities.MinisterialSpecification;
-using Pdc.Domain.Enums;
+﻿using Pdc.Domain.Enums;
 
-namespace Pdc.Domain.Entities.CourseFramework;
+namespace Pdc.Domain.Entities.MinisterialSpecification;
 
-/// <summary>
-/// La Value perment d'y inscrire le texte en lien avec le cours.
-/// </summary>
-public class CourseFrameworkCompetency
+public class CourseFrameworkCompetency : MinisterialCompetency
 {
-    public required Guid Id { get; set; } = Guid.NewGuid();
-    public required Competency Competency { get; set; }
-    public required CourseFramework CourseFramework { get; set; }
     public required int Hours { get; set; }
     public bool IsTerminalyEvaluated
     {
