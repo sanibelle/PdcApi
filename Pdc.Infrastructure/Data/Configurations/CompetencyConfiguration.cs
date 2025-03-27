@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pdc.Domain.Entities.MinisterialSpecification;
+using Pdc.Infrastructure.Entities.MinisterialSpecification;
 namespace Pdc.Infrastructure.Data.Configurations;
 
-public class CompetencyConfiguration : IEntityTypeConfiguration<Competency>
+public class CompetencyConfiguration : IEntityTypeConfiguration<CompetencyEntity>
 {
-    public void Configure(EntityTypeBuilder<Competency> builder)
+    public void Configure(EntityTypeBuilder<CompetencyEntity> builder)
     {
         builder.HasKey(x => x.Code);
 

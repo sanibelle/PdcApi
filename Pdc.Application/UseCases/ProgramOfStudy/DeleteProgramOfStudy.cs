@@ -16,7 +16,7 @@ public class DeleteProgramOfStudy : IDeleteProgramOfStudyUseCase
     {
         try
         {
-            await _programOfStudyRespository.FindById(code);
+            await _programOfStudyRespository.FindByCode(code);
         }
         catch
         {

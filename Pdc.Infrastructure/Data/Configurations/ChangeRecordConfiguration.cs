@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pdc.Domain.Entities.Versioning;
+using Pdc.Infrastructure.Entities.Versioning;
 namespace Pdc.Infrastructure.Data.Configurations;
 
-public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecord>
+public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEntity>
 {
-    public void Configure(EntityTypeBuilder<ChangeRecord> builder)
+    public void Configure(EntityTypeBuilder<ChangeRecordEntity> builder)
     {
         builder.HasKey(x => x.Id);
 

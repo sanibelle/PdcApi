@@ -1,14 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pdc.Domain.Entities.MinisterialSpecification;
+using Pdc.Infrastructure.Entities.MinisterialSpecification;
 
 namespace Pdc.Infrastructure.Data.Configurations;
-public class CompetencyElementConfiguration : IEntityTypeConfiguration<CompetencyElement>
+public class CompetencyElementConfiguration : IEntityTypeConfiguration<CompetencyElementEntity>
 {
-    public void Configure(EntityTypeBuilder<CompetencyElement> builder)
+    public void Configure(EntityTypeBuilder<CompetencyElementEntity> builder)
     {
-        builder.ConfigureChangeable(1000);
-
         builder.Property(x => x.Position)
             .IsRequired();
     }

@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pdc.Domain.Entities.CourseFramework;
+using Pdc.Infrastructure.Entities.CourseFramework;
 namespace Pdc.Infrastructure.Data.Configurations;
 
-public class ProgramOfStudyConfiguration : IEntityTypeConfiguration<ProgramOfStudy>
+public class ProgramOfStudyConfiguration : IEntityTypeConfiguration<ProgramOfStudyEntity>
 {
-    public void Configure(EntityTypeBuilder<ProgramOfStudy> builder)
+    public void Configure(EntityTypeBuilder<ProgramOfStudyEntity> builder)
     {
         builder.HasKey(x => x.Code);
 
@@ -36,22 +36,22 @@ public class ProgramOfStudyConfiguration : IEntityTypeConfiguration<ProgramOfStu
         // Add these new configurations to fix the cascade delete issue
         builder.HasOne(p => p.GeneralUnits)
             .WithOne()
-            .HasForeignKey<ProgramOfStudy>("GeneralUnitsId")
+            .HasForeignKey<ProgramOfStudyEntity>("GeneralUnitsId")
             .OnDelete(DeleteBehavior.ClientCascade); // Shadow property
 
         builder.HasOne(p => p.ComplementaryUnits)
             .WithOne()
-            .HasForeignKey<ProgramOfStudy>("ComplementaryUnitsId")
+            .HasForeignKey<ProgramOfStudyEntity>("ComplementaryUnitsId")
             .OnDelete(DeleteBehavior.ClientCascade); // Shadow property;
 
         builder.HasOne(p => p.SpecificUnits)
             .WithOne()
-            .HasForeignKey<ProgramOfStudy>("SpecificUnitsId")
+            .HasForeignKey<ProgramOfStudyEntity>("SpecificUnitsId")
             .OnDelete(DeleteBehavior.ClientCascade); // Shadow property;
 
         builder.HasOne(p => p.OptionnalUnits)
             .WithOne()
-            .HasForeignKey<ProgramOfStudy>("OptionnalUnitsId")
+            .HasForeignKey<ProgramOfStudyEntity>("OptionnalUnitsId")
             .OnDelete(DeleteBehavior.ClientCascade); // Shadow property;
     }
 }

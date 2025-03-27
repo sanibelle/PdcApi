@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using Pdc.Domain.Entities.Common;
-using Pdc.Domain.Entities.CourseFramework;
 using Pdc.Domain.Enums;
 using Pdc.Infrastructure.Data;
+using Pdc.Infrastructure.Entities.CourseFramework;
 using System;
 using System.Threading.Tasks;
 
@@ -27,7 +27,7 @@ public class TestDataSeeder
 
         if (!await _context.ProgramOfStudies.AnyAsync())
         {
-            _context.ProgramOfStudies.Add(new ProgramOfStudy
+            _context.ProgramOfStudies.Add(new ProgramOfStudyEntity
             {
                 Code = "TEST.123",
                 Name = "Test Program of Study",

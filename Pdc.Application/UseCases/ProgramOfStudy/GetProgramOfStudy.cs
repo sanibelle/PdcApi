@@ -22,7 +22,7 @@ public class GetProgramOfStudy : IGetProgramOfStudyUseCase
     {
         try
         {
-            ProgramOfStudy program = await _programOfStudyRespository.FindById(code);
+            ProgramOfStudy program = await _programOfStudyRespository.FindByCode(code);
             return _mapper.Map<ProgramOfStudyDTO>(program);
         }
         catch (EntityNotFoundException)

@@ -5,6 +5,7 @@
 /// </summary>
 public class ChangeRecord
 {
+    public int VersionNumber { get; set; }
     private IEnumerable<ComplementaryInformation> _complementaryInformations { get; set; } = new List<ComplementaryInformation>();
     private IEnumerable<ChangeDetail> _changeDetails { get; set; } = new List<ChangeDetail>();
     public Guid Id { get; set; }
@@ -14,7 +15,6 @@ public class ChangeRecord
     /// </summary>
     public bool IsDraft { get; set; }
     //UTILISATEUR CreatedBy
-    public int VersionNumber { get; set; }
     public string? Description { get; set; }
     /// <summary>
     /// The version before

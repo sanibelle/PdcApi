@@ -67,8 +67,8 @@ public class StudyProgramTest
         _programOfStudyRepositoryMock.Setup(repo => repo.Delete(It.IsAny<string>()));
         _programOfStudyRepositoryMock.Setup(repo => repo.Update(It.IsAny<ProgramOfStudy>())).ReturnsAsync(program1);
         _programOfStudyRepositoryMock.Setup(repo => repo.GetAll()).ReturnsAsync(new List<ProgramOfStudy> { program1, program2 });
-        _programOfStudyRepositoryMock.Setup(repo => repo.FindById(It.IsIn(program1.Code))).ReturnsAsync(program1);
-        _programOfStudyRepositoryMock.Setup(repo => repo.FindById(It.IsIn(codeOfAFakeProgram))).Throws(new EntityNotFoundException(nameof(ProgramOfStudy), codeOfAFakeProgram));
+        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsIn(program1.Code))).ReturnsAsync(program1);
+        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsIn(codeOfAFakeProgram))).Throws(new EntityNotFoundException(nameof(ProgramOfStudy), codeOfAFakeProgram));
     }
 
     [Test]

@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pdc.Domain.Entities.MinisterialSpecification;
+using Pdc.Infrastructure.Entities.MinisterialSpecification;
 namespace Pdc.Infrastructure.Data.Configurations;
 
-public class MinisterialRealisationContextConfiguration : IEntityTypeConfiguration<MinisterialRealisationContext>
+public class MinisterialRealisationContextConfiguration : IEntityTypeConfiguration<MinisterialRealisationContextEntity>
 {
-    public void Configure(EntityTypeBuilder<MinisterialRealisationContext> builder)
+    public void Configure(EntityTypeBuilder<MinisterialRealisationContextEntity> builder)
     {
-        builder.ConfigureChangeable(1000);
     }
 }

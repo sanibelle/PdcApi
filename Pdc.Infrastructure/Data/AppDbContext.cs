@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pdc.Domain.Entities.Common;
-using Pdc.Domain.Entities.CourseFramework;
-using Pdc.Domain.Entities.MinisterialSpecification;
-using Pdc.Domain.Entities.Versioning;
+using Pdc.Infrastructure.Entities.CourseFramework;
+using Pdc.Infrastructure.Entities.MinisterialSpecification;
+using Pdc.Infrastructure.Entities.Versioning;
 namespace Pdc.Infrastructure.Data;
 
 public class AppDbContext : DbContext
@@ -12,17 +12,17 @@ public class AppDbContext : DbContext
     {
     }
 
-    public DbSet<ProgramOfStudy> ProgramOfStudies { get; set; }
-    public DbSet<Competency> Competencies { get; set; }
+    public DbSet<ProgramOfStudyEntity> ProgramOfStudies { get; set; }
+    public DbSet<CompetencyEntity> Competencies { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
         // Changeable sera directement intégré dans les classes qui l'utilisent
-        modelBuilder.Entity<Changeable>().ToTable("Changeables");
+        modelBuilder.Entity<ChangeableEntity>().ToTable("Changeables");
         modelBuilder.Entity<Weighting>().UseTpcMappingStrategy();
-        modelBuilder.Entity<CompetencyElement>();
+        modelBuilder.Entity<CompetencyElementEntity>();
 
 
         // If you need additional configuration for abstract classes or TPH inheritance

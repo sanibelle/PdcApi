@@ -28,7 +28,7 @@ public class UpdateProgramOfStudy : IUpdateProgramOfStudyUseCase
         {
             throw new ValidationException(validationResult.Errors);
         }
-        ProgramOfStudy existingProgramOfStudy = await _programOfStudyRespository.FindById(code);
+        ProgramOfStudy existingProgramOfStudy = await _programOfStudyRespository.FindByCode(code);
         _mapper.Map(updateProgramOfStudyDto, existingProgramOfStudy);
         ProgramOfStudy updatedProgramOfStudy = await _programOfStudyRespository.Update(existingProgramOfStudy);
         return _mapper.Map<ProgramOfStudyDTO>(updatedProgramOfStudy);

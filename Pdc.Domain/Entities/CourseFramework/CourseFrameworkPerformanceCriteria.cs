@@ -1,11 +1,12 @@
-﻿using Pdc.Domain.Entities.MinisterialSpecification;
-using Pdc.Domain.Entities.Versioning;
-using Pdc.Domain.Enums;
+﻿using Pdc.Domain.Enums;
 
 namespace Pdc.Domain.Entities.CourseFramework;
 
-public class CourseFramerowkPerformanceCriteria : PerformanceCriteria
+public class CourseFrameworkPerformanceCriteria
 {
-    public required ElementSpecification ElementSpecification { get; set; } // enseigné, vu plus tard, etc... 
-    public required ChangeRecord MasterCoursePlanVersion { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public required ContentElement ContentElement { get; set; }
+    public required CourseFramework CourseFramework { get; set; }
+    private IEnumerable<ContentElement> _contentElements { get; set; } = new List<ContentElement>();
+    public required TeachedLevelType TeachedLevel { get; set; }
 }

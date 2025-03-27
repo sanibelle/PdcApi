@@ -1,14 +1,13 @@
 ﻿using Pdc.Domain.Entities.Common;
-using Pdc.Domain.Entities.MinisterialSpecification;
-using Pdc.Domain.Entities.Versioning;
+using Pdc.Infrastructure.Entities.Versioning;
 
-namespace Pdc.Domain.Entities.CourseFramework;
+namespace Pdc.Infrastructure.Entities.CourseFramework;
 
-public class CourseFramework : Versionable
+public class CourseFrameworkEntityEntity : VersionableEntity
 {
-    private IEnumerable<CourseFrameworkCompetency> _courseFrameworkCompetencyElements { get; set; } = new List<CourseFrameworkCompetency>();
-    private IEnumerable<CourseFrameworkPerformanceCriteria> _CourseFrameworkPerformanceCriterias { get; set; } = new List<CourseFrameworkPerformanceCriteria>();
-    private IEnumerable<CourseFramework> _prerequisites = new List<CourseFramework>();
+    private IEnumerable<CourseFrameworkCompetencyEntity> _courseFrameworkCompetencyElements { get; set; } = new List<CourseFrameworkCompetencyEntity>();
+    private IEnumerable<CourseFrameworkPerformanceCriteriaEntity> _CourseFrameworkPerformanceCriterias { get; set; } = new List<CourseFrameworkPerformanceCriteriaEntity>();
+    private IEnumerable<CourseFrameworkEntityEntity> _prerequisites = new List<CourseFrameworkEntityEntity>();
     public required string Name { get; set; }
     public required string CourseCode { get; set; }
     public required Weighting Weighting { get; set; }
@@ -33,11 +32,11 @@ public class CourseFramework : Versionable
     /// <list type="bullet">
     ///    <item>
     ///        <term>Un élément de compétence</term>
-    ///        <definition><see cref="CompetencyElement"/></definition>
+    ///        <definition><see cref="CompetencyElementEntity"/></definition>
     ///    </item>
     ///    <item>
     ///        <term>Un critère de performance</term>
-    ///        <definition><see cref="PerformanceCriteria"/></definition>
+    ///        <definition><see cref="PerformanceCriteriaEntity"/></definition>
     ///    </item>
     ///    <item>
     ///        <term>Un élément de contenu</term>
@@ -45,10 +44,10 @@ public class CourseFramework : Versionable
     ///    </item>
     ///    <item>
     ///        <term>Du texte</term>
-    ///        <definition><see cref="Changeable"/></definition>
+    ///        <definition><see cref="ChangeableEntity"/></definition>
     ///    </item>
     ///</list>
     /// </summary>
-    public required IEnumerable<Changeable> AssedElements { get; set; }
+    public required IEnumerable<ChangeableEntity> AssedElements { get; set; }
 }
 

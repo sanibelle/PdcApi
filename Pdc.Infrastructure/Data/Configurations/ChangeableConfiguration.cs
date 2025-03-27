@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pdc.Domain.Entities.Versioning;
+using Pdc.Infrastructure.Entities.Versioning;
 namespace Pdc.Infrastructure.Data.Configurations;
 
-public class ChangeableConfiguration : IEntityTypeConfiguration<Changeable>
+public class ChangeableConfiguration : IEntityTypeConfiguration<ChangeableEntity>
 {
-    public void Configure(EntityTypeBuilder<Changeable> builder)
+    public void Configure(EntityTypeBuilder<ChangeableEntity> builder)
     {
         builder.HasKey(x => x.Id);
 

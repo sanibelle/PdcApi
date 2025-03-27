@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Infrastructure.Data;
+using Pdc.Infrastructure.Mappings;
 using Pdc.Infrastructure.Repositories;
 
 namespace Pdc.Infrastructure;
@@ -31,6 +32,7 @@ public static class DependencyInjection
 
         // Register Repositories
         services.AddScoped<IProgramOfStudyRespository, ProgramOfStudyRespository>();
+        services.AddAutoMapper(typeof(MappingProfile));
 
         return services;
     }
