@@ -20,13 +20,15 @@ public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEn
             .UseSequence()
             .IsRequired();
 
-        builder.HasOne(builder => builder.ParentVersion)
-            .WithOne()
-            .HasForeignKey("VersionId");
+        //Not really one to many, but ef needs that
+        builder.HasOne(x => x.ParentVersion)
+            .WithMany()
+            .HasForeignKey("ParentVersionId");
 
-        builder.HasOne(builder => builder.NextVersion)
-            .WithOne()
-            .HasForeignKey("VersionId");
+        //Not really one to many, but ef needs that
+        builder.HasOne(x => x.NextVersion)
+            .WithMany()
+            .HasForeignKey("NextVersionId");
         //UTILISATEUR CreatedBy
     }
 }

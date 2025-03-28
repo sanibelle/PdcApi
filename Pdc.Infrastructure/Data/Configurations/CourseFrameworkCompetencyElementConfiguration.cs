@@ -4,9 +4,9 @@ using Pdc.Domain.Enums;
 using Pdc.Infrastructure.Entities.CourseFramework;
 
 namespace Pdc.Infrastructure.Data.Configurations;
-public class CourseFrameworkCompetencyElementConfiguration : IEntityTypeConfiguration<CourseFrameworkCompetencyElementEntity>
+public class CourseFrameworkCompetencyElementConfiguration : IEntityTypeConfiguration<CourseFrameworkPerformanceEntity>
 {
-    public void Configure(EntityTypeBuilder<CourseFrameworkCompetencyElementEntity> builder)
+    public void Configure(EntityTypeBuilder<CourseFrameworkPerformanceEntity> builder)
     {
         builder.HasKey(x => x.Id);
 

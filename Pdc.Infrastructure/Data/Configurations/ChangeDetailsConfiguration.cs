@@ -20,7 +20,7 @@ public class ChangeDetailConfiguration : IEntityTypeConfiguration<ChangeDetailEn
             .IsRequired();
 
         builder.HasOne(x => x.Changeable)
-            .WithOne()
+            .WithMany()
             .IsRequired();
     }
 }
