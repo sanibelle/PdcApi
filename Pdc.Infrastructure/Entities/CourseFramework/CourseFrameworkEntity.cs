@@ -5,7 +5,7 @@ namespace Pdc.Infrastructure.Entities.CourseFramework;
 
 public class CourseFrameworkEntity : VersionableEntity
 {
-    public IEnumerable<CourseFrameworkCompetencyEntity> CourseFrameworkCompetencyElements { get; set; } = new List<CourseFrameworkCompetencyEntity>();
+    public IEnumerable<CourseFrameworkCompetencyEntity> CourseFrameworkCompetencies { get; set; } = new List<CourseFrameworkCompetencyEntity>();
     public IEnumerable<CourseFrameworkPerformanceCriteriaEntity> CourseFrameworkPerformanceCriterias { get; set; } = new List<CourseFrameworkPerformanceCriteriaEntity>();
     public IEnumerable<CourseFrameworkEntity> Prerequisites { get; set; } = new List<CourseFrameworkEntity>();
     /// <summary>

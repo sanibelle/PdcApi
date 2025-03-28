@@ -4,21 +4,23 @@ using Pdc.Domain.Enums;
 using Pdc.Infrastructure.Entities.CourseFramework;
 
 namespace Pdc.Infrastructure.Data.Configurations;
-public class CourseFrameworkCompetencyElementConfiguration : IEntityTypeConfiguration<CourseFrameworkPerformanceEntity>
+public class CourseFrameworkCompetencyElementConfiguration : IEntityTypeConfiguration<CourseFrameworkCompetencyElementEntity>
 {
-    public void Configure(EntityTypeBuilder<CourseFrameworkPerformanceEntity> builder)
+    public void Configure(EntityTypeBuilder<CourseFrameworkCompetencyElementEntity> builder)
     {
         builder.HasKey(x => x.Id);
 
 
         builder.HasOne(x => x.CompetencyElement)
-                .WithMany()
-                .HasForeignKey("CompetencyElementId")
-                .IsRequired();
+            .WithMany()
+            .HasForeignKey("CompetencyElementId")
+            .OnDelete(DeleteBehavior.NoAction)
+            .IsRequired();
 
         builder.HasOne(x => x.CourseFramework)
             .WithMany()
             .HasForeignKey("CourseFrameworkId")
+            .OnDelete(DeleteBehavior.NoAction)
             .IsRequired();
 
         builder.Property(x => x.Hours)

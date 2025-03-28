@@ -12,7 +12,7 @@ using Pdc.Infrastructure.Data;
 namespace Pdc.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250328025011_InitialCreate")]
+    [Migration("20250328193410_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -54,7 +54,7 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.HasIndex("PrerequisitesCourseCode");
 
-                    b.ToTable("CourseFrameworkEntityCourseFrameworkEntity");
+                    b.ToTable("CourseFrameworkPrerequisites", (string)null);
                 });
 
             modelBuilder.Entity("Pdc.Domain.Entities.Common.Units", b =>
@@ -77,138 +77,7 @@ namespace Pdc.Infrastructure.Migrations
                     b.ToTable("Units");
                 });
 
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkCompetencyEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CompetencyDistribution")
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CompetencyId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CourseFrameworkCompetencyElementId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CourseFrameworkId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Hours")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsAssedElement")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ReachedTaxonomyLevel")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(6);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CompetencyId");
-
-                    b.HasIndex("CourseFrameworkCompetencyElementId");
-
-                    b.HasIndex("CourseFrameworkId");
-
-                    b.ToTable("CourseFrameworkCompetencyEntity");
-                });
-
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", b =>
-                {
-                    b.Property<string>("CourseCode")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CourseCharacteristics")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("CurrentVersionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("FinalCourseObjective")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Hours")
-                        .HasColumnType("TINYINT UNSIGNED");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("OtherSpecifications")
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Semester")
-                        .HasColumnType("TINYINT UNSIGNED");
-
-                    b.Property<string>("StatementOfComplexAuthenticTask")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TaskPresentation")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UnitsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("CourseCode");
-
-                    b.HasIndex("CurrentVersionId");
-
-                    b.HasIndex("UnitsId");
-
-                    b.ToTable("CourseFrameworkEntity");
-                });
-
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkPerformanceCriteriaEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CourseFrameworkId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CourseFrameworkPerformanceCriteriaId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsAssedElement")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("PerformanceCriteriaId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("TeachedLevel")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseFrameworkId");
-
-                    b.HasIndex("CourseFrameworkPerformanceCriteriaId");
-
-                    b.HasIndex("PerformanceCriteriaId");
-
-                    b.ToTable("CourseFrameworkPerformanceCriteriaEntity");
-                });
-
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkPerformanceEntity", b =>
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkCompetencyElementEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -243,7 +112,128 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.HasIndex("CourseFrameworkId");
 
-                    b.ToTable("CourseFrameworkPerformanceEntity");
+                    b.ToTable("CourseFrameworkCompetencyElements");
+                });
+
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkCompetencyEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CompetencyDistribution")
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompetencyId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CourseFrameworkCourseCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Hours")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsAssedElement")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ReachedTaxonomyLevel")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(6);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompetencyId");
+
+                    b.HasIndex("CourseFrameworkCourseCode");
+
+                    b.ToTable("CourseFrameworkCompetencies", (string)null);
+                });
+
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", b =>
+                {
+                    b.Property<string>("CourseCode")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CourseCharacteristics")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CurrentVersionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FinalCourseObjective")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("Hours")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("OtherSpecifications")
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("Semester")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("StatementOfComplexAuthenticTask")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TaskPresentation")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UnitsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CourseCode");
+
+                    b.HasIndex("CurrentVersionId");
+
+                    b.HasIndex("UnitsId");
+
+                    b.ToTable("CourseFrameworks");
+                });
+
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkPerformanceCriteriaEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CourseFrameworkCourseCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsAssedElement")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("PerformanceCriteriaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("TeachedLevel")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseFrameworkCourseCode");
+
+                    b.HasIndex("PerformanceCriteriaId");
+
+                    b.ToTable("CourseFrameworkPerformanceCriterias");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", b =>
@@ -345,9 +335,6 @@ namespace Pdc.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ChangeRecordEntityId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("ChangeRecordId")
                         .HasColumnType("uniqueidentifier");
 
@@ -363,13 +350,11 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChangeRecordEntityId");
-
                     b.HasIndex("ChangeRecordId");
 
                     b.HasIndex("ChangeableId");
 
-                    b.ToTable("ChangeDetailEntity");
+                    b.ToTable("ChangeDetails");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", b =>
@@ -409,7 +394,7 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.HasIndex("ParentVersionId");
 
-                    b.ToTable("ChangeRecordEntity");
+                    b.ToTable("ChangeRecords");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", b =>
@@ -417,11 +402,6 @@ namespace Pdc.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(34)
-                        .HasColumnType("nvarchar(34)");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -432,24 +412,13 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.ToTable("Changeables", (string)null);
 
-                    b.HasDiscriminator().HasValue("ChangeableEntity");
-
-                    b.UseTphMappingStrategy();
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ComplementaryInformationEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ChangeRecordEntityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ChangeRecordId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ChangeableEntityId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ChangeableId")
@@ -465,25 +434,21 @@ namespace Pdc.Infrastructure.Migrations
                         .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("WrittenOnVersionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
-
-                    b.HasIndex("ChangeRecordEntityId");
-
-                    b.HasIndex("ChangeRecordId");
-
-                    b.HasIndex("ChangeableEntityId");
 
                     b.HasIndex("ChangeableId");
 
-                    b.ToTable("ComplementaryInformationEntity");
+                    b.HasIndex("WrittenOnVersionId");
+
+                    b.ToTable("ComplementaryInformations");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.ContentElementEntity", b =>
                 {
                     b.HasBaseType("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity");
-
-                    b.Property<Guid?>("CourseFrameworkPerformanceCriteriaEntityId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CourseFrameworkPerformanceCriteriaId")
                         .HasColumnType("uniqueidentifier");
@@ -494,11 +459,9 @@ namespace Pdc.Infrastructure.Migrations
                     b.Property<int>("TeachedLevel")
                         .HasColumnType("int");
 
-                    b.HasIndex("CourseFrameworkPerformanceCriteriaEntityId");
-
                     b.HasIndex("CourseFrameworkPerformanceCriteriaId");
 
-                    b.HasDiscriminator().HasValue("ContentElementEntity");
+                    b.ToTable("ContentElements");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", b =>
@@ -513,23 +476,22 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.HasIndex("CompetencyId");
 
-                    b.ToTable("Changeables", t =>
-                        {
-                            t.Property("Position")
-                                .HasColumnName("CompetencyElementEntity_Position");
-                        });
-
-                    b.HasDiscriminator().HasValue("CompetencyElementEntity");
+                    b.ToTable("CompetencyElements", (string)null);
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", b =>
                 {
                     b.HasBaseType("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity");
 
+                    b.Property<Guid?>("CompetencyElementId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Position")
                         .HasColumnType("int");
 
-                    b.HasDiscriminator().HasValue("PerformanceCriteriaEntity");
+                    b.HasIndex("CompetencyElementId");
+
+                    b.ToTable("PerformanceCriterias");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.RealisationContextEntity", b =>
@@ -537,11 +499,12 @@ namespace Pdc.Infrastructure.Migrations
                     b.HasBaseType("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity");
 
                     b.Property<string>("CompetencyCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasIndex("CompetencyCode");
 
-                    b.HasDiscriminator().HasValue("RealisationContextEntity");
+                    b.ToTable("RealisationContexts");
                 });
 
             modelBuilder.Entity("ChangeableEntityCourseFrameworkEntity", b =>
@@ -574,21 +537,36 @@ namespace Pdc.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkCompetencyElementEntity", b =>
+                {
+                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", "CompetencyElement")
+                        .WithMany()
+                        .HasForeignKey("CompetencyElementId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CourseFramework")
+                        .WithMany()
+                        .HasForeignKey("CourseFrameworkId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("CompetencyElement");
+
+                    b.Navigation("CourseFramework");
+                });
+
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkCompetencyEntity", b =>
                 {
                     b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", "Competency")
                         .WithMany()
                         .HasForeignKey("CompetencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", null)
-                        .WithMany("CourseFrameworkCompetencyElements")
-                        .HasForeignKey("CourseFrameworkCompetencyElementId");
-
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CourseFramework")
-                        .WithMany()
-                        .HasForeignKey("CourseFrameworkId")
+                        .WithMany("CourseFrameworkCompetencies")
+                        .HasForeignKey("CourseFrameworkCourseCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -616,18 +594,18 @@ namespace Pdc.Infrastructure.Migrations
                             b1.Property<string>("CourseFrameworkEntityCourseCode")
                                 .HasColumnType("nvarchar(450)");
 
-                            b1.Property<int>("LaboratoryHours")
-                                .HasColumnType("TINYINT UNSIGNED");
+                            b1.Property<byte>("LaboratoryHours")
+                                .HasColumnType("tinyint");
 
-                            b1.Property<int>("PersonnalWorkHours")
-                                .HasColumnType("TINYINT UNSIGNED");
+                            b1.Property<byte>("PersonnalWorkHours")
+                                .HasColumnType("tinyint");
 
-                            b1.Property<int>("TheoryHours")
-                                .HasColumnType("TINYINT UNSIGNED");
+                            b1.Property<byte>("TheoryHours")
+                                .HasColumnType("tinyint");
 
                             b1.HasKey("CourseFrameworkEntityCourseCode");
 
-                            b1.ToTable("CourseFrameworkEntity");
+                            b1.ToTable("CourseFrameworks");
 
                             b1.WithOwner()
                                 .HasForeignKey("CourseFrameworkEntityCourseCode");
@@ -644,43 +622,20 @@ namespace Pdc.Infrastructure.Migrations
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkPerformanceCriteriaEntity", b =>
                 {
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CourseFramework")
-                        .WithMany()
-                        .HasForeignKey("CourseFrameworkId")
+                        .WithMany("CourseFrameworkPerformanceCriterias")
+                        .HasForeignKey("CourseFrameworkCourseCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", null)
-                        .WithMany("CourseFrameworkPerformanceCriterias")
-                        .HasForeignKey("CourseFrameworkPerformanceCriteriaId");
 
                     b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", "PerformanceCriteria")
                         .WithMany()
                         .HasForeignKey("PerformanceCriteriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("CourseFramework");
 
                     b.Navigation("PerformanceCriteria");
-                });
-
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkPerformanceEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", "CompetencyElement")
-                        .WithMany()
-                        .HasForeignKey("CompetencyElementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CourseFramework")
-                        .WithMany()
-                        .HasForeignKey("CourseFrameworkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CompetencyElement");
-
-                    b.Navigation("CourseFramework");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", b =>
@@ -743,12 +698,8 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeDetailEntity", b =>
                 {
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", null)
-                        .WithMany("ChangeDetails")
-                        .HasForeignKey("ChangeRecordEntityId");
-
                     b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "ChangeRecord")
-                        .WithMany()
+                        .WithMany("ChangeDetails")
                         .HasForeignKey("ChangeRecordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -781,23 +732,15 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ComplementaryInformationEntity", b =>
                 {
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", null)
+                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", "Changeable")
                         .WithMany("ComplementaryInformations")
-                        .HasForeignKey("ChangeRecordEntityId");
-
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "WrittenOnVersion")
-                        .WithMany()
-                        .HasForeignKey("ChangeRecordId")
+                        .HasForeignKey("ChangeableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", null)
+                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "WrittenOnVersion")
                         .WithMany("ComplementaryInformations")
-                        .HasForeignKey("ChangeableEntityId");
-
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", "Changeable")
-                        .WithMany()
-                        .HasForeignKey("ChangeableId")
+                        .HasForeignKey("WrittenOnVersionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -808,13 +751,15 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.ContentElementEntity", b =>
                 {
-                    b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkPerformanceCriteriaEntity", null)
-                        .WithMany("ContentElements")
-                        .HasForeignKey("CourseFrameworkPerformanceCriteriaEntityId");
-
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkPerformanceCriteriaEntity", "CourseFrameworkPerformanceCriteria")
-                        .WithMany()
+                        .WithMany("ContentElements")
                         .HasForeignKey("CourseFrameworkPerformanceCriteriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ContentElementEntity", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -826,18 +771,47 @@ namespace Pdc.Infrastructure.Migrations
                     b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", null)
                         .WithMany("CompetencyElements")
                         .HasForeignKey("CompetencyId");
+
+                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", b =>
+                {
+                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", null)
+                        .WithMany("PerformanceCriterias")
+                        .HasForeignKey("CompetencyElementId");
+
+                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.RealisationContextEntity", b =>
                 {
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", null)
+                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", "Competency")
                         .WithMany("RealisationContexts")
-                        .HasForeignKey("CompetencyCode");
+                        .HasForeignKey("CompetencyCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.RealisationContextEntity", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Competency");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", b =>
                 {
-                    b.Navigation("CourseFrameworkCompetencyElements");
+                    b.Navigation("CourseFrameworkCompetencies");
 
                     b.Navigation("CourseFrameworkPerformanceCriterias");
                 });
@@ -869,6 +843,11 @@ namespace Pdc.Infrastructure.Migrations
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", b =>
                 {
                     b.Navigation("ComplementaryInformations");
+                });
+
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", b =>
+                {
+                    b.Navigation("PerformanceCriterias");
                 });
 #pragma warning restore 612, 618
         }

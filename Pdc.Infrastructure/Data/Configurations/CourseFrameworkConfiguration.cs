@@ -14,11 +14,11 @@ public class CourseFrameworkConfiguration : IEntityTypeConfiguration<CourseFrame
             .IsRequired();
 
         builder.Property(x => x.Semester)
-            .HasColumnType("TINYINT UNSIGNED")
+            .HasColumnType("tinyint")
             .IsRequired();
 
         builder.Property(x => x.Hours)
-            .HasColumnType("TINYINT UNSIGNED")
+            .HasColumnType("tinyint")
             .IsRequired();
 
         builder.Property(x => x.FinalCourseObjective)
@@ -43,13 +43,13 @@ public class CourseFrameworkConfiguration : IEntityTypeConfiguration<CourseFrame
         builder.OwnsOne(x => x.Weighting, w =>
         {
             w.Property(p => p.LaboratoryHours)
-                .HasColumnType("TINYINT UNSIGNED")
+                .HasColumnType("tinyint")
                 .IsRequired();
             w.Property(p => p.PersonnalWorkHours)
-                .HasColumnType("TINYINT UNSIGNED")
+                .HasColumnType("tinyint")
                 .IsRequired();
             w.Property(p => p.TheoryHours)
-                .HasColumnType("TINYINT UNSIGNED")
+                .HasColumnType("tinyint")
                 .IsRequired();
         });
 
@@ -58,16 +58,9 @@ public class CourseFrameworkConfiguration : IEntityTypeConfiguration<CourseFrame
             .HasForeignKey("UnitsId")
             .OnDelete(DeleteBehavior.ClientCascade); // Shadow property;
 
-        builder.HasMany(x => x.CourseFrameworkCompetencyElements)
-            .WithOne()
-            .HasForeignKey("CourseFrameworkCompetencyElementId");
-
-        builder.HasMany(x => x.CourseFrameworkPerformanceCriterias)
-            .WithOne()
-            .HasForeignKey("CourseFrameworkPerformanceCriteriaId");
-
         builder.HasMany(x => x.Prerequisites)
-            .WithMany();
+            .WithMany()
+            .UsingEntity(x => x.ToTable("CourseFrameworkPrerequisites"));
 
         builder.HasMany(x => x.AssedElements)
             .WithMany();

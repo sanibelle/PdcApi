@@ -6,7 +6,7 @@ namespace Pdc.Infrastructure.Entities.CourseFramework;
 /// <summary>
 /// La Value perment d'y inscrire le texte en lien avec le cours.
 /// </summary>
-public class CourseFrameworkPerformanceEntity
+public class CourseFrameworkCompetencyElementEntity
 {
     public required Guid Id { get; set; } = Guid.NewGuid();
     public required CompetencyElementEntity CompetencyElement { get; set; }

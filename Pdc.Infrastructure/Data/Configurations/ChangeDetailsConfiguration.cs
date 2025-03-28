@@ -15,12 +15,12 @@ public class ChangeDetailConfiguration : IEntityTypeConfiguration<ChangeDetailEn
         builder.Property(x => x.ChangeType)
             .IsRequired();
 
-        builder.HasOne(x => x.ChangeRecord)
-            .WithMany()
-            .IsRequired();
+        //builder.HasOne(x => x.ChangeRecord)
+        //    .WithMany()
+        //    .IsRequired();
 
-        builder.HasOne(x => x.Changeable)
-            .WithMany()
-            .IsRequired();
+        //builder.HasOne(x => x.Changeable)
+        //    .WithMany()
+        //    .IsRequired();
     }
 }

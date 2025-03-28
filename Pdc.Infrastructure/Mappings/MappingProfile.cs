@@ -39,15 +39,11 @@ public class MappingProfile : Profile
             .IncludeBase<Competency, CompetencyEntity>()
             .ReverseMap();
 
-        CreateMap<CourseFrameworkCompetencyElement, CourseFrameworkPerformanceEntity>()
+        CreateMap<CourseFrameworkCompetencyElement, CourseFrameworkCompetencyElementEntity>()
             .IncludeBase<CompetencyElement, CompetencyElementEntity>()
             .ReverseMap();
 
-        CreateMap<CompetencyElement, CourseFrameworkPerformanceEntity>()
-            .ForMember(dest => dest.CompetencyElement, opt => opt.MapFrom(src => src))
-            .ReverseMap()
-            .ForMember(dest => dest, opt => opt.MapFrom(src => src.CompetencyElement));
-
-        // Migration et tests I guess! :)
+        CreateMap<CompetencyElement, CompetencyElementEntity>()
+            .ReverseMap();
     }
 }

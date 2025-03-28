@@ -9,16 +9,6 @@ public class ComplementaryInformationConfiguration : IEntityTypeConfiguration<Co
     {
         builder.HasKey(x => x.Id);
 
-        builder.HasOne(x => x.Changeable)
-            .WithMany()
-            .HasForeignKey("ChangeableId")
-            .IsRequired();
-
-        builder.HasOne(x => x.WrittenOnVersion)
-            .WithMany()
-            .HasForeignKey("ChangeRecordId")
-            .IsRequired();
-
         builder.Property(x => x.ModifiedOn)
             .HasDefaultValueSql("GETDATE()")
             .IsRequired();

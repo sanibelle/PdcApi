@@ -7,9 +7,9 @@ public class ContentElementConfiguration : IEntityTypeConfiguration<ContentEleme
 {
     public void Configure(EntityTypeBuilder<ContentElementEntity> builder)
     {
-        builder.HasOne(x => x.CourseFrameworkPerformanceCriteria)
-            .WithMany()
-            .HasForeignKey("CourseFrameworkPerformanceCriteriaId")
-            .IsRequired();
+        //builder.HasOne(x => x.CourseFrameworkPerformanceCriteria)
+        //    .WithMany()
+        //    .HasForeignKey("CourseFrameworkPerformanceCriteriaId")
+        //    .IsRequired();
     }
 }

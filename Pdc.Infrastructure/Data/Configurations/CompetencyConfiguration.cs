@@ -13,10 +13,6 @@ public class CompetencyConfiguration : IEntityTypeConfiguration<CompetencyEntity
             .IsRequired()
             .HasMaxLength(1500);
 
-        builder.HasMany(x => x.RealisationContexts)
-            .WithOne()
-            .HasForeignKey("CompetencyCode");
-
         builder.HasMany(x => x.CompetencyElements)
             .WithOne()
             .HasForeignKey("CompetencyId");

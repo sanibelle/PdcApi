@@ -13,12 +13,14 @@ public class CourseFrameworkCompetencyConfiguration : IEntityTypeConfiguration<C
         builder.HasOne(x => x.Competency)
             .WithMany()
             .HasForeignKey("CompetencyId")
+            .OnDelete(DeleteBehavior.NoAction)
             .IsRequired();
 
-        builder.HasOne(x => x.CourseFramework)
-            .WithMany()
-            .HasForeignKey("CourseFrameworkId")
-            .IsRequired();
+        //builder.HasOne(x => x.CourseFramework)
+        //    .WithMany()
+        //    .HasForeignKey("CourseFrameworkId")
+        //    .OnDelete(DeleteBehavior.NoAction)
+        //    .IsRequired();
 
         builder.Property(x => x.Hours)
             .IsRequired();
