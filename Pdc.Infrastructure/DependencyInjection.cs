@@ -32,6 +32,7 @@ public static class DependencyInjection
 
         // Register Repositories
         services.AddScoped<IProgramOfStudyRespository, ProgramOfStudyRespository>();
+        services.AddScoped<ICompetencyRespository, CompetencyRepository>();
         services.AddAutoMapper(typeof(MappingProfile));
 
         return services;

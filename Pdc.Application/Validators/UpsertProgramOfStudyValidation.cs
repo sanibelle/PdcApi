@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Pdc.Application.DTOS;
+using Pdc.Domain.Enums;
 
 namespace Pdc.Application.Validators;
 
@@ -16,7 +17,8 @@ public class UpsertProgramOfStudyValidation : AbstractValidator<CreateProgramOfS
             .MaximumLength(255);
 
         RuleFor(x => x.Sanction)
-            .IsInEnum();
+            .Must(s => Enum.IsDefined(typeof(SanctionType), s))
+            .WithMessage("Invalid sanction type.");
 
         RuleFor(x => x.MonthsDuration)
             .GreaterThan(0);

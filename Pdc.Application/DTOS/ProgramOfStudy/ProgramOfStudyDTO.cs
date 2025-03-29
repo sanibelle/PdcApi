@@ -4,7 +4,6 @@ namespace Pdc.Application.DTOS;
 
 public class ProgramOfStudyDTO : CreateProgramOfStudyDTO
 {
-    public required Guid Id { get; set; }
     /// <summary>
     /// Les unités des cours généraux
     /// </summary>

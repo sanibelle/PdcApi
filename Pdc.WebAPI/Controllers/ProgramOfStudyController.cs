@@ -41,12 +41,23 @@ public class ProgramOfStudyController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ProgramOfStudyDTO>> Create([FromBody] CreateProgramOfStudyDTO createProgramOfStudyDTO)
     {
-        var programOfStudy = await _createUseCase.Execute(createProgramOfStudyDTO);
+        try
+        {
+            var programOfStudy = await _createUseCase.Execute(createProgramOfStudyDTO);
+            return CreatedAtAction(
+                nameof(Get),
+                new { code = programOfStudy.Code },
+                programOfStudy);
+        }
+        catch (Exception ex)
+        {
+            // Log the exception
+            Console.WriteLine($"Exception: {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
 
-        return CreatedAtAction(
-            nameof(Get),
-            new { id = programOfStudy.Id },
-            programOfStudy);
+            // Re-throw to see it in your logs
+            throw;
+        }
     }
 
     [HttpGet("{code}")]

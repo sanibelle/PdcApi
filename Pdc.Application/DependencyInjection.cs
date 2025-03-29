@@ -19,6 +19,8 @@ public static class DependencyInjection
         services.AddScoped<IGetAllProgramOfStudyUseCase, GetAllProgramOfStudy>();
         services.AddScoped<IUpdateProgramOfStudyUseCase, UpdateProgramOfStudy>();
         services.AddScoped<IGetProgramOfStudyUseCase, GetProgramOfStudy>();
+        services.AddScoped<ICreateCompetencyUseCase, CreateCompetency>();
+
 
         services.AddAutoMapper(typeof(MappingProfile));
 

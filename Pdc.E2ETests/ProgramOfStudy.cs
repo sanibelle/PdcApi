@@ -35,7 +35,7 @@ namespace Pdc.E2ETests
             // Arrange
             CreateProgramOfStudyDTO newProgram = new CreateProgramOfStudyDTO()
             {
-                Code = "420.B0",
+                Code = "431.C0",
                 Name = "Techniques de l'informatique",
                 Sanction = Pdc.Domain.Enums.SanctionType.DEC,
                 MonthsDuration = 36,
@@ -55,7 +55,7 @@ namespace Pdc.E2ETests
             ProgramOfStudyDTO createdProgram = await response.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
             // Verify it was added to the database
-            HttpResponseMessage getResponse = await _client.GetAsync($"/api/programofstudy/{createdProgram.Id}");
+            HttpResponseMessage getResponse = await _client.GetAsync($"/api/programofstudy/{createdProgram.Code}");
             getResponse.EnsureSuccessStatusCode();
             ProgramOfStudyDTO fetchedProgram = await getResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
@@ -72,7 +72,7 @@ namespace Pdc.E2ETests
             // Arrange
             CreateProgramOfStudyDTO newProgram = new CreateProgramOfStudyDTO()
             {
-                Code = "420.B0",
+                Code = "420.D0",
                 Name = "Techniques de l'informatique",
                 Sanction = Pdc.Domain.Enums.SanctionType.DEC,
                 MonthsDuration = 36,
@@ -89,11 +89,11 @@ namespace Pdc.E2ETests
             var createdProgram = await createResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
             // Act - Delete the program
-            var deleteResponse = await _client.DeleteAsync($"/api/programofstudy/{createdProgram.Id}");
+            var deleteResponse = await _client.DeleteAsync($"/api/programofstudy/{createdProgram.Code}");
             deleteResponse.EnsureSuccessStatusCode();
 
             // Assert - Verify the program was deleted
-            var getResponse = await _client.GetAsync($"/api/programofstudy/{createdProgram.Id}");
+            var getResponse = await _client.GetAsync($"/api/programofstudy/{createdProgram.Code}");
             Assert.That(getResponse.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
         }
 
@@ -116,8 +116,7 @@ namespace Pdc.E2ETests
 
             ProgramOfStudyDTO updatedProgramData = new ProgramOfStudyDTO()
             {
-                Id = new Guid(),
-                Code = "421.B0",
+                Code = "421.B5",
                 Name = "Techniques de l'informatique 2.0",
                 Sanction = Pdc.Domain.Enums.SanctionType.AEC,
                 MonthsDuration = 35,
@@ -136,8 +135,8 @@ namespace Pdc.E2ETests
             var createdProgram = await createResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
             // Act - Uodate the program
-            updatedProgramData.Id = createdProgram.Id;
-            var updateResponse = await _client.PutAsJsonAsync($"/api/programofstudy/{updatedProgramData.Id}", updatedProgramData);
+            updatedProgramData.Code = createdProgram.Code;
+            var updateResponse = await _client.PutAsJsonAsync($"/api/programofstudy/{updatedProgramData.Code}", updatedProgramData);
             updateResponse.EnsureSuccessStatusCode();
             var updatedProgram = await updateResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 

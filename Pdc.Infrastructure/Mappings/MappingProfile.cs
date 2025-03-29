@@ -31,16 +31,13 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Competencies, opt => opt.MapFrom(src => src.Competencies));
 
         CreateMap<MinisterialCompetency, CompetencyEntity>()
-            .IncludeBase<Competency, CompetencyEntity>()
             .ReverseMap();
 
         // CourseFrameworkCompetency
         CreateMap<CourseFrameworkCompetency, CourseFrameworkCompetencyEntity>()
-            .IncludeBase<Competency, CompetencyEntity>()
             .ReverseMap();
 
         CreateMap<CourseFrameworkCompetencyElement, CourseFrameworkCompetencyElementEntity>()
-            .IncludeBase<CompetencyElement, CompetencyElementEntity>()
             .ReverseMap();
 
         CreateMap<CompetencyElement, CompetencyElementEntity>()
