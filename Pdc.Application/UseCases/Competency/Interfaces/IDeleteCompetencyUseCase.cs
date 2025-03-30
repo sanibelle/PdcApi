@@ -2,5 +2,5 @@
 
 public interface IDeleteCompetencyUseCase
 {
-    Task Execute(string code);
+    Task Execute(string programOfStudyCode, string competencyCode);
 }

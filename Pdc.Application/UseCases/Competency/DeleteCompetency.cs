@@ -1,4 +1,5 @@
 ﻿using Pdc.Application.Exceptions;
+using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 
 namespace Pdc.Application.UseCase;
@@ -12,16 +13,16 @@ public class DeleteCompetency : IDeleteCompetencyUseCase
         _programOfStudyRespository = programOfStudyRespository;
     }
 
-    public async Task Execute(string code)
+    public async Task Execute(string programOfStudyCode, string competencyCode)
     {
         try
         {
-            await _programOfStudyRespository.FindByCode(code);
+            await _programOfStudyRespository.FindByCode(programOfStudyCode, competencyCode);
         }
-        catch
+        catch (EntityNotFoundException)
         {
             throw new NotFoundException();
         }
-        await _programOfStudyRespository.Delete(code);
+        await _programOfStudyRespository.Delete(programOfStudyCode, competencyCode);
     }
 }

@@ -4,5 +4,5 @@ namespace Pdc.Application.UseCase;
 
 public interface IGetCompetencyUseCase
 {
-    Task<CompetencyDTO> Execute(string code);
+    Task<CompetencyDTO> Execute(string programOfStudyCode, string competencyCode);
 }

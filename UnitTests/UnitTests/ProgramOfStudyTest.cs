@@ -7,14 +7,14 @@ using Pdc.Application.UseCase;
 using Pdc.Application.Validators;
 using Pdc.Domain.Entities.Common;
 using Pdc.Domain.Entities.CourseFramework;
-using Pdc.Domain.Entities.MinisterialSpecification;
 using Pdc.Domain.Enums;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Tests.Builders.Models;
 
-namespace UnitTests;
+namespace Pdc.Tests.UnitTests;
 
-public class StudyProgramTest
+public class ProgramOfStudyTest
 {
     Mock<IProgramOfStudyRespository> _programOfStudyRepositoryMock;
     ICreateProgramOfStudyUseCase _createProgramOfStudyUseCase;
@@ -23,32 +23,11 @@ public class StudyProgramTest
     IUpdateProgramOfStudyUseCase _updateProgramOfStudyUseCase;
     IMapper _mapper;
     IValidator<CreateProgramOfStudyDTO> _validator;
-    string codeOfAFakeProgram = "FakeCode";
+    string codeOfAFakeProgram = "fakeCode";
 
 
-    private ProgramOfStudy program1 = new()
-    {
-        Code = "420.B0",
-        Name = "Techniques de l'informatique",
-        Sanction = SanctionType.DEC,
-        MonthsDuration = 36,
-        SpecificDurationHours = 2010,
-        TotalDurationHours = 5730,
-        PublishedOn = new DateOnly(2020, 01, 01),
-        Competencies = new List<MinisterialCompetency>(),
-    };
-
-    private ProgramOfStudy program2 = new()
-    {
-        Code = "570.G0",
-        Name = "Techniques de design graphique",
-        Sanction = SanctionType.DEC,
-        MonthsDuration = 36,
-        SpecificDurationHours = 1980,
-        TotalDurationHours = 5670,
-        PublishedOn = new DateOnly(2020, 01, 02),
-        Competencies = new List<MinisterialCompetency>()
-    };
+    private ProgramOfStudy program1 = new ProgramOfStudyBuilder().Build();
+    private ProgramOfStudy program2 = new ProgramOfStudyBuilder().Build();
 
     [SetUp]
     public void Setup()

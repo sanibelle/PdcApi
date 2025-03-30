@@ -12,9 +12,9 @@ using Pdc.Domain.Enums;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 
-namespace UnitTests;
+namespace Pdc.Tests.UnitTests;
 
-public class ProgramOfStudyTest
+public class MinisterialCompetencyTest
 {
     Mock<IProgramOfStudyRespository> _programOfStudyRepositoryMock;
     ICreateProgramOfStudyUseCase _createProgramOfStudyUseCase;
@@ -23,7 +23,7 @@ public class ProgramOfStudyTest
     IUpdateProgramOfStudyUseCase _updateProgramOfStudyUseCase;
     IMapper _mapper;
     IValidator<CreateProgramOfStudyDTO> _validator;
-    string codeOfAFakeProgram = "fakeCode";
+    string codeOfAFakeProgram = "FakeCode";
 
 
     private ProgramOfStudy program1 = new()

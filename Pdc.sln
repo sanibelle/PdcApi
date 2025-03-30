@@ -9,11 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pdc.Application", "Pdc.Appl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pdc.WebAPI", "Pdc.WebAPI\Pdc.WebAPI.csproj", "{F1C52531-2E67-404A-919D-5410DDE9E3F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pdc.UnitTests", "UnitTests\Pdc.UnitTests.csproj", "{4BDBA0CF-9A3D-49FD-B826-055680DD4591}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pdc.Tests", "UnitTests\Pdc.Tests.csproj", "{4BDBA0CF-9A3D-49FD-B826-055680DD4591}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8A0FB80E-D1DF-4B0E-93BD-663ACF12EE66} = {8A0FB80E-D1DF-4B0E-93BD-663ACF12EE66}
+		{F1C52531-2E67-404A-919D-5410DDE9E3F8} = {F1C52531-2E67-404A-919D-5410DDE9E3F8}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pdc.Infrastructure", "Pdc.Infrastructure\Pdc.Infrastructure.csproj", "{8A0FB80E-D1DF-4B0E-93BD-663ACF12EE66}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pdc.E2ETests", "Pdc.E2ETests\Pdc.E2ETests.csproj", "{BD66F067-174A-449F-BECE-12EEF066EFD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +43,6 @@ Global
 		{8A0FB80E-D1DF-4B0E-93BD-663ACF12EE66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A0FB80E-D1DF-4B0E-93BD-663ACF12EE66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A0FB80E-D1DF-4B0E-93BD-663ACF12EE66}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD66F067-174A-449F-BECE-12EEF066EFD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD66F067-174A-449F-BECE-12EEF066EFD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD66F067-174A-449F-BECE-12EEF066EFD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD66F067-174A-449F-BECE-12EEF066EFD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

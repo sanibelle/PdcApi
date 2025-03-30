@@ -35,36 +35,37 @@ public class CompetencyRepository : ICompetencyRespository
 
     public async Task<MinisterialCompetency> Update(MinisterialCompetency competency)
     {
-        CompetencyEntity entity = await FindEntityByCode(competency.Code);
+        CompetencyEntity entity = await FindEntityByCode(competency.ProgramOfStudyCode, competency.Code);
         _mapper.Map(competency, entity);
         EntityEntry<CompetencyEntity> updatedEntity = _context.Competencies.Update(entity);
         await _context.SaveChangesAsync();
         return _mapper.Map<MinisterialCompetency>(updatedEntity.Entity);
     }
 
-    public async Task Delete(string code)
+    public async Task Delete(string programOfStudyCode, string competencyCode)
     {
-        CompetencyEntity entity = await FindEntityByCode(code);
+        CompetencyEntity entity = await FindEntityByCode(programOfStudyCode, competencyCode);
         _context.Competencies.Remove(entity);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<MinisterialCompetency> FindByCode(string code)
+    public async Task<MinisterialCompetency> FindByCode(string programOfStudyCode, string competencyCode)
     {
-        CompetencyEntity entity = await FindEntityByCode(code);
+        CompetencyEntity entity = await FindEntityByCode(programOfStudyCode, competencyCode);
         return _mapper.Map<MinisterialCompetency>(entity);
     }
 
-    private async Task<CompetencyEntity> FindEntityByCode(string code)
+    private async Task<CompetencyEntity> FindEntityByCode(string programOfStudyCode, string competencyCode)
     {
         CompetencyEntity? competency = await _context.Competencies
             .Include(c => c.RealisationContexts)
             .Include(c => c.CompetencyElements)
-            .SingleOrDefaultAsync(x => x.Code == code);
+            .SingleOrDefaultAsync(x => x.Code == programOfStudyCode && x.ProgramOfStudy.Code == competencyCode);
         if (competency == null)
         {
-            throw new EntityNotFoundException(nameof(MinisterialCompetency), code);
+            throw new EntityNotFoundException(nameof(MinisterialCompetency), competencyCode);
         }
+
         return competency;
     }
 }

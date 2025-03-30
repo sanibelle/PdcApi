@@ -9,21 +9,21 @@ namespace Pdc.Application.UseCase;
 
 public class GetCompetency : IGetCompetencyUseCase
 {
-    private readonly ICompetencyRespository _programOfStudyRespository;
+    private readonly ICompetencyRespository _competencyRespository;
     private readonly IMapper _mapper;
 
-    public GetCompetency(ICompetencyRespository programOfStudyRespository, IMapper mapper)
+    public GetCompetency(ICompetencyRespository competencyRespository, IMapper mapper)
     {
-        _programOfStudyRespository = programOfStudyRespository;
+        _competencyRespository = competencyRespository;
         _mapper = mapper;
     }
 
-    public async Task<CompetencyDTO> Execute(string code)
+    public async Task<CompetencyDTO> Execute(string programOfStudyCode, string competencyCode)
     {
         try
         {
-            MinisterialCompetency program = await _programOfStudyRespository.FindByCode(code);
-            return _mapper.Map<CompetencyDTO>(program);
+            MinisterialCompetency competency = await _competencyRespository.FindByCode(programOfStudyCode, competencyCode);
+            return _mapper.Map<CompetencyDTO>(competency);
         }
         catch (EntityNotFoundException)
         {
