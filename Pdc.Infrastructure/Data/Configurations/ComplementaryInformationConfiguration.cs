@@ -15,6 +15,6 @@ public class ComplementaryInformationConfiguration : IEntityTypeConfiguration<Co
 
         builder.Property(x => x.Text)
             .IsRequired()
-            .HasMaxLength(5000);
+            .HasMaxLength(Constants.MaxComplementaryInformationsLength);
     }
 }

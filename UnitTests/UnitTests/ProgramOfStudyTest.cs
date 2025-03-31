@@ -34,7 +34,7 @@ public class ProgramOfStudyTest
     {
         _programOfStudyRepositoryMock = new Mock<IProgramOfStudyRespository>();
         _mapper = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()).CreateMapper();
-        _validator = new UpsertProgramOfStudyValidation();
+        _validator = new ProgramOfStudyValidation();
 
         _createProgramOfStudyUseCase = new CreateProgramOfStudy(_programOfStudyRepositoryMock.Object, _mapper, _validator);
         _deleteProgramOfStudyUseCase = new DeleteProgramOfStudy(_programOfStudyRepositoryMock.Object);
