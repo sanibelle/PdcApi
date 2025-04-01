@@ -1,4 +1,4 @@
-﻿using Pdc.Domain.Entities.CourseFramework;
+﻿using Pdc.Domain.Models.CourseFramework;
 
 namespace Pdc.Domain.Interfaces.Repositories;
 

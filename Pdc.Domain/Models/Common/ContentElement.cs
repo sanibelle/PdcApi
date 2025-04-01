@@ -1,7 +1,7 @@
-﻿using Pdc.Domain.Entities.Versioning;
+﻿using Pdc.Domain.Models.Versioning;
 using Pdc.Domain.Enums;
 
-namespace Pdc.Domain.Entities.Common;
+namespace Pdc.Domain.Models.Common;
 
 public class ContentElement : AChangeable
 {

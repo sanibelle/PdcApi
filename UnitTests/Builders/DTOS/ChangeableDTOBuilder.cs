@@ -6,7 +6,7 @@ public class ChangeableDTOBuilder
 {
     private Guid _id = Guid.NewGuid();
     private string _value = "Default Value";
-    private int _position = 0;
+    private int _position = 1;
     private List<ComplementaryInformationDTO> _complementaryInformations = new List<ComplementaryInformationDTO>();
 
     public ChangeableDTOBuilder WithId(Guid id)

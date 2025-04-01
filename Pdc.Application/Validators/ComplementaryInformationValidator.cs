@@ -4,7 +4,7 @@ using Pdc.Domain;
 
 namespace Pdc.Application.Validators;
 
-public class ComplementaryInformationValidator : AbstractValidator<CreateComplementaryInformationDTO>
+public class ComplementaryInformationValidator : AbstractValidator<ComplementaryInformationDTO>
 {
     public ComplementaryInformationValidator()
     {

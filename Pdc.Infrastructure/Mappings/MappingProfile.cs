@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Pdc.Domain.Entities.Common;
-using Pdc.Domain.Entities.CourseFramework;
-using Pdc.Domain.Entities.MinisterialSpecification;
+using Pdc.Domain.Models.Common;
+using Pdc.Domain.Models.CourseFramework;
+using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 

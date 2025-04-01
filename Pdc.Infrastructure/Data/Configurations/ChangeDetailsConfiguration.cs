@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Pdc.Domain;
 using Pdc.Infrastructure.Entities.Versioning;
 namespace Pdc.Infrastructure.Data.Configurations;
 

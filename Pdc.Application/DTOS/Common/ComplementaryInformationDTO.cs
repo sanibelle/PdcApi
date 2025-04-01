@@ -2,6 +2,7 @@
 
 public class ComplementaryInformationDTO
 {
+    public Guid? Id { get; set; }
     //UTILISATEUR
     /// <summary>
     /// Version à laquelle l'information a été ajoutée

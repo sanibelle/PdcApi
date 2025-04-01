@@ -1,6 +1,6 @@
-﻿using Pdc.Domain.Entities.Common;
+﻿using Pdc.Domain.Models.Common;
 
-namespace Pdc.Domain.Entities.MinisterialSpecification;
+namespace Pdc.Domain.Models.MinisterialSpecification;
 
 public class Competency
 {

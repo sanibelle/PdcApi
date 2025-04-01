@@ -1,4 +1,4 @@
-﻿namespace Pdc.Domain.Entities.Versioning;
+﻿namespace Pdc.Domain.Models.Versioning;
 
 /// <summary>
 /// Nommé ainsi pour les confilts de noms avec System.Version

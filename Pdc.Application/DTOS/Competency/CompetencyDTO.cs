@@ -1,5 +1,5 @@
 ﻿using Pdc.Application.DTOS.Common;
-using Pdc.Domain.Entities.Common;
+using Pdc.Domain.Models.Common;
 
 namespace Pdc.Application.DTOS;
 

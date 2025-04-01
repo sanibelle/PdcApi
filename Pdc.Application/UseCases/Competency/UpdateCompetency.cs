@@ -8,20 +8,20 @@ namespace Pdc.Application.UseCase;
 
 public class UpdateCompetency : IUpdateCompetencyUseCase
 {
-    private readonly IValidator<CreateCompetencyDTO> _validator;
+    private readonly IValidator<CompetencyDTO> _validator;
     private readonly ICompetencyRespository _programOfStudyRespository;
     private readonly IMapper _mapper;
 
     public UpdateCompetency(ICompetencyRespository programOfStudyRespository,
                                IMapper mapper,
-                               IValidator<CreateCompetencyDTO> validator)
+                               IValidator<CompetencyDTO> validator)
     {
         _programOfStudyRespository = programOfStudyRespository;
         _mapper = mapper;
         _validator = validator;
     }
 
-    public async Task<CompetencyDTO> Execute(string programOfStudyCode, CreateCompetencyDTO updateCompetencyDto)
+    public async Task<CompetencyDTO> Execute(string programOfStudyCode, CompetencyDTO updateCompetencyDto)
     {
         var validationResult = await _validator.ValidateAsync(updateCompetencyDto);
         if (!validationResult.IsValid)

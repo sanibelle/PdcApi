@@ -1,4 +1,4 @@
-﻿using Pdc.Domain.Entities.Common;
+﻿using Pdc.Domain.Models.Common;
 using Pdc.Infrastructure.Entities.Versioning;
 
 namespace Pdc.Infrastructure.Entities.CourseFramework;

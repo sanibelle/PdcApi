@@ -1,8 +1,8 @@
-﻿using Pdc.Domain.Entities.Common;
-using Pdc.Domain.Entities.MinisterialSpecification;
+﻿using Pdc.Domain.Models.Common;
+using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Enums;
 
-namespace Pdc.Domain.Entities.CourseFramework;
+namespace Pdc.Domain.Models.CourseFramework;
 
 public class CourseFrameworkPerformanceCriteria : PerformanceCriteria
 {

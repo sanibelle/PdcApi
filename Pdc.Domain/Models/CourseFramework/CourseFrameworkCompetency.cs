@@ -1,6 +1,6 @@
 ﻿using Pdc.Domain.Enums;
 
-namespace Pdc.Domain.Entities.MinisterialSpecification;
+namespace Pdc.Domain.Models.MinisterialSpecification;
 
 public class CourseFrameworkCompetency : MinisterialCompetency
 {

@@ -1,4 +1,4 @@
-using Pdc.Domain.Entities.MinisterialSpecification;
+using Pdc.Domain.Models.MinisterialSpecification;
 
 namespace Pdc.Domain.Interfaces.Repositories
 {

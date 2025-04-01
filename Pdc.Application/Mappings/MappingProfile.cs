@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Pdc.Application.DTOS;
-using Pdc.Domain.Entities.CourseFramework;
-using Pdc.Domain.Entities.MinisterialSpecification;
+using Pdc.Domain.Models.CourseFramework;
+using Pdc.Domain.Models.MinisterialSpecification;
 
 namespace Pdc.Application.Mappings;
 
@@ -11,10 +11,8 @@ public class MappingProfile : Profile
     {
         // ProgramOfStudy
         CreateMap<ProgramOfStudy, ProgramOfStudyDTO>().ReverseMap();
-        CreateMap<CreateProgramOfStudyDTO, ProgramOfStudy>().ReverseMap();
         // Comptency
         CreateMap<CompetencyDTO, MinisterialCompetency>().ReverseMap();
-        CreateMap<CreateCompetencyDTO, MinisterialCompetency>().ReverseMap();
 
     }
 }

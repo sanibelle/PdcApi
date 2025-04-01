@@ -1,7 +1,7 @@
-﻿using Pdc.Domain.Entities.MinisterialSpecification;
+﻿using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Enums;
 
-namespace Pdc.Domain.Entities.CourseFramework;
+namespace Pdc.Domain.Models.CourseFramework;
 
 /// <summary>
 /// La Value perment d'y inscrire le texte en lien avec le cours.

@@ -1,10 +1,12 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Pdc.Domain.Entities.MinisterialSpecification;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Models.CourseFramework;
+using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Infrastructure.Data;
+using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 
 namespace Pdc.Infrastructure.Repositories;
@@ -26,11 +28,14 @@ public class CompetencyRepository : ICompetencyRespository
         return _mapper.Map<List<MinisterialCompetency>>(entities);
     }
 
-    public async Task<MinisterialCompetency> Add(MinisterialCompetency competency)
+    public async Task<MinisterialCompetency> Add(ProgramOfStudy program, MinisterialCompetency competency)
     {
-        EntityEntry<CompetencyEntity> entity = await _context.Competencies.AddAsync(_mapper.Map<CompetencyEntity>(competency));
+        EntityEntry<CompetencyEntity> competencyEntity = await _context.Competencies.AddAsync(_mapper.Map<CompetencyEntity>(competency));
+        ProgramOfStudyEntity programEntity = await FindProgramOfStudy(program.Code);
+        programEntity.Competencies.Add(competencyEntity.Entity);
+
         await _context.SaveChangesAsync();
-        return _mapper.Map<MinisterialCompetency>(entity.Entity);
+        return _mapper.Map<MinisterialCompetency>(competencyEntity.Entity);
     }
 
     public async Task<MinisterialCompetency> Update(MinisterialCompetency competency)
@@ -67,5 +72,17 @@ public class CompetencyRepository : ICompetencyRespository
         }
 
         return competency;
+    }
+
+    private async Task<ProgramOfStudyEntity> FindProgramOfStudy(string code)
+    {
+        ProgramOfStudyEntity? program = await _context.ProgramOfStudies
+            .Include(p => p.Competencies)
+            .SingleOrDefaultAsync(x => x.Code == code);
+        if (program == null)
+        {
+            throw new EntityNotFoundException(nameof(ProgramOfStudy), code);
+        }
+        return program;
     }
 }

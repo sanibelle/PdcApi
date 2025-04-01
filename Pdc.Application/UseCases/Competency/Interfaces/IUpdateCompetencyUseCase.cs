@@ -3,5 +3,5 @@ using Pdc.Application.DTOS;
 
 public interface IUpdateCompetencyUseCase
 {
-    Task<CompetencyDTO> Execute(string programOfStudyCode, CreateCompetencyDTO programOfStudy);
+    Task<CompetencyDTO> Execute(string programOfStudyCode, CompetencyDTO programOfStudy);
 }

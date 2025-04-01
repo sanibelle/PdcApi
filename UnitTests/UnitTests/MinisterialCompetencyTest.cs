@@ -2,96 +2,99 @@ using AutoMapper;
 using FluentValidation;
 using Moq;
 using Pdc.Application.DTOS;
+using Pdc.Application.DTOS.Common;
 using Pdc.Application.Mappings;
 using Pdc.Application.UseCase;
 using Pdc.Application.Validators;
+using Pdc.Domain.Enums;
+using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Models.Common;
+using Pdc.Domain.Models.CourseFramework;
+using Pdc.Domain.Models.MinisterialSpecification;
+using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Tests.Builders.DTOS;
+using Pdc.Tests.Builders.Models;
 
 namespace Pdc.Tests.UnitTests;
 
 public class MinisterialCompetencyTest
 {
     //// Repository mocks
-    //Mock<IProgramOfStudyRespository> _programOfStudyRepositoryMock;
+    Mock<IProgramOfStudyRespository> _programOfStudyRepositoryMock;
     Mock<ICompetencyRespository> _competencyRepositoryMock;
 
-    //// Program of study use cases
-    ICreateCompetencyUseCase _createCompetencyUseCase;
-    //IDeleteProgramOfStudyUseCase _deleteProgramOfStudyUseCase;
-    //IGetAllProgramOfStudyUseCase _getAllProgramOfStudyUseCase;
-    //IUpdateProgramOfStudyUseCase _updateProgramOfStudyUseCase;
-
     //// Competency use cases
-    //ICreateCompetencyUseCase _createCompetencyUseCase;
+    ICreateCompetencyUseCase _createCompetencyUseCase;
     //IGetCompetencyUseCase _getCompetencyUseCase;
     //IUpdateCompetencyUseCase _updateCompetencyUseCase;
     //IDeleteCompetencyUseCase _deleteCompetencyUseCase;
 
     //// Mapper and validators
     IMapper _mapper;
-    //IValidator<CreateProgramOfStudyDTO> _programValidator;
-    IValidator<CreateCompetencyDTO> _competencyValidator;
+    IValidator<CompetencyDTO> _competencyValidator;
 
     //// Test data
-    string codeOfAFakeProgram = "FakeCode";
-    string codeOfAFakeCompetency = "FakeCompCode";
+    string _codeOfAFakeProgram = "Prog11";
+    string codeOfAFakeCompetency1 = "Comp11";
+    string codeOfAFakeCompetency2 = "Comp22";
 
-    //private ProgramOfStudy program1 = new ProgramOfStudyBuilder()
-    //    .WithCode("420.B0")
-    //    .WithName("Techniques de l'informatique")
-    //    .WithSanction(SanctionType.DEC)
-    //    .WithMonthsDuration(36)
-    //    .WithSpecificDurationHours(2010)
-    //    .WithTotalDurationHours(5730)
-    //    .WithPublishedOn(new DateOnly(2020, 01, 01))
-    //    .WithCompetencies(new List<MinisterialCompetency>())
-    //    .Build();
+    private ProgramOfStudy _programOfSudy;
 
-    //private ProgramOfStudy program2 = new ProgramOfStudyBuilder()
-    //    .WithCode("570.G0")
-    //    .WithName("Techniques de design graphique")
-    //    .WithSanction(SanctionType.DEC)
-    //    .WithMonthsDuration(36)
-    //    .WithSpecificDurationHours(1980)
-    //    .WithTotalDurationHours(5670)
-    //    .WithPublishedOn(new DateOnly(2020, 01, 02))
-    //    .WithCompetencies(new List<MinisterialCompetency>())
-    //    .Build();
+    private RealisationContext _realisationContext;
 
-    //private MinisterialCompetency competency1 = new MinisterialCompetencyBuilder()
-    //{
-    //    Code = "0123",
-    //    Name = "Develop web applications",
-    //    ProgramOfStudyCode = "420.B0",
-    //    CompetencyElements = new List<MinisterialCompetencyElement>
-    //    {
-    //        new MinisterialCompetencyElement
-    //        {
-    //            Code = "01",
-    //            Description = "Plan the development of a web application",
-    //            PerformanceCriterias = new List<PerformanceCriteria>
-    //            {
-    //                new PerformanceCriteria { Description = "Accurate assessment of client needs" }
-    //            }
-    //        }
-    //    }
-    //};
+    private MinisterialCompetencyElement _ministerialCompetencyElement;
 
-    //private MinisterialCompetency competency2 = new MinisterialCompetency
-    //{
-    //    Code = "0234",
-    //    Name = "Design UI/UX interfaces",
-    //    ProgramOfStudyCode = "570.G0",
-    //    CompetencyElements = new List<MinisterialCompetencyElement>()
-    //};
+    private MinisterialCompetency _competency1, _competency2;
 
     [SetUp]
     public void Setup()
     {
+        _programOfSudy = new ProgramOfStudyBuilder()
+    .WithCode(_codeOfAFakeProgram)
+    .WithName("Techniques de l'informatique")
+    .WithSanction(SanctionType.DEC)
+    .WithMonthsDuration(36)
+    .WithSpecificDurationHours(2010)
+    .WithTotalDurationHours(5730)
+    .WithPublishedOn(new DateOnly(2020, 01, 01))
+    .WithCompetencies(new List<MinisterialCompetency>())
+    .Build();
+
+        _realisationContext = new RealisationContextBuilder()
+            .Build();
+
+        _ministerialCompetencyElement = new MinisterialCompetencyElementBuilder()
+            .Build();
+
+        _competency1 = new MinisterialCompetencyBuilder()
+            .WithCode(codeOfAFakeCompetency1)
+            .WithVersionNumber(1)
+            .WithUnits(new Units(10))
+            .WithProgramOfStudyCode("POS1234")
+            .WithIsMandatory(false)
+            .WithIsOptionnal(true)
+            .WithStatementOfCompetency("Test Statement")
+            .AddRealisationContexts(_realisationContext)
+            .AddCompetencyElements(_ministerialCompetencyElement)
+            .Build();
+
+        _competency2 = new MinisterialCompetencyBuilder()
+            .WithCode(codeOfAFakeCompetency2)
+            .WithVersionNumber(1)
+            .WithUnits(new Units(11))
+            .WithProgramOfStudyCode("POS2345")
+            .WithIsMandatory(true)
+            .WithIsOptionnal(false)
+            .WithStatementOfCompetency("Test Statement 2")
+            .AddRealisationContexts(_realisationContext)
+            .AddCompetencyElements(_ministerialCompetencyElement)
+            .Build();
+
         // Initialize repository mocks
         //    _programOfStudyRepositoryMock = new Mock<IProgramOfStudyRespository>();
         _competencyRepositoryMock = new Mock<ICompetencyRespository>();
+        _programOfStudyRepositoryMock = new Mock<IProgramOfStudyRespository>();
 
         // Initialize mapper
         _mapper = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()).CreateMapper();
@@ -100,30 +103,24 @@ public class MinisterialCompetencyTest
         //    _programValidator = new UpsertProgramOfStudyValidation();
         _competencyValidator = new CompetencyValidation();
 
-        //    // Initialize program of study use cases
-        //    _createProgramOfStudyUseCase = new CreateProgramOfStudy(_programOfStudyRepositoryMock.Object, _mapper, _programValidator);
-        //    _deleteProgramOfStudyUseCase = new DeleteProgramOfStudy(_programOfStudyRepositoryMock.Object);
-        //    _getAllProgramOfStudyUseCase = new GetAllProgramOfStudy(_programOfStudyRepositoryMock.Object, _mapper);
-        //    _updateProgramOfStudyUseCase = new UpdateProgramOfStudy(_programOfStudyRepositoryMock.Object, _mapper, _programValidator);
-
         //    // Initialize competency use cases
-        _createCompetencyUseCase = new CreateCompetency(_competencyRepositoryMock.Object, _mapper, _competencyValidator);
-        //    _getCompetencyUseCase = new GetCompetency(_competencyRepositoryMock.Object, _mapper);
-        //    _updateCompetencyUseCase = new UpdateCompetency(_competencyRepositoryMock.Object, _mapper, _competencyValidator);
+        _createCompetencyUseCase = new CreateCompetency(_competencyRepositoryMock.Object, _programOfStudyRepositoryMock.Object, _mapper, _competencyValidator);
         //    _deleteCompetencyUseCase = new DeleteCompetency(_competencyRepositoryMock.Object);
+        //    _getAllCompetencyUseCase = new GetAllCompetency(_competencyRepositoryMock.Object, _mapper);
+        //    _updateCompetencyUseCase = new UpdateCompetency(_competencyRepositoryMock.Object, _mapper, _competencyValidator);
 
-        //    // Setup Program of Study Repository mock
-        //    _programOfStudyRepositoryMock.Setup(repo => repo.Add(It.IsAny<ProgramOfStudy>())).ReturnsAsync(program1);
-        //    _programOfStudyRepositoryMock.Setup(repo => repo.Delete(It.IsAny<string>()));
+        // Setup Program of Study Repository mock
+        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsIn(_codeOfAFakeProgram))).ReturnsAsync(_programOfSudy);
         //    _programOfStudyRepositoryMock.Setup(repo => repo.Update(It.IsAny<ProgramOfStudy>())).ReturnsAsync(program1);
         //    _programOfStudyRepositoryMock.Setup(repo => repo.GetAll()).ReturnsAsync(new List<ProgramOfStudy> { program1, program2 });
-        //    _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsIn(program1.Code))).ReturnsAsync(program1);
         //    _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsIn(program2.Code))).ReturnsAsync(program2);
         //    _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsIn(codeOfAFakeProgram)))
         //        .Throws(new EntityNotFoundException(nameof(ProgramOfStudy), codeOfAFakeProgram));
 
-        //    // Setup Competency Repository mock
-        //    _competencyRepositoryMock.Setup(repo => repo.Add(It.IsAny<MinisterialCompetency>())).ReturnsAsync(competency1);
+        // Setup Competency Repository mock
+        _competencyRepositoryMock.Setup(repo => repo.Add(It.IsAny<ProgramOfStudy>(), It.IsAny<MinisterialCompetency>())).ReturnsAsync(_competency2);
+        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _codeOfAFakeProgram), It.Is<string>(x => x == _competency1.Code))).ReturnsAsync(_competency1);
+        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _codeOfAFakeProgram), It.Is<string>(x => x != _competency1.Code))).Throws(new EntityNotFoundException(nameof(CompetencyEntity), _competency2.Code));
         //    _competencyRepositoryMock.Setup(repo => repo.Update(It.IsAny<MinisterialCompetency>())).ReturnsAsync(competency1);
         //    _competencyRepositoryMock.Setup(repo => repo.Delete(It.IsAny<string>(), It.IsAny<string>()));
         //    _competencyRepositoryMock.Setup(repo => repo.GetAll()).ReturnsAsync(new List<MinisterialCompetency> { competency1, competency2 });
@@ -131,24 +128,36 @@ public class MinisterialCompetencyTest
         //    _competencyRepositoryMock.Setup(repo => repo.FindByCode(program2.Code, competency2.Code)).ReturnsAsync(competency2);
         //    _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.IsAny<string>(), It.IsIn(codeOfAFakeCompetency)))
         //        .Throws(new EntityNotFoundException(nameof(MinisterialCompetency), codeOfAFakeCompetency));
+
+
+
     }
 
     [Test]
     public async Task CreateMinisterialCompetency_ShouldReturnMinisterialCompetency()
     {
         string code = "0123";
-        CreateCompetencyDTO createProgramDto = new CreateCompetencyDTOBuilder()
-            .WithCode(code)
+        CompetencyDTO createProgramDto = new CompetencyDTOBuilder()
+            .WithRealisationContexts(new List<ChangeableDTO> { new ChangeableDTOBuilder().Build() })
+            .WithCompetencyElements(new List<CompetencyElementDTO> { new CompetencyElementDTOBuilder()
+                .WithPerformanceCriterias( new List<ChangeableDTO> { new ChangeableDTOBuilder().Build() })
+                .BuildCompetencyElement() })
+            .WithCode(_competency2.Code)
             .Build();
         // Act
-        var result = await _createCompetencyUseCase.Execute(createProgramDto);
+        var result = await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, createProgramDto);
 
         // Assert
         Assert.That(createProgramDto.Code == code, "Code is returned");
     }
     //TODO at least one performance criteria
     //TODO validate position exists? plus dans le E2E
-
+    //TODO gestion de la version. Quand on crée un programme, on crée une nouvelle version
+    //Les compétences sont liées à une version du programme???? Sinon, chaque compétence doit avoir une version
+    //Valider la création de la version quand on crée un programme. La version est créée dans un service
+    //L'ajout une compétence doit être liée à une version du programme
+    // Mettre un todo pour parler du fait que l'ajout d'une version vient modifier le programme
+    // Avoir un concept de brouillon (change pas de version) et de propre (impossible de modifier, on crée une nouvelle version)
 
     //[Test]
     //public async Task DeleteProgramOfStudy_ShouldCallRepositoryDelete()
@@ -201,7 +210,7 @@ public class MinisterialCompetencyTest
     //public async Task CreateCompetency_ShouldReturnCreatedCompetency()
     //{
     //    // Arrange
-    //    CreateCompetencyDTO createCompetencyDto = new CreateCompetencyDTO
+    //    CompetencyDTO createCompetencyDto = new CompetencyDTO
     //    {
     //        Code = "0123",
     //        Name = "Develop web applications",
@@ -244,7 +253,7 @@ public class MinisterialCompetencyTest
     //public async Task UpdateCompetency_ShouldCallRepositoryUpdate()
     //{
     //    // Arrange
-    //    CreateCompetencyDTO updateCompetencyDto = new CreateCompetencyDTO
+    //    CompetencyDTO updateCompetencyDto = new CompetencyDTO
     //    {
     //        Code = "0123",
     //        Name = "Updated Competency Name",

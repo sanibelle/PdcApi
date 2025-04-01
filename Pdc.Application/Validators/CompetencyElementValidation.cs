@@ -3,7 +3,7 @@ using Pdc.Application.DTOS.Common;
 
 namespace Pdc.Application.Validators;
 
-public class CompetencyElementValidation : AbstractValidator<CreateCompetencyElementDTO>
+public class CompetencyElementValidation : AbstractValidator<CompetencyElementDTO>
 {
     public CompetencyElementValidation()
     {

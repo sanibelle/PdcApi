@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Pdc.Application.DTOS;
-using Pdc.Domain.Entities.Common;
+using Pdc.Domain.Models.Common;
 using Pdc.Tests.Builders.DTOS;
 using System.Net.Http.Json;
 
@@ -28,7 +28,7 @@ namespace Pdc.E2ETests
         public async Task GivenNewProgram_WhenCreateProgramOfStudy_ThenShouldAddNewProgram()
         {
             // Arrange
-            CreateProgramOfStudyDTO newProgram = new CreateProgramOfStudyDTOBuilder().Build();
+            ProgramOfStudyDTO newProgram = new ProgramOfStudyDTOBuilder().Build();
 
             // Act
             HttpResponseMessage response = await _client.PostAsJsonAsync("/api/programofstudy", newProgram);
@@ -36,17 +36,19 @@ namespace Pdc.E2ETests
             // Assert
             response.EnsureSuccessStatusCode();
             Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.Created));
-            ProgramOfStudyDTO createdProgram = await response.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
+            ProgramOfStudyDTO? createdProgram = await response.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
+            Assert.That(createdProgram, Is.Not.Null);
 
             // Verify it was added to the database
             HttpResponseMessage getResponse = await _client.GetAsync($"/api/programofstudy/{createdProgram.Code}");
             getResponse.EnsureSuccessStatusCode();
-            ProgramOfStudyDTO fetchedProgram = await getResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
+            ProgramOfStudyDTO? fetchedProgram = await getResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
+            Assert.That(fetchedProgram, Is.Not.Null);
 
             createdProgram.Should().BeEquivalentTo(fetchedProgram, options =>
                 options.ExcludingMissingMembers()
-                .Excluding(x => x.GeneralUnits)
-                .Excluding(x => x.ComplementaryUnits)
+                .Excluding(x => x!.GeneralUnits)
+                .Excluding(x => x!.ComplementaryUnits)
                 );
         }
 
@@ -54,7 +56,7 @@ namespace Pdc.E2ETests
         public async Task GivenExistingProgram_WhenDeleteProgramOfStudy_ThenShouldRemoveProgram()
         {
             // Arrange
-            CreateProgramOfStudyDTO newProgram = new CreateProgramOfStudyDTOBuilder().Build();
+            ProgramOfStudyDTO newProgram = new ProgramOfStudyDTOBuilder().Build();
 
 
             // Act - Create the program
@@ -63,7 +65,7 @@ namespace Pdc.E2ETests
             var createdProgram = await createResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
             // Act - Delete the program
-            var deleteResponse = await _client.DeleteAsync($"/api/programofstudy/{createdProgram.Code}");
+            var deleteResponse = await _client.DeleteAsync($"/api/programofstudy/{createdProgram!.Code}");
             deleteResponse.EnsureSuccessStatusCode();
 
             // Assert - Verify the program was deleted
@@ -75,7 +77,7 @@ namespace Pdc.E2ETests
         public async Task GivenExistingProgram_WhenUpdateProgramOfStudy_ThenShouldUpdateProgram()
         {
             // Arrange
-            CreateProgramOfStudyDTO newProgram = new CreateProgramOfStudyDTOBuilder().Build();
+            ProgramOfStudyDTO newProgram = new ProgramOfStudyDTOBuilder().Build();
 
             ProgramOfStudyDTO updatedProgramData = (ProgramOfStudyDTO)new ProgramOfStudyDTOBuilder()
                 .WithCode("421.B5")
@@ -95,7 +97,7 @@ namespace Pdc.E2ETests
             var createdProgram = await createResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
             // Act - Uodate the program
-            updatedProgramData.Code = createdProgram.Code;
+            updatedProgramData.Code = createdProgram!.Code;
             var updateResponse = await _client.PutAsJsonAsync($"/api/programofstudy/{updatedProgramData.Code}", updatedProgramData);
             updateResponse.EnsureSuccessStatusCode();
             var updatedProgram = await updateResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();

@@ -42,7 +42,7 @@ public class ProgramOfStudyController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ProgramOfStudyDTO>> Create([FromBody] CreateProgramOfStudyDTO createProgramOfStudyDTO)
+    public async Task<ActionResult<ProgramOfStudyDTO>> Create([FromBody] ProgramOfStudyDTO createProgramOfStudyDTO)
     {
         try
         {
@@ -78,7 +78,7 @@ public class ProgramOfStudyController : ControllerBase
     }
 
     [HttpPut("{code}")]
-    public async Task<IActionResult> Update(string code, [FromBody] CreateProgramOfStudyDTO programOfStudyDTO)
+    public async Task<IActionResult> Update(string code, [FromBody] ProgramOfStudyDTO programOfStudyDTO)
     {
         try
         {
@@ -107,7 +107,7 @@ public class ProgramOfStudyController : ControllerBase
     #endregion
     #region Competency
     [HttpPost("{programOfStudyCode}/competency")]
-    public async Task<ActionResult<ProgramOfStudyDTO>> AddCompetency(string programOfStudyCode, [FromBody] CreateCompetencyDTO createCompetencyDTO)
+    public async Task<ActionResult<ProgramOfStudyDTO>> AddCompetency(string programOfStudyCode, [FromBody] CompetencyDTO createCompetencyDTO)
     {
         CompetencyDTO competency = await _createCompetencyUseCase.Execute(programOfStudyCode, createCompetencyDTO);
 

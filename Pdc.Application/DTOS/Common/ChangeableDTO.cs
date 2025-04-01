@@ -5,7 +5,7 @@
 /// </summary>
 public class ChangeableDTO
 {
-    public required Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public required string Value { get; set; }
     public int Position { get; set; }
     public required IEnumerable<ComplementaryInformationDTO> ComplementaryInformations { get; set; }

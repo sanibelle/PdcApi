@@ -1,4 +1,5 @@
-using Pdc.Domain.Entities.MinisterialSpecification;
+using Pdc.Domain.Models.Common;
+using Pdc.Domain.Models.MinisterialSpecification;
 
 namespace Pdc.Tests.Builders.Models;
 
@@ -64,12 +65,23 @@ public class MinisterialCompetencyBuilder
         return this;
     }
 
+    public MinisterialCompetencyBuilder AddRealisationContexts(RealisationContext realisationContext)
+    {
+        _realisationContexts.Add(realisationContext);
+        return this;
+    }
+
     public MinisterialCompetencyBuilder WithCompetencyElements(List<MinisterialCompetencyElement> competencyElements)
     {
         _competencyElements = competencyElements;
         return this;
     }
 
+    public MinisterialCompetencyBuilder AddCompetencyElements(MinisterialCompetencyElement competencyElement)
+    {
+        _competencyElements.Add(competencyElement);
+        return this;
+    }
     public MinisterialCompetency Build()
     {
         return new MinisterialCompetency

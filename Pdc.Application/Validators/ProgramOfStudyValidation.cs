@@ -4,7 +4,7 @@ using Pdc.Domain.Enums;
 
 namespace Pdc.Application.Validators;
 
-public class ProgramOfStudyValidation : AbstractValidator<CreateProgramOfStudyDTO>
+public class ProgramOfStudyValidation : AbstractValidator<ProgramOfStudyDTO>
 {
     public ProgramOfStudyValidation()
     {

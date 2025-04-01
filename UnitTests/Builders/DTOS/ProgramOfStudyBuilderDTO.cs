@@ -1,32 +1,28 @@
 using Pdc.Application.DTOS;
-using Pdc.Domain.Entities.Common;
-using Pdc.Domain.Entities.MinisterialSpecification;
+using Pdc.Domain.Enums;
+using Pdc.Domain.Models.Common;
+using Pdc.Domain.Models.MinisterialSpecification;
 
 namespace Pdc.Tests.Builders.DTOS;
 
-public class ProgramOfStudyDTOBuilder : CreateProgramOfStudyDTOBuilder
+public class ProgramOfStudyDTOBuilder
 {
-    private List<MinisterialCompetency> _competencies;
+    private List<MinisterialCompetency> _competencies = new List<MinisterialCompetency>();
     private Units _generalUnits = new Units(1);
     private Units _complementaryUnits = new Units(2);
+    private string _code = $"TES ${Random.Shared.Next(100, 1000)}";
+    private string _name = "Default Test Program Of Study";
+    private SanctionType _sanction = SanctionType.DEC;
+    private int _monthsDuration = 30;
+    private int _specificDurationHours = 540;
+    private int _totalDurationHours = 1340;
+    private DateOnly _publishedOn = new DateOnly(2025, 03, 31);
+    private Units _specificUnits = new Units(3);
+    private Units _optionnalUnits = new Units(4);
+    public ICollection<CompetencyDTO> _competencyDTOs { get; set; } = new List<CompetencyDTO>();
 
     public ProgramOfStudyDTOBuilder()
     {
-        _competencies = new List<MinisterialCompetency>();
-    }
-
-    private ProgramOfStudyDTOBuilder(CreateProgramOfStudyDTO createProgramOfStudyDTO)
-    {
-        _competencies = new List<MinisterialCompetency>();
-        _code = createProgramOfStudyDTO.Code;
-        _name = createProgramOfStudyDTO.Name;
-        _sanction = createProgramOfStudyDTO.Sanction;
-        _monthsDuration = createProgramOfStudyDTO.MonthsDuration;
-        _specificDurationHours = createProgramOfStudyDTO.SpecificDurationHours;
-        _totalDurationHours = createProgramOfStudyDTO.TotalDurationHours;
-        _publishedOn = createProgramOfStudyDTO.PublishedOn;
-        _specificUnits = createProgramOfStudyDTO.SpecificUnits;
-        _optionnalUnits = createProgramOfStudyDTO.OptionnalUnits;
     }
 
     public ProgramOfStudyDTOBuilder WithCompetencies(List<MinisterialCompetency> competencies)
@@ -34,8 +30,6 @@ public class ProgramOfStudyDTOBuilder : CreateProgramOfStudyDTOBuilder
         _competencies = competencies;
         return this;
     }
-
-
 
     public ProgramOfStudyDTOBuilder WithGeneralUnits(Units generalUnits)
     {
@@ -49,7 +43,67 @@ public class ProgramOfStudyDTOBuilder : CreateProgramOfStudyDTOBuilder
         return this;
     }
 
-    public override ProgramOfStudyDTO Build()
+    public ProgramOfStudyDTOBuilder WithCode(string code)
+    {
+        _code = code;
+        return this;
+    }
+
+    public ProgramOfStudyDTOBuilder WithName(string name)
+    {
+        _name = name;
+        return this;
+    }
+
+    public ProgramOfStudyDTOBuilder WithSanction(SanctionType sanction)
+    {
+        _sanction = sanction;
+        return this;
+    }
+
+    public ProgramOfStudyDTOBuilder WithMonthsDuration(int monthsDuration)
+    {
+        _monthsDuration = monthsDuration;
+        return this;
+    }
+
+    public ProgramOfStudyDTOBuilder WithSpecificDurationHours(int specificDurationHours)
+    {
+        _specificDurationHours = specificDurationHours;
+        return this;
+    }
+
+    public ProgramOfStudyDTOBuilder WithTotalDurationHours(int totalDurationHours)
+    {
+        _totalDurationHours = totalDurationHours;
+        return this;
+    }
+
+    public ProgramOfStudyDTOBuilder WithPublishedOn(DateOnly publishedOn)
+    {
+        _publishedOn = publishedOn;
+        return this;
+    }
+
+    public ProgramOfStudyDTOBuilder WithSpecificUnits(Units specificUnits)
+    {
+        _specificUnits = specificUnits;
+        return this;
+    }
+
+    public ProgramOfStudyDTOBuilder WithOptionnalUnits(Units optionnalUnits)
+    {
+        _optionnalUnits = optionnalUnits;
+        return this;
+    }
+
+    public ProgramOfStudyDTOBuilder WithCompetencies(ICollection<CompetencyDTO> competencyDTOs)
+    {
+        _competencyDTOs = competencyDTOs;
+        return this;
+    }
+
+    public ProgramOfStudyDTO Build()
     {
         return new ProgramOfStudyDTO
         {
@@ -63,7 +117,8 @@ public class ProgramOfStudyDTOBuilder : CreateProgramOfStudyDTOBuilder
             SpecificUnits = _specificUnits,
             OptionnalUnits = _optionnalUnits,
             GeneralUnits = _generalUnits,
-            ComplementaryUnits = _complementaryUnits
+            ComplementaryUnits = _complementaryUnits,
+            CompetencyDTOs = _competencyDTOs
         };
     }
 }

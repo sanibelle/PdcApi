@@ -1,27 +1,27 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Pdc.Application.DTOS;
-using Pdc.Domain.Entities.CourseFramework;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Models.CourseFramework;
 
 namespace Pdc.Application.UseCase;
 
 public class UpdateProgramOfStudy : IUpdateProgramOfStudyUseCase
 {
-    private readonly IValidator<CreateProgramOfStudyDTO> _validator;
+    private readonly IValidator<ProgramOfStudyDTO> _validator;
     private readonly IProgramOfStudyRespository _programOfStudyRespository;
     private readonly IMapper _mapper;
 
     public UpdateProgramOfStudy(IProgramOfStudyRespository programOfStudyRespository,
                                IMapper mapper,
-                               IValidator<CreateProgramOfStudyDTO> validator)
+                               IValidator<ProgramOfStudyDTO> validator)
     {
         _programOfStudyRespository = programOfStudyRespository;
         _mapper = mapper;
         _validator = validator;
     }
 
-    public async Task<ProgramOfStudyDTO> Execute(string code, CreateProgramOfStudyDTO updateProgramOfStudyDto)
+    public async Task<ProgramOfStudyDTO> Execute(string code, ProgramOfStudyDTO updateProgramOfStudyDto)
     {
         var validationResult = await _validator.ValidateAsync(updateProgramOfStudyDto);
         if (!validationResult.IsValid)

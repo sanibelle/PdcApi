@@ -2,25 +2,25 @@
 using FluentValidation;
 using FluentValidation.Results;
 using Pdc.Application.DTOS;
-using Pdc.Domain.Entities.CourseFramework;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Models.CourseFramework;
 
 namespace Pdc.Application.UseCase;
 
 public class CreateProgramOfStudy : ICreateProgramOfStudyUseCase
 {
-    private readonly IValidator<CreateProgramOfStudyDTO> _validator;
+    private readonly IValidator<ProgramOfStudyDTO> _validator;
     private readonly IProgramOfStudyRespository _programOfStudyRespository;
     private readonly IMapper _mapper;
 
-    public CreateProgramOfStudy(IProgramOfStudyRespository programOfStudyRespository, IMapper mapper, IValidator<CreateProgramOfStudyDTO> validator)
+    public CreateProgramOfStudy(IProgramOfStudyRespository programOfStudyRespository, IMapper mapper, IValidator<ProgramOfStudyDTO> validator)
     {
         _programOfStudyRespository = programOfStudyRespository;
         _mapper = mapper;
         _validator = validator;
     }
 
-    public async Task<ProgramOfStudyDTO> Execute(CreateProgramOfStudyDTO createProgramOfStudyDto)
+    public async Task<ProgramOfStudyDTO> Execute(ProgramOfStudyDTO createProgramOfStudyDto)
     {
         ValidationResult validationResult = await _validator.ValidateAsync(createProgramOfStudyDto);
         if (!validationResult.IsValid)

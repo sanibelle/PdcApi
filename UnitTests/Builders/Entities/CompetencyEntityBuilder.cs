@@ -1,3 +1,5 @@
+using Pdc.Domain.Models.Common;
+using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 
 public class CompetencyEntityBuilder

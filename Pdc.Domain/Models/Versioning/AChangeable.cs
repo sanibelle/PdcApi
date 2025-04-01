@@ -1,6 +1,6 @@
-﻿namespace Pdc.Domain.Entities.Versioning;
+﻿namespace Pdc.Domain.Models.Versioning;
 
-public class AChangeable
+public abstract class AChangeable
 {
     public required Guid Id { get; set; }
     public required string Value { get; set; }

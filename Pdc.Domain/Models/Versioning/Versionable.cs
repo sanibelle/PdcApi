@@ -1,4 +1,4 @@
-﻿namespace Pdc.Domain.Entities.Versioning;
+﻿namespace Pdc.Domain.Models.Versioning;
 
 public abstract class Versionable
 {

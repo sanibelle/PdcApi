@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Pdc.Application.DTOS;
 using Pdc.Application.Exceptions;
-using Pdc.Domain.Entities.CourseFramework;
+using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 

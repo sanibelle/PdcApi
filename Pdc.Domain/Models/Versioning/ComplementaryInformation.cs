@@ -1,4 +1,4 @@
-﻿namespace Pdc.Domain.Entities.Versioning;
+﻿namespace Pdc.Domain.Models.Versioning;
 
 public class ComplementaryInformation  // Informations supplémentaires comme des notes. Utilisé comme 4ieme colonne des éléments de contenu
 {

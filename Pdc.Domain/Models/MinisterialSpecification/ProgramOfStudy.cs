@@ -1,12 +1,12 @@
-﻿using Pdc.Domain.Entities.Common;
-using Pdc.Domain.Entities.MinisterialSpecification;
-using Pdc.Domain.Enums;
+﻿using Pdc.Domain.Enums;
+using Pdc.Domain.Models.Common;
+using Pdc.Domain.Models.MinisterialSpecification;
 
-namespace Pdc.Domain.Entities.CourseFramework;
+namespace Pdc.Domain.Models.CourseFramework;
 
 public class ProgramOfStudy // toujours issu d'un devis ministeriel
 {
-    public IEnumerable<MinisterialCompetency> Competencies { get; set; } = new List<MinisterialCompetency>();
+    public ICollection<MinisterialCompetency> Competencies { get; set; } = new List<MinisterialCompetency>();
     /// <summary>
     /// Code unique de la formation
     /// </summary>

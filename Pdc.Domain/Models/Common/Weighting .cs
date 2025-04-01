@@ -1,4 +1,4 @@
-﻿namespace Pdc.Domain.Entities.Common;
+﻿namespace Pdc.Domain.Models.Common;
 
 public class Weighting
 {

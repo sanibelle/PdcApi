@@ -1,6 +1,6 @@
-﻿using Pdc.Domain.Entities.Versioning;
+﻿using Pdc.Domain.Models.Versioning;
 
-namespace Pdc.Domain.Entities.MinisterialSpecification;
+namespace Pdc.Domain.Models.MinisterialSpecification;
 
 public class PerformanceCriteria : AChangeable
 {

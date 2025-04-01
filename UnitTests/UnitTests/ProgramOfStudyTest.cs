@@ -5,11 +5,11 @@ using Pdc.Application.DTOS;
 using Pdc.Application.Mappings;
 using Pdc.Application.UseCase;
 using Pdc.Application.Validators;
-using Pdc.Domain.Entities.Common;
-using Pdc.Domain.Entities.CourseFramework;
 using Pdc.Domain.Enums;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Models.Common;
+using Pdc.Domain.Models.CourseFramework;
 using Pdc.Tests.Builders.Models;
 
 namespace Pdc.Tests.UnitTests;
@@ -22,7 +22,7 @@ public class ProgramOfStudyTest
     IGetAllProgramOfStudyUseCase _getAllProgramOfStudyUseCase;
     IUpdateProgramOfStudyUseCase _updateProgramOfStudyUseCase;
     IMapper _mapper;
-    IValidator<CreateProgramOfStudyDTO> _validator;
+    IValidator<ProgramOfStudyDTO> _validator;
     string codeOfAFakeProgram = "fakeCode";
 
 
@@ -53,7 +53,7 @@ public class ProgramOfStudyTest
     [Test]
     public async Task CreateProgramOfStudy_ShouldReturnCreatedProgram()
     {
-        CreateProgramOfStudyDTO createProgramDto = new()
+        ProgramOfStudyDTO createProgramDto = new()
         {
             Code = "420.B0",
             Name = "Techniques de l'informatique",
@@ -99,7 +99,7 @@ public class ProgramOfStudyTest
     public async Task UpdateProgramOfStudy_ShouldCallRepositoryUpdate()
     {
         // Arrange
-        CreateProgramOfStudyDTO updateProgramDto = new()
+        ProgramOfStudyDTO updateProgramDto = new()
         {
             Code = "420.B0",
             Name = "UpdatedName",
