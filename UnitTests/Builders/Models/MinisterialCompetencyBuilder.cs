@@ -94,7 +94,7 @@ public class MinisterialCompetencyBuilder
             IsOptionnal = _isOptionnal,
             StatementOfCompetency = _statementOfCompetency,
             RealisationContexts = _realisationContexts,
-            CompetencyElements = _competencyElements
+            CompetencyElements = _competencyElements,
         };
     }
 }

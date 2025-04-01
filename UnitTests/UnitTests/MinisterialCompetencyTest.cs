@@ -64,7 +64,11 @@ public class MinisterialCompetencyTest
         _realisationContext = new RealisationContextBuilder()
             .Build();
 
+        _realisationContext = new PerformanceCriteriaBuilder()
+            .Build();
+
         _ministerialCompetencyElement = new MinisterialCompetencyElementBuilder()
+            .WithPerformanceCriterias(new List<PerformanceCriteria>())
             .Build();
 
         _competency1 = new MinisterialCompetencyBuilder()
@@ -136,20 +140,31 @@ public class MinisterialCompetencyTest
     [Test]
     public async Task CreateMinisterialCompetency_ShouldReturnMinisterialCompetency()
     {
-        string code = "0123";
+        var realisationContext = new ChangeableDTOBuilder()
+            .WithId(_realisationContext.Id)
+            .Build();
+        var performanceCriteria = new ChangeableDTOBuilder()
+            .WithId(_performanceCriteria.Id).Build();
+        var competencyElement = new CompetencyElementDTOBuilder()
+            .WithPerformanceCriterias(new List<ChangeableDTO> { performanceCriteria })
+            .BuildCompetencyElement();
         CompetencyDTO createProgramDto = new CompetencyDTOBuilder()
-            .WithRealisationContexts(new List<ChangeableDTO> { new ChangeableDTOBuilder().Build() })
-            .WithCompetencyElements(new List<CompetencyElementDTO> { new CompetencyElementDTOBuilder()
-                .WithPerformanceCriterias( new List<ChangeableDTO> { new ChangeableDTOBuilder().Build() })
-                .BuildCompetencyElement() })
+
+            .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
+            .WithCompetencyElements(new List<CompetencyElementDTO> { competencyElement })
             .WithCode(_competency2.Code)
             .Build();
         // Act
         var result = await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, createProgramDto);
 
         // Assert
-        Assert.That(createProgramDto.Code == code, "Code is returned");
+        Assert.That(createProgramDto.Code == _competency2.Code, "Code is returned");
+        Assert.That(createProgramDto.RealisationContexts.First().Id == realisationContext.Id, "RealisationContext is returned");
+        Assert.That(createProgramDto.CompetencyElements.First().Id == competencyElement.Id, "competencyElement is returned");
+        Assert.That(createProgramDto.CompetencyElements.First().PerformanceCriterias.First().Id == competencyElement.Id, "competencyElement is returned");
+        Assert.That(createProgramDto.CompetencyElements.First().PerformanceCriterias.First().Id == performanceCriteria.Id, "PerformanceCriteria is returned");
     }
+    //TODO at least one competency element
     //TODO at least one performance criteria
     //TODO validate position exists? plus dans le E2E
     //TODO gestion de la version. Quand on crée un programme, on crée une nouvelle version
