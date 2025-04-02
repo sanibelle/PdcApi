@@ -3,6 +3,7 @@ using FluentValidation;
 using Moq;
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
+using Pdc.Application.Exceptions;
 using Pdc.Application.Mappings;
 using Pdc.Application.UseCase;
 using Pdc.Application.Validators;
@@ -185,6 +186,36 @@ public class MinisterialCompetencyTest
         Assert.That(result.CompetencyElements.First().ComplementaryInformations.First().Id == complementaryInformation.Id, "ComplementaryInformation is returned");
         Assert.That(result.CompetencyElements.First().ComplementaryInformations.First().ModifiedOn.HasValue, "ComplementaryInformation ModifiedOn is prsent");
         Assert.That(result.CompetencyElements.First().ComplementaryInformations.First().WrittenOnVersion == _changeRecord.VersionNumber, "ComplementaryInformation version is returned");
+    }
+
+    [Test]
+    public async Task CreateMinisterialCompetency_ShouldNotHaveDuplicateCode()
+    {
+        var complementaryInformation = new ComplementaryInformationDTOBuilder()
+            .WithId(_complementaryInformation.Id)
+            .WithVersionNumber(1)
+            .Build();
+        var realisationContext = new ChangeableDTOBuilder()
+            .AddComplementaryInformation(complementaryInformation)
+            .WithId(_realisationContext.Id)
+            .Build();
+        var performanceCriteria = new ChangeableDTOBuilder()
+            .AddComplementaryInformation(complementaryInformation)
+            .WithId(_performanceCriteria.Id)
+            .Build();
+        var competencyElement = new CompetencyElementDTOBuilder()
+            .AddPerformanceCriteria(performanceCriteria)
+            .WithId(_competencyElement.Id)
+            .AddComplementaryInformations(complementaryInformation)
+            .BuildCompetencyElement();
+        CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
+            .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
+            .WithCompetencyElements(new List<CompetencyElementDTO> { competencyElement })
+            .WithCode(_competency1.Code)
+            .Build();
+
+        Assert.ThrowsAsync<DuplicateException>(async () =>
+                await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO));
     }
 
     [Test]

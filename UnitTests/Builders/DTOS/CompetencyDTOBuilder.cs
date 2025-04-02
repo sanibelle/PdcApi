@@ -11,8 +11,8 @@ public class CompetencyDTOBuilder
     private bool _isMandatory = false;
     private bool _isOptionnal = false;
     private string _statementOfCompetency = "Default Statement";
-    private IEnumerable<ChangeableDTO> _realisationContexts = new List<ChangeableDTO>();
-    private IEnumerable<CompetencyElementDTO> _competencyElements = new List<CompetencyElementDTO>();
+    private ICollection<ChangeableDTO> _realisationContexts = new List<ChangeableDTO>();
+    private ICollection<CompetencyElementDTO> _competencyElements = new List<CompetencyElementDTO>();
     private int? _versionNumber = null;
 
     public CompetencyDTOBuilder WithCode(string code)
@@ -45,15 +45,21 @@ public class CompetencyDTOBuilder
         return this;
     }
 
-    public CompetencyDTOBuilder WithRealisationContexts(IEnumerable<ChangeableDTO> realisationContexts)
+    public CompetencyDTOBuilder WithRealisationContexts(ICollection<ChangeableDTO> realisationContexts)
     {
         _realisationContexts = realisationContexts;
         return this;
     }
 
-    public CompetencyDTOBuilder WithCompetencyElements(IEnumerable<CompetencyElementDTO> competencyElements)
+    public CompetencyDTOBuilder WithCompetencyElements(ICollection<CompetencyElementDTO> competencyElements)
     {
         _competencyElements = competencyElements;
+        return this;
+    }
+
+    public CompetencyDTOBuilder AddCompetencyElements(CompetencyElementDTO competencyElement)
+    {
+        _competencyElements.Add(competencyElement);
         return this;
     }
 

@@ -16,16 +16,18 @@ public class MappingProfile : Profile
         // common
         CreateMap<Competency, CompetencyEntity>()
             .ReverseMap();
-
+        CreateMap<ChangeableEntity, AChangeable>()
+            .ReverseMap();
+        CreateMap<PerformanceCriteria, PerformanceCriteriaEntity>()
+            .ReverseMap();
+        CreateMap<ComplementaryInformation, ComplementaryInformationEntity>()
+            .ReverseMap();
         CreateMap<CompetencyElement, CompetencyElementEntity>()
             .ReverseMap();
-
         CreateMap<ContentElement, ContentElementEntity>()
             .ReverseMap();
-
         CreateMap<RealisationContextEntity, RealisationContext>()
             .ReverseMap();
-
         CreateMap<ChangeRecordEntity, ChangeRecord>()
             .ReverseMap();
 
@@ -36,6 +38,8 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Competencies, opt => opt.MapFrom(src => src.Competencies));
 
         CreateMap<MinisterialCompetency, CompetencyEntity>()
+            .ReverseMap();
+        CreateMap<MinisterialCompetencyElement, CompetencyElementEntity>()
             .ReverseMap();
 
         // CourseFrameworkCompetency

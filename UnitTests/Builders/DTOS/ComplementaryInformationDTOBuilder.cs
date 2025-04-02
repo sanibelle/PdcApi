@@ -4,12 +4,12 @@ namespace Pdc.Tests.Builders.DTOS;
 
 public class ComplementaryInformationDTOBuilder
 {
-    private Guid _id = Guid.NewGuid();
+    private Guid? _id = Guid.NewGuid();
     private string _text = "Test DATA";
     private DateTime _modifiedOn;
     private int _versionNumber;
 
-    public ComplementaryInformationDTOBuilder WithId(Guid id)
+    public ComplementaryInformationDTOBuilder WithId(Guid? id)
     {
         _id = id;
         return this;

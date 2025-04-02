@@ -4,13 +4,13 @@ namespace Pdc.Tests.Builders.DTOS;
 
 public class CompetencyElementDTOBuilder
 {
-    private Guid _id = Guid.NewGuid();
+    private Guid? _id = Guid.NewGuid();
     private string _value = "Default Value";
     private int _position = 1;
     protected List<ComplementaryInformationDTO> ComplementaryInformations = new List<ComplementaryInformationDTO>();
     private ICollection<ChangeableDTO> _performanceCriterias = new List<ChangeableDTO>();
 
-    public CompetencyElementDTOBuilder WithId(Guid id)
+    public CompetencyElementDTOBuilder WithId(Guid? id)
     {
         _id = id;
         return this;

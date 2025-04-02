@@ -4,12 +4,12 @@ namespace Pdc.Tests.Builders.DTOS;
 
 public class ChangeableDTOBuilder
 {
-    private Guid _id = Guid.NewGuid();
+    private Guid? _id = Guid.NewGuid();
     private string _value = "Default Value";
     private int _position = 1;
     protected List<ComplementaryInformationDTO> _complementaryInformations = new List<ComplementaryInformationDTO>();
 
-    public ChangeableDTOBuilder WithId(Guid id)
+    public ChangeableDTOBuilder WithId(Guid? id)
     {
         _id = id;
         return this;

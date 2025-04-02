@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Pdc.Application.DTOS;
+using Pdc.Application.DTOS.Common;
 using Pdc.Domain.Models.Common;
 using Pdc.Tests.Builders.DTOS;
 using System.Net.Http.Json;
@@ -104,6 +105,44 @@ namespace Pdc.E2ETests
 
 
             updatedProgram.Should().NotBeEquivalentTo(createdProgram, options =>
+                options.ExcludingMissingMembers());
+        }
+
+        [Test]
+        public async Task GivenExistingProgram_WhenCreatingCompetency_ThenShouldCreateCompetency()
+        {
+            string programCode = TestDataSeeder.ProgramOfStudyEntity.Code;
+            // Arrange
+            var complementaryInformation = new ComplementaryInformationDTOBuilder()
+                .WithId(null)
+                .WithVersionNumber(1)
+                .Build();
+            var realisationContext = new ChangeableDTOBuilder()
+                .WithId(null)
+                .AddComplementaryInformation(complementaryInformation)
+                .Build();
+            var performanceCriteria = new ChangeableDTOBuilder()
+                .WithId(null)
+                .AddComplementaryInformation(complementaryInformation)
+                .Build();
+            var competencyElement = new CompetencyElementDTOBuilder()
+                .AddPerformanceCriteria(performanceCriteria)
+                .WithId(null)
+                .AddComplementaryInformations(complementaryInformation)
+                .BuildCompetencyElement();
+            CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
+                .WithCode("E2E.TES")
+                .AddCompetencyElements(competencyElement)
+                .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
+                .Build();
+
+
+            // Act - Create the program
+            var createResponse = await _client.PostAsJsonAsync($"/api/programofstudy/{programCode}/competency", competencyDTO);
+            createResponse.EnsureSuccessStatusCode();
+            var createdCompetency = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+
+            createdCompetency.Should().BeEquivalentTo(competencyDTO, options =>
                 options.ExcludingMissingMembers());
         }
 
