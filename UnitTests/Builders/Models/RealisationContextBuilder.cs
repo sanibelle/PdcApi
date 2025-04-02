@@ -29,6 +29,12 @@ public class RealisationContextBuilder
         return this;
     }
 
+    public RealisationContextBuilder AddComplementaryInformations(ComplementaryInformation complementaryInformation)
+    {
+        _complementaryInformations.Add(complementaryInformation);
+        return this;
+    }
+
     public RealisationContext Build()
     {
         return new RealisationContext
@@ -38,4 +44,6 @@ public class RealisationContextBuilder
             ComplementaryInformations = _complementaryInformations
         };
     }
+
+
 }

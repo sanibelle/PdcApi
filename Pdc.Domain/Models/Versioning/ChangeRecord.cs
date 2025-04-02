@@ -24,4 +24,24 @@ public class ChangeRecord
     /// The version with the changes
     /// </summary>
     public ChangeRecord? NextVersion { get; set; }
+
+    /// <summary>
+    /// Creates a default version with the version number statring at 1
+    /// </summary>
+    public ChangeRecord()
+    {
+        Id = Guid.NewGuid();
+        VersionNumber = 1;
+        CreatedOn = DateTime.Now;
+        IsDraft = true;
+    }
+
+    /// <summary>
+    /// Used when the version is incoming from the front-end
+    /// </summary>
+    /// <param name="writtenOnVersion"></param>
+    public ChangeRecord(int writtenOnVersion)
+    {
+        VersionNumber = writtenOnVersion;
+    }
 }

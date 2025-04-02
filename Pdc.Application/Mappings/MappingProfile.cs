@@ -4,6 +4,7 @@ using Pdc.Application.DTOS.Common;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
+using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Application.Mappings;
 
@@ -18,6 +19,10 @@ public class MappingProfile : Profile
         CreateMap<CompetencyElementDTO, MinisterialCompetencyElement>().ReverseMap();
         CreateMap<ChangeableDTO, RealisationContext>().ReverseMap();
         CreateMap<ChangeableDTO, PerformanceCriteria>().ReverseMap();
-
+        CreateMap<ChangeRecordDTO, ChangeRecord>().ReverseMap();
+        CreateMap<ComplementaryInformationDTO, ComplementaryInformation>()
+        .ForMember(dest => dest.WrittenOnVersion, opt => opt.MapFrom(src => new ChangeRecord(src.WrittenOnVersion ?? -1)))
+        .ReverseMap()
+        .ForMember(dest => dest.WrittenOnVersion, opt => opt.MapFrom(src => src.WrittenOnVersion.VersionNumber));
     }
 }

@@ -6,7 +6,6 @@ namespace Pdc.Tests.Builders.Models;
 public class MinisterialCompetencyBuilder
 {
     private string _code = "MC" + new Random().Next(1000, 9999);
-    private int _versionNumber = 1;
     private Units? _units = new Units(5);
     private string _programOfStudyCode = "POS" + new Random().Next(1000, 9999);
     private bool _isMandatory = true;
@@ -20,12 +19,6 @@ public class MinisterialCompetencyBuilder
     public MinisterialCompetencyBuilder WithCode(string code)
     {
         _code = code;
-        return this;
-    }
-
-    public MinisterialCompetencyBuilder WithVersionNumber(int versionNumber)
-    {
-        _versionNumber = versionNumber;
         return this;
     }
 
@@ -87,7 +80,6 @@ public class MinisterialCompetencyBuilder
         return new MinisterialCompetency
         {
             Code = _code,
-            VersionNumber = _versionNumber,
             Units = _units,
             ProgramOfStudyCode = _programOfStudyCode,
             IsMandatory = _isMandatory,

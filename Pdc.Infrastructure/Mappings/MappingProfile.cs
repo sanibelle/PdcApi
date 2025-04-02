@@ -2,8 +2,10 @@
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
+using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
+using Pdc.Infrastructure.Entities.Versioning;
 
 namespace Pdc.Infrastructure.Mappings;
 
@@ -22,6 +24,9 @@ public class MappingProfile : Profile
             .ReverseMap();
 
         CreateMap<RealisationContextEntity, RealisationContext>()
+            .ReverseMap();
+
+        CreateMap<ChangeRecordEntity, ChangeRecord>()
             .ReverseMap();
 
         // Ministerial

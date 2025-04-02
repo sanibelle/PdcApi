@@ -5,23 +5,29 @@ namespace Pdc.Tests.Builders.Models;
 
 public class MinisterialCompetencyElementBuilder
 {
-    private IEnumerable<PerformanceCriteria> _performanceCriterias = new List<PerformanceCriteria>();
-    private IEnumerable<ComplementaryInformation> _complementaryInformations = new List<ComplementaryInformation>();
+    private List<PerformanceCriteria> _performanceCriterias = new List<PerformanceCriteria>();
+    private List<ComplementaryInformation> _complementaryInformations = new List<ComplementaryInformation>();
     private Guid _id = Guid.NewGuid();
     private int _position = 0;
     private string _value = string.Empty;
 
     public MinisterialCompetencyElementBuilder() { }
 
-    public MinisterialCompetencyElementBuilder WithPerformanceCriterias(IEnumerable<PerformanceCriteria> performanceCriterias)
+    public MinisterialCompetencyElementBuilder WithPerformanceCriterias(List<PerformanceCriteria> performanceCriterias)
     {
         _performanceCriterias = performanceCriterias;
         return this;
     }
 
-    public MinisterialCompetencyElementBuilder WithComplementaryInformations(IEnumerable<ComplementaryInformation> complementaryInformations)
+    public MinisterialCompetencyElementBuilder WithComplementaryInformations(List<ComplementaryInformation> complementaryInformations)
     {
         _complementaryInformations = complementaryInformations;
+        return this;
+    }
+
+    public MinisterialCompetencyElementBuilder AddComplementaryInformation(ComplementaryInformation complementaryInformation)
+    {
+        _complementaryInformations.Add(complementaryInformation);
         return this;
     }
 
@@ -42,6 +48,11 @@ public class MinisterialCompetencyElementBuilder
         _value = value;
         return this;
     }
+    public MinisterialCompetencyElementBuilder AddPerformanceCriteria(PerformanceCriteria performanceCriteria)
+    {
+        _performanceCriterias.Add(performanceCriteria);
+        return this;
+    }
 
     public MinisterialCompetencyElement Build()
     {
@@ -54,4 +65,5 @@ public class MinisterialCompetencyElementBuilder
             PerformanceCriterias = _performanceCriterias
         };
     }
+
 }

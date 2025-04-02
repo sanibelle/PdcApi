@@ -1,6 +1,16 @@
-﻿namespace Pdc.Domain.Models.MinisterialSpecification;
+﻿
+using Pdc.Domain.Models.Versioning;
+
+namespace Pdc.Domain.Models.MinisterialSpecification;
 
 public class MinisterialCompetency : Competency
 {
-    public IEnumerable<MinisterialCompetencyElement> CompetencyElements { get; set; } = new List<MinisterialCompetencyElement>();
+    public List<MinisterialCompetencyElement> CompetencyElements { get; set; } = new List<MinisterialCompetencyElement>();
+
+    public override void SetVersion(ChangeRecord version)
+    {
+        base.SetVersion(version);
+        CurrentVersion = version;
+        CompetencyElements.ForEach(x => x.SetVersion(version));
+    }
 }

@@ -1,6 +1,14 @@
-﻿namespace Pdc.Domain.Models.MinisterialSpecification;
+﻿using Pdc.Domain.Models.Versioning;
+
+namespace Pdc.Domain.Models.MinisterialSpecification;
 
 public class MinisterialCompetencyElement : CompetencyElement
 {
-    public IEnumerable<PerformanceCriteria> PerformanceCriterias { get; set; } = new List<PerformanceCriteria>();
+    public List<PerformanceCriteria> PerformanceCriterias { get; set; } = new List<PerformanceCriteria>();
+
+    public void SetVersion(ChangeRecord version)
+    {
+        base.SetVersion(version);
+        PerformanceCriterias.ForEach(x => x.SetVersion(version));
+    }
 }

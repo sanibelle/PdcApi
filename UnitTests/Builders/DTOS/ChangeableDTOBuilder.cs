@@ -7,7 +7,7 @@ public class ChangeableDTOBuilder
     private Guid _id = Guid.NewGuid();
     private string _value = "Default Value";
     private int _position = 1;
-    private List<ComplementaryInformationDTO> _complementaryInformations = new List<ComplementaryInformationDTO>();
+    protected List<ComplementaryInformationDTO> _complementaryInformations = new List<ComplementaryInformationDTO>();
 
     public ChangeableDTOBuilder WithId(Guid id)
     {
@@ -33,6 +33,13 @@ public class ChangeableDTOBuilder
         return this;
     }
 
+    internal ChangeableDTOBuilder AddComplementaryInformation(ComplementaryInformationDTO complementaryInformation)
+    {
+        _complementaryInformations.Add(complementaryInformation);
+        return this;
+    }
+
+
     public ChangeableDTO Build()
     {
         return new ChangeableDTO
@@ -40,7 +47,8 @@ public class ChangeableDTOBuilder
             Id = _id,
             Value = _value,
             Position = _position,
-            ComplementaryInformations = _complementaryInformations
+            ComplementaryInformations = _complementaryInformations,
         };
     }
+
 }

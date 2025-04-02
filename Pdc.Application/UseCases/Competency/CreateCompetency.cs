@@ -7,6 +7,7 @@ using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
+using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Application.UseCase;
 
@@ -38,8 +39,9 @@ public class CreateCompetency : ICreateCompetencyUseCase
         ProgramOfStudy program = await _programOfStudyRepository.FindByCode(programOfStudyCode);
         await ThrowIfDuplicateCode(programOfStudyCode, createCompetencyDto.Code);
 
-        MinisterialCompetency programOfStudy = _mapper.Map<MinisterialCompetency>(createCompetencyDto);
-        MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, programOfStudy);
+        MinisterialCompetency competency = _mapper.Map<MinisterialCompetency>(createCompetencyDto);
+        competency.SetVersion(new ChangeRecord());
+        MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, competency);
 
         return _mapper.Map<CompetencyDTO>(savedCompetency);
     }
@@ -48,7 +50,7 @@ public class CreateCompetency : ICreateCompetencyUseCase
     {
         try
         {
-            var comptency = await _competencyRepository.FindByCode(programOfStudyCode, competencyCode);
+            MinisterialCompetency comptency = await _competencyRepository.FindByCode(programOfStudyCode, competencyCode);
             throw new DuplicateException();
         }
         catch (EntityNotFoundException)

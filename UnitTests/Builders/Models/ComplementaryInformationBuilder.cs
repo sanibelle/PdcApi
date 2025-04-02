@@ -7,7 +7,6 @@ public class ComplementaryInformationBuilder
     private Guid _id = Guid.NewGuid();
     private string _text = "Test DATA";
     private DateTime _modifiedOn = DateTime.Now;
-    private AChangeable _changeable;
     private ChangeRecord _writtenOnVersion;
 
     public ComplementaryInformationBuilder WithId(Guid id)
@@ -22,6 +21,12 @@ public class ComplementaryInformationBuilder
         return this;
     }
 
+    public ComplementaryInformationBuilder WithChangeRecord(ChangeRecord writtenOnVersion)
+    {
+        _writtenOnVersion = writtenOnVersion;
+        return this;
+    }
+
     public ComplementaryInformation Build()
     {
         return new ComplementaryInformation
@@ -29,7 +34,6 @@ public class ComplementaryInformationBuilder
             Id = _id,
             Text = _text,
             ModifiedOn = _modifiedOn,
-            Changeable = _changeable,
             WrittenOnVersion = _writtenOnVersion
         };
     }

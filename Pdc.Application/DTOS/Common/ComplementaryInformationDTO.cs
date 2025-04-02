@@ -7,8 +7,8 @@ public class ComplementaryInformationDTO
     /// <summary>
     /// Version à laquelle l'information a été ajoutée
     /// </summary>
-    public int VersionNumber { get; set; }
-    public DateTime ModifiedOn { get; set; }
+    public int? WrittenOnVersion { get; set; }
+    public DateTime? ModifiedOn { get; set; }
     public required string Text { get; set; }
 
 }

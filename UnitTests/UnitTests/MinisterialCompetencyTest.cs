@@ -12,6 +12,7 @@ using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
+using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Tests.Builders.DTOS;
 using Pdc.Tests.Builders.Models;
@@ -42,8 +43,10 @@ public class MinisterialCompetencyTest
     private ProgramOfStudy _programOfSudy;
 
     private RealisationContext _realisationContext;
-
-    private MinisterialCompetencyElement _ministerialCompetencyElement;
+    private ChangeRecord _changeRecord;
+    private ComplementaryInformation _complementaryInformation;
+    private PerformanceCriteria _performanceCriteria;
+    private MinisterialCompetencyElement _competencyElement;
 
     private MinisterialCompetency _competency1, _competency2;
 
@@ -51,48 +54,56 @@ public class MinisterialCompetencyTest
     public void Setup()
     {
         _programOfSudy = new ProgramOfStudyBuilder()
-    .WithCode(_codeOfAFakeProgram)
-    .WithName("Techniques de l'informatique")
-    .WithSanction(SanctionType.DEC)
-    .WithMonthsDuration(36)
-    .WithSpecificDurationHours(2010)
-    .WithTotalDurationHours(5730)
-    .WithPublishedOn(new DateOnly(2020, 01, 01))
-    .WithCompetencies(new List<MinisterialCompetency>())
-    .Build();
+            .WithCode(_codeOfAFakeProgram)
+            .WithName("Techniques de l'informatique")
+            .WithSanction(SanctionType.DEC)
+            .WithMonthsDuration(36)
+            .WithSpecificDurationHours(2010)
+            .WithTotalDurationHours(5730)
+            .WithPublishedOn(new DateOnly(2020, 01, 01))
+            .WithCompetencies(new List<MinisterialCompetency>())
+            .Build();
+
+        _changeRecord = new ChangeRecordBuilder()
+            .Build();
+
+        _complementaryInformation = new ComplementaryInformationBuilder()
+            .WithChangeRecord(_changeRecord)
+            .Build();
 
         _realisationContext = new RealisationContextBuilder()
+            .AddComplementaryInformations(_complementaryInformation)
             .Build();
 
-        _realisationContext = new PerformanceCriteriaBuilder()
+        _performanceCriteria = new PerformanceCriteriaBuilder()
+            .AddComplementaryInformations(_complementaryInformation)
             .Build();
 
-        _ministerialCompetencyElement = new MinisterialCompetencyElementBuilder()
-            .WithPerformanceCriterias(new List<PerformanceCriteria>())
+        _competencyElement = new MinisterialCompetencyElementBuilder()
+            .AddPerformanceCriteria(_performanceCriteria)
+            .AddComplementaryInformation(_complementaryInformation)
             .Build();
 
         _competency1 = new MinisterialCompetencyBuilder()
             .WithCode(codeOfAFakeCompetency1)
-            .WithVersionNumber(1)
             .WithUnits(new Units(10))
             .WithProgramOfStudyCode("POS1234")
             .WithIsMandatory(false)
             .WithIsOptionnal(true)
             .WithStatementOfCompetency("Test Statement")
             .AddRealisationContexts(_realisationContext)
-            .AddCompetencyElements(_ministerialCompetencyElement)
+            .AddCompetencyElements(_competencyElement)
             .Build();
 
         _competency2 = new MinisterialCompetencyBuilder()
             .WithCode(codeOfAFakeCompetency2)
-            .WithVersionNumber(1)
             .WithUnits(new Units(11))
             .WithProgramOfStudyCode("POS2345")
             .WithIsMandatory(true)
             .WithIsOptionnal(false)
             .WithStatementOfCompetency("Test Statement 2")
             .AddRealisationContexts(_realisationContext)
-            .AddCompetencyElements(_ministerialCompetencyElement)
+            .AddCompetencyElements(_competencyElement)
             .Build();
 
         // Initialize repository mocks
@@ -140,38 +151,123 @@ public class MinisterialCompetencyTest
     [Test]
     public async Task CreateMinisterialCompetency_ShouldReturnMinisterialCompetency()
     {
+        var complementaryInformation = new ComplementaryInformationDTOBuilder()
+            .WithId(_complementaryInformation.Id)
+            .WithVersionNumber(1)
+            .Build();
         var realisationContext = new ChangeableDTOBuilder()
+            .AddComplementaryInformation(complementaryInformation)
             .WithId(_realisationContext.Id)
             .Build();
         var performanceCriteria = new ChangeableDTOBuilder()
-            .WithId(_performanceCriteria.Id).Build();
+            .AddComplementaryInformation(complementaryInformation)
+            .WithId(_performanceCriteria.Id)
+            .Build();
         var competencyElement = new CompetencyElementDTOBuilder()
-            .WithPerformanceCriterias(new List<ChangeableDTO> { performanceCriteria })
+            .AddPerformanceCriteria(performanceCriteria)
+            .WithId(_competencyElement.Id)
+            .AddComplementaryInformations(complementaryInformation)
             .BuildCompetencyElement();
-        CompetencyDTO createProgramDto = new CompetencyDTOBuilder()
-
+        CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
             .WithCompetencyElements(new List<CompetencyElementDTO> { competencyElement })
             .WithCode(_competency2.Code)
             .Build();
         // Act
-        var result = await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, createProgramDto);
+        CompetencyDTO result = await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO);
 
         // Assert
-        Assert.That(createProgramDto.Code == _competency2.Code, "Code is returned");
-        Assert.That(createProgramDto.RealisationContexts.First().Id == realisationContext.Id, "RealisationContext is returned");
-        Assert.That(createProgramDto.CompetencyElements.First().Id == competencyElement.Id, "competencyElement is returned");
-        Assert.That(createProgramDto.CompetencyElements.First().PerformanceCriterias.First().Id == competencyElement.Id, "competencyElement is returned");
-        Assert.That(createProgramDto.CompetencyElements.First().PerformanceCriterias.First().Id == performanceCriteria.Id, "PerformanceCriteria is returned");
+        Assert.That(result.Code == _competency2.Code, "Code is returned");
+        Assert.That(result.RealisationContexts.First().Id == realisationContext.Id, "RealisationContext is returned");
+        Assert.That(result.RealisationContexts.First().ComplementaryInformations.First().WrittenOnVersion == _changeRecord.VersionNumber, "RealisationContext complementary information version number matches");
+        Assert.That(result.CompetencyElements.First().Id == competencyElement.Id, "competencyElement is returned");
+        Assert.That(result.CompetencyElements.First().PerformanceCriterias.First().Id == performanceCriteria.Id, "competencyElement is returned");
+        Assert.That(result.CompetencyElements.First().ComplementaryInformations.First().Id == complementaryInformation.Id, "ComplementaryInformation is returned");
+        Assert.That(result.CompetencyElements.First().ComplementaryInformations.First().ModifiedOn.HasValue, "ComplementaryInformation ModifiedOn is prsent");
+        Assert.That(result.CompetencyElements.First().ComplementaryInformations.First().WrittenOnVersion == _changeRecord.VersionNumber, "ComplementaryInformation version is returned");
     }
-    //TODO at least one competency element
-    //TODO at least one performance criteria
-    //TODO validate position exists? plus dans le E2E
+
+    [Test]
+    public async Task CreateMinisterialCompetency_ShouldHaveAtLeastOneCompetencyElement()
+    {
+        var complementaryInformation = new ComplementaryInformationDTOBuilder()
+            .WithId(_complementaryInformation.Id)
+            .WithVersionNumber(1)
+            .Build();
+        var realisationContext = new ChangeableDTOBuilder()
+            .AddComplementaryInformation(complementaryInformation)
+            .WithId(_realisationContext.Id)
+            .Build();
+        var performanceCriteria = new ChangeableDTOBuilder()
+            .AddComplementaryInformation(complementaryInformation)
+            .WithId(_performanceCriteria.Id)
+            .Build();
+        CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
+            .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
+            .WithCode(_competency2.Code)
+            .Build();
+
+        // Assert
+        Assert.ThrowsAsync<ValidationException>(async () =>
+                await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO));
+    }
+
+    [Test]
+    public async Task CreateMinisterialCompetency_ShouldHaveAtLeastOnePerformanceCriteria()
+    {
+        var complementaryInformation = new ComplementaryInformationDTOBuilder()
+            .WithId(_complementaryInformation.Id)
+            .WithVersionNumber(1)
+            .Build();
+        var realisationContext = new ChangeableDTOBuilder()
+            .AddComplementaryInformation(complementaryInformation)
+            .WithId(_realisationContext.Id)
+            .Build();
+        var competencyElement = new CompetencyElementDTOBuilder()
+            .WithId(_competencyElement.Id)
+            .AddComplementaryInformations(complementaryInformation)
+            .BuildCompetencyElement();
+        CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
+            .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
+            .WithCompetencyElements(new List<CompetencyElementDTO> { competencyElement })
+            .WithCode(_competency2.Code)
+            .Build();
+
+        // Assert
+        Assert.ThrowsAsync<ValidationException>(async () =>
+                await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO));
+    }
+
+    [Test]
+    public async Task CreateMinisterialCompetency_ShouldHaveAtLeastOneRealisationContext()
+    {
+        var complementaryInformation = new ComplementaryInformationDTOBuilder()
+            .WithId(_complementaryInformation.Id)
+            .WithVersionNumber(1)
+            .Build();
+        var performanceCriteria = new ChangeableDTOBuilder()
+            .AddComplementaryInformation(complementaryInformation)
+            .WithId(_performanceCriteria.Id)
+            .Build();
+        var competencyElement = new CompetencyElementDTOBuilder()
+            .AddPerformanceCriteria(performanceCriteria)
+            .WithId(_competencyElement.Id)
+            .AddComplementaryInformations(complementaryInformation)
+            .BuildCompetencyElement();
+        CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
+            .WithCompetencyElements(new List<CompetencyElementDTO> { competencyElement })
+            .WithCode(_competency2.Code)
+            .Build();
+
+        // Assert
+        Assert.ThrowsAsync<ValidationException>(async () =>
+                await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO));
+    }
+
     //TODO gestion de la version. Quand on crée un programme, on crée une nouvelle version
-    //Les compétences sont liées à une version du programme???? Sinon, chaque compétence doit avoir une version
-    //Valider la création de la version quand on crée un programme. La version est créée dans un service
-    //L'ajout une compétence doit être liée à une version du programme
-    // Mettre un todo pour parler du fait que l'ajout d'une version vient modifier le programme
+    //TODO validate position exists? plus dans le E2E
+    //TODO ajouter des change details à une version
+    //TODO aller chercher une compétence par version
     // Avoir un concept de brouillon (change pas de version) et de propre (impossible de modifier, on crée une nouvelle version)
 
     //[Test]
