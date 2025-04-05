@@ -182,10 +182,10 @@ public class MinisterialCompetencyTest
         // Assert
         Assert.That(result.Code == _competency2.Code, "Code is returned");
         Assert.That(result.RealisationContexts.First().Id == realisationContext.Id, "RealisationContext is returned");
-        Assert.That(result.RealisationContexts.First().ComplementaryInformations.First().WrittenOnVersion == _changeRecord.VersionNumber, "RealisationContext complementary information version number matches");
+        Assert.That(result.RealisationContexts.First()?.ComplementaryInformations?.First().WrittenOnVersion == _changeRecord.VersionNumber, "RealisationContext complementary information version number matches");
         Assert.That(result.CompetencyElements.First().Id == competencyElement.Id, "competencyElement is returned");
         Assert.That(result.CompetencyElements.First().PerformanceCriterias.First().Id == performanceCriteria.Id, "competencyElement is returned");
-        Assert.That(result.CompetencyElements.First().ComplementaryInformations.First().Id == complementaryInformation.Id, "ComplementaryInformation is returned");
+        Assert.That(result.CompetencyElements.First()?.ComplementaryInformations?.First().Id == complementaryInformation.Id, "ComplementaryInformation is returned");
         Assert.That(result.CompetencyElements.First().ComplementaryInformations.First().ModifiedOn.HasValue, "ComplementaryInformation ModifiedOn is prsent");
         Assert.That(result.CompetencyElements.First().ComplementaryInformations.First().WrittenOnVersion == _changeRecord.VersionNumber, "ComplementaryInformation version is returned");
     }

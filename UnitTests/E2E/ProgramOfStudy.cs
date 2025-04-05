@@ -157,7 +157,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
                 .Excluding(x => x.ComplementaryInformations)
                 .Excluding(x => x.Id));
 
-            AssertComplementartInformation(r.ComplementaryInformations.FirstOrDefault(), performanceCriteriaComplementaryInformation);
+            AssertComplementartInformation(r?.ComplementaryInformations?.FirstOrDefault(), performanceCriteriaComplementaryInformation);
         }
 
         // NOTE le foreach a un seul element
@@ -170,9 +170,9 @@ public class ProgramOfStudyApiTests : ApiTestBase
                 .Excluding(x => x.PerformanceCriterias)
                 .Excluding(x => x.ComplementaryInformations));
 
-            AssertComplementartInformation(c.ComplementaryInformations.FirstOrDefault(), competencyElementComplementaryInformation);
+            AssertComplementartInformation(c?.ComplementaryInformations?.FirstOrDefault(), competencyElementComplementaryInformation);
 
-            foreach (var p in c.PerformanceCriterias)
+            foreach (var p in c?.PerformanceCriterias ?? [])
             {
 
                 Assert.That(p.Id != Guid.Empty || p.Id != null, "guid is not empty");
@@ -181,7 +181,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
                     .Excluding(x => x.Id)
                     .Excluding(x => x.ComplementaryInformations));
 
-                AssertComplementartInformation(p.ComplementaryInformations.FirstOrDefault(), performanceCriteriaComplementaryInformation);
+                AssertComplementartInformation(p?.ComplementaryInformations?.FirstOrDefault(), performanceCriteriaComplementaryInformation);
             }
         }
 

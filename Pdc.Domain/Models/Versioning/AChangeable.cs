@@ -6,7 +6,7 @@ public abstract class AChangeable
     public required string Value { get; set; }
     public required List<ComplementaryInformation> ComplementaryInformations { get; set; }
 
-    public void SetVersion(ChangeRecord version)
+    public virtual void SetVersion(ChangeRecord version)
     {
         ComplementaryInformations.ForEach(x => x.SetVersion(version));
     }
