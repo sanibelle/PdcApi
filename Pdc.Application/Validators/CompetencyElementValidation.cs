@@ -14,9 +14,7 @@ public class CompetencyElementValidation : AbstractValidator<CompetencyElementDT
             .ForEach(y => y.SetValidator(new ChangeableValidation()))
             .NotEmpty();
         // TODO FR .WithMessage("PerformanceCriterias cannot be empty.");
-
-        RuleForEach(x => x.ComplementaryInformations)
-            .SetValidator(new ComplementaryInformationValidator())
-            .NotEmpty();
     }
+
 }
+

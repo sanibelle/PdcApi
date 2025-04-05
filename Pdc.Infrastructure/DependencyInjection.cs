@@ -19,7 +19,9 @@ public static class DependencyInjection
         {
             // Register InMemory DbContext for tests
             services.AddDbContext<AppDbContext>(options =>
-                options.UseInMemoryDatabase("InMemoryTestDatabase"));
+                options.UseInMemoryDatabase("InMemoryTestDatabase")
+                .EnableDetailedErrors()
+                .EnableSensitiveDataLogging());
         }
         else
         {

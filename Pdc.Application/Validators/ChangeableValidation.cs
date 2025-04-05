@@ -8,15 +8,18 @@ public class ChangeableValidation : AbstractValidator<ChangeableDTO>
 {
     public ChangeableValidation()
     {
-        RuleFor(x => x.Position)
-        .NotEmpty();
-
         RuleFor(x => x.Value)
             .MaximumLength(Constants.MaxChangeableLength)
         .NotEmpty();
 
+        // TODO valider que les positions sont de 1 à n sans sauts.
         RuleFor(x => x.Position)
-            .GreaterThan(0)
-        .NotEmpty();
+            .Custom((x, context) =>
+            {
+                if (x.HasValue && x.Value <= 0)
+                {
+                    context.AddFailure("Position", "Position must be greater than 0.");
+                }
+            });
     }
 }

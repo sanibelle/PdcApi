@@ -38,7 +38,6 @@ public class CreateCompetency : ICreateCompetencyUseCase
         }
         ProgramOfStudy program = await _programOfStudyRepository.FindByCode(programOfStudyCode);
         await ThrowIfDuplicateCode(programOfStudyCode, createCompetencyDto.Code);
-
         MinisterialCompetency competency = _mapper.Map<MinisterialCompetency>(createCompetencyDto);
         competency.SetVersion(new ChangeRecord());
         MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, competency);
@@ -63,4 +62,6 @@ public class CreateCompetency : ICreateCompetencyUseCase
             throw;
         }
     }
+
+
 }

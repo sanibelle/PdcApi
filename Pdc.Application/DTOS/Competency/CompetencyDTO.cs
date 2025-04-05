@@ -10,8 +10,8 @@ public class CompetencyDTO
     public bool IsMandatory { get; set; }
     public bool IsOptionnal { get; set; }
     public required string StatementOfCompetency { get; set; }
-    public IEnumerable<ChangeableDTO> RealisationContexts { get; set; } = new List<ChangeableDTO>();
-    public IEnumerable<CompetencyElementDTO> CompetencyElements { get; set; } = new List<CompetencyElementDTO>();
+    public ICollection<ChangeableDTO> RealisationContexts { get; set; } = new List<ChangeableDTO>();
+    public ICollection<CompetencyElementDTO> CompetencyElements { get; set; } = new List<CompetencyElementDTO>();
     public int? VersionNumber { get; set; }
 
     public CompetencyDTO() { }

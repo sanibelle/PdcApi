@@ -30,12 +30,14 @@ public class CompetencyRepository : ICompetencyRespository
 
     public async Task<MinisterialCompetency> Add(ProgramOfStudy program, MinisterialCompetency competency)
     {
-        EntityEntry<CompetencyEntity> competencyEntity = await _context.Competencies.AddAsync(_mapper.Map<CompetencyEntity>(competency));
+        var competencyEntity = _mapper.Map<CompetencyEntity>(competency);
+
+        EntityEntry<CompetencyEntity> addedEntity = await _context.Competencies.AddAsync(competencyEntity);
         ProgramOfStudyEntity programEntity = await FindProgramOfStudy(program.Code);
-        programEntity.Competencies.Add(competencyEntity.Entity);
+        programEntity.Competencies.Add(addedEntity.Entity);
 
         await _context.SaveChangesAsync();
-        return _mapper.Map<MinisterialCompetency>(competencyEntity.Entity);
+        return _mapper.Map<MinisterialCompetency>(addedEntity.Entity);
     }
 
     public async Task<MinisterialCompetency> Update(MinisterialCompetency competency)

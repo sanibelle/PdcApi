@@ -37,7 +37,7 @@ public class CourseFramework : Versionable
     ///    </item>
     ///    <item>
     ///        <term>Un critère de performance</term>
-    ///        <definition><see cref="PerformanceCriteria"/></definition>
+    ///        <definition><see cref="PerformanceCriteriaDTO"/></definition>
     ///    </item>
     ///    <item>
     ///        <term>Un élément de contenu</term>

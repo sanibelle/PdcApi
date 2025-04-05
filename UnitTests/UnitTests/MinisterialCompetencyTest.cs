@@ -46,7 +46,7 @@ public class MinisterialCompetencyTest
     private RealisationContext _realisationContext;
     private ChangeRecord _changeRecord;
     private ComplementaryInformation _complementaryInformation;
-    private PerformanceCriteria _performanceCriteria;
+    private PerformanceCriteriaDTO _performanceCriteria;
     private MinisterialCompetencyElement _competencyElement;
 
     private MinisterialCompetency _competency1, _competency2;
@@ -161,10 +161,12 @@ public class MinisterialCompetencyTest
             .WithId(_realisationContext.Id)
             .Build();
         var performanceCriteria = new ChangeableDTOBuilder()
+            .WithPosition(1)
             .AddComplementaryInformation(complementaryInformation)
             .WithId(_performanceCriteria.Id)
             .Build();
         var competencyElement = new CompetencyElementDTOBuilder()
+            .WithPosition(1)
             .AddPerformanceCriteria(performanceCriteria)
             .WithId(_competencyElement.Id)
             .AddComplementaryInformations(complementaryInformation)
@@ -189,24 +191,58 @@ public class MinisterialCompetencyTest
     }
 
     [Test]
-    public async Task CreateMinisterialCompetency_ShouldNotHaveDuplicateCode()
+    public void CompetencyElements_ShouldHaveRightPosition()
     {
-        var complementaryInformation = new ComplementaryInformationDTOBuilder()
-            .WithId(_complementaryInformation.Id)
-            .WithVersionNumber(1)
-            .Build();
         var realisationContext = new ChangeableDTOBuilder()
-            .AddComplementaryInformation(complementaryInformation)
+            .Build();
+        var performanceCriteria1 = new ChangeableDTOBuilder()
+            .Build();
+        var performanceCriteria2 = new ChangeableDTOBuilder()
+            .Build();
+        var competencyElement1 = new CompetencyElementDTOBuilder()
+            .WithPerformanceCriterias(new List<ChangeableDTO> { performanceCriteria1, performanceCriteria2 })
+            .BuildCompetencyElement();
+        var competencyElement2 = new CompetencyElementDTOBuilder()
+            .WithPerformanceCriterias(new List<ChangeableDTO> { performanceCriteria1, performanceCriteria2 })
+            .BuildCompetencyElement();
+        CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
+            .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
+            .WithCompetencyElements(new List<CompetencyElementDTO> { competencyElement1, competencyElement2 })
+            .WithCode(_competency1.Code)
+            .Build();
+        // Act
+        var validation = new CompetencyValidation();
+
+        Assert.That(validation.Validate(competencyDTO).Errors.Count == 6, "6 erreurs. Deux par criteres de performances plus deux elements competences");
+
+        //Wrong positions
+        performanceCriteria1.Position = 3;
+        performanceCriteria2.Position = 1;
+        competencyElement2.Position = 1;
+        Assert.That(validation.Validate(competencyDTO).Errors.Count == 3, "3 erreurs. Une par criteres de performances plus une pour les competences");
+
+        // RIght positions
+        performanceCriteria1.Position = 2;
+        performanceCriteria2.Position = 1;
+        competencyElement1.Position = 1;
+        competencyElement2.Position = 2;
+        Assert.That(validation.Validate(competencyDTO).Errors.Count == 0, "Aucune erreur");
+    }
+
+    [Test]
+    public void CompetencyElements_ShouldHavePosition()
+    {
+        var realisationContext = new ChangeableDTOBuilder()
             .WithId(_realisationContext.Id)
             .Build();
         var performanceCriteria = new ChangeableDTOBuilder()
-            .AddComplementaryInformation(complementaryInformation)
             .WithId(_performanceCriteria.Id)
+            .WithPosition(1)
             .Build();
         var competencyElement = new CompetencyElementDTOBuilder()
             .AddPerformanceCriteria(performanceCriteria)
             .WithId(_competencyElement.Id)
-            .AddComplementaryInformations(complementaryInformation)
+            .WithPosition(1)
             .BuildCompetencyElement();
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
@@ -219,7 +255,7 @@ public class MinisterialCompetencyTest
     }
 
     [Test]
-    public async Task CreateMinisterialCompetency_ShouldHaveAtLeastOneCompetencyElement()
+    public void CreateMinisterialCompetency_ShouldHaveAtLeastOneCompetencyElement()
     {
         var complementaryInformation = new ComplementaryInformationDTOBuilder()
             .WithId(_complementaryInformation.Id)
@@ -228,14 +264,17 @@ public class MinisterialCompetencyTest
         var realisationContext = new ChangeableDTOBuilder()
             .AddComplementaryInformation(complementaryInformation)
             .WithId(_realisationContext.Id)
+            .WithPosition(1)
             .Build();
         var performanceCriteria = new ChangeableDTOBuilder()
             .AddComplementaryInformation(complementaryInformation)
             .WithId(_performanceCriteria.Id)
+            .WithPosition(1)
             .Build();
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
             .WithCode(_competency2.Code)
+
             .Build();
 
         // Assert
@@ -244,7 +283,7 @@ public class MinisterialCompetencyTest
     }
 
     [Test]
-    public async Task CreateMinisterialCompetency_ShouldHaveAtLeastOnePerformanceCriteria()
+    public void CreateMinisterialCompetency_ShouldHaveAtLeastOnePerformanceCriteria()
     {
         var complementaryInformation = new ComplementaryInformationDTOBuilder()
             .WithId(_complementaryInformation.Id)
@@ -253,9 +292,11 @@ public class MinisterialCompetencyTest
         var realisationContext = new ChangeableDTOBuilder()
             .AddComplementaryInformation(complementaryInformation)
             .WithId(_realisationContext.Id)
+            .WithPosition(1)
             .Build();
         var competencyElement = new CompetencyElementDTOBuilder()
             .WithId(_competencyElement.Id)
+            .WithPosition(1)
             .AddComplementaryInformations(complementaryInformation)
             .BuildCompetencyElement();
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
@@ -270,7 +311,7 @@ public class MinisterialCompetencyTest
     }
 
     [Test]
-    public async Task CreateMinisterialCompetency_ShouldHaveAtLeastOneRealisationContext()
+    public void CreateMinisterialCompetency_ShouldHaveAtLeastOneRealisationContext()
     {
         var complementaryInformation = new ComplementaryInformationDTOBuilder()
             .WithId(_complementaryInformation.Id)
@@ -279,9 +320,11 @@ public class MinisterialCompetencyTest
         var performanceCriteria = new ChangeableDTOBuilder()
             .AddComplementaryInformation(complementaryInformation)
             .WithId(_performanceCriteria.Id)
+            .WithPosition(1)
             .Build();
         var competencyElement = new CompetencyElementDTOBuilder()
             .AddPerformanceCriteria(performanceCriteria)
+            .WithPosition(1)
             .WithId(_competencyElement.Id)
             .AddComplementaryInformations(complementaryInformation)
             .BuildCompetencyElement();

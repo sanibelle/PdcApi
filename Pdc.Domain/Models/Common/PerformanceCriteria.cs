@@ -2,7 +2,7 @@
 
 namespace Pdc.Domain.Models.MinisterialSpecification;
 
-public class PerformanceCriteria : AChangeable
+public class PerformanceCriteriaDTO : AChangeable
 {
     public required int Position { get; set; }
 }

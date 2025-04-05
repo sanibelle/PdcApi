@@ -107,24 +107,22 @@ public class ProgramOfStudyController : ControllerBase
     #endregion
     #region Competency
     [HttpPost("{programOfStudyCode}/competency")]
-    public async Task<ActionResult<ProgramOfStudyDTO>> AddCompetency(string programOfStudyCode, [FromBody] CompetencyDTO createCompetencyDTO)
+    public async Task<ActionResult<CompetencyDTO>> AddCompetency(string programOfStudyCode, [FromBody] CompetencyDTO createCompetencyDTO)
     {
         CompetencyDTO competency = await _createCompetencyUseCase.Execute(programOfStudyCode, createCompetencyDTO);
 
         return CreatedAtAction(
-            nameof(Get),
+            nameof(GetCompetency),
             new { programOfStudyCode, competencyCode = competency.Code },
             competency);
     }
-    [HttpPost("{programOfStudyCode}/competency/{competencyCode}")]
-    public async Task<ActionResult<ProgramOfStudyDTO>> GetCompetency(string code, string competencyCode)
-    {
-        CompetencyDTO competency = await _getCompetencyUseCase.Execute(code, competencyCode);
 
-        return CreatedAtAction(
-            nameof(Get),
-            new { code = competency.Code },
-            competency);
+    [HttpGet("{programOfStudyCode}/competency/{competencyCode}")]
+    public async Task<ActionResult<CompetencyDTO>> GetCompetency(string programOfStudyCode, string competencyCode)
+    {
+        CompetencyDTO competency = await _getCompetencyUseCase.Execute(programOfStudyCode, competencyCode);
+
+        return Ok(competency);
     }
     #endregion
 }

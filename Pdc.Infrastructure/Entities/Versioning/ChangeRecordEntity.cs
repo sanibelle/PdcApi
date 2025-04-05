@@ -5,9 +5,25 @@
 /// </summary>
 public class ChangeRecordEntity
 {
+    private Guid _id;
+    public Guid Id
+    {
+        get => _id;
+        set
+        {
+            if (Guid.Empty == value)
+            {
+                _id = Guid.NewGuid();
+            }
+            else
+            {
+                _id = value;
+            }
+        }
+    }
+
     public IEnumerable<ComplementaryInformationEntity> ComplementaryInformations { get; set; } = new List<ComplementaryInformationEntity>();
     public IEnumerable<ChangeDetailEntity> ChangeDetails { get; set; } = new List<ChangeDetailEntity>();
-    public Guid Id { get; set; }
     public DateTime CreatedOn { get; set; }
     /// <summary>
     /// Premet d'avoir plusieurs copies d'une version. Un seul est actif à la fois.
@@ -19,14 +35,15 @@ public class ChangeRecordEntity
     /// <summary>
     /// The version before
     /// </summary>
-    public ChangeRecordEntity? ParentVersion { get; set; }
+    public ChangeRecordEntity? ParentVersion { get; set; } = null;
     /// <summary>
     /// The version with the changes
     /// </summary>
-    public ChangeRecordEntity? NextVersion { get; set; }
+    public ChangeRecordEntity? NextVersion { get; set; } = null;
 
     public ChangeRecordEntity()
     {
         CreatedOn = DateTime.Now;
+        Id = Guid.NewGuid();
     }
 }

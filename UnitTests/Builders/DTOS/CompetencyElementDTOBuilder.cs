@@ -6,7 +6,7 @@ public class CompetencyElementDTOBuilder
 {
     private Guid? _id = Guid.NewGuid();
     private string _value = "Default Value";
-    private int _position = 1;
+    private int? _position = null;
     protected List<ComplementaryInformationDTO> ComplementaryInformations = new List<ComplementaryInformationDTO>();
     private ICollection<ChangeableDTO> _performanceCriterias = new List<ChangeableDTO>();
 

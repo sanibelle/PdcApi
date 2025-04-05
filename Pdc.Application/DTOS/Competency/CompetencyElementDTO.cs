@@ -5,5 +5,5 @@
 /// </summary>
 public class CompetencyElementDTO : ChangeableDTO
 {
-    public required IEnumerable<ChangeableDTO> PerformanceCriterias { get; set; }
+    public required ICollection<ChangeableDTO> PerformanceCriterias { get; set; }
 }
