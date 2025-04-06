@@ -12,7 +12,6 @@ public class ChangeableValidation : AbstractValidator<ChangeableDTO>
             .MaximumLength(Constants.MaxChangeableLength)
         .NotEmpty();
 
-        // TODO valider que les positions sont de 1 à n sans sauts.
         RuleFor(x => x.Position)
             .Custom((x, context) =>
             {

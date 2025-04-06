@@ -7,7 +7,7 @@ namespace Pdc.Tests.Builders.DTOS;
 
 public class ProgramOfStudyDTOBuilder
 {
-    private List<MinisterialCompetency> _competencies = new List<MinisterialCompetency>();
+    private List<MinisterialCompetencyEntity> _competencies = new List<MinisterialCompetencyEntity>();
     private Units _generalUnits = new Units(1);
     private Units _complementaryUnits = new Units(2);
     private string _code = $"TES ${Random.Shared.Next(100, 1000)}";
@@ -25,7 +25,7 @@ public class ProgramOfStudyDTOBuilder
     {
     }
 
-    public ProgramOfStudyDTOBuilder WithCompetencies(List<MinisterialCompetency> competencies)
+    public ProgramOfStudyDTOBuilder WithCompetencies(List<MinisterialCompetencyEntity> competencies)
     {
         _competencies = competencies;
         return this;

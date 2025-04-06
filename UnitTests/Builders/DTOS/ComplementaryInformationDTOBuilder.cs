@@ -6,7 +6,7 @@ public class ComplementaryInformationDTOBuilder
 {
     private Guid? _id = Guid.NewGuid();
     private string _text = "Test DATA";
-    private DateTime _modifiedOn;
+    private DateTime _modifiedOn = new DateTime(2025, 04, 05);
     private int _versionNumber;
 
     public ComplementaryInformationDTOBuilder WithId(Guid? id)

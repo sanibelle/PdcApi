@@ -2,7 +2,7 @@
 
 namespace Pdc.Domain.Models.MinisterialSpecification;
 
-public class CourseFrameworkCompetency : MinisterialCompetency
+public class CourseFrameworkCompetency : MinisterialCompetencyEntity
 {
     public required int Hours { get; set; }
     public bool IsTerminalyEvaluated

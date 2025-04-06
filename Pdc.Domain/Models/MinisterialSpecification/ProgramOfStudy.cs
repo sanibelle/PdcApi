@@ -6,7 +6,7 @@ namespace Pdc.Domain.Models.CourseFramework;
 
 public class ProgramOfStudy // toujours issu d'un devis ministeriel
 {
-    public ICollection<MinisterialCompetency> Competencies { get; set; } = new List<MinisterialCompetency>();
+    public ICollection<MinisterialCompetencyEntity> Competencies { get; set; } = new List<MinisterialCompetencyEntity>();
     /// <summary>
     /// Code unique de la formation
     /// </summary>

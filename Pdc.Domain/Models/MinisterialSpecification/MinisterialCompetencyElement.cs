@@ -4,7 +4,7 @@ namespace Pdc.Domain.Models.MinisterialSpecification;
 
 public class MinisterialCompetencyElement : CompetencyElement
 {
-    public List<PerformanceCriteriaDTO> PerformanceCriterias { get; set; } = new List<PerformanceCriteriaDTO>();
+    public List<PerformanceCriteria> PerformanceCriterias { get; set; } = new List<PerformanceCriteria>();
 
     public override void SetVersion(ChangeRecord version)
     {

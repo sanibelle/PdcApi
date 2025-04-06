@@ -42,9 +42,9 @@ public class PerformanceCriteriaBuilder
         return this;
     }
 
-    public PerformanceCriteriaDTO Build()
+    public PerformanceCriteria Build()
     {
-        return new PerformanceCriteriaDTO
+        return new PerformanceCriteria
         {
             Id = _id,
             Value = _value,

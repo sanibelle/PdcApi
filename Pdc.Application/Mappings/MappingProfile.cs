@@ -15,13 +15,13 @@ public class MappingProfile : Profile
         // ProgramOfStudy
         CreateMap<ProgramOfStudy, ProgramOfStudyDTO>().ReverseMap();
         // Comptency
-        CreateMap<CompetencyDTO, MinisterialCompetency>().ReverseMap();
+        CreateMap<CompetencyDTO, MinisterialCompetencyEntity>().ReverseMap();
         CreateMap<CompetencyElementDTO, MinisterialCompetencyElement>().ReverseMap();
         CreateMap<ChangeableDTO, RealisationContext>().ReverseMap();
-        CreateMap<ChangeableDTO, PerformanceCriteriaDTO>().ReverseMap();
+        CreateMap<ChangeableDTO, PerformanceCriteria>().ReverseMap();
         CreateMap<ChangeRecordDTO, ChangeRecord>().ReverseMap();
         CreateMap<ComplementaryInformationDTO, ComplementaryInformation>()
-        .ForMember(dest => dest.WrittenOnVersion, opt => opt.MapFrom(src => new ChangeRecord(src.WrittenOnVersion ?? -1)))
+        .PreserveReferences()
         .ReverseMap()
         .ForMember(dest => dest.WrittenOnVersion, opt => opt.MapFrom(src => src.WrittenOnVersion.VersionNumber));
     }

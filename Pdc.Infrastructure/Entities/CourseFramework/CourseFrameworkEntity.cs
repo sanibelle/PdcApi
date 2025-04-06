@@ -45,7 +45,6 @@ public class CourseFrameworkEntity : VersionableEntity
     /// Permet d'ajouter des sections supplémentaires propres aux différents départements sous la forme d'un texte
     /// </summary>
     public string? OtherSpecifications { get; set; }
-    // TODO inférer le niveau atteint de taxonomie de Bloom
     public required string StatementOfComplexAuthenticTask { get; set; }
     public required string TaskPresentation { get; set; }
 }

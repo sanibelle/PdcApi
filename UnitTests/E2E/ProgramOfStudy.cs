@@ -112,6 +112,9 @@ public class ProgramOfStudyApiTests : ApiTestBase
     [Test]
     public async Task GivenExistingProgram_WhenCreatingCompetency_ThenShouldCreateCompetency()
     {
+
+        // Je viens denlever la version qui se crée toute seule dansle mapping du domain. Probablement qu'elle est manquante dans les
+        // complementary informations. avec .PreserveReferences(), je ne devrais plus avoir d'objets dupliqués dans le mapping
         string programCode = TestDataSeeder.ProgramOfStudyEntity.Code;
         // Arrange
         var realisationContextComplementaryInformation = new ComplementaryInformationDTOBuilder()
@@ -157,7 +160,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
                 .Excluding(x => x.ComplementaryInformations)
                 .Excluding(x => x.Id));
 
-            AssertComplementartInformation(r?.ComplementaryInformations?.FirstOrDefault(), performanceCriteriaComplementaryInformation);
+            AssertComplementarytInformation(r?.ComplementaryInformations?.FirstOrDefault(), realisationContextComplementaryInformation);
         }
 
         // NOTE le foreach a un seul element
@@ -170,7 +173,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
                 .Excluding(x => x.PerformanceCriterias)
                 .Excluding(x => x.ComplementaryInformations));
 
-            AssertComplementartInformation(c?.ComplementaryInformations?.FirstOrDefault(), competencyElementComplementaryInformation);
+            AssertComplementarytInformation(c?.ComplementaryInformations?.FirstOrDefault(), competencyElementComplementaryInformation);
 
             foreach (var p in c?.PerformanceCriterias ?? [])
             {
@@ -181,16 +184,17 @@ public class ProgramOfStudyApiTests : ApiTestBase
                     .Excluding(x => x.Id)
                     .Excluding(x => x.ComplementaryInformations));
 
-                AssertComplementartInformation(p?.ComplementaryInformations?.FirstOrDefault(), performanceCriteriaComplementaryInformation);
+                AssertComplementarytInformation(p?.ComplementaryInformations?.FirstOrDefault(), performanceCriteriaComplementaryInformation);
             }
         }
 
     }
-    private void AssertComplementartInformation(ComplementaryInformationDTO? i, ComplementaryInformationDTO? competencyElementComplementaryInformation)
+    private void AssertComplementarytInformation(ComplementaryInformationDTO? i, ComplementaryInformationDTO? competencyElementComplementaryInformation)
     {
-        //TODO FINIR
-        //Assert.That(i.Id != Guid.Empty || i.Id != null, "guid is not empty");
-        //Assert.That(i.WrittenOnVersion != null, "version is found");
-        //i.Should().BeEquivalentTo(competencyElementComplementaryInformation);
+        Assert.That(i?.Id != Guid.Empty || i.Id != null, "guid is not empty");
+        Assert.That(i?.WrittenOnVersion != null, "version is found");
+        Assert.That(i?.WrittenOnVersion == 1, "new version is always 1");
+        i.Should().BeEquivalentTo(competencyElementComplementaryInformation, options =>
+            options.Excluding(x => x.WrittenOnVersion));
     }
 }

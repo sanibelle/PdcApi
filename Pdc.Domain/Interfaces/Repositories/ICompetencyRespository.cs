@@ -5,9 +5,9 @@ namespace Pdc.Domain.Interfaces.Repositories;
 
 public interface ICompetencyRespository
 {
-    Task<List<MinisterialCompetency>> GetAll();
-    Task<MinisterialCompetency> FindByCode(string programOfStudyCode, string competencyCode);
-    Task<MinisterialCompetency> Add(ProgramOfStudy program, MinisterialCompetency entity);
-    Task<MinisterialCompetency> Update(MinisterialCompetency entity);
+    Task<List<MinisterialCompetencyEntity>> GetAll();
+    Task<MinisterialCompetencyEntity> FindByCode(string programOfStudyCode, string competencyCode);
+    Task<MinisterialCompetencyEntity> Add(ProgramOfStudy program, MinisterialCompetencyEntity entity);
+    Task<MinisterialCompetencyEntity> Update(MinisterialCompetencyEntity entity);
     Task Delete(string programOfStudyCode, string competencyCode);
 }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pdc.Domain.Enums;
 using Pdc.Infrastructure.Entities.CourseFramework;
 
 namespace Pdc.Infrastructure.Data.Configurations;
@@ -16,17 +15,7 @@ public class CourseFrameworkCompetencyConfiguration : IEntityTypeConfiguration<C
             .OnDelete(DeleteBehavior.NoAction)
             .IsRequired();
 
-        //builder.HasOne(x => x.CourseFramework)
-        //    .WithMany()
-        //    .HasForeignKey("CourseFrameworkId")
-        //    .OnDelete(DeleteBehavior.NoAction)
-        //    .IsRequired();
-
         builder.Property(x => x.Hours)
-            .IsRequired();
-
-        builder.Property(x => x.ReachedTaxonomyLevel)
-            .HasDefaultValue(BloomTaxonomy.Creating)
             .IsRequired();
 
         builder.Property(x => x.CompetencyDistribution)

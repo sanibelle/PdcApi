@@ -15,14 +15,14 @@ public class MappingProfile : Profile
     {
         // common
         CreateMap<Competency, CompetencyEntity>()
-            .ForMember(dest => dest.CurrentVersion, opt => opt.MapFrom<ChangeRecordResolver>())
+            //.ForMember(dest => dest.CurrentVersion, opt => opt.MapFrom<ChangeRecordResolver>())
             .ReverseMap();
         CreateMap<ChangeableEntity, AChangeable>()
             .ReverseMap();
-        CreateMap<PerformanceCriteriaDTO, PerformanceCriteriaEntity>()
+        CreateMap<PerformanceCriteria, PerformanceCriteriaEntity>()
             .ReverseMap();
         CreateMap<ComplementaryInformation, ComplementaryInformationEntity>()
-            .ForMember(dest => dest.WrittenOnVersion, opt => opt.MapFrom<ChangeRecordResolver>())
+            //.ForMember(dest => dest.WrittenOnVersion, opt => opt.MapFrom<ChangeRecordResolver>())
             .ReverseMap();
         CreateMap<CompetencyElement, CompetencyElementEntity>()
             .ReverseMap();
@@ -39,8 +39,9 @@ public class MappingProfile : Profile
             .ReverseMap()
             .ForMember(dest => dest.Competencies, opt => opt.MapFrom(src => src.Competencies));
 
-        CreateMap<MinisterialCompetency, CompetencyEntity>()
-            .ForMember(dest => dest.CurrentVersion, opt => opt.MapFrom<ChangeRecordResolver>())
+        CreateMap<MinisterialCompetencyEntity, CompetencyEntity>()
+            .PreserveReferences()
+            //.ForMember(dest => dest.CurrentVersion, opt => opt.MapFrom<ChangeRecordResolver>())
             .ReverseMap();
         CreateMap<MinisterialCompetencyElement, CompetencyElementEntity>()
             .ReverseMap();

@@ -5,7 +5,7 @@ namespace Pdc.Tests.Builders.Models;
 
 public class MinisterialCompetencyElementBuilder
 {
-    private List<PerformanceCriteriaDTO> _performanceCriterias = new List<PerformanceCriteriaDTO>();
+    private List<PerformanceCriteria> _performanceCriterias = new List<PerformanceCriteria>();
     private List<ComplementaryInformation> _complementaryInformations = new List<ComplementaryInformation>();
     private Guid _id = Guid.NewGuid();
     private int _position = 0;
@@ -13,7 +13,7 @@ public class MinisterialCompetencyElementBuilder
 
     public MinisterialCompetencyElementBuilder() { }
 
-    public MinisterialCompetencyElementBuilder WithPerformanceCriterias(List<PerformanceCriteriaDTO> performanceCriterias)
+    public MinisterialCompetencyElementBuilder WithPerformanceCriterias(List<PerformanceCriteria> performanceCriterias)
     {
         _performanceCriterias = performanceCriterias;
         return this;
@@ -48,7 +48,7 @@ public class MinisterialCompetencyElementBuilder
         _value = value;
         return this;
     }
-    public MinisterialCompetencyElementBuilder AddPerformanceCriteria(PerformanceCriteriaDTO performanceCriteria)
+    public MinisterialCompetencyElementBuilder AddPerformanceCriteria(PerformanceCriteria performanceCriteria)
     {
         _performanceCriterias.Add(performanceCriteria);
         return this;

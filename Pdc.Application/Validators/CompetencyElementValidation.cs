@@ -12,8 +12,8 @@ public class CompetencyElementValidation : AbstractValidator<CompetencyElementDT
         // Add any additional rules specific to CreateCompetencyElementDTO
         RuleFor(x => x.PerformanceCriterias)
             .ForEach(y => y.SetValidator(new ChangeableValidation()))
-            .NotEmpty();
-        // TODO FR .WithMessage("PerformanceCriterias cannot be empty.");
+            .NotEmpty()
+            .WithMessage("Le critère de performance ne peut être vide");
     }
 
 }

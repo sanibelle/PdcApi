@@ -4,7 +4,7 @@ using Pdc.Domain.Enums;
 
 namespace Pdc.Domain.Models.CourseFramework;
 
-public class CourseFrameworkPerformanceCriteria : PerformanceCriteriaDTO
+public class CourseFrameworkPerformanceCriteria : PerformanceCriteria
 {
     public IEnumerable<ContentElement> ContentElements { get; set; } = new List<ContentElement>();
     public required TeachedLevelType TeachedLevel { get; set; }
