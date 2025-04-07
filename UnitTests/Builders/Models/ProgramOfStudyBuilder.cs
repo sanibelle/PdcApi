@@ -14,7 +14,7 @@ public class ProgramOfStudyBuilder
     private int _specificDurationHours = 2010;
     private int _totalDurationHours = 5730;
     private DateOnly _publishedOn = DateOnly.FromDateTime(DateTime.Now);
-    private List<MinisterialCompetencyEntity> _competencies = new List<MinisterialCompetencyEntity>();
+    private List<MinisterialCompetency> _competencies = new List<MinisterialCompetency>();
     private Units _specificUnits = new Units(10);
     private Units _optionnalUnits = new Units(5);
     private Units _generalUnits = new Units(15);
@@ -64,7 +64,7 @@ public class ProgramOfStudyBuilder
         return this;
     }
 
-    public ProgramOfStudyBuilder WithCompetencies(List<MinisterialCompetencyEntity> competencies)
+    public ProgramOfStudyBuilder WithCompetencies(List<MinisterialCompetency> competencies)
     {
         _competencies = competencies;
         return this;

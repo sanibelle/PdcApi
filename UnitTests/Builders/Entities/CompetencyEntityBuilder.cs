@@ -1,6 +1,9 @@
 using Pdc.Domain.Models.Common;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
+using Pdc.Infrastructure.Entities.Versioning;
+
+namespace Pdc.Tests.Builders.Entities;
 
 public class CompetencyEntityBuilder
 {
@@ -12,6 +15,7 @@ public class CompetencyEntityBuilder
     private string _statementOfCompetency = "Effectuer le déploiement de serveurs intranet";
     private IList<RealisationContextEntity> _realisationContexts = new List<RealisationContextEntity>();
     private IList<CompetencyElementEntity> _competencyElements = new List<CompetencyElementEntity>();
+    private ChangeRecordEntity _currentVersion;
 
     public CompetencyEntityBuilder WithCode(string code)
     {
@@ -61,6 +65,24 @@ public class CompetencyEntityBuilder
         return this;
     }
 
+    public CompetencyEntityBuilder AddRealisationContexts(RealisationContextEntity realisationContexts)
+    {
+        _realisationContexts.Add(realisationContexts);
+        return this;
+    }
+
+    public CompetencyEntityBuilder AddCompetencyElements(CompetencyElementEntity competencyElements)
+    {
+        _competencyElements.Add(competencyElements);
+        return this;
+    }
+
+    public CompetencyEntityBuilder WithCurrentVersion(ChangeRecordEntity currentVersion)
+    {
+        _currentVersion = currentVersion;
+        return this;
+    }
+
     public CompetencyEntity Build()
     {
         return new CompetencyEntity
@@ -72,7 +94,8 @@ public class CompetencyEntityBuilder
             IsOptionnal = _isOptionnal,
             StatementOfCompetency = _statementOfCompetency,
             RealisationContexts = _realisationContexts,
-            CompetencyElements = _competencyElements
+            CompetencyElements = _competencyElements,
+            CurrentVersion = _currentVersion
         };
     }
 }

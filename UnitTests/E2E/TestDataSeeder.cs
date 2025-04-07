@@ -4,6 +4,8 @@ using Pdc.Domain.Models.Common;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
+using Pdc.Tests.Builders.Entities;
+using Pdc.Tests.Builders.Models;
 
 namespace Pdc.E2ETests;
 
@@ -14,16 +16,18 @@ public class TestDataSeeder
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public static ProgramOfStudyEntity ProgramOfStudyEntity { get; set; }
+    public static CompetencyEntity CompetencyEntity { get; set; }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private readonly AppDbContext _context;
 
     public TestDataSeeder(AppDbContext context)
     {
         _context = context;
-        CreateEntities();
+        CreateProgramOfStudy();
+        CreateCompetency();
     }
 
-    private void CreateEntities()
+    private void CreateProgramOfStudy()
     {
         ProgramOfStudyEntity = new ProgramOfStudyEntityBuilder()
             .WithCode("Test.123")
@@ -39,6 +43,43 @@ public class TestDataSeeder
             .Build();
     }
 
+    private void CreateCompetency()
+    {
+        var changeRecord = new ChangeRecordEntityBuilder()
+            .Build();
+
+        var realisationContext = new RealisationContextEntityBuilder()
+            .AddComplementaryInformations(new ComplementaryInformationBuilder()
+                .WithChangeRecord(changeRecord)
+                .Build())
+            .Build();
+
+        var performanceCriteria = new PerformanceCriteriaEntityBuilder()
+            .AddComplementaryInformations(new ComplementaryInformationBuilder()
+                .WithChangeRecord(changeRecord)
+                .Build())
+            .Build();
+
+        var competencyElement = new CompetencyElementEntityBuilder()
+            .AddPerformanceCriteria(performanceCriteria)
+            .AddComplementaryInformation(new ComplementaryInformationBuilder()
+                .WithChangeRecord(changeRecord)
+                .Build())
+            .Build();
+
+        var CompetencyEntity = new CompetencyEntityBuilder()
+            .WithCode("SEE.DED")
+            .WithUnits(new Units(10))
+            .WithIsMandatory(false)
+            .WithIsOptionnal(true)
+            .WithStatementOfCompetency("Test Statement")
+            .AddRealisationContexts(realisationContext)
+            .AddCompetencyElements(competencyElement)
+            .WithCurrentVersion(changeRecord)
+            .Build();
+    }
+
+
     public async Task SeedTestData()
     {
         await _context.Database.EnsureCreatedAsync();
@@ -46,6 +87,7 @@ public class TestDataSeeder
         if (!await _context.ProgramOfStudies.AnyAsync())
         {
             _context.ProgramOfStudies.Add(ProgramOfStudyEntity);
+            _context.Competencies.Add(CompetencyEntity);
 
             await _context.SaveChangesAsync();
         }

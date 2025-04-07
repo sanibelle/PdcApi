@@ -22,13 +22,13 @@ public class CompetencyRepository : ICompetencyRespository
         _mapper = mapper;
     }
 
-    public async Task<List<MinisterialCompetencyEntity>> GetAll()
+    public async Task<List<MinisterialCompetency>> GetAll()
     {
         List<CompetencyEntity> entities = await _context.Competencies.ToListAsync();
-        return _mapper.Map<List<MinisterialCompetencyEntity>>(entities);
+        return _mapper.Map<List<MinisterialCompetency>>(entities);
     }
 
-    public async Task<MinisterialCompetencyEntity> Add(ProgramOfStudy program, MinisterialCompetencyEntity competency)
+    public async Task<MinisterialCompetency> Add(ProgramOfStudy program, MinisterialCompetency competency)
     {
         var competencyEntity = _mapper.Map<CompetencyEntity>(competency);
 
@@ -37,16 +37,16 @@ public class CompetencyRepository : ICompetencyRespository
         programEntity.Competencies.Add(addedEntity.Entity);
 
         await _context.SaveChangesAsync();
-        return _mapper.Map<MinisterialCompetencyEntity>(addedEntity.Entity);
+        return _mapper.Map<MinisterialCompetency>(addedEntity.Entity);
     }
 
-    public async Task<MinisterialCompetencyEntity> Update(MinisterialCompetencyEntity competency)
+    public async Task<MinisterialCompetency> Update(MinisterialCompetency competency)
     {
         CompetencyEntity entity = await FindEntityByCode(competency.ProgramOfStudyCode, competency.Code);
         _mapper.Map(competency, entity);
         EntityEntry<CompetencyEntity> updatedEntity = _context.Competencies.Update(entity);
         await _context.SaveChangesAsync();
-        return _mapper.Map<MinisterialCompetencyEntity>(updatedEntity.Entity);
+        return _mapper.Map<MinisterialCompetency>(updatedEntity.Entity);
     }
 
     public async Task Delete(string programOfStudyCode, string competencyCode)
@@ -56,10 +56,10 @@ public class CompetencyRepository : ICompetencyRespository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<MinisterialCompetencyEntity> FindByCode(string programOfStudyCode, string competencyCode)
+    public async Task<MinisterialCompetency> FindByCode(string programOfStudyCode, string competencyCode)
     {
         CompetencyEntity entity = await FindEntityByCode(programOfStudyCode, competencyCode);
-        return _mapper.Map<MinisterialCompetencyEntity>(entity);
+        return _mapper.Map<MinisterialCompetency>(entity);
     }
 
     private async Task<CompetencyEntity> FindEntityByCode(string programOfStudyCode, string competencyCode)
@@ -70,7 +70,7 @@ public class CompetencyRepository : ICompetencyRespository
             .SingleOrDefaultAsync(x => x.Code == programOfStudyCode && x.ProgramOfStudy.Code == competencyCode);
         if (competency == null)
         {
-            throw new EntityNotFoundException(nameof(MinisterialCompetencyEntity), competencyCode);
+            throw new EntityNotFoundException(nameof(MinisterialCompetency), competencyCode);
         }
 
         return competency;

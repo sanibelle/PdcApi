@@ -6,7 +6,7 @@ namespace Pdc.Domain.Models.CourseFramework;
 
 public class CourseFramework : Versionable
 {
-    public IEnumerable<MinisterialCompetencyEntity> Competencies { get; set; } = new List<MinisterialCompetencyEntity>();
+    public IEnumerable<MinisterialCompetency> Competencies { get; set; } = new List<MinisterialCompetency>();
     public IEnumerable<CourseFrameworkCompetencyElement> CourseFrameworkPerformanceCriterias { get; set; } = new List<CourseFrameworkCompetencyElement>();
     public IEnumerable<CourseFramework> Prerequisites = new List<CourseFramework>();
     public required string Name { get; set; }

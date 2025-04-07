@@ -38,9 +38,9 @@ public class CreateCompetency : ICreateCompetencyUseCase
         }
         ProgramOfStudy program = await _programOfStudyRepository.FindByCode(programOfStudyCode);
         await ThrowIfDuplicateCode(programOfStudyCode, createCompetencyDto.Code);
-        MinisterialCompetencyEntity competency = _mapper.Map<MinisterialCompetencyEntity>(createCompetencyDto);
+        MinisterialCompetency competency = _mapper.Map<MinisterialCompetency>(createCompetencyDto);
         competency.SetVersion(new ChangeRecord());
-        MinisterialCompetencyEntity savedCompetency = await _competencyRepository.Add(program, competency);
+        MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, competency);
 
         return _mapper.Map<CompetencyDTO>(savedCompetency);
     }
@@ -49,7 +49,7 @@ public class CreateCompetency : ICreateCompetencyUseCase
     {
         try
         {
-            MinisterialCompetencyEntity comptency = await _competencyRepository.FindByCode(programOfStudyCode, competencyCode);
+            MinisterialCompetency comptency = await _competencyRepository.FindByCode(programOfStudyCode, competencyCode);
             throw new DuplicateException();
         }
         catch (EntityNotFoundException)

@@ -39,7 +39,7 @@ public class MappingProfile : Profile
             .ReverseMap()
             .ForMember(dest => dest.Competencies, opt => opt.MapFrom(src => src.Competencies));
 
-        CreateMap<MinisterialCompetencyEntity, CompetencyEntity>()
+        CreateMap<MinisterialCompetency, CompetencyEntity>()
             .PreserveReferences()
             //.ForMember(dest => dest.CurrentVersion, opt => opt.MapFrom<ChangeRecordResolver>())
             .ReverseMap();

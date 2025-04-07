@@ -1,7 +1,9 @@
-using Pdc.Domain.Models.Common;
 using Pdc.Domain.Enums;
+using Pdc.Domain.Models.Common;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
+
+namespace Pdc.Tests.Builders.Entities;
 
 public class ProgramOfStudyEntityBuilder
 {

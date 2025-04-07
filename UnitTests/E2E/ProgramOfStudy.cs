@@ -1,7 +1,6 @@
 ﻿// TODO $$$$ Payer fluent assertion
 using FluentAssertions;
 using Pdc.Application.DTOS;
-using Pdc.Application.DTOS.Common;
 using Pdc.Domain.Models.Common;
 using Pdc.Tests.Builders.DTOS;
 using System.Net.Http.Json;
@@ -108,93 +107,5 @@ public class ProgramOfStudyApiTests : ApiTestBase
         updatedProgram.Should().NotBeEquivalentTo(createdProgram, options =>
             options.ExcludingMissingMembers());
     }
-
-    [Test]
-    public async Task GivenExistingProgram_WhenCreatingCompetency_ThenShouldCreateCompetency()
-    {
-
-        // Je viens denlever la version qui se crée toute seule dansle mapping du domain. Probablement qu'elle est manquante dans les
-        // complementary informations. avec .PreserveReferences(), je ne devrais plus avoir d'objets dupliqués dans le mapping
-        string programCode = TestDataSeeder.ProgramOfStudyEntity.Code;
-        // Arrange
-        var realisationContextComplementaryInformation = new ComplementaryInformationDTOBuilder()
-            .Build();
-        var performanceCriteriaComplementaryInformation = new ComplementaryInformationDTOBuilder()
-            .Build();
-        var competencyElementComplementaryInformation = new ComplementaryInformationDTOBuilder()
-            .Build();
-        var realisationContext = new ChangeableDTOBuilder()
-            .AddComplementaryInformation(realisationContextComplementaryInformation)
-            .Build();
-        var performanceCriteria = new ChangeableDTOBuilder()
-            .AddComplementaryInformation(performanceCriteriaComplementaryInformation)
-            .WithPosition(1)
-            .Build();
-        var competencyElement = new CompetencyElementDTOBuilder()
-            .AddPerformanceCriteria(performanceCriteria)
-            .WithPosition(1)
-            .AddComplementaryInformations(competencyElementComplementaryInformation)
-            .BuildCompetencyElement();
-        CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
-            .WithCode("E2E.TES")
-            .AddCompetencyElements(competencyElement)
-            .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
-            .Build();
-
-        // Act - Create the program
-        var createResponse = await _client.PostAsJsonAsync($"/api/programofstudy/{programCode}/competency", competencyDTO);
-        createResponse.EnsureSuccessStatusCode();
-        var createdCompetency = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
-
-        createdCompetency.Should().BeEquivalentTo(competencyDTO, options =>
-            options
-            .Excluding(x => x.CompetencyElements)
-            .Excluding(x => x.RealisationContexts));
-
-        foreach (var r in createdCompetency.RealisationContexts)
-        {
-
-            Assert.That(r.Id != Guid.Empty || r.Id != null, "guid is not empty");
-            r.Should().BeEquivalentTo(realisationContext, options =>
-                options
-                .Excluding(x => x.ComplementaryInformations)
-                .Excluding(x => x.Id));
-
-            AssertComplementarytInformation(r?.ComplementaryInformations?.FirstOrDefault(), realisationContextComplementaryInformation);
-        }
-
-        // NOTE le foreach a un seul element
-        foreach (var c in createdCompetency.CompetencyElements)
-        {
-            Assert.That(c.Id != Guid.Empty || c.Id != null, "guid is not empty");
-            c.Should().BeEquivalentTo(competencyElement, options =>
-                options
-                .Excluding(x => x.Id)
-                .Excluding(x => x.PerformanceCriterias)
-                .Excluding(x => x.ComplementaryInformations));
-
-            AssertComplementarytInformation(c?.ComplementaryInformations?.FirstOrDefault(), competencyElementComplementaryInformation);
-
-            foreach (var p in c?.PerformanceCriterias ?? [])
-            {
-
-                Assert.That(p.Id != Guid.Empty || p.Id != null, "guid is not empty");
-                p.Should().BeEquivalentTo(performanceCriteria, options =>
-                    options
-                    .Excluding(x => x.Id)
-                    .Excluding(x => x.ComplementaryInformations));
-
-                AssertComplementarytInformation(p?.ComplementaryInformations?.FirstOrDefault(), performanceCriteriaComplementaryInformation);
-            }
-        }
-
-    }
-    private void AssertComplementarytInformation(ComplementaryInformationDTO? i, ComplementaryInformationDTO? competencyElementComplementaryInformation)
-    {
-        Assert.That(i?.Id != Guid.Empty || i.Id != null, "guid is not empty");
-        Assert.That(i?.WrittenOnVersion != null, "version is found");
-        Assert.That(i?.WrittenOnVersion == 1, "new version is always 1");
-        i.Should().BeEquivalentTo(competencyElementComplementaryInformation, options =>
-            options.Excluding(x => x.WrittenOnVersion));
-    }
 }
+

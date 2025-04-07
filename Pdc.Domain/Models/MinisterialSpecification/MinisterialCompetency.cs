@@ -3,7 +3,7 @@ using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.MinisterialSpecification;
 
-public class MinisterialCompetencyEntity : Competency
+public class MinisterialCompetency : Competency
 {
     public List<MinisterialCompetencyElement> CompetencyElements { get; set; } = new List<MinisterialCompetencyElement>();
 

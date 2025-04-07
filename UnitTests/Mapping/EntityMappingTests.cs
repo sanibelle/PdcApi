@@ -11,7 +11,7 @@ internal class EntityMappingTests
 {
 
     IMapper _mapper;
-    private MinisterialCompetencyEntity _ministerialCompetency;
+    private MinisterialCompetency _ministerialCompetency;
     [SetUp]
     public void Setup()
     {
@@ -55,11 +55,11 @@ internal class EntityMappingTests
     public async Task MappingMinisterialCompetency_ShouldKeepReferenceChangeRecordOnlyOnce()
     {
         _ministerialCompetency.SetVersion(new ChangeRecord());
-        var entity = _mapper.Map<MinisterialCompetencyEntity>(_ministerialCompetency);
+        var entity = _mapper.Map<MinisterialCompetency>(_ministerialCompetency);
 
         // Assert
         Assert.That(entity, Is.Not.Null);
-        Assert.That(entity, Is.InstanceOf<MinisterialCompetencyEntity>());
+        Assert.That(entity, Is.InstanceOf<MinisterialCompetency>());
 
         Assert.That(entity.CompetencyElements, Is.Not.Null);
         Assert.That(entity.CompetencyElements.Count, Is.EqualTo(1));

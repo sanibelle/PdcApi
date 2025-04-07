@@ -15,7 +15,7 @@ public class MappingProfile : Profile
         // ProgramOfStudy
         CreateMap<ProgramOfStudy, ProgramOfStudyDTO>().ReverseMap();
         // Comptency
-        CreateMap<CompetencyDTO, MinisterialCompetencyEntity>().ReverseMap();
+        CreateMap<CompetencyDTO, MinisterialCompetency>().ReverseMap();
         CreateMap<CompetencyElementDTO, MinisterialCompetencyElement>().ReverseMap();
         CreateMap<ChangeableDTO, RealisationContext>().ReverseMap();
         CreateMap<ChangeableDTO, PerformanceCriteria>().ReverseMap();

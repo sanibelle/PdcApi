@@ -75,9 +75,9 @@ public class MinisterialCompetencyBuilder
         _competencyElements.Add(competencyElement);
         return this;
     }
-    public MinisterialCompetencyEntity Build()
+    public MinisterialCompetency Build()
     {
-        return new MinisterialCompetencyEntity
+        return new MinisterialCompetency
         {
             Code = _code,
             Units = _units,

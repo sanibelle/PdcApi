@@ -10,7 +10,7 @@ public class ChangeRecordResolver : IValueResolver<object, object, ChangeRecordE
     {
         ChangeRecord? version = null;
         // Détecter le type de l'objet source et extraire la Competency
-        if (source is MinisterialCompetencyEntity competency)
+        if (source is MinisterialCompetency competency)
         {
             version = FindChangeRecord(competency);
         }
@@ -33,7 +33,7 @@ public class ChangeRecordResolver : IValueResolver<object, object, ChangeRecordE
         return mapped;
     }
 
-    private ChangeRecord FindChangeRecord(MinisterialCompetencyEntity competency)
+    private ChangeRecord FindChangeRecord(MinisterialCompetency competency)
     {
         var version = competency.CurrentVersion;
         if (version == null)

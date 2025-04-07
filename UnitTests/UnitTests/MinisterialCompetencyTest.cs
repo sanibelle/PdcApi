@@ -49,7 +49,7 @@ public class MinisterialCompetencyTest
     private PerformanceCriteria _performanceCriteria;
     private MinisterialCompetencyElement _competencyElement;
 
-    private MinisterialCompetencyEntity _competency1, _competency2;
+    private MinisterialCompetency _competency1, _competency2;
 
     [SetUp]
     public void Setup()
@@ -62,7 +62,7 @@ public class MinisterialCompetencyTest
             .WithSpecificDurationHours(2010)
             .WithTotalDurationHours(5730)
             .WithPublishedOn(new DateOnly(2020, 01, 01))
-            .WithCompetencies(new List<MinisterialCompetencyEntity>())
+            .WithCompetencies(new List<MinisterialCompetency>())
             .Build();
 
         _changeRecord = new ChangeRecordBuilder()
@@ -134,7 +134,7 @@ public class MinisterialCompetencyTest
         //        .Throws(new EntityNotFoundException(nameof(ProgramOfStudy), codeOfAFakeProgram));
 
         // Setup Competency Repository mock
-        _competencyRepositoryMock.Setup(repo => repo.Add(It.IsAny<ProgramOfStudy>(), It.IsAny<MinisterialCompetencyEntity>())).ReturnsAsync(_competency2);
+        _competencyRepositoryMock.Setup(repo => repo.Add(It.IsAny<ProgramOfStudy>(), It.IsAny<MinisterialCompetency>())).ReturnsAsync(_competency2);
         _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _codeOfAFakeProgram), It.Is<string>(x => x == _competency1.Code))).ReturnsAsync(_competency1);
         _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _codeOfAFakeProgram), It.Is<string>(x => x != _competency1.Code))).Throws(new EntityNotFoundException(nameof(CompetencyEntity), _competency2.Code));
         //    _competencyRepositoryMock.Setup(repo => repo.Update(It.IsAny<MinisterialCompetency>())).ReturnsAsync(competency1);

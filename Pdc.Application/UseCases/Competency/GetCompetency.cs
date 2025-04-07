@@ -22,7 +22,7 @@ public class GetCompetency : IGetCompetencyUseCase
     {
         try
         {
-            MinisterialCompetencyEntity competency = await _competencyRespository.FindByCode(programOfStudyCode, competencyCode);
+            MinisterialCompetency competency = await _competencyRespository.FindByCode(programOfStudyCode, competencyCode);
             return _mapper.Map<CompetencyDTO>(competency);
         }
         catch (EntityNotFoundException)
