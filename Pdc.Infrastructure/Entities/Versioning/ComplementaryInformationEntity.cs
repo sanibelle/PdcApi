@@ -1,6 +1,6 @@
 ﻿namespace Pdc.Infrastructure.Entities.Versioning;
 
-public class ComplementaryInformationEntity  // Informations supplémentaires comme des notes. Utilisé comme 4ieme colonne des éléments de contenu
+public class ComplementaryInformationEntity
 {
     public Guid Id { get; set; }
     public required ChangeableEntity Changeable { get; set; }

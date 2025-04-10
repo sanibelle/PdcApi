@@ -5,7 +5,6 @@ using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Tests.Builders.Entities;
-using Pdc.Tests.Builders.Models;
 
 namespace Pdc.E2ETests;
 
@@ -49,25 +48,25 @@ public class TestDataSeeder
             .Build();
 
         var realisationContext = new RealisationContextEntityBuilder()
-            .AddComplementaryInformations(new ComplementaryInformationBuilder()
+            .AddComplementaryInformations(new ComplementaryInformationEntityBuilder()
                 .WithChangeRecord(changeRecord)
                 .Build())
             .Build();
 
         var performanceCriteria = new PerformanceCriteriaEntityBuilder()
-            .AddComplementaryInformations(new ComplementaryInformationBuilder()
+            .AddComplementaryInformation(new ComplementaryInformationEntityBuilder()
                 .WithChangeRecord(changeRecord)
                 .Build())
             .Build();
 
         var competencyElement = new CompetencyElementEntityBuilder()
             .AddPerformanceCriteria(performanceCriteria)
-            .AddComplementaryInformation(new ComplementaryInformationBuilder()
+            .AddComplementaryInformation(new ComplementaryInformationEntityBuilder()
                 .WithChangeRecord(changeRecord)
                 .Build())
             .Build();
 
-        var CompetencyEntity = new CompetencyEntityBuilder()
+        CompetencyEntity = new CompetencyEntityBuilder()
             .WithCode("SEE.DED")
             .WithUnits(new Units(10))
             .WithIsMandatory(false)
@@ -76,6 +75,7 @@ public class TestDataSeeder
             .AddRealisationContexts(realisationContext)
             .AddCompetencyElements(competencyElement)
             .WithCurrentVersion(changeRecord)
+            .WithProgramOfStudy(ProgramOfStudyEntity)
             .Build();
     }
 

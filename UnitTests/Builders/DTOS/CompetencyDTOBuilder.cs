@@ -6,7 +6,7 @@ namespace Pdc.Tests.Builders.DTOS;
 
 public class CompetencyDTOBuilder
 {
-    private string _code = "DefaultCode";
+    private string _code = $"TEST{Random.Shared.Next(0, 10000)}";
     private Units? _units = null;
     private bool _isMandatory = false;
     private bool _isOptionnal = false;

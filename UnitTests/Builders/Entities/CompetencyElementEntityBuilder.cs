@@ -5,9 +5,9 @@ namespace Pdc.Tests.Builders.Entities;
 
 public class CompetencyElementEntityBuilder
 {
+    private Guid _id = Guid.NewGuid();
     private List<PerformanceCriteriaEntity> _performanceCriterias = new List<PerformanceCriteriaEntity>();
     private List<ComplementaryInformationEntity> _complementaryInformations = new List<ComplementaryInformationEntity>();
-    private Guid _id = Guid.NewGuid();
     private int _position = 0;
     private string _value = string.Empty;
 
@@ -25,7 +25,7 @@ public class CompetencyElementEntityBuilder
         return this;
     }
 
-    public CompetencyElementEntityBuilder AddComplementaryInformationEntity(ComplementaryInformationEntity complementaryInformation)
+    public CompetencyElementEntityBuilder AddComplementaryInformation(ComplementaryInformationEntity complementaryInformation)
     {
         _complementaryInformations.Add(complementaryInformation);
         return this;
@@ -48,7 +48,7 @@ public class CompetencyElementEntityBuilder
         _value = value;
         return this;
     }
-    public CompetencyElementEntityBuilder AddPerformanceCriteriaEntity(PerformanceCriteriaEntity performanceCriteria)
+    public CompetencyElementEntityBuilder AddPerformanceCriteria(PerformanceCriteriaEntity performanceCriteria)
     {
         _performanceCriterias.Add(performanceCriteria);
         return this;

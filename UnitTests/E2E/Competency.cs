@@ -79,10 +79,8 @@ public class CompetencyApiTests : ApiTestBase
         CompetencyDTO competencyDTO;
         CreateCompetency(out realisationContextComplementaryInformation, out performanceCriteriaComplementaryInformation, out competencyElementComplementaryInformation, out realisationContext, out performanceCriteria, out competencyElement, out competencyDTO);
 
-        // Act - Create the program
+        competencyDTO.Code = TestDataSeeder.CompetencyEntity.Code;
         var createResponse = await _client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);
-        createResponse.EnsureSuccessStatusCode();
-        createResponse = await _client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);
         createResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.Conflict);
     }
 
@@ -107,7 +105,6 @@ public class CompetencyApiTests : ApiTestBase
             .AddComplementaryInformations(competencyElementComplementaryInformation)
             .BuildCompetencyElement();
         competencyDTO =new CompetencyDTOBuilder()
-            .WithCode("E2E.TES")
             .AddCompetencyElements(competencyElement)
             .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
             .Build();

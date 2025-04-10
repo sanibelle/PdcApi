@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Pdc.Application.DTOS;
-using Pdc.Application.Exceptions;
-using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Models.MinisterialSpecification;
+using Pdc.Infrastructure.Exceptions;
 
 namespace Pdc.Application.UseCase;
 

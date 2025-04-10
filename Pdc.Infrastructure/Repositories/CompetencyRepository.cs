@@ -1,13 +1,13 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
+using Pdc.Infrastructure.Exceptions;
 
 namespace Pdc.Infrastructure.Repositories;
 
@@ -35,7 +35,6 @@ public class CompetencyRepository : ICompetencyRespository
         EntityEntry<CompetencyEntity> addedEntity = await _context.Competencies.AddAsync(competencyEntity);
         ProgramOfStudyEntity programEntity = await FindProgramOfStudy(program.Code);
         programEntity.Competencies.Add(addedEntity.Entity);
-
         await _context.SaveChangesAsync();
         return _mapper.Map<MinisterialCompetency>(addedEntity.Entity);
     }
@@ -62,12 +61,22 @@ public class CompetencyRepository : ICompetencyRespository
         return _mapper.Map<MinisterialCompetency>(entity);
     }
 
+    public async Task<bool> ExistsEntityByCode(string programOfStudyCode, string competencyCode)
+    {
+        return await _context.Competencies
+            .Include(c => c.RealisationContexts)
+            .Include(c => c.CompetencyElements)
+            .Where(x => x.Code == competencyCode && x.ProgramOfStudy.Code == programOfStudyCode)
+            .AnyAsync();
+    }
+
     private async Task<CompetencyEntity> FindEntityByCode(string programOfStudyCode, string competencyCode)
     {
         CompetencyEntity? competency = await _context.Competencies
             .Include(c => c.RealisationContexts)
             .Include(c => c.CompetencyElements)
-            .SingleOrDefaultAsync(x => x.Code == programOfStudyCode && x.ProgramOfStudy.Code == competencyCode);
+            .Include(c => c.ProgramOfStudy)
+            .SingleOrDefaultAsync(x => x.Code == competencyCode && x.ProgramOfStudy.Code == programOfStudyCode);
         if (competency == null)
         {
             throw new EntityNotFoundException(nameof(MinisterialCompetency), competencyCode);

@@ -2,7 +2,6 @@
 using FluentValidation;
 using FluentValidation.Results;
 using Pdc.Application.DTOS;
-using Pdc.Application.Exceptions;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
@@ -36,8 +35,8 @@ public class CreateCompetency : ICreateCompetencyUseCase
         {
             throw new ValidationException(validationResult.Errors);
         }
-        ProgramOfStudy program = await _programOfStudyRepository.FindByCode(programOfStudyCode);
         await ThrowIfDuplicateCode(programOfStudyCode, createCompetencyDto.Code);
+        ProgramOfStudy program = await _programOfStudyRepository.FindByCode(programOfStudyCode);
         MinisterialCompetency competency = _mapper.Map<MinisterialCompetency>(createCompetencyDto);
         competency.SetVersion(new ChangeRecord());
         MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, competency);
@@ -47,21 +46,9 @@ public class CreateCompetency : ICreateCompetencyUseCase
 
     private async Task ThrowIfDuplicateCode(string programOfStudyCode, string competencyCode)
     {
-        try
+        if (await _competencyRepository.ExistsEntityByCode(programOfStudyCode, competencyCode))
         {
-            MinisterialCompetency comptency = await _competencyRepository.FindByCode(programOfStudyCode, competencyCode);
-            throw new DuplicateException();
-        }
-        catch (EntityNotFoundException)
-        {
-            // No duplicate found, continue
-            return;
-        }
-        catch
-        {
-            throw;
+            throw new DuplicateException($"The competency with the code {competencyCode} attached to the program of study {programOfStudyCode} already exists.");
         }
     }
-
-
 }

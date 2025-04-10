@@ -1,4 +1,4 @@
-﻿namespace Pdc.Domain.Exceptions
+﻿namespace Pdc.Infrastructure.Exceptions
 {
     public class EntityNotFoundException : Exception
     {

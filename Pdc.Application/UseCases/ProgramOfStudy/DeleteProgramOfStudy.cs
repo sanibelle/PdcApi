@@ -1,4 +1,4 @@
-﻿using Pdc.Application.Exceptions;
+﻿using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 
 namespace Pdc.Application.UseCase;

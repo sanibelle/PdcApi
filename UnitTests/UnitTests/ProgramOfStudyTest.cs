@@ -6,10 +6,10 @@ using Pdc.Application.Mappings;
 using Pdc.Application.UseCase;
 using Pdc.Application.Validators;
 using Pdc.Domain.Enums;
-using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
+using Pdc.Infrastructure.Exceptions;
 using Pdc.Tests.Builders.Models;
 
 namespace Pdc.Tests.UnitTests;

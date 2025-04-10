@@ -3,18 +3,17 @@ using FluentValidation;
 using Moq;
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
-using Pdc.Application.Exceptions;
 using Pdc.Application.Mappings;
 using Pdc.Application.UseCase;
 using Pdc.Application.Validators;
 using Pdc.Domain.Enums;
-using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
+using Pdc.Infrastructure.Exceptions;
 using Pdc.Tests.Builders.DTOS;
 using Pdc.Tests.Builders.Models;
 
@@ -242,7 +241,6 @@ public class MinisterialCompetencyTest
         var competencyElement = new CompetencyElementDTOBuilder()
             .AddPerformanceCriteria(performanceCriteria)
             .WithId(_competencyElement.Id)
-            .WithPosition(1)
             .BuildCompetencyElement();
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
@@ -250,7 +248,7 @@ public class MinisterialCompetencyTest
             .WithCode(_competency1.Code)
             .Build();
 
-        Assert.ThrowsAsync<DuplicateException>(async () =>
+        Assert.ThrowsAsync<ValidationException>(async () =>
                 await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO));
     }
 

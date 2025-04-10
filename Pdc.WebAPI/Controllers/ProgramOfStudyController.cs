@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Pdc.Application.DTOS;
-using Pdc.Application.Exceptions;
 using Pdc.Application.UseCase;
 
 namespace Pdc.WebAPI.Controllers;
@@ -44,65 +43,32 @@ public class ProgramOfStudyController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<ProgramOfStudyDTO>> Create([FromBody] ProgramOfStudyDTO createProgramOfStudyDTO)
     {
-        try
-        {
-            var programOfStudy = await _createUseCase.Execute(createProgramOfStudyDTO);
-            return CreatedAtAction(
-                nameof(Get),
-                new { code = programOfStudy.Code },
-                programOfStudy);
-        }
-        catch (Exception ex)
-        {
-            // Log the exception
-            Console.WriteLine($"Exception: {ex.Message}");
-            Console.WriteLine($"Stack trace: {ex.StackTrace}");
-
-            // Re-throw to see it in your logs
-            throw;
-        }
+        var programOfStudy = await _createUseCase.Execute(createProgramOfStudyDTO);
+        return CreatedAtAction(
+            nameof(Get),
+            new { code = programOfStudy.Code },
+            programOfStudy);
     }
 
     [HttpGet("{code}")]
     public async Task<IActionResult> Get(string code)
     {
-        try
-        {
-            var program = await _getUseCase.Execute(code);
-            return Ok(program);
-        }
-        catch (NotFoundException)
-        {
-            return NotFound();
-        }
+        var program = await _getUseCase.Execute(code);
+        return Ok(program);
     }
 
     [HttpPut("{code}")]
     public async Task<IActionResult> Update(string code, [FromBody] ProgramOfStudyDTO programOfStudyDTO)
     {
-        try
-        {
-            var program = await _updateUseCase.Execute(code, programOfStudyDTO);
-            return Ok(program);
-        }
-        catch (NotFoundException)
-        {
-            return NotFound();
-        }
+        var program = await _updateUseCase.Execute(code, programOfStudyDTO);
+        return Ok(program);
     }
 
     [HttpDelete("{code}")]
     public async Task<IActionResult> Delete(string code)
     {
-        try
-        {
-            await _deleteUseCase.Execute(code);
-            return NoContent();
-        }
-        catch (NotFoundException)
-        {
-            return NotFound();
-        }
+        await _deleteUseCase.Execute(code);
+        return NoContent();
     }
     #endregion
     #region Competency
@@ -121,7 +87,6 @@ public class ProgramOfStudyController : ControllerBase
     public async Task<ActionResult<CompetencyDTO>> GetCompetency(string programOfStudyCode, string competencyCode)
     {
         CompetencyDTO competency = await _getCompetencyUseCase.Execute(programOfStudyCode, competencyCode);
-
         return Ok(competency);
     }
     #endregion

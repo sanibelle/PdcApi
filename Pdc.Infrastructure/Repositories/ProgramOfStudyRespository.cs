@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Pdc.Domain.Models.CourseFramework;
-using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Models.CourseFramework;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.CourseFramework;
+using Pdc.Infrastructure.Exceptions;
 
 namespace Pdc.Infrastructure.Repositories;
 

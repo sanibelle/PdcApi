@@ -1,4 +1,4 @@
-﻿namespace Pdc.Application.Exceptions;
+﻿namespace Pdc.Domain.Exceptions;
 
 public class NotFoundException : Exception
 {

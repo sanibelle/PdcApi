@@ -2,6 +2,7 @@
 // Program.cs
 using Pdc.Application;
 using Pdc.Infrastructure;
+using Pdc.WebAPI.Middlewares;
 
 public class Program
 {
@@ -30,6 +31,8 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseExceptionHandling();
 
         app.UseHttpsRedirection();
         app.UseAuthorization();
