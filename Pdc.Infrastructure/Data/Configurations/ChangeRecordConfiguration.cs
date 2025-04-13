@@ -17,7 +17,6 @@ public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEn
             .IsRequired();
 
         builder.Property(x => x.VersionNumber)
-            .UseSequence()
             .IsRequired();
 
         //Not really one to many, but ef needs that
@@ -29,6 +28,10 @@ public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEn
         builder.HasOne(x => x.NextVersion)
             .WithMany()
             .HasForeignKey("NextVersionId");
-        //UTILISATEUR CreatedBy
+
+        // TODO mettre a jour le diagramme de la base de données avec les CreatedBy, mettre à jour lesc schemas et les builders.
+        builder.HasOne(x => x.ValidatedBy)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

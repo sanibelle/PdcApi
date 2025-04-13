@@ -1,4 +1,6 @@
-﻿namespace Pdc.Domain.Models.Versioning;
+﻿using Pdc.Domain.Models.Security;
+
+namespace Pdc.Domain.Models.Versioning;
 
 /// <summary>
 /// Nommé ainsi pour les confilts de noms avec System.Version
@@ -14,7 +16,6 @@ public class ChangeRecord
     /// Premet d'avoir plusieurs copies d'une version. Un seul est actif à la fois.
     /// </summary>
     public bool IsDraft { get; set; }
-    //UTILISATEUR CreatedBy
     public string? Description { get; set; }
     /// <summary>
     /// The version before
@@ -24,6 +25,8 @@ public class ChangeRecord
     /// The version with the changes
     /// </summary>
     public ChangeRecord? NextVersion { get; set; }
+    public User ValidatedBy { get; set; }
+    public DateTime? ValidatedOn { get; set; }
 
     /// <summary>
     /// Creates a default version with the version number statring at 1

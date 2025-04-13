@@ -1,4 +1,6 @@
-﻿namespace Pdc.Infrastructure.Entities.Versioning;
+﻿using Pdc.Infrastructure.Entities.Identity;
+
+namespace Pdc.Infrastructure.Entities.Versioning;
 
 /// <summary>
 /// Nommé ainsi pour les confilts de noms avec System.Version
@@ -29,7 +31,6 @@ public class ChangeRecordEntity
     /// Premet d'avoir plusieurs copies d'une version. Un seul est actif à la fois.
     /// </summary>
     public bool IsDraft { get; set; }
-    //UTILISATEUR CreatedBy
     public int VersionNumber { get; set; }
     public string? Description { get; set; }
     /// <summary>
@@ -40,7 +41,7 @@ public class ChangeRecordEntity
     /// The version with the changes
     /// </summary>
     public ChangeRecordEntity? NextVersion { get; set; } = null;
-
+    public IdentityUserEntity? ValidatedBy { get; set; }
     public ChangeRecordEntity()
     {
         CreatedOn = DateTime.Now;

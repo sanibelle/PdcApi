@@ -14,7 +14,7 @@ public class Competency
     public bool IsMandatory { get; set; }
     public bool IsOptionnal { get; set; }
     public string StatementOfCompetency { get; set; } = "";// Effectuer le déploiement de serveurs intranet
-    public ChangeRecord CurrentVersion { get; set; } = new ChangeRecord();
+    public required ChangeRecord CurrentVersion { get; set; }
     public List<RealisationContext> RealisationContexts { get; set; } = new List<RealisationContext>(); // Critères de performance liés à l’ensemble de la compétence
 
     public virtual void SetVersion(ChangeRecord version)

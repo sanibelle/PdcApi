@@ -17,5 +17,11 @@ public class ComplementaryInformationConfiguration : IEntityTypeConfiguration<Co
         builder.Property(x => x.Text)
             .IsRequired()
             .HasMaxLength(Constants.MaxComplementaryInformationsLength);
+
+        // TODO mettre a jour le diagramme de la base de données avec les CreatedBy, mettre à jour lesc schemas et les builders.
+        builder.HasOne(x => x.CreatedBy)
+            .WithMany()
+            .OnDelete(DeleteBehavior.NoAction)
+            .IsRequired();
     }
 }
