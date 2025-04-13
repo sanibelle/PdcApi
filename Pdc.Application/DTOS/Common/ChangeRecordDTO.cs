@@ -13,8 +13,8 @@ public class ChangeRecordDTO
     private IEnumerable<ChangeDetail> _changeDetails { get; set; } = new List<ChangeDetail>();
     public DateTime CreatedOn { get; set; }
     public bool IsDraft { get; set; }
-    //UTILISATEUR CreatedBy
     public string? Description { get; set; }
     public ChangeRecord? ParentVersion { get; set; }
     public ChangeRecord? NextVersion { get; set; }
+    public UserDTO? ValidateBy { get; set; }
 }

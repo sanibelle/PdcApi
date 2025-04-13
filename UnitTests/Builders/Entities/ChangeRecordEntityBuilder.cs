@@ -1,3 +1,4 @@
+using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Entities.Versioning;
 
 namespace Pdc.Tests.Builders.Entities;
@@ -13,6 +14,7 @@ public class ChangeRecordEntityBuilder
     private ChangeRecordEntity? _nextVersion = null;
     private ChangeRecordEntity? _parentVersion = null;
     private int _versionNumber = 1;
+    private IdentityUserEntity _validatedBy = null;
 
     public ChangeRecordEntityBuilder() { }
 
@@ -82,6 +84,12 @@ public class ChangeRecordEntityBuilder
         return this;
     }
 
+    public ChangeRecordEntityBuilder WithValidatedBy(IdentityUserEntity validatedBy)
+    {
+        _validatedBy = validatedBy;
+        return this;
+    }
+
     public ChangeRecordEntity Build()
     {
         return new ChangeRecordEntity
@@ -94,7 +102,8 @@ public class ChangeRecordEntityBuilder
             IsDraft = _isDraft,
             NextVersion = _nextVersion,
             ParentVersion = _parentVersion,
-            VersionNumber = _versionNumber
+            VersionNumber = _versionNumber,
+            ValidatedBy = _validatedBy
         };
     }
 }

@@ -1,3 +1,4 @@
+using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Tests.Builders.Models;
@@ -11,6 +12,7 @@ public class ChangeRecordBuilder
     private bool _isDraft = false;
     private ChangeRecord? _nextVersion = null;
     private ChangeRecord? _parentVersion = null;
+    private User _validatedBy;
 
     public ChangeRecordBuilder() { }
 
@@ -56,6 +58,12 @@ public class ChangeRecordBuilder
         return this;
     }
 
+    public ChangeRecordBuilder WithValidatedBy(User validatedBy)
+    {
+        _validatedBy = validatedBy;
+        return this;
+    }
+
     public ChangeRecord Build()
     {
         return new ChangeRecord
@@ -67,6 +75,7 @@ public class ChangeRecordBuilder
             IsDraft = _isDraft,
             NextVersion = _nextVersion,
             ParentVersion = _parentVersion,
+            ValidatedBy = _validatedBy
         };
     }
 }

@@ -4,6 +4,7 @@ using Pdc.Application.DTOS.Common;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
+using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Application.Mappings;
@@ -20,6 +21,7 @@ public class MappingProfile : Profile
         CreateMap<ChangeableDTO, RealisationContext>().ReverseMap();
         CreateMap<ChangeableDTO, PerformanceCriteria>().ReverseMap();
         CreateMap<ChangeRecordDTO, ChangeRecord>().ReverseMap();
+        CreateMap<UserDTO, User>().ReverseMap();
         CreateMap<ComplementaryInformationDTO, ComplementaryInformation>()
         .PreserveReferences()
         .ReverseMap()

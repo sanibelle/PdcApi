@@ -1,4 +1,6 @@
-﻿namespace Pdc.Domain.Models.Versioning;
+﻿using Pdc.Domain.Models.Security;
+
+namespace Pdc.Domain.Models.Versioning;
 
 public abstract class AChangeable
 {
@@ -9,5 +11,11 @@ public abstract class AChangeable
     public virtual void SetVersion(ChangeRecord version)
     {
         ComplementaryInformations.ForEach(x => x.SetVersion(version));
+    }
+
+
+    public virtual void SetCreatedBy(User createdBy)
+    {
+        ComplementaryInformations.ForEach(x => x.SetCreatedBy(createdBy));
     }
 }

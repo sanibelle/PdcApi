@@ -1,11 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Pdc.Domain.Models.Common;
 using Pdc.Infrastructure.Entities.CourseFramework;
+using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Infrastructure.Entities.Versioning;
 namespace Pdc.Infrastructure.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<IdentityUserEntity, IdentityRole<Guid>, Guid>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
@@ -27,6 +30,8 @@ public class AppDbContext : DbContext
     public DbSet<ContentElementEntity> ContentElements { get; set; }
     public DbSet<CourseFrameworkEntity> CourseFrameworks { get; set; }
     public DbSet<ChangeDetailEntity> ChangeDetails { get; set; }
+    //TODO voir si c'est toujours utile quand je vais faire la migration ultime
+    //public DbSet<IdentityUserEntity> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -34,9 +39,9 @@ public class AppDbContext : DbContext
 
         // Changeable sera directement intégré dans les classes qui l'utilisent
         modelBuilder.Entity<ChangeableEntity>().ToTable("Changeables").UseTptMappingStrategy();
+        // TODO valider si utile.
         modelBuilder.Entity<CompetencyElementEntity>().ToTable("CompetencyElements").HasBaseType<ChangeableEntity>();
         modelBuilder.Entity<CourseFrameworkCompetencyEntity>().ToTable("CourseFrameworkCompetencies");
-
         // If you need additional configuration for abstract classes or TPH inheritance
         //modelBuilder.Entity<ContentElement>()
         //    .HasDiscriminator<string>("ContentElementType")
@@ -45,5 +50,18 @@ public class AppDbContext : DbContext
         //modelBuilder.Entity<ContentSpecification>()
         //    .HasDiscriminator<string>("ContentSpecificationType")
         //    .HasValue<CourseFrameworkContentSpecification>(nameof(CourseFrameworkContentSpecification));
+
+        modelBuilder.Entity<IdentityUserLogin<Guid>>(b =>
+        {
+            b.HasKey(l => new { l.LoginProvider, l.ProviderKey });
+        });
+        modelBuilder.Entity<IdentityUserRole<Guid>>(b =>
+        {
+            b.HasKey(r => new { r.UserId, r.RoleId });
+        });
+        modelBuilder.Entity<IdentityUserToken<Guid>>(b =>
+        {
+            b.HasKey(t => new { t.UserId, t.LoginProvider, t.Name });
+        });
     }
 }

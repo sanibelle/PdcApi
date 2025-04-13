@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Pdc.Application.Mappings;
+using Pdc.Application.Services.UserService;
 using Pdc.Application.UseCase;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Infrastructure.Repositories;
@@ -21,6 +22,9 @@ public static class DependencyInjection
         services.AddScoped<IGetProgramOfStudyUseCase, GetProgramOfStudy>();
         services.AddScoped<ICreateCompetencyUseCase, CreateCompetency>();
         services.AddScoped<IGetCompetencyUseCase, GetCompetency>();
+
+        // Auth
+        services.AddScoped<IUserService, UserService>();
 
 
         services.AddAutoMapper(typeof(MappingProfile));

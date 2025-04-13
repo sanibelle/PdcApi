@@ -25,7 +25,13 @@ public class ChangeRecord
     /// The version with the changes
     /// </summary>
     public ChangeRecord? NextVersion { get; set; }
-    public User ValidatedBy { get; set; }
+    /// <summary>
+    /// Who validated the version (changed IsDraft to false)
+    /// </summary>
+    public User? ValidatedBy { get; set; } // TODO faire un useCase pour valider la version.
+    /// <summary>
+    /// When the version changed IsDraft to false
+    /// </summary>
     public DateTime? ValidatedOn { get; set; }
 
     /// <summary>

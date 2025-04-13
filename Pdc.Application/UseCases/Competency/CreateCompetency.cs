@@ -6,6 +6,7 @@ using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
+using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Application.UseCase;
@@ -28,7 +29,7 @@ public class CreateCompetency : ICreateCompetencyUseCase
         _validator = validator;
     }
 
-    public async Task<CompetencyDTO> Execute(string programOfStudyCode, CompetencyDTO createCompetencyDto)
+    public async Task<CompetencyDTO> Execute(string programOfStudyCode, CompetencyDTO createCompetencyDto, User currentUser)
     {
         ValidationResult validationResult = await _validator.ValidateAsync(createCompetencyDto);
         if (!validationResult.IsValid)
@@ -39,6 +40,7 @@ public class CreateCompetency : ICreateCompetencyUseCase
         ProgramOfStudy program = await _programOfStudyRepository.FindByCode(programOfStudyCode);
         MinisterialCompetency competency = _mapper.Map<MinisterialCompetency>(createCompetencyDto);
         competency.SetVersion(new ChangeRecord());
+        competency.SetCreatedBy(currentUser);
         MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, competency);
 
         return _mapper.Map<CompetencyDTO>(savedCompetency);

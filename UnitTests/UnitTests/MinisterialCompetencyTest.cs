@@ -11,6 +11,7 @@ using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
+using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Infrastructure.Exceptions;
@@ -39,7 +40,7 @@ public class MinisterialCompetencyTest
     string _codeOfAFakeProgram = "Prog11";
     string codeOfAFakeCompetency1 = "Comp11";
     string codeOfAFakeCompetency2 = "Comp22";
-
+    private User _user;
     private ProgramOfStudy _programOfSudy;
 
     private RealisationContext _realisationContext;
@@ -53,6 +54,9 @@ public class MinisterialCompetencyTest
     [SetUp]
     public void Setup()
     {
+        _user = new UserBuilder()
+            .Build();
+
         _programOfSudy = new ProgramOfStudyBuilder()
             .WithCode(_codeOfAFakeProgram)
             .WithName("Techniques de l'informatique")
@@ -65,10 +69,12 @@ public class MinisterialCompetencyTest
             .Build();
 
         _changeRecord = new ChangeRecordBuilder()
+            .WithValidatedBy(_user)
             .Build();
 
         _complementaryInformation = new ComplementaryInformationBuilder()
             .WithChangeRecord(_changeRecord)
+            .WithCreatedBy(_user)
             .Build();
 
         _realisationContext = new RealisationContextBuilder()
@@ -176,7 +182,7 @@ public class MinisterialCompetencyTest
             .WithCode(_competency2.Code)
             .Build();
         // Act
-        CompetencyDTO result = await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO);
+        CompetencyDTO result = await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO, _user);
 
         // Assert
         Assert.That(result.Code == _competency2.Code, "Code is returned");
@@ -249,7 +255,7 @@ public class MinisterialCompetencyTest
             .Build();
 
         Assert.ThrowsAsync<ValidationException>(async () =>
-                await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO));
+                await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO, _user));
     }
 
     [Test]
@@ -277,7 +283,7 @@ public class MinisterialCompetencyTest
 
         // Assert
         Assert.ThrowsAsync<ValidationException>(async () =>
-                await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO));
+                await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO, _user));
     }
 
     [Test]
@@ -305,7 +311,7 @@ public class MinisterialCompetencyTest
 
         // Assert
         Assert.ThrowsAsync<ValidationException>(async () =>
-                await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO));
+                await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO, _user));
     }
 
     [Test]
@@ -333,7 +339,7 @@ public class MinisterialCompetencyTest
 
         // Assert
         Assert.ThrowsAsync<ValidationException>(async () =>
-                await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO));
+                await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO, _user));
     }
 
     //TODO gestion de la version. Quand on crée un programme, on crée une nouvelle version

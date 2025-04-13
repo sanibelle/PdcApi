@@ -8,6 +8,7 @@ public class ComplementaryInformationDTOBuilder
     private string _text = "Test DATA";
     private DateTime _modifiedOn = new DateTime(2025, 04, 05);
     private int _versionNumber;
+    private UserDTO _createdBy;
 
     public ComplementaryInformationDTOBuilder WithId(Guid? id)
     {
@@ -27,6 +28,12 @@ public class ComplementaryInformationDTOBuilder
         return this;
     }
 
+    public ComplementaryInformationDTOBuilder WithCreatedBy(UserDTO createdBy)
+    {
+        _createdBy = createdBy;
+        return this;
+    }
+
     public ComplementaryInformationDTO Build()
     {
         return new ComplementaryInformationDTO
@@ -34,7 +41,9 @@ public class ComplementaryInformationDTOBuilder
             Id = _id,
             Text = _text,
             ModifiedOn = _modifiedOn,
-            WrittenOnVersion = _versionNumber
+            WrittenOnVersion = _versionNumber,
+            CreatedOn = DateTime.Now,
+            CreatedBy =  _createdBy
         };
     }
 }

@@ -18,12 +18,16 @@ public class ExceptionHandlingMiddleware
     {
         try
         {
+            //TODO ajouter la gestion des erreurs de connexion à microsoft ailleurs qu'ici pour passer un 401
             await _next(context);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Une exception non traitée a été levée");
             await HandleExceptionAsync(context, ex);
+#if DEBUG
+            throw;
+#endif
         }
     }
 

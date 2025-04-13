@@ -42,6 +42,7 @@ public class ChangeRecordEntity
     /// </summary>
     public ChangeRecordEntity? NextVersion { get; set; } = null;
     public IdentityUserEntity? ValidatedBy { get; set; }
+    public DateTime? ValidatedOn { get; set; }
     public ChangeRecordEntity()
     {
         CreatedOn = DateTime.Now;

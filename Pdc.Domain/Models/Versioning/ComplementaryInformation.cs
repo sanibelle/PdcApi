@@ -17,6 +17,12 @@ public class ComplementaryInformation  // Informations supplémentaires comme de
     {
         WrittenOnVersion = version;
     }
+
+    internal void SetCreatedBy(User createdBy)
+    {
+        CreatedBy = createdBy;
+    }
+
     public ComplementaryInformation()
     {
         Id = Guid.NewGuid();

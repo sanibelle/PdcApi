@@ -1,3 +1,4 @@
+using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Entities.Versioning;
 
 namespace Pdc.Tests.Builders.Entities;
@@ -9,6 +10,8 @@ public class ComplementaryInformationEntityBuilder
     private ChangeableEntity _changeable;
     private DateTime _modifiedOn = new DateTime(2025, 04, 07);
     private ChangeRecordEntity _writtenOnVersion;
+    private IdentityUserEntity _createdBy;
+    private DateTime _createdOn = new DateTime(2024, 04, 12);
 
     public ComplementaryInformationEntityBuilder() { }
 
@@ -42,6 +45,12 @@ public class ComplementaryInformationEntityBuilder
         return this;
     }
 
+    public ComplementaryInformationEntityBuilder WithCreatedBy(IdentityUserEntity createdBy)
+    {
+        _createdBy = createdBy;
+        return this;
+    }
+
     public ComplementaryInformationEntity Build()
     {
         return new ComplementaryInformationEntity
@@ -50,7 +59,9 @@ public class ComplementaryInformationEntityBuilder
             Changeable = _changeable,
             Text = _text,
             ModifiedOn = _modifiedOn,
-            WrittenOnVersion = _writtenOnVersion
+            WrittenOnVersion = _writtenOnVersion,
+            CreatedBy = _createdBy,
+            CreatedOn = _createdOn
         };
     }
 

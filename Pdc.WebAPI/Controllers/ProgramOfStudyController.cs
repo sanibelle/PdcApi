@@ -1,6 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pdc.Application.DTOS;
 using Pdc.Application.UseCase;
+using Pdc.Domain.Models.Security;
+using Pdc.WebAPI.Services;
 
 namespace Pdc.WebAPI.Controllers;
 [ApiController]
@@ -14,6 +17,8 @@ public class ProgramOfStudyController : ControllerBase
     private IUpdateProgramOfStudyUseCase _updateUseCase;
     private IGetProgramOfStudyUseCase _getUseCase;
     private IGetCompetencyUseCase _getCompetencyUseCase;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private UserControllerService _userControllerService;
 
     public ProgramOfStudyController(ICreateProgramOfStudyUseCase createUseCase,
                                     IDeleteProgramOfStudyUseCase deleteUseCase,
@@ -21,7 +26,9 @@ public class ProgramOfStudyController : ControllerBase
                                     IGetAllProgramOfStudyUseCase getAllUseCase,
                                     IUpdateProgramOfStudyUseCase updateUseCase,
                                     ICreateCompetencyUseCase createCompetencyUseCase,
-                                    IGetCompetencyUseCase getCompetencyUseCase)
+                                    IGetCompetencyUseCase getCompetencyUseCase,
+                                    UserControllerService userControllerService,
+                                    IHttpContextAccessor httpContextAccessor)
     {
         _createUseCase = createUseCase;
         _deleteUseCase = deleteUseCase;
@@ -30,6 +37,9 @@ public class ProgramOfStudyController : ControllerBase
         _updateUseCase=updateUseCase;
         _createCompetencyUseCase = createCompetencyUseCase;
         _getCompetencyUseCase = getCompetencyUseCase;
+        _userControllerService = userControllerService;
+        _httpContextAccessor=httpContextAccessor;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     #region ProgramOfStudy
@@ -72,10 +82,13 @@ public class ProgramOfStudyController : ControllerBase
     }
     #endregion
     #region Competency
+    //TODO ROLES
+    [Authorize(Roles = "CreateCompetency")]
     [HttpPost("{programOfStudyCode}/competency")]
     public async Task<ActionResult<CompetencyDTO>> AddCompetency(string programOfStudyCode, [FromBody] CompetencyDTO createCompetencyDTO)
     {
-        CompetencyDTO competency = await _createCompetencyUseCase.Execute(programOfStudyCode, createCompetencyDTO);
+        User user = _userControllerService.GetUserFromHttpContext(_httpContextAccessor);
+        CompetencyDTO competency = await _createCompetencyUseCase.Execute(programOfStudyCode, createCompetencyDTO, user);
 
         return CreatedAtAction(
             nameof(GetCompetency),
