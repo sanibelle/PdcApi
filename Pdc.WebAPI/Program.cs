@@ -1,5 +1,6 @@
 
 // Program.cs
+using Microsoft.AspNetCore.Authorization;
 using Pdc.Application;
 using Pdc.Infrastructure;
 using Pdc.Infrastructure.Identity;
@@ -30,8 +31,9 @@ public class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddAzureAdAuthentication(builder.Configuration);
 
-        // Register UserControllerService in the DI container
+        // Security
         builder.Services.AddScoped<UserControllerService>();
+        builder.Services.AddSingleton<IAuthorizationHandler, AdminAuthorizationOverrideHandler>();
 
         // Configure CORS TODO spécifier les headers.
         //builder.Services.AddCors(options =>
@@ -57,9 +59,18 @@ public class Program
         app.UseExceptionHandling();
         app.UseHttpsRedirection();
         app.UseAuthentication();
+
+
+        // Register in DI
         app.UseAuthorization();
         app.MapControllers();
 
         app.Run();
     }
 }
+
+
+
+
+
+// WIP en train d'ajouter des roles

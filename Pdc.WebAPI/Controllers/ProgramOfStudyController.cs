@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Pdc.Application.DTOS;
 using Pdc.Application.UseCase;
 using Pdc.Domain.Models.Security;
+using Pdc.Infrastructure.Identity;
 using Pdc.WebAPI.Services;
 
 namespace Pdc.WebAPI.Controllers;
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class ProgramOfStudyController : ControllerBase
 {
@@ -50,6 +52,7 @@ public class ProgramOfStudyController : ControllerBase
         return Ok(programOfStudies);
     }
 
+    [Authorize(Roles = Roles.StudyProgram)]
     [HttpPost]
     public async Task<ActionResult<ProgramOfStudyDTO>> Create([FromBody] ProgramOfStudyDTO createProgramOfStudyDTO)
     {
@@ -60,6 +63,7 @@ public class ProgramOfStudyController : ControllerBase
             programOfStudy);
     }
 
+    [Authorize]
     [HttpGet("{code}")]
     public async Task<IActionResult> Get(string code)
     {
@@ -67,6 +71,7 @@ public class ProgramOfStudyController : ControllerBase
         return Ok(program);
     }
 
+    [Authorize(Roles = Roles.StudyProgram)]
     [HttpPut("{code}")]
     public async Task<IActionResult> Update(string code, [FromBody] ProgramOfStudyDTO programOfStudyDTO)
     {
@@ -74,6 +79,7 @@ public class ProgramOfStudyController : ControllerBase
         return Ok(program);
     }
 
+    [Authorize(Roles = Roles.StudyProgram)]
     [HttpDelete("{code}")]
     public async Task<IActionResult> Delete(string code)
     {
@@ -83,7 +89,7 @@ public class ProgramOfStudyController : ControllerBase
     #endregion
     #region Competency
     //TODO ROLES
-    [Authorize(Roles = "CreateCompetency")]
+    [Authorize(Roles = Roles.Competency)]
     [HttpPost("{programOfStudyCode}/competency")]
     public async Task<ActionResult<CompetencyDTO>> AddCompetency(string programOfStudyCode, [FromBody] CompetencyDTO createCompetencyDTO)
     {
@@ -95,6 +101,7 @@ public class ProgramOfStudyController : ControllerBase
             new { programOfStudyCode, competencyCode = competency.Code },
             competency);
     }
+
 
     [HttpGet("{programOfStudyCode}/competency/{competencyCode}")]
     public async Task<ActionResult<CompetencyDTO>> GetCompetency(string programOfStudyCode, string competencyCode)
