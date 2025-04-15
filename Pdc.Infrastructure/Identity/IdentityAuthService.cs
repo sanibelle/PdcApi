@@ -37,25 +37,23 @@ public class IdentityAuthService : IAuthService
         }
 
 
-        string? userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId is null)
-        {
-            throw new EntityNotFoundException(nameof(IdentityUserEntity), "userId not found");
-        }
-        IdentityUserEntity? identityUser = await _userManager.FindByIdAsync(userId);
+        string? userId = user.FindFirstValue(ClaimTypes.NameIdentifier)
+            ?? throw new ClaimNotFoundException(ClaimTypes.NameIdentifier);
 
-        if (identityUser is null)
-            throw new EntityNotFoundException(nameof(IdentityUserEntity), "userId not found");
+        IdentityUserEntity? identityUser = await _userManager.FindByIdAsync(userId)
+            ?? throw new EntityNotFoundException(nameof(IdentityUserEntity), "userId not found");
 
-        IList<string> roles = await _userManager.GetRolesAsync(identityUser);
+        IList<Claim> claims = await _userManager.GetClaimsAsync(identityUser)
+            ?? throw new ClaimNotFoundException("ClaimsList");
+
+        var claim = claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)
+            ?? throw new ClaimNotFoundException(ClaimTypes.Name);
 
         return new User
         {
-            // TODO valider le concept des noms ici
             Id = identityUser.Id,
-            Email = identityUser.Email ?? "",
-            //TODO aller chercher / ajouter le nom dans la bd.
-            DisplayName = identityUser.UserName ?? ""
+            Email = identityUser.Email,
+            DisplayName =  claim.Value
         };
     }
 

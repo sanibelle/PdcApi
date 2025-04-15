@@ -8,12 +8,12 @@ public class IdentityUserEntityBuilder
     private string _userName = $"user_{Guid.NewGuid().ToString().Substring(0, 8)}";
     private string _normalizedUserName = null;
     private string _email = $"user_{Guid.NewGuid().ToString().Substring(0, 8)}@example.com";
-    private string _normalizedEmail = null;
-    private bool _emailConfirmed = false;
-    private string _passwordHash = Guid.NewGuid().ToString();
+    private string _normalizedEmail = "";
+    private bool _emailConfirmed = true;
+    private string? _passwordHash = null;
     private string _securityStamp = Guid.NewGuid().ToString();
     private string _concurrencyStamp = Guid.NewGuid().ToString();
-    private string _phoneNumber = $"+1{new Random().Next(1000000000, 1999999999)}";
+    private string? _phoneNumber = $"+1{new Random().Next(1000000000, 1999999999)}";
     private bool _phoneNumberConfirmed = false;
     private bool _twoFactorEnabled = false;
     private DateTimeOffset? _lockoutEnd = null;
@@ -58,7 +58,7 @@ public class IdentityUserEntityBuilder
         return this;
     }
 
-    public IdentityUserEntityBuilder WithPasswordHash(string passwordHash)
+    public IdentityUserEntityBuilder WithPasswordHash(string? passwordHash)
     {
         _passwordHash = passwordHash;
         return this;
@@ -76,7 +76,7 @@ public class IdentityUserEntityBuilder
         return this;
     }
 
-    public IdentityUserEntityBuilder WithPhoneNumber(string phoneNumber)
+    public IdentityUserEntityBuilder WithPhoneNumber(string? phoneNumber)
     {
         _phoneNumber = phoneNumber;
         return this;

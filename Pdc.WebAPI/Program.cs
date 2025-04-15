@@ -29,7 +29,13 @@ public class Program
         // Add Swagger/OpenAPI
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        builder.Services.AddAzureAdAuthentication(builder.Configuration);
+        Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
+
+        if (!string.IsNullOrEmpty(builder.Configuration["AzureAd:Instance"]))
+        {
+            builder.Services.AddAzureAdAuthentication(builder.Configuration);
+        }
+
 
         // Security
         builder.Services.AddScoped<UserControllerService>();
@@ -51,6 +57,8 @@ public class Program
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
+            builder.Logging.AddDebug();
+            builder.Logging.AddConsole();
             app.UseSwagger();
             app.UseSwaggerUI();
         }
@@ -59,7 +67,6 @@ public class Program
         app.UseExceptionHandling();
         app.UseHttpsRedirection();
         app.UseAuthentication();
-
 
         // Register in DI
         app.UseAuthorization();

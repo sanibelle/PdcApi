@@ -25,9 +25,6 @@ public class ExceptionHandlingMiddleware
         {
             _logger.LogError(ex, "Une exception non traitée a été levée");
             await HandleExceptionAsync(context, ex);
-#if DEBUG
-            throw;
-#endif
         }
     }
 
@@ -49,6 +46,7 @@ public class ExceptionHandlingMiddleware
 
     private static int GetStatusCode(Exception exception)
     {
+        // TODO log not managed exception
         return exception switch
         {
             ValidationException => StatusCodes.Status400BadRequest,
