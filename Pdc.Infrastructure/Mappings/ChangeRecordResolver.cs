@@ -4,12 +4,15 @@ using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Entities.Versioning;
 
+
+// Pas utile, mais je le garde pour que si un jour.....
+// Permettait de sauvegarder une instance de ChangeRecordEntity pour que quand on sauvegarde un gros objet, on n'aie pas de conflits de sauvegarde.
 public class ChangeRecordResolver : IValueResolver<object, object, ChangeRecordEntity>
 {
     public ChangeRecordEntity Resolve(object source, object destination, ChangeRecordEntity destMember, ResolutionContext context)
     {
         ChangeRecord? version = null;
-        // Détecter le type de l'objet source et extraire la Competency
+        // Détecter le type de l'objet source et extraire la Competency/
         if (source is MinisterialCompetency competency)
         {
             version = FindChangeRecord(competency);

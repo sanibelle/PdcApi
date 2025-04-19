@@ -17,14 +17,12 @@ public class MappingProfile : Profile
     {
         // common
         CreateMap<Competency, CompetencyEntity>()
-            //.ForMember(dest => dest.CurrentVersion, opt => opt.MapFrom<ChangeRecordResolver>())
             .ReverseMap();
         CreateMap<ChangeableEntity, AChangeable>()
             .ReverseMap();
         CreateMap<PerformanceCriteria, PerformanceCriteriaEntity>()
             .ReverseMap();
         CreateMap<ComplementaryInformation, ComplementaryInformationEntity>()
-            //.ForMember(dest => dest.WrittenOnVersion, opt => opt.MapFrom<ChangeRecordResolver>())
             .ReverseMap();
         CreateMap<CompetencyElement, CompetencyElementEntity>()
             .ReverseMap();
@@ -37,6 +35,7 @@ public class MappingProfile : Profile
 
         // security
         CreateMap<User, IdentityUserEntity>()
+            .PreserveReferences() // used for the versions references
             .ReverseMap();
 
         // Ministerial
@@ -46,8 +45,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Competencies, opt => opt.MapFrom(src => src.Competencies));
 
         CreateMap<MinisterialCompetency, CompetencyEntity>()
-            .PreserveReferences()
-            //.ForMember(dest => dest.CurrentVersion, opt => opt.MapFrom<ChangeRecordResolver>())
+            .PreserveReferences() // used for the versions references
             .ReverseMap();
         CreateMap<MinisterialCompetencyElement, CompetencyElementEntity>()
             .ReverseMap();

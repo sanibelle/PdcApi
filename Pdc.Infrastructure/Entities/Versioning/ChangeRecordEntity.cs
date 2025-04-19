@@ -27,6 +27,7 @@ public class ChangeRecordEntity
     public IEnumerable<ComplementaryInformationEntity> ComplementaryInformations { get; set; } = new List<ComplementaryInformationEntity>();
     public IEnumerable<ChangeDetailEntity> ChangeDetails { get; set; } = new List<ChangeDetailEntity>();
     public DateTime CreatedOn { get; set; }
+    public IdentityUserEntity CreatedBy { get; set; }
     /// <summary>
     /// Premet d'avoir plusieurs copies d'une version. Un seul est actif à la fois.
     /// </summary>
@@ -47,5 +48,11 @@ public class ChangeRecordEntity
     {
         CreatedOn = DateTime.Now;
         Id = Guid.NewGuid();
+    }
+
+    internal void SetCreatedBy(IdentityUserEntity createdBy)
+    {
+        CreatedBy = createdBy;
+        ComplementaryInformations.ToList().ForEach(x => x.SetCreatedBy(createdBy));
     }
 }

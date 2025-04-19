@@ -1,5 +1,6 @@
 ﻿using Pdc.Domain.Models.Common;
 using Pdc.Infrastructure.Entities.CourseFramework;
+using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Entities.Versioning;
 
 namespace Pdc.Infrastructure.Entities.MinisterialSpecification;
@@ -15,11 +16,18 @@ public class CompetencyEntity : VersionableEntity
     public bool IsMandatory { get; set; } // true
     public bool IsOptionnal { get; set; } // true
     public string StatementOfCompetency { get; set; } = ""; // Effectuer le déploiement de serveurs intranet
-    public IEnumerable<RealisationContextEntity> RealisationContexts { get; set; } = new List<RealisationContextEntity>(); // Critères de performance liés à l’ensemble de la compétence
-    public IEnumerable<CompetencyElementEntity> CompetencyElements { get; set; } = new List<CompetencyElementEntity>();
+    public ICollection<RealisationContextEntity> RealisationContexts { get; set; } = new List<RealisationContextEntity>(); // Critères de performance liés à l’ensemble de la compétence
+    public ICollection<CompetencyElementEntity> CompetencyElements { get; set; } = new List<CompetencyElementEntity>();
 
     public CompetencyEntity()
     {
 
+    }
+
+    internal override void SetCreatedBy(IdentityUserEntity createdBy)
+    {
+        base.SetCreatedBy(createdBy);
+        RealisationContexts.ToList().ForEach(x => x.SetCreatedBy(createdBy));
+        CompetencyElements.ToList().ForEach(x => x.SetCreatedBy(createdBy));
     }
 }

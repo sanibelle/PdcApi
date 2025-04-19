@@ -1,5 +1,4 @@
-﻿using Pdc.Domain.Models.Security;
-using Pdc.Domain.Models.Versioning;
+﻿using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.MinisterialSpecification;
 
@@ -11,11 +10,5 @@ public class MinisterialCompetencyElement : CompetencyElement
     {
         base.SetVersion(version);
         PerformanceCriterias.ForEach(x => x.SetVersion(version));
-    }
-
-    public override void SetCreatedBy(User createdBy)
-    {
-        base.SetCreatedBy(createdBy);
-        PerformanceCriterias.ForEach(x => x.SetCreatedBy(createdBy));
     }
 }

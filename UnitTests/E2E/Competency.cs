@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
+using Pdc.Application.Validators;
 using Pdc.Tests.Builders.DTOS;
 using System.Net.Http.Json;
 
@@ -78,9 +79,11 @@ public class CompetencyApiTests : ApiTestBase
         CompetencyElementDTO competencyElement;
         CompetencyDTO competencyDTO;
         CreateCompetency(out realisationContextComplementaryInformation, out performanceCriteriaComplementaryInformation, out competencyElementComplementaryInformation, out realisationContext, out performanceCriteria, out competencyElement, out competencyDTO);
-
+        CompetencyValidation validation = new CompetencyValidation();
         competencyDTO.Code = TestDataSeeder.CompetencyEntity.Code;
+        validation.Validate(competencyDTO).IsValid.Should().BeTrue();
         var createResponse = await _client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);
+        var responseContent = await createResponse.Content.ReadAsStringAsync();
         createResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.Conflict);
     }
 
@@ -116,6 +119,7 @@ public class CompetencyApiTests : ApiTestBase
         Assert.That(i?.WrittenOnVersion != null, "version is found");
         Assert.That(i?.WrittenOnVersion == 1, "new version is always 1");
         i.Should().BeEquivalentTo(competencyElementComplementaryInformation, options =>
-            options.Excluding(x => x.WrittenOnVersion));
+           options.Excluding(x => x.WrittenOnVersion)
+           .Excluding(x => x.CreatedBy));
     }
 }

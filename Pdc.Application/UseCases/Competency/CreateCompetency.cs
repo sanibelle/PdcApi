@@ -40,8 +40,7 @@ public class CreateCompetency : ICreateCompetencyUseCase
         ProgramOfStudy program = await _programOfStudyRepository.FindByCode(programOfStudyCode);
         MinisterialCompetency competency = _mapper.Map<MinisterialCompetency>(createCompetencyDto);
         competency.SetVersion(new ChangeRecord());
-        competency.SetCreatedBy(currentUser);
-        MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, competency);
+        MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, competency, currentUser);
 
         return _mapper.Map<CompetencyDTO>(savedCompetency);
     }

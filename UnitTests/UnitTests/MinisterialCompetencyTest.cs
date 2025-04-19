@@ -139,7 +139,7 @@ public class MinisterialCompetencyTest
         //        .Throws(new EntityNotFoundException(nameof(ProgramOfStudy), codeOfAFakeProgram));
 
         // Setup Competency Repository mock
-        _competencyRepositoryMock.Setup(repo => repo.Add(It.IsAny<ProgramOfStudy>(), It.IsAny<MinisterialCompetency>())).ReturnsAsync(_competency2);
+        _competencyRepositoryMock.Setup(repo => repo.Add(It.IsAny<ProgramOfStudy>(), It.IsAny<MinisterialCompetency>(), It.IsAny<User>())).ReturnsAsync(_competency2);
         _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _codeOfAFakeProgram), It.Is<string>(x => x == _competency1.Code))).ReturnsAsync(_competency1);
         _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _codeOfAFakeProgram), It.Is<string>(x => x != _competency1.Code))).Throws(new EntityNotFoundException(nameof(CompetencyEntity), _competency2.Code));
         //    _competencyRepositoryMock.Setup(repo => repo.Update(It.IsAny<MinisterialCompetency>())).ReturnsAsync(competency1);

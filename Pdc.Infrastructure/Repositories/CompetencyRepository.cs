@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
+using Pdc.Domain.Models.Security;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.CourseFramework;
+using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Infrastructure.Exceptions;
 
@@ -28,10 +30,15 @@ public class CompetencyRepository : ICompetencyRespository
         return _mapper.Map<List<MinisterialCompetency>>(entities);
     }
 
-    public async Task<MinisterialCompetency> Add(ProgramOfStudy program, MinisterialCompetency competency)
+    public async Task<MinisterialCompetency> Add(ProgramOfStudy program, MinisterialCompetency competency, User currentUser)
     {
         var competencyEntity = _mapper.Map<CompetencyEntity>(competency);
-
+        IdentityUserEntity? user = _context.Users.FirstOrDefault(x => x.Id == currentUser.Id);
+        if (user is null)
+        {
+            throw new EntityNotFoundException(nameof(IdentityUserEntity), user.Id);
+        }
+        competencyEntity.SetCreatedBy(user);
         EntityEntry<CompetencyEntity> addedEntity = await _context.Competencies.AddAsync(competencyEntity);
         ProgramOfStudyEntity programEntity = await FindProgramOfStudy(program.Code);
         programEntity.Competencies.Add(addedEntity.Entity);

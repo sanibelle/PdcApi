@@ -12,6 +12,7 @@ public class ChangeDetailEntity
     /// Holds the old value of the property when updated or deleted.
     /// </summary>
     public string? OldValue { get; set; }
+
 }
 //TODO quand je vais tester. Un delete après un update devrait montrer la version initiale (pas l'entre deux)
 // voir le diagramme UML pour comprendre.AncientValue : "Valeur initiale"

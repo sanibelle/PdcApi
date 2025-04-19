@@ -11,8 +11,8 @@ public class ComplementaryInformationDTO
     /// </summary>
     public int? WrittenOnVersion { get; set; }
     public DateTime? ModifiedOn { get; set; }
-    public required DateTime CreatedOn { get; set; }
-    public required UserDTO CreatedBy { get; set; }
+    public DateTime? CreatedOn { get; set; }
+    public UserDTO? CreatedBy { get; set; }
     public required string Text { get; set; }
 
 }
