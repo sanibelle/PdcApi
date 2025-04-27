@@ -42,16 +42,16 @@ public class Program
         builder.Services.AddSingleton<IAuthorizationHandler, AdminAuthorizationOverrideHandler>();
 
         // Configure CORS TODO spécifier les headers.
-        //builder.Services.AddCors(options =>
-        //{
-        //    options.AddPolicy("DefaultPolicy", policy =>
-        //    {
-        //        policy.WithOrigins(builder.Configuration["Cors:AllowedOrigins"]?.Split(',') ?? Array.Empty<string>())
-        //              .AllowAnyHeader()
-        //              .AllowAnyMethod();
-        //    });
-        //});
-
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("DefaultPolicy", policy =>
+            {
+                policy.WithOrigins(builder.Configuration["Cors:AllowedOrigins"]?.Split(',') ?? Array.Empty<string>())
+                      .AllowAnyHeader()
+                      .AllowAnyMethod()
+                      .AllowCredentials();
+            });
+        });
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -67,8 +67,6 @@ public class Program
         app.UseExceptionHandling();
         app.UseHttpsRedirection();
         app.UseAuthentication();
-
-        // Register in DI
         app.UseAuthorization();
         app.MapControllers();
 

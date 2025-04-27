@@ -39,7 +39,7 @@ namespace Pdc.WebAPI.Controllers
         public IActionResult Login()
         {
             // TODO redirige sur la page d'accueil de mon app.
-            return Challenge(new AuthenticationProperties { RedirectUri = "/api/auth/signin-oidc" },
+            return Challenge(new AuthenticationProperties { RedirectUri = "https://localhost:3000/" },
                 OpenIdConnectDefaults.AuthenticationScheme);
         }
 

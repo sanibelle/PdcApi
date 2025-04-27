@@ -16,28 +16,8 @@
         "ASPNETCORE_ENVIRONMENT": "Test"
       }
     },
-    "http": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5121",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "https": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7227;http://localhost:5121",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
     "IIS Express": {
-      "commandName": "IISExpress",
+      "commandName": "IISExpress",https://localhost:44360/swagger/index.html
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {

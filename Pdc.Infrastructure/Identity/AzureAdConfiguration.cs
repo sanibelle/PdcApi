@@ -30,6 +30,7 @@ public static class AzureAdConfiguration
                 .RequireAuthenticatedUser()
                 .Build();
         });
+
         services.AddAuthentication(options =>
         {
             options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -37,17 +38,17 @@ public static class AzureAdConfiguration
         })
         .AddCookie(options =>
         {
-            // Here's where you disable redirects for 401 responses
             options.Events = new CookieAuthenticationEvents
             {
                 OnRedirectToLogin = context =>
                 {
-                    // Instead of redirecting, return 401
+                    //TODO utile?
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     return Task.CompletedTask;
                 },
                 OnRedirectToAccessDenied = context =>
                 {
+                    //TODO utile?
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
                     return Task.CompletedTask;
                 }
@@ -66,15 +67,24 @@ public static class AzureAdConfiguration
             options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             options.Events = new OpenIdConnectEvents
             {
+                OnAccessDenied = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                },
+                OnRedirectToIdentityProvider = context =>
+                {
+                    if (context.Request.Path != "/api/auth/login")
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        context.HandleResponse(); // This is critical - it prevents the redirect
+                    }
+                    return Task.CompletedTask;
+                },
                 OnTokenValidated = async context =>
                 {
                     // Synchroniser l'utilisateur avec Identity mais sans exposer ces détails
                     await SynchronizeAzureAdUser(context);
-                },
-                OnRedirectToIdentityProvider = context =>
-                {
-                    System.Diagnostics.Debug.WriteLine("Redirecting to identity provider");
-                    return Task.CompletedTask;
                 },
                 OnAuthorizationCodeReceived = context =>
                 {
@@ -91,7 +101,6 @@ public static class AzureAdConfiguration
 
         services.AddHttpContextAccessor();
         services.AddScoped<IAuthService, IdentityAuthService>();
-
         return services;
     }
 
