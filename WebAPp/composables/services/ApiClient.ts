@@ -8,7 +8,6 @@ import {
 } from '~/types/Exceptions/ApiExceptions';
 
 export interface Options<T = any> {
-  isSSR?: boolean; // false par défaut. Si true, le cookie d'authentification n'est pas envoyé.
   data?: T;
   noRedirectOnLogin?: boolean;
 }
@@ -16,14 +15,13 @@ export interface Options<T = any> {
 interface InternalOptions extends Options {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 }
-const baseURL = useRuntimeConfig().public.apiBaseUrl as string;
 
 export class ApiClient {
   private baseURL: string;
 
   constructor() {
     // TODO from config
-    this.baseURL = baseURL;
+    this.baseURL = useRuntimeConfig().public.apiBaseUrl as string;
   }
 
   private NavigateToLoginPage = async (url: string, options: InternalOptions) => {
@@ -33,8 +31,7 @@ export class ApiClient {
   };
 
   private async SendRequest<T>(url: string, options: InternalOptions): Promise<T | null> {
-    const response = await useFetch<T>(this.baseURL + url, {
-      server: options.isSSR,
+    const response = await $fetch<T>(this.baseURL + url, {
       method: options.method as any,
       body: options.data ? JSON.stringify(options.data) : undefined,
       credentials: 'include',
@@ -44,19 +41,9 @@ export class ApiClient {
         Accept: 'application/json',
       },
       onResponse: async ({ response }) => {
-        console.log(response.statusText);
-        console.log(response.status);
-        console.log(response.url);
-        console.log(response.type);
-
-        console.log('--- Headers ---');
-        response.headers.forEach((value, key) => {
-          console.log(`${key}: ${value}`);
-        });
         // A redirect should only happend for a login request in our api.
         if (response.status >= 300 && response.status < 400) {
           const location = response.headers.get('location');
-          console.log('🚀 ~ ApiClient ~ onResponse: ~ location:', location);
           if (location) {
             await this.NavigateToLoginPage(location, options);
           }
@@ -76,7 +63,7 @@ export class ApiClient {
         }
       },
     });
-    return response.data.value ? (response.data.value as T) : null;
+    return response as T;
   }
 
   // GET request

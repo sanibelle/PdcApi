@@ -27,6 +27,9 @@ export default defineNuxtConfig({
   },
   plugins: ['~/plugins/opentelemetry'],
   i18n: {
+    bundle: {
+      optimizeTranslationDirective: false,
+    },
     strategy: 'prefix_except_default',
     customRoutes: 'page',
     defaultLocale: 'fr',
@@ -35,10 +38,13 @@ export default defineNuxtConfig({
       useCookie: true,
     },
   },
-  modules: ['@nuxtjs/i18n', '@pinia/nuxt'],
+  modules: ['@nuxtjs/i18n', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt'],
   runtimeConfig: {
     public: {
       apiBaseUrl: '',
     },
+  },
+  imports: {
+    dirs: ['composables/**'],
   },
 });

@@ -5,14 +5,29 @@ defineI18nRoute({
     fr: '/gestion',
   },
 });
+const { fetchPrograms } = useProgramOfStudy();
+const programsOfSudy = ref([]);
+onMounted(async () => {
+  programsOfSudy.value = await fetchPrograms();
+});
 </script>
 
-<template></template>
+<template>
+  <h1>
+    {{ t('title') }}
+  </h1>
+  <div v-if="programsOfSudy.length === 0">{{ t('noProgramsYet') }}</div>
+  <div v-for="program in programsOfSudy" :key="program.id">
+    <h2>{{ program.name }}</h2>
+    <p>{{ program.description }}</p>
+  </div>
+</template>
 
 <i18n lang="json">
 {
   "fr": {
-    "test": "Bienvenue sur notre sitaeae"
+    "title": "Programmes d'études",
+    "noProgramsYet": "Aucun programme d'études disponible pour le moment."
   }
 }
 </i18n>
