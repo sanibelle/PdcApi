@@ -369,7 +369,7 @@ namespace Pdc.Infrastructure.Migrations
                     b.Property<DateOnly>("PublishedOn")
                         .HasColumnType("date");
 
-                    b.Property<int>("Sanction")
+                    b.Property<int>("ProgramType")
                         .HasColumnType("int");
 
                     b.Property<int>("SpecificDurationHours")

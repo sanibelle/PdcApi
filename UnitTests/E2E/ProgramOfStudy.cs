@@ -83,7 +83,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
         ProgramOfStudyDTO updatedProgramData = (ProgramOfStudyDTO)new ProgramOfStudyDTOBuilder()
             .WithCode("421.B5")
             .WithName("Techniques de l'informatique 2.0")
-            .WithSanction(Pdc.Domain.Enums.SanctionType.AEC)
+            .WithProgramType(Pdc.Domain.Enums.ProgramType.AEC)
             .WithMonthsDuration(35)
             .WithSpecificDurationHours(53)
             .WithTotalDurationHours(35)

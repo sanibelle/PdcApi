@@ -36,10 +36,10 @@ namespace Pdc.WebAPI.Controllers
         }
 
         [HttpGet("login")]
-        public IActionResult Login()
+        public IActionResult Login(string? uri)
         {
-            // TODO redirige sur la page d'accueil de mon app.
-            return Challenge(new AuthenticationProperties { RedirectUri = "https://localhost:3000/" },
+            // TODO Changer localhost:3000 pour une url dans le appSettings.
+            return Challenge(new AuthenticationProperties { RedirectUri = string.IsNullOrEmpty(uri) ? "https://localhost:3000/" : uri },
                 OpenIdConnectDefaults.AuthenticationScheme);
         }
 

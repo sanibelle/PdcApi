@@ -1,19 +1,21 @@
 // server.ts
 import {
+  DuplicateException,
   ForbiddenException,
   NotFoundException,
   ServerException,
   UnauthorizedException,
   ValidationException,
-} from '~/types/Exceptions/ApiExceptions';
+} from '~/types/exceptions/ApiExceptions';
 
-export interface Options<T = any> {
-  data?: T;
+export interface Options {
   noRedirectOnLogin?: boolean;
+  silentSubmissionError?: boolean;
 }
 
-interface InternalOptions extends Options {
+interface InternalOptions<T = any> extends Options {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  data?: T;
 }
 
 export class ApiClient {
@@ -26,7 +28,7 @@ export class ApiClient {
 
   private NavigateToLoginPage = async (url: string, options: InternalOptions) => {
     if (!options.noRedirectOnLogin) {
-      await navigateTo(url, { external: true });
+      await navigateTo(`${url}?uri=${useRequestURL().href}`, { external: true });
     }
   };
 
@@ -56,10 +58,10 @@ export class ApiClient {
           // if UnauthorizedException, redirect to login page
           if (e instanceof UnauthorizedException || e instanceof ForbiddenException) {
             await this.NavigateToLoginPage(`${this.baseURL}/auth/login`, options);
-          } else {
-            // TODO handle other exceptions
-            console.error(e);
+          } else if (e instanceof ValidationException || e instanceof DuplicateException) {
+            if (!options.silentSubmissionError) throw e; // throw error to be handled in the component
           }
+          console.error(e);
         }
       },
     });
@@ -74,7 +76,7 @@ export class ApiClient {
   async Post<ResponseData, Payload = ResponseData>(
     url: string,
     data: Payload,
-    options: Options
+    options: Options = {}
   ): Promise<ResponseData | null> {
     return this.SendRequest<ResponseData>(url, { ...options, method: 'POST', data });
   }
@@ -82,7 +84,7 @@ export class ApiClient {
   async Put<ResponseData, Payload = ResponseData>(
     url: string,
     data: Payload,
-    options: Options
+    options: Options = {}
   ): Promise<ResponseData | null> {
     return this.SendRequest<ResponseData>(url, { ...options, method: 'PUT', data });
   }
@@ -90,7 +92,7 @@ export class ApiClient {
   async Patch<ResponseData, Payload = ResponseData>(
     url: string,
     data: Payload,
-    options: Options
+    options: Options = {}
   ): Promise<ResponseData | null> {
     return this.SendRequest<ResponseData>(url, { ...options, method: 'PATCH', data });
   }
@@ -99,7 +101,6 @@ export class ApiClient {
     await this.SendRequest(url, { ...options, method: 'DELETE' });
   }
 
-  // TODO passer le message d'erreur dans la fct
   private HandleResponseStatus = (status: number) => {
     switch (status) {
       case 400:
@@ -111,6 +112,8 @@ export class ApiClient {
         throw new ForbiddenException();
       case 404:
         throw new NotFoundException();
+      case 409:
+        throw new DuplicateException();
       case 500:
         throw new ServerException();
     }

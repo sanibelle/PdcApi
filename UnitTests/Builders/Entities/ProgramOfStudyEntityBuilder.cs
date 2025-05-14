@@ -13,7 +13,7 @@ public class ProgramOfStudyEntityBuilder
     private Units _generalUnits = new Units(16, 2, 3);
     private Units _complementaryUnits = new Units(4);
     private string _name = "Techniques de l'informatique";
-    private SanctionType _sanction = SanctionType.DEC;
+    private ProgramType _programType = ProgramType.DEC;
     private int _monthsDuration = 36;
     private int _specificDurationHours = 2010;
     private int _totalDurationHours = 5730;
@@ -56,9 +56,9 @@ public class ProgramOfStudyEntityBuilder
         return this;
     }
 
-    public ProgramOfStudyEntityBuilder WithSanction(SanctionType sanction)
+    public ProgramOfStudyEntityBuilder WithProgramType(ProgramType programType)
     {
-        _sanction = sanction;
+        _programType = programType;
         return this;
     }
 
@@ -102,7 +102,7 @@ public class ProgramOfStudyEntityBuilder
             GeneralUnits = _generalUnits,
             ComplementaryUnits = _complementaryUnits,
             Name = _name,
-            Sanction = _sanction,
+            ProgramType = _programType,
             MonthsDuration = _monthsDuration,
             SpecificDurationHours = _specificDurationHours,
             TotalDurationHours = _totalDurationHours,

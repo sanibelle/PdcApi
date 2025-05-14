@@ -1,18 +1,16 @@
 using Pdc.Application.DTOS;
 using Pdc.Domain.Enums;
 using Pdc.Domain.Models.Common;
-using Pdc.Domain.Models.MinisterialSpecification;
 
 namespace Pdc.Tests.Builders.DTOS;
 
 public class ProgramOfStudyDTOBuilder
 {
-    private List<MinisterialCompetency> _competencies = new List<MinisterialCompetency>();
     private Units _generalUnits = new Units(1);
     private Units _complementaryUnits = new Units(2);
     private string _code = $"TES ${Random.Shared.Next(100, 1000)}";
     private string _name = "Default Test Program Of Study";
-    private SanctionType _sanction = SanctionType.DEC;
+    private ProgramType _programType = ProgramType.DEC;
     private int _monthsDuration = 30;
     private int _specificDurationHours = 540;
     private int _totalDurationHours = 1340;
@@ -23,12 +21,6 @@ public class ProgramOfStudyDTOBuilder
 
     public ProgramOfStudyDTOBuilder()
     {
-    }
-
-    public ProgramOfStudyDTOBuilder WithCompetencies(List<MinisterialCompetency> competencies)
-    {
-        _competencies = competencies;
-        return this;
     }
 
     public ProgramOfStudyDTOBuilder WithGeneralUnits(Units generalUnits)
@@ -55,9 +47,9 @@ public class ProgramOfStudyDTOBuilder
         return this;
     }
 
-    public ProgramOfStudyDTOBuilder WithSanction(SanctionType sanction)
+    public ProgramOfStudyDTOBuilder WithProgramType(ProgramType programType)
     {
-        _sanction = sanction;
+        _programType = programType;
         return this;
     }
 
@@ -109,7 +101,7 @@ public class ProgramOfStudyDTOBuilder
         {
             Code = _code,
             Name = _name,
-            Sanction = _sanction,
+            ProgramType = _programType,
             MonthsDuration = _monthsDuration,
             SpecificDurationHours = _specificDurationHours,
             TotalDurationHours = _totalDurationHours,
@@ -117,8 +109,7 @@ public class ProgramOfStudyDTOBuilder
             SpecificUnits = _specificUnits,
             OptionnalUnits = _optionnalUnits,
             GeneralUnits = _generalUnits,
-            ComplementaryUnits = _complementaryUnits,
-            CompetencyDTOs = _competencyDTOs
+            ComplementaryUnits = _complementaryUnits
         };
     }
 }

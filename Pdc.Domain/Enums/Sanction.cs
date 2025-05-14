@@ -1,8 +1,8 @@
 ﻿namespace Pdc.Domain.Enums;
 
-public enum SanctionType
+public enum ProgramType
 {
-    DEC,
+    DEC = 1,
     PREU,
     AEC
 }
