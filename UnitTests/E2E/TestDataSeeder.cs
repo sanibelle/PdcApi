@@ -36,7 +36,7 @@ public class TestDataSeeder
         ProgramOfStudyEntity = new ProgramOfStudyEntityBuilder()
             .WithCode("Test.123")
             .WithName("Test Program of Study")
-            .WithSanction(SanctionType.DEC)
+            .WithProgramType(ProgramType.DEC)
             .WithMonthsDuration(24)
             .WithSpecificDurationHours(1800)
             .WithTotalDurationHours(4500)

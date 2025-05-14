@@ -28,6 +28,13 @@ export class NotFoundException extends ApiError {
   }
 }
 
+export class DuplicateException extends ApiError {
+  constructor(message = 'Duplicate resource found') {
+    super(message, 409);
+    this.name = 'DuplicateException';
+  }
+}
+
 export class ValidationException extends ApiError {
   errors?: Record<string, string[]>;
 

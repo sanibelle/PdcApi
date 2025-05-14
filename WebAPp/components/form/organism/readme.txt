@@ -1,0 +1,1 @@
+Pour simplifier le nommage des composants, les organismes sont à la racine

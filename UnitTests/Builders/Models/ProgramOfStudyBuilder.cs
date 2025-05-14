@@ -1,7 +1,7 @@
+using Pdc.Domain.Enums;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
-using Pdc.Domain.Enums;
 
 namespace Pdc.Tests.Builders.Models;
 
@@ -9,7 +9,7 @@ public class ProgramOfStudyBuilder
 {
     private string _code = "TES" + new Random().Next(1000, 9999);
     private string _name = "Default Program";
-    private SanctionType _sanction = SanctionType.DEC;
+    private ProgramType _programType = ProgramType.DEC;
     private int _monthsDuration = 36;
     private int _specificDurationHours = 2010;
     private int _totalDurationHours = 5730;
@@ -34,9 +34,9 @@ public class ProgramOfStudyBuilder
         return this;
     }
 
-    public ProgramOfStudyBuilder WithSanction(SanctionType sanction)
+    public ProgramOfStudyBuilder WithProgramType(ProgramType programType)
     {
-        _sanction = sanction;
+        _programType = programType;
         return this;
     }
 
@@ -100,7 +100,7 @@ public class ProgramOfStudyBuilder
         {
             Code = _code,
             Name = _name,
-            Sanction = _sanction,
+            ProgramType = _programType,
             MonthsDuration = _monthsDuration,
             SpecificDurationHours = _specificDurationHours,
             TotalDurationHours = _totalDurationHours,

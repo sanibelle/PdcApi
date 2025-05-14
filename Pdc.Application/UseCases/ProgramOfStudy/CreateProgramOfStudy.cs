@@ -2,8 +2,10 @@
 using FluentValidation;
 using FluentValidation.Results;
 using Pdc.Application.DTOS;
+using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
+using Pdc.Infrastructure.Exceptions;
 
 namespace Pdc.Application.UseCase;
 
@@ -26,6 +28,15 @@ public class CreateProgramOfStudy : ICreateProgramOfStudyUseCase
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
+        }
+        try
+        {
+            await _programOfStudyRespository.FindByCode(createProgramOfStudyDto.Code);
+            throw new DuplicateException("programOfStudyCodeExists");
+        }
+        catch (EntityNotFoundException)
+        {
+            // Program not found, proceed with creation
         }
 
         ProgramOfStudy programOfStudy = _mapper.Map<ProgramOfStudy>(createProgramOfStudyDto);

@@ -28,7 +28,7 @@ public class ProgramOfStudy // toujours issu d'un devis ministeriel
     /// </summary>
     public Units ComplementaryUnits { get; set; } = new Units(4);
     public required string Name { get; set; } //Techniques de l'informatique
-    public SanctionType Sanction { get; set; } //DEC, PRE-U
+    public ProgramType ProgramType { get; set; } //DEC, PRE-U
     public int MonthsDuration { get; set; } // 36 mois
     public int SpecificDurationHours { get; set; } // 2010
     public int TotalDurationHours { get; set; } // 5730

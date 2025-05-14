@@ -13,7 +13,7 @@ public class ProgramOfStudyConfiguration : IEntityTypeConfiguration<ProgramOfStu
             .IsRequired()
             .HasMaxLength(255);
 
-        builder.Property(x => x.Sanction)
+        builder.Property(x => x.ProgramType)
             .IsRequired();
 
         builder.Property(x => x.MonthsDuration)

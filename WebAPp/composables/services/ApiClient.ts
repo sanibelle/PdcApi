@@ -1,40 +1,39 @@
 // server.ts
 import {
+  DuplicateException,
   ForbiddenException,
   NotFoundException,
   ServerException,
   UnauthorizedException,
   ValidationException,
-} from '~/types/Exceptions/ApiExceptions';
+} from '~/types/exceptions/ApiExceptions';
 
-export interface Options<T = any> {
-  isSSR?: boolean; // false par défaut. Si true, le cookie d'authentification n'est pas envoyé.
-  data?: T;
+export interface Options {
   noRedirectOnLogin?: boolean;
+  silentSubmissionError?: boolean;
 }
 
-interface InternalOptions extends Options {
+interface InternalOptions<T = any> extends Options {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  data?: T;
 }
-const baseURL = useRuntimeConfig().public.apiBaseUrl as string;
 
 export class ApiClient {
   private baseURL: string;
 
   constructor() {
     // TODO from config
-    this.baseURL = baseURL;
+    this.baseURL = useRuntimeConfig().public.apiBaseUrl as string;
   }
 
   private NavigateToLoginPage = async (url: string, options: InternalOptions) => {
     if (!options.noRedirectOnLogin) {
-      await navigateTo(url, { external: true });
+      await navigateTo(`${url}?uri=${useRequestURL().href}`, { external: true });
     }
   };
 
   private async SendRequest<T>(url: string, options: InternalOptions): Promise<T | null> {
-    const response = await useFetch<T>(this.baseURL + url, {
-      server: options.isSSR,
+    const response = await $fetch<T>(this.baseURL + url, {
       method: options.method as any,
       body: options.data ? JSON.stringify(options.data) : undefined,
       credentials: 'include',
@@ -44,19 +43,9 @@ export class ApiClient {
         Accept: 'application/json',
       },
       onResponse: async ({ response }) => {
-        console.log(response.statusText);
-        console.log(response.status);
-        console.log(response.url);
-        console.log(response.type);
-
-        console.log('--- Headers ---');
-        response.headers.forEach((value, key) => {
-          console.log(`${key}: ${value}`);
-        });
         // A redirect should only happend for a login request in our api.
         if (response.status >= 300 && response.status < 400) {
           const location = response.headers.get('location');
-          console.log('🚀 ~ ApiClient ~ onResponse: ~ location:', location);
           if (location) {
             await this.NavigateToLoginPage(location, options);
           }
@@ -69,14 +58,14 @@ export class ApiClient {
           // if UnauthorizedException, redirect to login page
           if (e instanceof UnauthorizedException || e instanceof ForbiddenException) {
             await this.NavigateToLoginPage(`${this.baseURL}/auth/login`, options);
-          } else {
-            // TODO handle other exceptions
-            console.error(e);
+          } else if (e instanceof ValidationException || e instanceof DuplicateException) {
+            if (!options.silentSubmissionError) throw e; // throw error to be handled in the component
           }
+          console.error(e);
         }
       },
     });
-    return response.data.value ? (response.data.value as T) : null;
+    return response as T;
   }
 
   // GET request
@@ -87,7 +76,7 @@ export class ApiClient {
   async Post<ResponseData, Payload = ResponseData>(
     url: string,
     data: Payload,
-    options: Options
+    options: Options = {}
   ): Promise<ResponseData | null> {
     return this.SendRequest<ResponseData>(url, { ...options, method: 'POST', data });
   }
@@ -95,7 +84,7 @@ export class ApiClient {
   async Put<ResponseData, Payload = ResponseData>(
     url: string,
     data: Payload,
-    options: Options
+    options: Options = {}
   ): Promise<ResponseData | null> {
     return this.SendRequest<ResponseData>(url, { ...options, method: 'PUT', data });
   }
@@ -103,7 +92,7 @@ export class ApiClient {
   async Patch<ResponseData, Payload = ResponseData>(
     url: string,
     data: Payload,
-    options: Options
+    options: Options = {}
   ): Promise<ResponseData | null> {
     return this.SendRequest<ResponseData>(url, { ...options, method: 'PATCH', data });
   }
@@ -112,7 +101,6 @@ export class ApiClient {
     await this.SendRequest(url, { ...options, method: 'DELETE' });
   }
 
-  // TODO passer le message d'erreur dans la fct
   private HandleResponseStatus = (status: number) => {
     switch (status) {
       case 400:
@@ -124,6 +112,8 @@ export class ApiClient {
         throw new ForbiddenException();
       case 404:
         throw new NotFoundException();
+      case 409:
+        throw new DuplicateException();
       case 500:
         throw new ServerException();
     }
