@@ -5,7 +5,6 @@ using Pdc.Application.DTOS;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
-using Pdc.Infrastructure.Exceptions;
 
 namespace Pdc.Application.UseCase;
 
@@ -29,14 +28,9 @@ public class CreateProgramOfStudy : ICreateProgramOfStudyUseCase
         {
             throw new ValidationException(validationResult.Errors);
         }
-        try
+        if (await _programOfStudyRespository.ExistsByCode(createProgramOfStudyDto.Code))
         {
-            await _programOfStudyRespository.FindByCode(createProgramOfStudyDto.Code);
             throw new DuplicateException("programOfStudyCodeExists");
-        }
-        catch (EntityNotFoundException)
-        {
-            // Program not found, proceed with creation
         }
 
         ProgramOfStudy programOfStudy = _mapper.Map<ProgramOfStudy>(createProgramOfStudyDto);

@@ -50,13 +50,13 @@ watch(
   }
 );
 
-const onChange = async (event: Event): Promise<void> => {
+const onChange = (event: Event) => {
   handleChange(event, !!errorMessage.value);
   const target = event.target as HTMLInputElement;
   emit('update:modelValue', target.value);
 };
 
-const onBlur = async (event: Event): Promise<void> => {
+const onBlur = (event: Event) => {
   handleBlur(event, true);
 };
 

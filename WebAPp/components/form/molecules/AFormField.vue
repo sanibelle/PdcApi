@@ -50,7 +50,7 @@ const props = defineProps({
 });
 
 defineEmits(['update:modelValue']);
-const errorMessage = toRef(props,'errorMessage');
+const errorMessage = ref(props.errorMessage, 'errorMessage');
 
 </script>
 

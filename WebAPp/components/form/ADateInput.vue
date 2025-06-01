@@ -43,14 +43,6 @@ const validationRules = computed(() => {
   if (props.required !== null) {
     rules.push(`required`);
   }
-  if (props.min !== null) {
-    rules.push(`min_date:${props.min}`);
-  }
-
-  if (props.max !== null) {
-    rules.push(`max_date:${props.max}`);
-  }
-
   return rules.join('|');
 });
 </script>

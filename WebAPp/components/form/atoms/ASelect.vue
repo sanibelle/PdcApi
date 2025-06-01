@@ -26,11 +26,10 @@ const props = defineProps({
   options: {
     type: Array as () => SelectOption[],
     required: true,
-    default: () => [],
   },
   modelValue: {
     type: [String, Number, null],
-    default: '',
+    default: null,
   },
 });
 

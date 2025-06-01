@@ -1,4 +1,3 @@
-// plugins/vee-validate.js
 import { defineRule, configure } from 'vee-validate';
 import {
   required,
@@ -14,9 +13,9 @@ import {
 import { localize, setLocale } from '@vee-validate/i18n';
 
 export default defineNuxtPlugin(() => {
-  // Set the default locale to French
+  // language
   setLocale('fr');
-  // Define global validation rules
+  // rules
   defineRule('required', required);
   defineRule('email', email);
   defineRule('min', min);

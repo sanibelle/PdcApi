@@ -69,4 +69,10 @@ public class ProgramOfStudyRespository : IProgramOfStudyRespository
         }
         return program;
     }
+
+    public async Task<bool> ExistsByCode(string code)
+    {
+        return await _context.ProgramOfStudies
+            .AnyAsync(x => x.Code == code);
+    }
 }

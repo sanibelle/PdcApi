@@ -1,5 +1,4 @@
-<script setup>
-import { ref, computed, watch } from 'vue';
+<script setup lang="ts">
 
 const props = defineProps({
   name: {
@@ -39,7 +38,7 @@ const props = defineProps({
     default: false,
   },
   modelValue: {
-    type: [String, Number, null], // lorsque vide, c'est un String
+    type: [String, Number], // lorsque vide, c'est un String
     default: '',
   },
 });

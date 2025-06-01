@@ -76,7 +76,7 @@ public class ProgramOfStudyTest
     }
 
     [Test]
-    public async Task CreateDeuplicateProgramOfStudy_ShouldReturnDuplicateException()
+    public async Task CreateDuplicateProgramOfStudy_ShouldReturnDuplicateException()
     {
         ProgramOfStudyDTO createProgramDto = new()
         {

@@ -1,6 +1,4 @@
-<script setup>
-import { max } from '@vee-validate/rules';
-import { useField } from 'vee-validate';
+<script setup lang="ts">
 
 const props = defineProps({
   id: {
@@ -40,6 +38,14 @@ const props = defineProps({
     type: Date,
     default: undefined,
   },
+  min: {
+    type: Date,
+    default: null,
+  },
+  max: {
+    type: Date,
+    default: null,
+  },
 });
 
 defineEmits(['update:modelValue']);
@@ -53,7 +59,7 @@ const errorMessage = ref('');
       {{ label }}
     </FormAtomsABaseLabel>
     <FormAtomsADateInput :id="id" :name="name" :placeholder="placeholder" :disabled="disabled" :rules="rules"
-      :modelValue="modelValue" @update:modelValue="$emit('update:modelValue', $event)" :max-date="max" :min-date="min"
+      :modelValue="modelValue" @update:modelValue="$emit('update:modelValue', $event)" :max="max" :min="min"
       @update:error-message="errorMessage = $event" :date-only="true" />
     <FormAtomsAErrorMessage :message="errorMessage" />
     <FormAtomsAHint :hint="hint" />

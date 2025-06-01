@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useField } from 'vee-validate';
 import type { SelectOption } from '~/types/forms/SelectOption';
 
 const props = defineProps({

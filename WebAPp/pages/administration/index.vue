@@ -32,7 +32,7 @@ const upsertProgramOfStudyModal = useModal();
     {{ t('title') }}
   </h1>
   <section>
-    <div class="scholar-row" style="display: flex; align-items: center; margin-bottom: 1rem">
+    <div class="scholar-row">
       <button @click="upsertProgramOfStudyModal.open()" class="scholar-btn">
         {{ t('createButton') }}
       </button>

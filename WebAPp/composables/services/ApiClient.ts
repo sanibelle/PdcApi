@@ -97,7 +97,7 @@ export class ApiClient {
     return this.SendRequest<ResponseData>(url, { ...options, method: 'PATCH', data });
   }
 
-  async Delete(url: string, options: Options) {
+  async Delete(url: string, options: Options = {}): Promise<void> {
     await this.SendRequest(url, { ...options, method: 'DELETE' });
   }
 

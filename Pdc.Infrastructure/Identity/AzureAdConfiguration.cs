@@ -53,6 +53,8 @@ public static class AzureAdConfiguration
                     return Task.CompletedTask;
                 }
             };
+            options.ExpireTimeSpan = TimeSpan.FromHours(1); // Set the expiration time for the cookie
+            options.SlidingExpiration = true; // Enable sliding expiration
         })
         .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
         {

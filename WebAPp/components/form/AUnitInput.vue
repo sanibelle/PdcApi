@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { required } from '@vee-validate/rules';
 import type { Unit } from '~/types/common/Unit';
 import type { SelectOption } from '~/types/forms/SelectOption';
 

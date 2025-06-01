@@ -1,5 +1,5 @@
 export function useModal() {
-  const isOpen = ref(false);
+  const isOpen = ref<boolean>(false);
 
   const open = () => {
     isOpen.value = true;

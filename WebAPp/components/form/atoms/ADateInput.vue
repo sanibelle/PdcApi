@@ -22,11 +22,11 @@ const props = defineProps({
     type: [String, Object],
     default: '',
   },
-  minDate: {
+  min: {
     type: Date,
     default: null,
   },
-  maxDate: {
+  max: {
     type: Date,
     default: null,
   },
@@ -39,13 +39,13 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'update:errorMessage']);
 
 // Use VeeValidate's useField to handle validation
-const { value, handleChange, errorMessage } = useField(props.name, props.rules);
+const { value, handleChange, setValue, errorMessage } = useField(props.name, props.rules);
 
 watch(
   () => props.modelValue,
   (newValue) => {
     if (newValue !== value.value) {
-      handleChange(newValue);
+      setValue(newValue);
     }
   }
 );
@@ -57,8 +57,8 @@ watch(value, (newVal) => {
   }
 });
 
-const onChange = async (date: Date): Promise<void> => {
-  await handleChange(date, !!errorMessage.value);
+const onChange = (date: Date) => {
+  handleChange(date, !!errorMessage.value);
   emit('update:modelValue', date);
 };
 
@@ -72,7 +72,7 @@ watch(
 
 <template>
   <VueDatePicker :model-value="value" :enable-time-picker="false" :teleport="true" :auto-apply="true"
-    :class="{ 'is-invalid': errorMessage }" :minDate="minDate" :maxDate="maxDate" @update:model-value="onChange" />
+    :class="{ 'is-invalid': errorMessage }" :min-date="min" :max-date="max" @update:model-value="onChange" />
 </template>
 
 <style scoped>

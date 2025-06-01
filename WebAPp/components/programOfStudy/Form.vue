@@ -78,7 +78,7 @@ const options: SelectOption[] = Object.entries(ProgramType)
       <FormAUnitInput name="complementaryUnits" :label="t('complementaryUnits')"
         v-model="programOfStudy.complementaryUnits" />
       <div class="modal-footer">
-        <FormMoleculesASubmitButton :isSubmiting="isSubmitting" />
+        <FormMoleculesASubmitButton :isSubmitting="isSubmitting" />
       </div>
 
     </form>

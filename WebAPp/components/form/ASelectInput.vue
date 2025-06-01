@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
 import type { SelectOption } from '~/types/forms/SelectOption';
 
 const props = defineProps({
@@ -51,17 +50,7 @@ const validationRules = computed(() => {
 </script>
 
 <template>
-  <FormMoleculesASelectField
-    :name="name"
-    :label="label"
-    type="text"
-    :placeholder="placeholder"
-    :disabled="disabled"
-    :required="required"
-    :rules="validationRules"
-    :hint="hint"
-    :options="options"
-    :modelValue="modelValue"
-    @update:modelValue="$emit('update:modelValue', $event)"
-  />
+  <FormMoleculesASelectField :name="name" :label="label" type="text" :placeholder="placeholder" :disabled="disabled"
+    :required="required" :rules="validationRules" :hint="hint" :options="options" :modelValue="modelValue"
+    @update:modelValue="$emit('update:modelValue', $event)" />
 </template>

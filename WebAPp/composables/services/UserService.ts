@@ -1,7 +1,6 @@
 import { useApi } from './ApiClient';
 import type { User } from '~/types/Security/User';
 
-// TODO add use keyword to the function
 export const useUser = () => {
   const fetchUser = async (): Promise<User> => {
     const api = useApi();

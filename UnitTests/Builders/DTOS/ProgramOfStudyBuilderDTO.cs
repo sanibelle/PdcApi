@@ -17,7 +17,6 @@ public class ProgramOfStudyDTOBuilder
     private DateOnly _publishedOn = new DateOnly(2025, 03, 31);
     private Units _specificUnits = new Units(3);
     private Units _optionnalUnits = new Units(4);
-    public ICollection<CompetencyDTO> _competencyDTOs { get; set; } = new List<CompetencyDTO>();
 
     public ProgramOfStudyDTOBuilder()
     {
@@ -86,12 +85,6 @@ public class ProgramOfStudyDTOBuilder
     public ProgramOfStudyDTOBuilder WithOptionnalUnits(Units optionnalUnits)
     {
         _optionnalUnits = optionnalUnits;
-        return this;
-    }
-
-    public ProgramOfStudyDTOBuilder WithCompetencies(ICollection<CompetencyDTO> competencyDTOs)
-    {
-        _competencyDTOs = competencyDTOs;
         return this;
     }
 
