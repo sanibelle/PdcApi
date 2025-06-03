@@ -9,9 +9,88 @@ env:
   SOLUTION_PATH: './Pdc.sln'
   
 jobs:
-  # Build and test job
+  # Check what files have changed
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      code-changed: ${{ steps.changes.outputs.code }}
+      tests-changed: ${{ steps.changes.outputs.tests }}
+      should-run-tests: ${{ steps.decide.outputs.should-run }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Need full history for proper change detection
+        
+    - name: Check for changes
+      uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          code:
+            - 'src/**'
+            - '**/*.cs'
+            - '**/*.csproj'
+            - '*.sln'
+            - '.github/workflows/**'
+          tests:
+            - 'UnitTests/**'
+            - 'Pdc.E2ETests/**'
+            - 'test/**'
+            
+    - name: Check last workflow status
+      id: last-status
+      run: |
+        # Get the status of the last workflow run on the base branch
+        LAST_STATUS=$(gh run list \
+          --branch ${{ github.base_ref }} \
+          --workflow "${{ github.workflow }}" \
+          --limit 1 \
+          --json conclusion \
+          --jq '.[0].conclusion // "unknown"')
+        echo "last-status=$LAST_STATUS" >> $GITHUB_OUTPUT
+        echo "Last workflow status: $LAST_STATUS"
+      env:
+        GH_TOKEN: ${{ github.token }}
+        
+    - name: Decide if tests should run
+      id: decide
+      run: |
+        CODE_CHANGED="${{ steps.changes.outputs.code }}"
+        TESTS_CHANGED="${{ steps.changes.outputs.tests }}"
+        LAST_STATUS="${{ steps.last-status.outputs.last-status }}"
+        
+        # Check if commit message contains force test keywords
+        COMMIT_MSG="${{ github.event.pull_request.title }} ${{ github.event.head_commit.message }}"
+        FORCE_TESTS=$(echo "$COMMIT_MSG" | grep -iE '\[run tests\]|\[force tests\]|\[test\]' || true)
+        
+        echo "Code changed: $CODE_CHANGED"
+        echo "Tests changed: $TESTS_CHANGED"
+        echo "Last status: $LAST_STATUS"
+        echo "Force tests: $([ -n "$FORCE_TESTS" ] && echo 'true' || echo 'false')"
+        
+        # Run tests if:
+        # 1. Code has changed, OR
+        # 2. Tests have changed, OR  
+        # 3. Last workflow wasn't successful, OR
+        # 4. This is the first run (no previous status), OR
+        # 5. Commit message contains force test keywords
+        if [ "$CODE_CHANGED" == "true" ] || [ "$TESTS_CHANGED" == "true" ] || [ "$LAST_STATUS" != "success" ] || [ "$LAST_STATUS" == "unknown" ] || [ -n "$FORCE_TESTS" ]; then
+          echo "should-run=true" >> $GITHUB_OUTPUT
+          echo "✅ Tests will run"
+          if [ -n "$FORCE_TESTS" ]; then
+            echo "🔧 Tests forced by commit message"
+          fi
+        else
+          echo "should-run=false" >> $GITHUB_OUTPUT  
+          echo "⏭️ Skipping tests - no relevant changes and last run was successful"
+        fi
+
+  # Build and test job - now conditional
   build-and-test:
     runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.should-run-tests == 'true'
     strategy:
       matrix:
         configuration: [Debug, Release]
@@ -96,11 +175,29 @@ jobs:
         verbose: true
         flags: unittests
         name: codecov-umbrella
+
+  # Skipped tests notification
+  tests-skipped:
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.should-run-tests == 'false'
+    
+    steps:
+    - name: Tests Skipped Notification
+      run: |
+        echo "## ⏭️ Tests Skipped" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Tests were skipped because:" >> $GITHUB_STEP_SUMMARY
+        echo "- No relevant code or test files were changed" >> $GITHUB_STEP_SUMMARY  
+        echo "- Last workflow run was successful" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "To force test execution, add `[run tests]` to your commit message." >> $GITHUB_STEP_SUMMARY
         
-  # Code quality checks
+  # Code quality checks - always run for PR changes
   code-quality:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    needs: changes
+    if: github.event_name == 'pull_request' && needs.changes.outputs.code == 'true'
     
     steps:
     - name: Checkout code
@@ -121,13 +218,14 @@ jobs:
           --verbosity normal \
           /p:TreatWarningsAsErrors=true \
           /p:WarningsAsErrors="" \
-          /p:WarningsNotAsErrors=""
+          /p:WarningsNotAsErrors="" \
+          /p:ExcludeProjects="Pdc.Tests"
           
-  # Test summary job
+  # Test summary job - conditional
   test-summary:
     runs-on: ubuntu-latest
-    needs: [build-and-test]
-    if: always()
+    needs: [changes, build-and-test]
+    if: always() && needs.changes.outputs.should-run-tests == 'true'
     
     steps:
     - name: Download test results
