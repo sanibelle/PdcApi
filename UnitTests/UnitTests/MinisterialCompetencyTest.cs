@@ -382,7 +382,7 @@ public class MinisterialCompetencyTest
     //        .WithSpecificDurationHours(2010)
     //        .WithTotalDurationHours(5730)
     //        .WithPublishedOn(new DateOnly(2020, 01, 01))
-    //        .WithOptionnalUnits(new Units(16, 2, 3))
+    //        .WithOptionalUnits(new Units(16, 2, 3))
     //        .WithSpecificUnits(new Units(26, 2, 3))
     //        .Build();
 

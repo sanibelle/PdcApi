@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ASemesterCalendar from '~/components/calendar/ASemesterCalendar.vue';
-import { SemesterEnum } from 'types/enum/SemesterEnum';
 </script>
 
 <template>

@@ -8,7 +8,7 @@ public class ProgramOfStudyDTOBuilder
 {
     private Units _generalUnits = new Units(1);
     private Units _complementaryUnits = new Units(2);
-    private string _code = $"TES ${Random.Shared.Next(100, 1000)}";
+    private string _code = $"TES{Random.Shared.Next(100, 1000)}";
     private string _name = "Default Test Program Of Study";
     private ProgramType _programType = ProgramType.DEC;
     private int _monthsDuration = 30;
@@ -16,7 +16,7 @@ public class ProgramOfStudyDTOBuilder
     private int _totalDurationHours = 1340;
     private DateOnly _publishedOn = new DateOnly(2025, 03, 31);
     private Units _specificUnits = new Units(3);
-    private Units _optionnalUnits = new Units(4);
+    private Units _optionalUnits = new Units(4);
 
     public ProgramOfStudyDTOBuilder()
     {
@@ -82,9 +82,9 @@ public class ProgramOfStudyDTOBuilder
         return this;
     }
 
-    public ProgramOfStudyDTOBuilder WithOptionnalUnits(Units optionnalUnits)
+    public ProgramOfStudyDTOBuilder WithOptionalUnits(Units optionalUnits)
     {
-        _optionnalUnits = optionnalUnits;
+        _optionalUnits = optionalUnits;
         return this;
     }
 
@@ -100,7 +100,7 @@ public class ProgramOfStudyDTOBuilder
             TotalDurationHours = _totalDurationHours,
             PublishedOn = _publishedOn,
             SpecificUnits = _specificUnits,
-            OptionnalUnits = _optionnalUnits,
+            OptionalUnits = _optionalUnits,
             GeneralUnits = _generalUnits,
             ComplementaryUnits = _complementaryUnits
         };

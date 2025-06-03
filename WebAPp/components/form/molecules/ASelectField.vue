@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { SelectOption } from '~/types/forms/SelectOption';
 
 const props = defineProps({
   id: {
@@ -36,7 +35,7 @@ const props = defineProps({
     default: '',
   },
   options: {
-    type: Array<SelectOption>,
+    type: Array as PropType<SelectOption[]>,
     required: true,
   },
   modelValue: {
@@ -45,7 +44,7 @@ const props = defineProps({
   },
 });
 
-defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue']);
 
 // Get the error message from VeeValidate
 const errorMessage = ref('');
@@ -57,7 +56,7 @@ const errorMessage = ref('');
       {{ label }}
     </FormAtomsABaseLabel>
     <FormAtomsASelect :id="id" :name="name" :options="options" :placeholder="placeholder" :disabled="disabled"
-      :rules="rules" :modelValue="modelValue" @update:modelValue="$emit('update:modelValue', $event)"
+      :rules="rules" :modelValue="modelValue" @update:modelValue="emit('update:modelValue', $event)"
       @update:error-message="errorMessage = $event" />
     <FormAtomsAErrorMessage :message="errorMessage" />
     <FormAtomsAHint :hint="hint" />

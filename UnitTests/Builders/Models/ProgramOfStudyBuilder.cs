@@ -16,7 +16,7 @@ public class ProgramOfStudyBuilder
     private DateOnly _publishedOn = DateOnly.FromDateTime(DateTime.Now);
     private List<MinisterialCompetency> _competencies = new List<MinisterialCompetency>();
     private Units _specificUnits = new Units(10);
-    private Units _optionnalUnits = new Units(5);
+    private Units _optionalUnits = new Units(5);
     private Units _generalUnits = new Units(15);
     private Units _complementaryUnits = new Units(5);
 
@@ -76,9 +76,9 @@ public class ProgramOfStudyBuilder
         return this;
     }
 
-    public ProgramOfStudyBuilder WithOptionnalUnits(Units optionnalUnits)
+    public ProgramOfStudyBuilder WithOptionalUnits(Units optionalUnits)
     {
-        _optionnalUnits = optionnalUnits;
+        _optionalUnits = optionalUnits;
         return this;
     }
 
@@ -107,7 +107,7 @@ public class ProgramOfStudyBuilder
             PublishedOn = _publishedOn,
             Competencies = _competencies,
             SpecificUnits = _specificUnits,
-            OptionnalUnits = _optionnalUnits,
+            OptionalUnits = _optionalUnits,
             GeneralUnits = _generalUnits,
             ComplementaryUnits = _complementaryUnits
         };

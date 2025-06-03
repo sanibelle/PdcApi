@@ -32,7 +32,7 @@ public class ProgramOfStudyValidation : AbstractValidator<ProgramOfStudyDTO>
         RuleFor(x => x.PublishedOn)
             .NotEmpty();
 
-        RuleFor(x => x.OptionnalUnits)
+        RuleFor(x => x.OptionalUnits)
             .NotEmpty();
 
         RuleFor(x => x.SpecificUnits)

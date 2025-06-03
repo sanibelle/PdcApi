@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { Unit } from '~/types/common/Unit';
-import type { SelectOption } from '~/types/forms/SelectOption';
 
 const { t } = useI18n();
 
@@ -70,12 +68,12 @@ const numeratorOption = computed(() =>
 );
 
 const handleNumeratorChange = (value: number) => {
-  unit.value.numerator = value ? value : null;
+  unit.value.numerator = value === 0 || value ? value : null;
   emit('update:modelValue', unit);
 };
 
 const handleDenominatorChange = (value: number) => {
-  unit.value.denominator = value ? value : null;
+  unit.value.denominator = value === 0 || value ? value : null;
   emit('update:modelValue', unit);
 };
 

@@ -49,9 +49,9 @@ public class ProgramOfStudyConfiguration : IEntityTypeConfiguration<ProgramOfStu
             .HasForeignKey<ProgramOfStudyEntity>("SpecificUnitsId")
             .OnDelete(DeleteBehavior.ClientCascade); // Shadow property;
 
-        builder.HasOne(p => p.OptionnalUnits)
+        builder.HasOne(p => p.OptionalUnits)
             .WithOne()
-            .HasForeignKey<ProgramOfStudyEntity>("OptionnalUnitsId")
+            .HasForeignKey<ProgramOfStudyEntity>("OptionalUnitsId")
             .OnDelete(DeleteBehavior.ClientCascade); // Shadow property;
     }
 }

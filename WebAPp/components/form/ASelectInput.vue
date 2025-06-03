@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { SelectOption } from '~/types/forms/SelectOption';
 
 const props = defineProps({
   name: {
@@ -28,8 +27,7 @@ const props = defineProps({
   },
   options: {
     type: Array<SelectOption>,
-    required: true,
-    default: () => [],
+    required: true
   },
   modelValue: {
     type: [String, Number],

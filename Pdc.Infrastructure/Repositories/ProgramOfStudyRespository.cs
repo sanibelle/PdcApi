@@ -61,7 +61,7 @@ public class ProgramOfStudyRespository : IProgramOfStudyRespository
             .Include(p => p.GeneralUnits)
             .Include(p => p.ComplementaryUnits)
             .Include(p => p.SpecificUnits)
-            .Include(p => p.OptionnalUnits)
+            .Include(p => p.OptionalUnits)
             .SingleOrDefaultAsync(x => x.Code == code);
         if (program == null)
         {

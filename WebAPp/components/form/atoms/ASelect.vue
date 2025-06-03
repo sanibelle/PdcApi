@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { SelectOption } from '~/types/forms/SelectOption';
 import { useField } from 'vee-validate';
 
 const props = defineProps({
@@ -56,7 +55,7 @@ watch(
 const onChange = async (event: Event): Promise<void> => {
   handleChange(event, !!errorMessage.value);
   const target = event.target as HTMLSelectElement;
-  const newValue: string = target.value;
+  const newValue = target.value === '' ? null : target.value;
   emit('update:modelValue', newValue);
 };
 
@@ -94,7 +93,7 @@ watch(
   position: relative;
   width: 100%;
 
-  .is-disabled {
+  &is-disabled {
     opacity: 0.7;
   }
 
@@ -135,7 +134,7 @@ watch(
   pointer-events: none;
   color: #64748b;
 
-  .is-disabled {
+  &.is-disabled {
     opacity: 0.5;
   }
 }

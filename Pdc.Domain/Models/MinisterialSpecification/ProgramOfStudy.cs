@@ -18,7 +18,7 @@ public class ProgramOfStudy // toujours issu d'un devis ministeriel
     /// <summary>
     /// Les unités des programmes optionnels
     /// </summary>
-    public Units? OptionnalUnits { get; set; }
+    public Units? OptionalUnits { get; set; }
     /// <summary>
     /// Les unités des cours généraux
     /// </summary>

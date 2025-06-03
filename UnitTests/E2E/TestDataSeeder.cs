@@ -42,7 +42,7 @@ public class TestDataSeeder
             .WithTotalDurationHours(4500)
             .WithPublishedOn(DateOnly.FromDateTime(DateTime.Now))
             .WithCompetencies(new List<CompetencyEntity>())
-            .WithOptionnalUnits(new Units(10, 1, 2))
+            .WithOptionalUnits(new Units(10, 1, 2))
             .WithSpecificUnits(new Units(60))
             .Build();
     }

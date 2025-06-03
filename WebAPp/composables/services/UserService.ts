@@ -1,5 +1,4 @@
 import { useApi } from './ApiClient';
-import type { User } from '~/types/Security/User';
 
 export const useUser = () => {
   const fetchUser = async (): Promise<User> => {

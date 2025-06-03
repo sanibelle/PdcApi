@@ -9,7 +9,7 @@ defineProps({
 
 <template>
   <transition name="fade">
-    <p v-if="message" class="error-message">{{ message }}</p>
+    <p v-if="message" class="error-message" role="alert" aria-live="assertive">{{ message }}</p>
   </transition>
 </template>
 

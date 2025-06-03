@@ -38,9 +38,20 @@ namespace Pdc.WebAPI.Controllers
         [HttpGet("login")]
         public IActionResult Login(string? uri)
         {
-            // TODO Changer localhost:3000 pour une url dans le appSettings.
-            return Challenge(new AuthenticationProperties { RedirectUri = string.IsNullOrEmpty(uri) ? "https://localhost:3000/" : uri },
-                OpenIdConnectDefaults.AuthenticationScheme);
+            // Load trusted redirect URIs and default from configuration
+            var allowed = (_configuration["AllowedOrigins"] ?? "")
+                                      .Split(',', StringSplitOptions.RemoveEmptyEntries);
+            var redirectUri = _configuration["DefaultRedirectUri"]
+                                     ?? throw new InvalidOperationException("No default redirect URI configured.");
+
+            if (!string.IsNullOrEmpty(uri)
+                && allowed.Contains(uri, StringComparer.OrdinalIgnoreCase))
+            {
+                redirectUri = uri;
+            }
+
+            return Challenge(new AuthenticationProperties { RedirectUri = redirectUri },
+                 OpenIdConnectDefaults.AuthenticationScheme);
         }
 
         [HttpGet("logout")]

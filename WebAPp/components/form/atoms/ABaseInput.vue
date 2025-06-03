@@ -93,7 +93,7 @@ watch(
     cursor: not-allowed;
   }
 
-  .base-input.error {
+  &.error {
     border-color: #ef4444;
   }
 }

@@ -19,7 +19,7 @@ public class ProgramOfStudyDTO
     /// <summary>
     /// Les unités optionnelles du programmes
     /// </summary>
-    public required Units OptionnalUnits { get; set; }
+    public required Units OptionalUnits { get; set; }
     /// <summary>
     /// Les unités des cours généraux
     /// </summary>

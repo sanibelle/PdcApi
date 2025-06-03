@@ -9,7 +9,7 @@ public class ProgramOfStudyEntityBuilder
 {
     private string _code = "420.B0";
     private Units? _specificUnits = new Units(26, 2, 3);
-    private Units? _optionnalUnits = new Units(16, 2, 3);
+    private Units? _optionalUnits = new Units(16, 2, 3);
     private Units _generalUnits = new Units(16, 2, 3);
     private Units _complementaryUnits = new Units(4);
     private string _name = "Techniques de l'informatique";
@@ -32,9 +32,9 @@ public class ProgramOfStudyEntityBuilder
         return this;
     }
 
-    public ProgramOfStudyEntityBuilder WithOptionnalUnits(Units optionnalUnits)
+    public ProgramOfStudyEntityBuilder WithOptionalUnits(Units optionalUnits)
     {
-        _optionnalUnits = optionnalUnits;
+        _optionalUnits = optionalUnits;
         return this;
     }
 
@@ -98,7 +98,7 @@ public class ProgramOfStudyEntityBuilder
         {
             Code = _code,
             SpecificUnits = _specificUnits,
-            OptionnalUnits = _optionnalUnits,
+            OptionalUnits = _optionalUnits,
             GeneralUnits = _generalUnits,
             ComplementaryUnits = _complementaryUnits,
             Name = _name,

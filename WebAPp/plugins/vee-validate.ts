@@ -31,7 +31,7 @@ export default defineNuxtPlugin(() => {
     if (!value) {
       return true;
     }
-    if (!(value instanceof Date) && isNaN(Date.parse(value))) {
+    if (!isDate(value)) {
       return false;
     }
     return true;

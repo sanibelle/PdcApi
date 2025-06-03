@@ -4,7 +4,6 @@ import { Calendar, type EventDropArg, type EventInput } from '@fullcalendar/core
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
-import { SemesterEnum } from 'types/enum/SemesterEnum';
 
 const { duration, semester, year } = defineProps<{
   duration: number;

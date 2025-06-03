@@ -40,7 +40,7 @@ const emit = defineEmits(['update:modelValue']);
 const validationRules = computed(() => {
   const rules = ['date'];
 
-  if (props.required !== null) {
+  if (props.required) {
     rules.push(`required`);
   }
   return rules.join('|');

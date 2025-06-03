@@ -151,7 +151,7 @@ namespace Pdc.Infrastructure.Migrations
                 {
                     Code = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SpecificUnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    OptionnalUnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    OptionalUnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     GeneralUnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ComplementaryUnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
@@ -175,8 +175,8 @@ namespace Pdc.Infrastructure.Migrations
                         principalTable: "Units",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ProgramOfStudies_Units_OptionnalUnitsId",
-                        column: x => x.OptionnalUnitsId,
+                        name: "FK_ProgramOfStudies_Units_OptionalUnitsId",
+                        column: x => x.OptionalUnitsId,
                         principalTable: "Units",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -255,7 +255,7 @@ namespace Pdc.Infrastructure.Migrations
                     UnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ProgramOfStudyCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsMandatory = table.Column<bool>(type: "bit", nullable: false),
-                    IsOptionnal = table.Column<bool>(type: "bit", nullable: false),
+                    IsOptional = table.Column<bool>(type: "bit", nullable: false),
                     StatementOfCompetency = table.Column<string>(type: "nvarchar(1500)", maxLength: 1500, nullable: false),
                     CurrentVersionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -708,11 +708,11 @@ namespace Pdc.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProgramOfStudies_OptionnalUnitsId",
+                name: "IX_ProgramOfStudies_OptionalUnitsId",
                 table: "ProgramOfStudies",
-                column: "OptionnalUnitsId",
+                column: "OptionalUnitsId",
                 unique: true,
-                filter: "[OptionnalUnitsId] IS NOT NULL");
+                filter: "[OptionalUnitsId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProgramOfStudies_SpecificUnitsId",

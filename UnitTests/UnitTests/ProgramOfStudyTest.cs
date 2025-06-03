@@ -44,12 +44,12 @@ public class ProgramOfStudyTest
 
         // Arrange
         _programOfStudyRepositoryMock.Setup(repo => repo.Add(It.IsAny<ProgramOfStudy>())).ReturnsAsync(throwsNotFoundProgram);
-        _programOfStudyRepositoryMock.Setup(repo => repo.Delete(It.IsAny<string>()));
+        _programOfStudyRepositoryMock.Setup(repo => repo.Delete(It.IsAny<string>())).Returns(Task.CompletedTask);
         _programOfStudyRepositoryMock.Setup(repo => repo.Update(It.IsAny<ProgramOfStudy>())).ReturnsAsync(existingProgram);
         _programOfStudyRepositoryMock.Setup(repo => repo.GetAll()).ReturnsAsync(new List<ProgramOfStudy> { throwsNotFoundProgram, existingProgram });
-        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsIn(existingProgram.Code))).ReturnsAsync(existingProgram);
+        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(c => c == existingProgram.Code))).ReturnsAsync(existingProgram);
         _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsNotIn(existingProgram.Code))).ThrowsAsync(new EntityNotFoundException(nameof(ProgramOfStudy), "12345"));
-        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsIn(codeOfAFakeProgram))).Throws(new EntityNotFoundException(nameof(ProgramOfStudy), codeOfAFakeProgram));
+        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(c => c == codeOfAFakeProgram))).Throws(new EntityNotFoundException(nameof(ProgramOfStudy), codeOfAFakeProgram));
     }
 
     [Test]
@@ -64,7 +64,7 @@ public class ProgramOfStudyTest
             SpecificDurationHours = 2010,
             TotalDurationHours = 5730,
             PublishedOn = new DateOnly(2020, 01, 01),
-            OptionnalUnits = new Units(16, 2, 3),
+            OptionalUnits = new Units(16, 2, 3),
             SpecificUnits = new Units(26, 2, 3)
         };
         // Act
@@ -87,7 +87,7 @@ public class ProgramOfStudyTest
             SpecificDurationHours = 2010,
             TotalDurationHours = 5730,
             PublishedOn = new DateOnly(2020, 01, 01),
-            OptionnalUnits = new Units(16, 2, 3),
+            OptionalUnits = new Units(16, 2, 3),
             SpecificUnits = new Units(26, 2, 3)
         };
         // Act
@@ -129,7 +129,7 @@ public class ProgramOfStudyTest
             SpecificDurationHours = 2010,
             TotalDurationHours = 5730,
             PublishedOn = new DateOnly(2020, 01, 01),
-            OptionnalUnits = new Units(16, 2, 3),
+            OptionalUnits = new Units(16, 2, 3),
             SpecificUnits = new Units(26, 2, 3)
         };
 
@@ -154,7 +154,7 @@ public class ProgramOfStudyTest
             SpecificDurationHours = 2010,
             TotalDurationHours = 5730,
             PublishedOn = new DateOnly(2020, 01, 01),
-            OptionnalUnits = new Units(16, 2, 3),
+            OptionalUnits = new Units(16, 2, 3),
             SpecificUnits = new Units(26, 2, 3)
         };
 

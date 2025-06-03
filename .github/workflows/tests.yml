@@ -1,0 +1,172 @@
+name: CI/CD Pipeline
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  SOLUTION_PATH: './Pdc.sln'
+  
+jobs:
+  # Build and test job
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+          
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.SOLUTION_PATH }}
+      
+    - name: Build solution
+      run: dotnet build ${{ env.SOLUTION_PATH }} --configuration ${{ matrix.configuration }} --no-restore
+      
+    - name: Run Unit Tests
+      run: |
+        dotnet test UnitTests/Pdc.Tests.csproj \
+          --configuration ${{ matrix.configuration }} \
+          --no-build \
+          --verbosity normal \
+          --collect:"XPlat Code Coverage" \
+          --results-directory ./coverage/unit \
+          --logger "trx;LogFileName=unit-test-results-${{ matrix.configuration }}.trx"
+          
+    - name: Run E2E Tests
+      run: |
+        dotnet test Pdc.E2ETests/Pdc.E2ETests.csproj \
+          --configuration ${{ matrix.configuration }} \
+          --no-build \
+          --verbosity normal \
+          --collect:"XPlat Code Coverage" \
+          --results-directory ./coverage/e2e \
+          --logger "trx;LogFileName=e2e-test-results-${{ matrix.configuration }}.trx"
+      
+    # Only generate coverage report for Release configuration
+    - name: Install ReportGenerator
+      if: matrix.configuration == 'Release'
+      run: dotnet tool install -g dotnet-reportgenerator-globaltool
+      
+    - name: Generate Code Coverage Report
+      if: matrix.configuration == 'Release'
+      run: |
+        reportgenerator \
+          -reports:"coverage/**/coverage.cobertura.xml" \
+          -targetdir:"coverage/report" \
+          -reporttypes:"Html;Cobertura;TextSummary;Badges"
+          
+    - name: Upload Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-${{ matrix.configuration }}
+        path: |
+          coverage/**/*.trx
+          
+    - name: Upload Coverage Report
+      uses: actions/upload-artifact@v4
+      if: matrix.configuration == 'Release' && always()
+      with:
+        name: coverage-report
+        path: coverage/report/
+        
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v4
+      if: matrix.configuration == 'Release'
+      with:
+        files: coverage/**/coverage.cobertura.xml
+        fail_ci_if_error: false
+        verbose: true
+        flags: unittests
+        name: codecov-umbrella
+        
+  # Code quality checks
+  code-quality:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Restore dependencies
+      run: dotnet restore ${{ env.SOLUTION_PATH }}
+      
+    - name: Run Code Analysis
+      run: |
+        dotnet build ${{ env.SOLUTION_PATH }} \
+          --configuration Release \
+          --verbosity normal \
+          /p:TreatWarningsAsErrors=true \
+          /p:WarningsAsErrors="" \
+          /p:WarningsNotAsErrors=""
+          
+  # Test summary job
+  test-summary:
+    runs-on: ubuntu-latest
+    needs: [build-and-test]
+    if: always()
+    
+    steps:
+    - name: Download test results
+      uses: actions/download-artifact@v4
+      with:
+        pattern: test-results-*
+        merge-multiple: true
+        path: ./test-results
+        
+    - name: Download coverage report
+      uses: actions/download-artifact@v4
+      continue-on-error: true
+      with:
+        name: coverage-report
+        path: ./coverage-report
+        
+    - name: Display Test Summary
+      run: |
+        echo "## 🧪 Test Results Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        # Count test result files
+        unit_tests=$(find ./test-results -name "*unit-test-results*.trx" | wc -l)
+        e2e_tests=$(find ./test-results -name "*e2e-test-results*.trx" | wc -l)
+        
+        echo "### Test Execution" >> $GITHUB_STEP_SUMMARY
+        echo "- Unit test configurations: $unit_tests" >> $GITHUB_STEP_SUMMARY
+        echo "- E2E test configurations: $e2e_tests" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ -f ./coverage-report/Summary.txt ]; then
+          echo "### 📊 Code Coverage" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          cat ./coverage-report/Summary.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "### 📁 Available Artifacts" >> $GITHUB_STEP_SUMMARY
+        echo "- Test results (TRX files)" >> $GITHUB_STEP_SUMMARY
+        echo "- Code coverage report (HTML)" >> $GITHUB_STEP_SUMMARY
+        echo "- Coverage data uploaded to Codecov" >> $GITHUB_STEP_SUMMARY

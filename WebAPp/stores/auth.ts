@@ -1,7 +1,5 @@
 import { ref, computed } from 'vue';
 import { useApi } from '~/composables/services/ApiClient';
-import type { User } from '~/types/Security/User';
-
 export const useAuthStore = defineStore(
   'auth',
   () => {
