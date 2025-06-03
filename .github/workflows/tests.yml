@@ -28,15 +28,9 @@ jobs:
       with:
         filters: |
           code:
-            - 'src/**'
-            - '**/*.cs'
-            - '**/*.csproj'
-            - '*.sln'
-            - '.github/workflows/**'
+            - 'Pdc.*/**'
           tests:
             - 'UnitTests/**'
-            - 'Pdc.E2ETests/**'
-            - 'test/**'
             
     - name: Check last workflow status
       id: last-status
@@ -197,7 +191,7 @@ jobs:
   code-quality:
     runs-on: ubuntu-latest
     needs: changes
-    if: github.event_name == 'pull_request' && needs.changes.outputs.code == 'true'
+    if: github.event_name == 'pull_request' && needs.changes.outputs.should-run-tests == 'true'
     
     steps:
     - name: Checkout code
