@@ -12,7 +12,7 @@ public class ComplementaryInformationEntity
     public required ChangeRecordEntity WrittenOnVersion { get; set; }
     public DateTime? ModifiedOn { get; set; }
     public DateTime CreatedOn { get; set; }
-    public IdentityUserEntity CreatedBy { get; set; }
+    public required IdentityUserEntity CreatedBy { get; set; }
 
     public required string Text { get; set; }
 

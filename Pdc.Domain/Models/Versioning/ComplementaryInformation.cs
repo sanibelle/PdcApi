@@ -8,7 +8,7 @@ public class ComplementaryInformation  // Informations supplémentaires comme de
     /// <summary>
     /// Version à laquelle l'information a été ajoutée
     /// </summary>
-    public required ChangeRecord WrittenOnVersion { get; set; }
+    public ChangeRecord? WrittenOnVersion { get; set; }
     public DateTime? ModifiedOn { get; set; }
     public required DateTime CreatedOn { get; set; }
     public required string Text { get; set; }

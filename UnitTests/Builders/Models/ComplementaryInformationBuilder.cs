@@ -8,8 +8,8 @@ public class ComplementaryInformationBuilder
     private Guid _id = Guid.NewGuid();
     private string _text = "Test DATA";
     private DateTime _modifiedOn = DateTime.Now;
-    private ChangeRecord _writtenOnVersion;
-    private User _createdBy;
+    private ChangeRecord? _writtenOnVersion;
+    private User _createdBy = new UserBuilder().Build();
 
     public ComplementaryInformationBuilder WithId(Guid id)
     {
