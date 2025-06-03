@@ -93,7 +93,7 @@ watch(
   position: relative;
   width: 100%;
 
-  &is-disabled {
+  .is-disabled {
     opacity: 0.7;
   }
 

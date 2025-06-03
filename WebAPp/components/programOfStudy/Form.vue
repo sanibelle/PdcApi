@@ -67,7 +67,7 @@ const options: SelectOption[] = Object.entries(ProgramType)
       <FormAUnitInput name="specificUnits" :label="t('specificUnits')" v-model="programOfStudy.specificUnits"
         :required="true" :hint="t('specificUnitsHint')" />
       <FormAUnitInput name="optionalUnits" :label="t('optionalUnits')" v-model="programOfStudy.optionalUnits"
-        :required="true" :hint="t('optionnalUnitsHint')" />
+        :required="true" :hint="t('optionalUnitsHint')" />
       <FormAUnitInput name="generalUnits" :label="t('generalUnits')" v-model="programOfStudy.generalUnits"
         :required="true" />
       <FormAUnitInput name="complementaryUnits" :label="t('complementaryUnits')"
@@ -101,7 +101,7 @@ const options: SelectOption[] = Object.entries(ProgramType)
     "generalUnits": "Unités des cours généraux (ex: philosophie, français)",
     "complementaryUnits": "Unités des complémentaires",
     "specificUnitsHint": "Indiquer le nombre d'unités maximales",
-    "optionnalUnitsHint": "Indiquer le nombre d'unités maximales",
+    "optionalUnitsHint": "Indiquer le nombre d'unités maximales",
     "codeExistingErrorMessage": "Le code de programme existe déjà.",
     "programType.DEC": "Technique",
     "programType.AEC": "Attestation d'études collégiales",

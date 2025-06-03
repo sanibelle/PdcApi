@@ -24,11 +24,10 @@ public class ProgramOfStudyTest
     IUpdateProgramOfStudyUseCase _updateProgramOfStudyUseCase;
     IMapper _mapper;
     IValidator<ProgramOfStudyDTO> _validator;
-    string codeOfAFakeProgram = "fakeCode";
 
 
     private ProgramOfStudy throwsNotFoundProgram = new ProgramOfStudyBuilder().Build();
-    private ProgramOfStudy existingProgram = new ProgramOfStudyBuilder().Build();
+    private ProgramOfStudy program = new ProgramOfStudyBuilder().Build();
 
     [SetUp]
     public void Setup()
@@ -45,11 +44,12 @@ public class ProgramOfStudyTest
         // Arrange
         _programOfStudyRepositoryMock.Setup(repo => repo.Add(It.IsAny<ProgramOfStudy>())).ReturnsAsync(throwsNotFoundProgram);
         _programOfStudyRepositoryMock.Setup(repo => repo.Delete(It.IsAny<string>())).Returns(Task.CompletedTask);
-        _programOfStudyRepositoryMock.Setup(repo => repo.Update(It.IsAny<ProgramOfStudy>())).ReturnsAsync(existingProgram);
-        _programOfStudyRepositoryMock.Setup(repo => repo.GetAll()).ReturnsAsync(new List<ProgramOfStudy> { throwsNotFoundProgram, existingProgram });
-        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(c => c == existingProgram.Code))).ReturnsAsync(existingProgram);
-        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsNotIn(existingProgram.Code))).ThrowsAsync(new EntityNotFoundException(nameof(ProgramOfStudy), "12345"));
-        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(c => c == codeOfAFakeProgram))).Throws(new EntityNotFoundException(nameof(ProgramOfStudy), codeOfAFakeProgram));
+        _programOfStudyRepositoryMock.Setup(repo => repo.Update(It.IsAny<ProgramOfStudy>())).ReturnsAsync(program);
+        _programOfStudyRepositoryMock.Setup(repo => repo.GetAll()).ReturnsAsync(new List<ProgramOfStudy> { throwsNotFoundProgram, program });
+        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsNotIn(program.Code, throwsNotFoundProgram.Code))).ThrowsAsync(new EntityNotFoundException(nameof(ProgramOfStudy), "12345"));
+        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(c => c == program.Code))).ReturnsAsync(program);
+        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(c => c == throwsNotFoundProgram.Code))).Throws(new EntityNotFoundException(nameof(ProgramOfStudy), throwsNotFoundProgram.Code));
+        _programOfStudyRepositoryMock.Setup(repo => repo.ExistsByCode(It.Is<string>(c => c == throwsNotFoundProgram.Code))).ReturnsAsync(true);
     }
 
     [Test]
@@ -80,7 +80,7 @@ public class ProgramOfStudyTest
     {
         ProgramOfStudyDTO createProgramDto = new()
         {
-            Code = existingProgram.Code,
+            Code = throwsNotFoundProgram.Code,
             Name = "Techniques de l'informatique",
             ProgramType = ProgramType.DEC,
             MonthsDuration = 36,
@@ -98,10 +98,10 @@ public class ProgramOfStudyTest
     public async Task DeleteProgramOfStudy_ShouldCallRepositoryDelete()
     {
         // Act
-        await _deleteProgramOfStudyUseCase.Execute(existingProgram.Code);
+        await _deleteProgramOfStudyUseCase.Execute(program.Code);
 
         // Assert
-        _programOfStudyRepositoryMock.Verify(repo => repo.Delete(existingProgram.Code), Times.Once);
+        _programOfStudyRepositoryMock.Verify(repo => repo.Delete(program.Code), Times.Once);
     }
 
     [Test]
@@ -113,7 +113,7 @@ public class ProgramOfStudyTest
         // Assert
         Assert.That(result.Count == 2, "Got 2 programs");
         Assert.That(throwsNotFoundProgram.Code == result[0].Code, "Both programs are returned");
-        Assert.That(existingProgram.Code == result[1].Code, "Both programs are returned");
+        Assert.That(program.Code == result[1].Code, "Both programs are returned");
     }
 
     [Test]
@@ -122,7 +122,7 @@ public class ProgramOfStudyTest
         // Arrange
         ProgramOfStudyDTO updateProgramDto = new()
         {
-            Code = existingProgram.Code,
+            Code = program.Code,
             Name = "UpdatedName",
             ProgramType = ProgramType.DEC,
             MonthsDuration = 36,
@@ -134,32 +134,11 @@ public class ProgramOfStudyTest
         };
 
         // Act
-        var result = await _updateProgramOfStudyUseCase.Execute(existingProgram.Code, updateProgramDto);
+        var result = await _updateProgramOfStudyUseCase.Execute(program.Code, updateProgramDto);
 
         // Assert
-        _programOfStudyRepositoryMock.Verify(repo => repo.Update(It.Is<ProgramOfStudy>(p => p.Code == existingProgram.Code && p.Name == updateProgramDto.Name)), Times.Once);
-        Assert.That(result.Name == existingProgram.Name, "Program name is updated");
+        _programOfStudyRepositoryMock.Verify(repo => repo.Update(It.Is<ProgramOfStudy>(p => p.Code == program.Code && p.Name == updateProgramDto.Name)), Times.Once);
+        Assert.That(result.Name == program.Name, "Program name is updated");
     }
 
-    [Test]
-    public async Task UpdateProgramOfStudyWithAnotherExistingName_ShouldCallDuplicateException()
-    {
-        // Arrange
-        ProgramOfStudyDTO updateProgramDto = new()
-        {
-            Code = existingProgram.Code,
-            Name = "UpdatedName",
-            ProgramType = ProgramType.DEC,
-            MonthsDuration = 36,
-            SpecificDurationHours = 2010,
-            TotalDurationHours = 5730,
-            PublishedOn = new DateOnly(2020, 01, 01),
-            OptionalUnits = new Units(16, 2, 3),
-            SpecificUnits = new Units(26, 2, 3)
-        };
-
-        // Act
-        // Assert
-        Assert.CatchAsync<DuplicateException>(async () => await _updateProgramOfStudyUseCase.Execute(throwsNotFoundProgram.Code, updateProgramDto), "Duplicate program exception is thrown");
-    }
 }

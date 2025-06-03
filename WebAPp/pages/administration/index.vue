@@ -14,7 +14,7 @@ onMounted(async () => {
   programsOfStudy.value = await fetchPrograms();
 });
 
-const handleSubmited = (programOfStudy: ProgramOfStudy) => {
+const handleSubmitted = (programOfStudy: ProgramOfStudy) => {
   programsOfStudy.value.unshift(programOfStudy);
   upsertProgramOfStudyModal.close()
 };
@@ -40,7 +40,7 @@ const upsertProgramOfStudyModal = useModal();
   </div>
 
   <CommonAModal v-model="upsertProgramOfStudyModal.isOpen.value" :title="t('title')" :hide-footer="true">
-    <ProgramOfStudyForm @submited="handleSubmited" :program="null" :isEdit="false" />
+    <ProgramOfStudyForm @submited="handleSubmitted" :program="null" :isEdit="false" />
   </CommonAModal>
 </template>
 
