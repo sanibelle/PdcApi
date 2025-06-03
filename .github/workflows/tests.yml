@@ -116,7 +116,6 @@ jobs:
       run: |
         dotnet test UnitTests/Pdc.Tests.csproj \
           --configuration ${{ matrix.configuration }} \
-          --no-build \
           --verbosity normal \
           --collect:"XPlat Code Coverage" \
           --results-directory ./coverage/unit \
@@ -126,7 +125,6 @@ jobs:
       run: |
         dotnet test Pdc.E2ETests/Pdc.E2ETests.csproj \
           --configuration ${{ matrix.configuration }} \
-          --no-build \
           --verbosity normal \
           --collect:"XPlat Code Coverage" \
           --results-directory ./coverage/e2e \
