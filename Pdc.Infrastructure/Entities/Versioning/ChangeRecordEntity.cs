@@ -27,7 +27,7 @@ public class ChangeRecordEntity
     public IEnumerable<ComplementaryInformationEntity> ComplementaryInformations { get; set; } = new List<ComplementaryInformationEntity>();
     public IEnumerable<ChangeDetailEntity> ChangeDetails { get; set; } = new List<ChangeDetailEntity>();
     public DateTime CreatedOn { get; set; }
-    public IdentityUserEntity CreatedBy { get; set; }
+    public required IdentityUserEntity CreatedBy { get; set; }
     /// <summary>
     /// Premet d'avoir plusieurs copies d'une version. Un seul est actif à la fois.
     /// </summary>

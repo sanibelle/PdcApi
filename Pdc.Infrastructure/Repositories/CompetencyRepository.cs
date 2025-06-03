@@ -36,7 +36,7 @@ public class CompetencyRepository : ICompetencyRespository
         IdentityUserEntity? user = _context.Users.FirstOrDefault(x => x.Id == currentUser.Id);
         if (user is null)
         {
-            throw new EntityNotFoundException(nameof(IdentityUserEntity), user.Id);
+            throw new EntityNotFoundException(nameof(IdentityUserEntity), currentUser.Id);
         }
         competencyEntity.SetCreatedBy(user);
         EntityEntry<CompetencyEntity> addedEntity = await _context.Competencies.AddAsync(competencyEntity);

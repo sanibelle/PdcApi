@@ -9,6 +9,7 @@ public class ChangeRecordEntityBuilder
     private List<ChangeDetailEntity> _changeDetails = new List<ChangeDetailEntity>();
     private List<ComplementaryInformationEntity> _complementaryInformations = new List<ComplementaryInformationEntity>();
     private DateTime _createdOn = new DateTime(2025, 04, 07);
+    private IdentityUserEntity _createdBy = new IdentityUserEntityBuilder().Build();
     private string _description = $"This is a test description value {Random.Shared.Next(0, 1000)}";
     private bool _isDraft = true;
     private ChangeRecordEntity? _nextVersion = null;
@@ -90,6 +91,12 @@ public class ChangeRecordEntityBuilder
         return this;
     }
 
+    public ChangeRecordEntityBuilder WithCreatedBy(IdentityUserEntity createdBy)
+    {
+        _createdBy = createdBy;
+        return this;
+    }
+
     public ChangeRecordEntity Build()
     {
         return new ChangeRecordEntity
@@ -103,7 +110,8 @@ public class ChangeRecordEntityBuilder
             NextVersion = _nextVersion,
             ParentVersion = _parentVersion,
             VersionNumber = _versionNumber,
-            ValidatedBy = _validatedBy
+            ValidatedBy = _validatedBy,
+            CreatedBy = _createdBy
         };
     }
 }
