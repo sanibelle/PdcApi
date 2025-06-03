@@ -114,7 +114,7 @@ jobs:
       
     - name: Run Tests
       run: |
-        dotnet test UnitTests/Pdc.Tests.csproj \
+        dotnet test Pdc.Tests/Pdc.Tests.csproj \
           --configuration ${{ matrix.configuration }} \
           --verbosity normal \
           --collect:"XPlat Code Coverage" \
@@ -202,7 +202,7 @@ jobs:
           /p:TreatWarningsAsErrors=true \
           /p:WarningsAsErrors="" \
           /p:WarningsNotAsErrors="" \
-          /p:ExcludeProjects="Pdc.Tests.csproj"
+          /p:SkipTestProjects=true
           
   # Test summary job - conditional
   test-summary:
