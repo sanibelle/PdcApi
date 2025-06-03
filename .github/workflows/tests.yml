@@ -202,7 +202,7 @@ jobs:
           /p:TreatWarningsAsErrors=true \
           /p:WarningsAsErrors="" \
           /p:WarningsNotAsErrors="" \
-          /p:ExcludeProjects="Pdc.Tests"
+          /p:ExcludeProjects="Pdc.Tests.csproj"
           
   # Test summary job - conditional
   test-summary:
