@@ -197,12 +197,11 @@ jobs:
     - name: Run Code Analysis
       run: |
         dotnet build ${{ env.SOLUTION_PATH }} \
-          --configuration Release \
+          --configuration CodeAnalysis \
           --verbosity normal \
           /p:TreatWarningsAsErrors=true \
           /p:WarningsAsErrors="" \
-          /p:WarningsNotAsErrors="" \
-          /p:SkipTestProjects=true
+          /p:WarningsNotAsErrors=""
           
   # Test summary job - conditional
   test-summary:
