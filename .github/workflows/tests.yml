@@ -7,6 +7,7 @@ on:
 env:
   DOTNET_VERSION: '9.0.x'
   SOLUTION_PATH: './Pdc.sln'
+  PR_TITLE: ${{ github.event.pull_request.title }}
   
 jobs:
   # Check what files have changed
@@ -23,7 +24,7 @@ jobs:
         fetch-depth: 0  # Need full history for proper change detection
         
     - name: Check for changes
-      uses: dorny/paths-filter@v2
+      uses: dorny/paths-filter@v3
       id: changes
       with:
         filters: |
@@ -55,7 +56,7 @@ jobs:
         LAST_STATUS="${{ steps.last-status.outputs.last-status }}"
         
         # Check if commit message contains force test keywords
-        COMMIT_MSG="${{ github.event.pull_request.title }} ${{ github.event.head_commit.message }}"
+        COMMIT_MSG="$PR_TITLE ${{ github.event.head_commit.message }}"
         FORCE_TESTS=$(echo "$COMMIT_MSG" | grep -iE '\[run tests\]|\[force tests\]|\[test\]' || true)
         
         echo "Code changed: $CODE_CHANGED"
