@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Week } from 'types/Week';
 import ADate from 'components/common/ADate.vue';
 
 interface Props {

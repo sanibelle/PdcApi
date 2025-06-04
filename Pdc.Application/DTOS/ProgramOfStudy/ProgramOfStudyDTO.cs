@@ -7,7 +7,7 @@ public class ProgramOfStudyDTO
 {
     public required string Code { get; set; } //420.B0
     public required string Name { get; set; } //Techniques de l'informatique
-    public required SanctionType Sanction { get; set; } //DEC, PRE-U
+    public required ProgramType ProgramType { get; set; }
     public int MonthsDuration { get; set; } // 36 mois
     public int SpecificDurationHours { get; set; } // 2010
     public int TotalDurationHours { get; set; } // 5730
@@ -19,7 +19,7 @@ public class ProgramOfStudyDTO
     /// <summary>
     /// Les unités optionnelles du programmes
     /// </summary>
-    public required Units OptionnalUnits { get; set; }
+    public required Units OptionalUnits { get; set; }
     /// <summary>
     /// Les unités des cours généraux
     /// </summary>
@@ -28,8 +28,6 @@ public class ProgramOfStudyDTO
     /// Les unités des cours complémentaires
     /// </summary>
     public Units? ComplementaryUnits { get; set; }
-    public ICollection<CompetencyDTO> CompetencyDTOs { get; set; } = new List<CompetencyDTO>();
-
     public ProgramOfStudyDTO()
     {
     }

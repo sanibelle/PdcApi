@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Pdc.Application.DTOS;
+using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
 
@@ -27,6 +28,10 @@ public class UpdateProgramOfStudy : IUpdateProgramOfStudyUseCase
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
+        }
+        if (updateProgramOfStudyDto.Code != code && await _programOfStudyRespository.ExistsByCode(updateProgramOfStudyDto.Code))
+        {
+            throw new DuplicateException("programOfStudyCodeExists");
         }
         ProgramOfStudy existingProgramOfStudy = await _programOfStudyRespository.FindByCode(code);
         _mapper.Map(updateProgramOfStudyDto, existingProgramOfStudy);

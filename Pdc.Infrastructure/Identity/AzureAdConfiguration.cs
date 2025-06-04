@@ -53,6 +53,8 @@ public static class AzureAdConfiguration
                     return Task.CompletedTask;
                 }
             };
+            options.ExpireTimeSpan = TimeSpan.FromHours(1); // Set the expiration time for the cookie
+            options.SlidingExpiration = true; // Enable sliding expiration
         })
         .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
         {
@@ -117,7 +119,6 @@ public static class AzureAdConfiguration
         {
             throw new Exception("context.Principal should not be null");
         }
-        //"a7a5abae-0223-4dd3-b505-a0520aafe834"
         string? objectId = context.Principal.FindFirstValue(AzureAdClaimTypes.ObjectId);
         if (string.IsNullOrEmpty(objectId))
         {
@@ -142,6 +143,7 @@ public static class AzureAdConfiguration
             await HandleIdentityResultAsync(() => userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, fullName)), "Failed to add claim");
             await HandleIdentityResultAsync(() => userManager.AddLoginAsync(user, new UserLoginInfo("AzureAD", objectId, user.UserName)), "Failed to add login");
         }
+        //TODO gérer l'expiration du cookie.
         await signInManager.SignInAsync(user, isPersistent: true);
     }
 

@@ -8,6 +8,9 @@ export default defineNuxtConfig({
       cert: 'certificates/localhost.pem',
     },
   },
+  build: {
+    transpile: ['@vuepic/vue-datepicker'],
+  },
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
@@ -27,6 +30,9 @@ export default defineNuxtConfig({
   },
   plugins: ['~/plugins/opentelemetry'],
   i18n: {
+    bundle: {
+      optimizeTranslationDirective: false,
+    },
     strategy: 'prefix_except_default',
     customRoutes: 'page',
     defaultLocale: 'fr',
@@ -35,10 +41,22 @@ export default defineNuxtConfig({
       useCookie: true,
     },
   },
-  modules: ['@nuxtjs/i18n', '@pinia/nuxt'],
+  modules: [
+    '@nuxtjs/i18n',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
+    'nuxt-security',
+    '@vee-validate/nuxt',
+  ],
   runtimeConfig: {
     public: {
       apiBaseUrl: '',
     },
+  },
+  imports: {
+    dirs: ['composables/**', 'shared/types/**'],
+  },
+  future: {
+    compatibilityVersion: 4,
   },
 });

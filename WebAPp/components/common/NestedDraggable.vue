@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { VueDraggable, type SortableEvent } from 'vue-draggable-plus';
-import type NestableItem from '~/types/syllabus/NestableItem';
 
 const emit = defineEmits(['end', 'update:modelValue']);
 const { modelValue, group, idsToHighlight } = defineProps({
@@ -38,30 +37,18 @@ const isCompleted = (item: NestableItem): boolean => {
 </script>
 
 <template>
-  <VueDraggable
-    v-model="items"
-    :animation="150"
-    ghostClass="ghost"
-    :group="{ name: `${group}`, pull: 'clone' }"
-    @end="onMoveEnd"
-  >
+  <VueDraggable v-model="items" :animation="150" ghostClass="ghost" :group="{ name: `${group}`, pull: 'clone' }"
+    @end="onMoveEnd">
     <div v-for="item in items" :key="item.id" class="item" :data-id="item.id">
       <div class="flex flex-row">
-        <p
-          :class="{
-            completed: isCompleted(item),
-            highlight: idsToHighlight.some((x) => x == item.id),
-          }"
-        >
+        <p :class="{
+          completed: isCompleted(item),
+          highlight: idsToHighlight.some((x) => x == item.id),
+        }">
           {{ item.name }}
         </p>
-        <CommonNestedDraggable
-          v-if="item.children && item.children.length"
-          v-model="item.children"
-          :group="group + 1"
-          :ids-to-highlight="idsToHighlight"
-          @end="(id) => emit('end', id)"
-        />
+        <CommonNestedDraggable v-if="item.children && item.children.length" v-model="item.children" :group="group + 1"
+          :ids-to-highlight="idsToHighlight" @end="(id) => emit('end', id)" />
       </div>
     </div>
   </VueDraggable>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 import { VueDraggable } from 'vue-draggable-plus';
-import type NestableItem from '~/types/syllabus/NestableItem';
 
 const complete = (item: NestableItem, id: number | undefined = undefined): void => {
   if (!item.children) {
@@ -116,19 +115,10 @@ const onHighlight = (ids: number[]) => {
   </pre>
   <section id="building" class="py-20 bg-white flex flex-row items-center">
     <CommonNestedDraggable @end="onMoveEnd" v-model="list" :ids-to-highlight="idsToHighLight" />
-    <VueDraggable
-      v-model="list2"
-      :animation="150"
-      ghostClass="ghost"
-      class="right min-h-[300px] min-w-[300px]"
-      :group="{ name: 'syllabus', pull: false, put: true }"
-    >
+    <VueDraggable v-model="list2" :animation="150" ghostClass="ghost" class="right min-h-[300px] min-w-[300px]"
+      :group="{ name: 'syllabus', pull: false, put: true }">
       <template v-for="item in list2" :key="item.id" class="item">
-        <SyllabusContent
-          :item="item"
-          @on-remove="onRemove"
-          @onHighlight="onHighlight"
-        ></SyllabusContent>
+        <SyllabusContent :item="item" @on-remove="onRemove" @onHighlight="onHighlight"></SyllabusContent>
       </template>
     </VueDraggable>
   </section>
@@ -138,9 +128,11 @@ const onHighlight = (ids: number[]) => {
 .left {
   flex: 1;
 }
+
 .right {
   flex: 1;
 }
+
 .container {
   border: solid 1px black;
 }
@@ -152,6 +144,7 @@ const onHighlight = (ids: number[]) => {
   cursor: move;
   border: solid 1px black;
 }
+
 .highlight {
   background-color: yellow;
 }

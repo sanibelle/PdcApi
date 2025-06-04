@@ -17,8 +17,8 @@
       }
     },
     "IIS Express": {
-      "commandName": "IISExpress",https://localhost:44360/swagger/index.html
-      "launchBrowser": true,
+      "commandName": "IISExpress",
+      "launchBrowser": false,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

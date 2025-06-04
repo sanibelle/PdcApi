@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type NestableItem from '~/types/syllabus/NestableItem';
 
 const emit = defineEmits(['onRemove', 'onHighlight']);
 const { item, depth } = defineProps({
@@ -23,22 +22,12 @@ const onHighlight = (id?: number) => {
 </script>
 
 <template>
-  <div
-    :class="{ item: depth == 0 }"
-    :style="{ paddingLeft: `${depth * 1}rem` }"
-    @mouseover.stop="onHighlight(item.id)"
-    @mouseleave="onHighlight()"
-  >
+  <div :class="{ item: depth == 0 }" :style="{ paddingLeft: `${depth * 1}rem` }" @mouseover.stop="onHighlight(item.id)"
+    @mouseleave="onHighlight()">
     {{ item.name }}
     <button @click="onRemove(item.id)">poubelle</button>
-    <SyllabusContent
-      v-for="child in item.children"
-      :key="child.id"
-      :item="child"
-      :depth="depth + 1"
-      @on-highlight="(ids) => emit('onHighlight', [...ids, item.id])"
-      @on-remove="onRemove"
-    />
+    <SyllabusContent v-for="child in item.children" :key="child.id" :item="child" :depth="depth + 1"
+      @on-highlight="(ids) => emit('onHighlight', [...ids, item.id])" @on-remove="onRemove" />
   </div>
 </template>
 

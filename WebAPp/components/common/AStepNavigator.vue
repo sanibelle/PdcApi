@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Step } from 'types/common/Step';
 
 const { steps } = defineProps<{
   steps: Step[];
@@ -25,18 +24,12 @@ const handleSelectStep = (currentStepIndex: number) => {
     <div class="w-full max-w-4xl bg-white rounded-lg shadow-md">
       <template v-for="(step, index) in steps" :key="index">
         <div class="flex border-b">
-          <button
-            class="flex-1 py-4 px-6 text-sm font-medium focus:outline-none transition-colors duration-200"
-            :class="{
-              disabled: step.isDisabled,
-              active: step.isSelected,
-              test: step.isCompleted,
-            }"
-            @click="handleSelectStep(index)"
-            :aria-selected="step.isSelected"
-            :disabled="step.isDisabled"
-            role="tab"
-          >
+          <button class="flex-1 py-4 px-6 text-sm font-medium focus:outline-none transition-colors duration-200" :class="{
+            disabled: step.isDisabled,
+            active: step.isSelected,
+            test: step.isCompleted,
+          }" @click="handleSelectStep(index)" :aria-selected="step.isSelected" :disabled="step.isDisabled"
+            role="tab">
             {{ step.title }}
           </button>
         </div>

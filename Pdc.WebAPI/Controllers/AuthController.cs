@@ -36,11 +36,22 @@ namespace Pdc.WebAPI.Controllers
         }
 
         [HttpGet("login")]
-        public IActionResult Login()
+        public IActionResult Login(string? uri)
         {
-            // TODO redirige sur la page d'accueil de mon app.
-            return Challenge(new AuthenticationProperties { RedirectUri = "https://localhost:3000/" },
-                OpenIdConnectDefaults.AuthenticationScheme);
+            // Load trusted redirect URIs and default from configuration
+            var allowed = (_configuration["AllowedOrigins"] ?? "")
+                                      .Split(',', StringSplitOptions.RemoveEmptyEntries);
+            var redirectUri = _configuration["DefaultRedirectUri"]
+                                     ?? throw new InvalidOperationException("No default redirect URI configured.");
+
+            if (!string.IsNullOrEmpty(uri)
+                && allowed.Contains(uri, StringComparer.OrdinalIgnoreCase))
+            {
+                redirectUri = uri;
+            }
+
+            return Challenge(new AuthenticationProperties { RedirectUri = redirectUri },
+                 OpenIdConnectDefaults.AuthenticationScheme);
         }
 
         [HttpGet("logout")]

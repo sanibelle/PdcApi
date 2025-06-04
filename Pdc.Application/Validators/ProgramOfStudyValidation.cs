@@ -16,9 +16,9 @@ public class ProgramOfStudyValidation : AbstractValidator<ProgramOfStudyDTO>
             .NotEmpty()
             .MaximumLength(255);
 
-        RuleFor(x => x.Sanction)
-            .Must(s => Enum.IsDefined(typeof(SanctionType), s))
-            .WithMessage("Invalid sanction type.");
+        RuleFor(x => x.ProgramType)
+            .Must(s => Enum.IsDefined(typeof(ProgramType), s))
+            .WithMessage("Invalid program type.");
 
         RuleFor(x => x.MonthsDuration)
             .GreaterThan(0);
@@ -32,7 +32,7 @@ public class ProgramOfStudyValidation : AbstractValidator<ProgramOfStudyDTO>
         RuleFor(x => x.PublishedOn)
             .NotEmpty();
 
-        RuleFor(x => x.OptionnalUnits)
+        RuleFor(x => x.OptionalUnits)
             .NotEmpty();
 
         RuleFor(x => x.SpecificUnits)

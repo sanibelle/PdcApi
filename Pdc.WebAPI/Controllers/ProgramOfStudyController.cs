@@ -54,13 +54,12 @@ public class ProgramOfStudyController : ControllerBase
 
     [Authorize(Roles = Roles.StudyProgram)]
     [HttpPost]
-    public async Task<ActionResult<ProgramOfStudyDTO>> Create([FromBody] ProgramOfStudyDTO createProgramOfStudyDTO)
+    public async Task<ActionResult<ProgramOfStudyDTO>> Create(ProgramOfStudyDTO programOfStudy)
     {
-        var programOfStudy = await _createUseCase.Execute(createProgramOfStudyDTO);
         return CreatedAtAction(
             nameof(Get),
             new { code = programOfStudy.Code },
-            programOfStudy);
+            await _createUseCase.Execute(programOfStudy));
     }
 
     [Authorize]

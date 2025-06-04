@@ -61,12 +61,18 @@ public class ProgramOfStudyRespository : IProgramOfStudyRespository
             .Include(p => p.GeneralUnits)
             .Include(p => p.ComplementaryUnits)
             .Include(p => p.SpecificUnits)
-            .Include(p => p.OptionnalUnits)
+            .Include(p => p.OptionalUnits)
             .SingleOrDefaultAsync(x => x.Code == code);
         if (program == null)
         {
             throw new EntityNotFoundException(nameof(ProgramOfStudy), code);
         }
         return program;
+    }
+
+    public async Task<bool> ExistsByCode(string code)
+    {
+        return await _context.ProgramOfStudies
+            .AnyAsync(x => x.Code == code);
     }
 }

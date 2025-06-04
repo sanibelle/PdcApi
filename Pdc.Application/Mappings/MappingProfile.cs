@@ -13,9 +13,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        // ProgramOfStudy
+        // ProgramOfStudy  
         CreateMap<ProgramOfStudy, ProgramOfStudyDTO>().ReverseMap();
-        // Comptency
+        // Comptency  
         CreateMap<CompetencyDTO, MinisterialCompetency>().ReverseMap();
         CreateMap<CompetencyElementDTO, MinisterialCompetencyElement>().ReverseMap();
         CreateMap<ChangeableDTO, RealisationContext>().ReverseMap();
@@ -25,6 +25,6 @@ public class MappingProfile : Profile
         CreateMap<ComplementaryInformationDTO, ComplementaryInformation>()
         .PreserveReferences()
         .ReverseMap()
-        .ForMember(dest => dest.WrittenOnVersion, opt => opt.MapFrom(src => src.WrittenOnVersion.VersionNumber));
+        .ForMember(dest => dest.WrittenOnVersion, opt => opt.MapFrom(src => src.WrittenOnVersion != null ? src.WrittenOnVersion.VersionNumber : default));
     }
 }

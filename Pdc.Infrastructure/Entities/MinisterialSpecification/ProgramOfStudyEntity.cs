@@ -1,5 +1,5 @@
-﻿using Pdc.Domain.Models.Common;
-using Pdc.Domain.Enums;
+﻿using Pdc.Domain.Enums;
+using Pdc.Domain.Models.Common;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 
 namespace Pdc.Infrastructure.Entities.CourseFramework;
@@ -17,7 +17,7 @@ public class ProgramOfStudyEntity // toujours issu d'un devis ministeriel
     /// <summary>
     /// Les unités des programmes optionnels
     /// </summary>
-    public Units? OptionnalUnits { get; set; }
+    public Units? OptionalUnits { get; set; }
     /// <summary>
     /// Les unités des cours généraux
     /// </summary>
@@ -27,7 +27,7 @@ public class ProgramOfStudyEntity // toujours issu d'un devis ministeriel
     /// </summary>
     public Units ComplementaryUnits { get; set; } = new Units(4);
     public required string Name { get; set; } //Techniques de l'informatique
-    public required SanctionType Sanction { get; set; } //DEC, PRE-U
+    public required ProgramType ProgramType { get; set; } //DEC, PRE-U
     public int MonthsDuration { get; set; } // 36 mois
     public int SpecificDurationHours { get; set; } // 2010
     public int TotalDurationHours { get; set; } // 5730

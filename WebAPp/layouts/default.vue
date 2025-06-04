@@ -8,15 +8,17 @@ const authStore = useAuthStore();
     <header class="bg-white shadow-md">
       POC semaines plan de cours
       <NuxtLink to="/">Home</NuxtLink>
-      <div>
-        <div v-if="authStore.isAuthenticated">
-          Bonjour, {{ authStore.user?.name }}!
-          <button @click="authStore.logout">Logout</button>
+      <ClientOnly>
+        <div>
+          <div v-if="authStore.isAuthenticated">
+            Bonjour, {{ authStore.user?.name }}!
+            <button @click="authStore.logout">Logout</button>
+          </div>
+          <div v-else>
+            <button @click="authStore.login">Login</button>
+          </div>
         </div>
-        <div v-else>
-          <button @click="authStore.login">Login</button>
-        </div>
-      </div>
+      </ClientOnly>
     </header>
 
     <!-- Main content slot -->

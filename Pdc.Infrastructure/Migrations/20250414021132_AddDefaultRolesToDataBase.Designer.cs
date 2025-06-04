@@ -363,13 +363,13 @@ namespace Pdc.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<Guid?>("OptionnalUnitsId")
+                    b.Property<Guid?>("OptionalUnitsId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly>("PublishedOn")
                         .HasColumnType("date");
 
-                    b.Property<int>("Sanction")
+                    b.Property<int>("ProgramType")
                         .HasColumnType("int");
 
                     b.Property<int>("SpecificDurationHours")
@@ -389,9 +389,9 @@ namespace Pdc.Infrastructure.Migrations
                     b.HasIndex("GeneralUnitsId")
                         .IsUnique();
 
-                    b.HasIndex("OptionnalUnitsId")
+                    b.HasIndex("OptionalUnitsId")
                         .IsUnique()
-                        .HasFilter("[OptionnalUnitsId] IS NOT NULL");
+                        .HasFilter("[OptionalUnitsId] IS NOT NULL");
 
                     b.HasIndex("SpecificUnitsId")
                         .IsUnique()
@@ -825,9 +825,9 @@ namespace Pdc.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
-                    b.HasOne("Pdc.Domain.Models.Common.Units", "OptionnalUnits")
+                    b.HasOne("Pdc.Domain.Models.Common.Units", "OptionalUnits")
                         .WithOne()
-                        .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "OptionnalUnitsId")
+                        .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "OptionalUnitsId")
                         .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.HasOne("Pdc.Domain.Models.Common.Units", "SpecificUnits")
@@ -839,7 +839,7 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.Navigation("GeneralUnits");
 
-                    b.Navigation("OptionnalUnits");
+                    b.Navigation("OptionalUnits");
 
                     b.Navigation("SpecificUnits");
                 });

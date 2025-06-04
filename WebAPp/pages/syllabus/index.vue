@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import AWeek from 'components/common/AWeek.vue';
-import type { Week } from 'types/Week';
 
 const weeks: Week[] = [
   {
