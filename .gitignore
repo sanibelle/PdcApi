@@ -72,4 +72,4 @@ node_modules/
 
 # App Settings
 appsettings.*.json
-!appsettings.test.json
+!appsettings.Test.json

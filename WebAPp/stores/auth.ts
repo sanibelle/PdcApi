@@ -1,4 +1,3 @@
-import { ref, computed } from 'vue';
 import { useApi } from '~/composables/services/ApiClient';
 export const useAuthStore = defineStore(
   'auth',
@@ -19,7 +18,7 @@ export const useAuthStore = defineStore(
 
     const logout = async () => {
       //TODO
-      await useApi().Get('logout');
+      await useApi().Get('/auth/logout');
     };
 
     return {

@@ -28,7 +28,7 @@ const { createProgram } = useProgramOfStudy();
 const onSubmit = handleSubmit(async () => {
 
   try {
-    emit('submit', await createProgram(programOfStudy as ProgramOfStudy));
+    emit('submited', await createProgram(programOfStudy as ProgramOfStudy));
   } catch (e) {
     if (e instanceof DuplicateException) {
       codeExistingErrorMessage.value = t('codeExistingErrorMessage');

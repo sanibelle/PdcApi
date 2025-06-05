@@ -36,18 +36,18 @@ namespace Pdc.WebAPI.Controllers
         }
 
         [HttpGet("login")]
-        public IActionResult Login(string? uri)
+        public IActionResult Login(Uri? uri)
         {
             // Load trusted redirect URIs and default from configuration
-            var allowed = (_configuration["AllowedOrigins"] ?? "")
+            var allowed = (_configuration["Cors:AllowedOrigins"] ?? "")
                                       .Split(',', StringSplitOptions.RemoveEmptyEntries);
             var redirectUri = _configuration["DefaultRedirectUri"]
                                      ?? throw new InvalidOperationException("No default redirect URI configured.");
 
-            if (!string.IsNullOrEmpty(uri)
-                && allowed.Contains(uri, StringComparer.OrdinalIgnoreCase))
+            if (uri is not null
+                && allowed.Any(x => x.Contains(uri.Authority, StringComparison.OrdinalIgnoreCase)))
             {
-                redirectUri = uri;
+                redirectUri = uri.ToString();
             }
 
             return Challenge(new AuthenticationProperties { RedirectUri = redirectUri },
