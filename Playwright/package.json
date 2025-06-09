@@ -1,0 +1,14 @@
+{
+  "name": "Playwright",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/sanibelle/PdcApi",
+  "author": "Antoine Chagnon-Michaud",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.15.30"
+  },
+  "scripts": {}
+}

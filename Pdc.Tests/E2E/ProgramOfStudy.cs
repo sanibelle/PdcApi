@@ -2,8 +2,9 @@
 using FluentAssertions;
 using Pdc.Application.DTOS;
 using Pdc.Domain.Models.Common;
-using Pdc.Tests.Builders.DTOS;
 using System.Net.Http.Json;
+using TestDataSeeder;
+using TestDataSeeder.Builders.DTOS;
 
 namespace Pdc.E2ETests;
 
@@ -22,7 +23,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
 
         Assert.That(programs, Is.Not.Null);
         Assert.That(programs.Count, Is.GreaterThan(0));
-        Assert.That(programs.Any(p => p.Code == TestDataSeeder.ProgramOfStudyEntity.Code), Is.True);
+        Assert.That(programs.Any(p => p.Code == DataSeeder.ProgramOfStudyEntity.Code), Is.True);
     }
 
     [Test]
@@ -80,7 +81,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
         // Arrange
         ProgramOfStudyDTO newProgram = new ProgramOfStudyDTOBuilder().Build();
 
-        ProgramOfStudyDTO updatedProgramData = (ProgramOfStudyDTO)new ProgramOfStudyDTOBuilder()
+        ProgramOfStudyDTO updatedProgramData = new ProgramOfStudyDTOBuilder()
             .WithCode("421.B5")
             .WithName("Techniques de l'informatique 2.0")
             .WithProgramType(Pdc.Domain.Enums.ProgramType.AEC)

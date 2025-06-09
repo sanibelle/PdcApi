@@ -11,7 +11,7 @@ using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Infrastructure.Exceptions;
-using Pdc.Tests.Builders.Models;
+using TestDataSeeder.Builders.Models;
 
 namespace Pdc.Tests.UnitTests;
 

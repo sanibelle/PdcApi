@@ -1,15 +1,14 @@
 
 // Program.cs
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Pdc.Application;
 using Pdc.Infrastructure;
 using Pdc.Infrastructure.Identity;
 using Pdc.WebAPI.Middlewares;
 using Pdc.WebAPI.Services;
+using System.Text.Json;
 
-// Fix for CS0119: 'UserControllerService' is a type, which is not valid in the given context
-// The issue is that the `Main` method is incorrectly trying to accept `UserControllerService` as a parameter.
-// The `Main` method should not have additional parameters. Instead, `UserControllerService` should be registered in the DI container.
 
 public class Program
 {
@@ -31,6 +30,7 @@ public class Program
         builder.Services.AddSwaggerGen();
         Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
 
+        // SECURE: Only add test authentication in Test environment
         if (!string.IsNullOrEmpty(builder.Configuration["AzureAd:Instance"]))
         {
             builder.Services.AddAzureAdAuthentication(builder.Configuration);
@@ -52,6 +52,8 @@ public class Program
                       .AllowCredentials();
             });
         });
+        builder.Services.AddHealthChecks();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -70,6 +72,21 @@ public class Program
         app.UseAuthorization();
         app.MapControllers();
 
+        app.MapHealthChecks("/api/health");
+        app.MapHealthChecks("/api/ping", new HealthCheckOptions
+        {
+            ResponseWriter = async (context, report) =>
+            {
+                context.Response.ContentType = "application/json";
+                var response = new
+                {
+                    status = report.Status.ToString(),
+                    timestamp = DateTime.UtcNow,
+                    duration = report.TotalDuration
+                };
+                await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+            }
+        });
         app.Run();
     }
 }

@@ -3,8 +3,9 @@ using FluentAssertions;
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
 using Pdc.Application.Validators;
-using Pdc.Tests.Builders.DTOS;
 using System.Net.Http.Json;
+using TestDataSeeder;
+using TestDataSeeder.Builders.DTOS;
 
 namespace Pdc.E2ETests;
 
@@ -15,7 +16,7 @@ public class CompetencyApiTests : ApiTestBase
     [Test]
     public async Task GivenExistingProgram_WhenCreatingCompetency_ThenShouldCreateCompetency()
     {
-        string _programCode = TestDataSeeder.ProgramOfStudyEntity.Code;
+        string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
         ComplementaryInformationDTO realisationContextComplementaryInformation, performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
         ChangeableDTO realisationContext, performanceCriteria;
         CompetencyElementDTO competencyElement;
@@ -73,14 +74,14 @@ public class CompetencyApiTests : ApiTestBase
     [Test]
     public async Task GivenExistingCompetency_WhenCreatingCompetency_ThenShouldReturnAnError()
     {
-        string _programCode = TestDataSeeder.ProgramOfStudyEntity.Code;
+        string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
         ComplementaryInformationDTO realisationContextComplementaryInformation, performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
         ChangeableDTO realisationContext, performanceCriteria;
         CompetencyElementDTO competencyElement;
         CompetencyDTO competencyDTO;
         CreateCompetency(out realisationContextComplementaryInformation, out performanceCriteriaComplementaryInformation, out competencyElementComplementaryInformation, out realisationContext, out performanceCriteria, out competencyElement, out competencyDTO);
         CompetencyValidation validation = new CompetencyValidation();
-        competencyDTO.Code = TestDataSeeder.CompetencyEntity.Code;
+        competencyDTO.Code = DataSeeder.CompetencyEntity.Code;
         validation.Validate(competencyDTO).IsValid.Should().BeTrue();
         var createResponse = await _client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);
         var responseContent = await createResponse.Content.ReadAsStringAsync();

@@ -8,7 +8,7 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <Configurations>Debug;Release;CodeAnalysis</Configurations>
+    <Configurations>Debug;Release;CodeAnalysis;Tests</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,6 +33,7 @@
     <ProjectReference Include="..\Pdc.Domain\Pdc.Domain.csproj" />
     <ProjectReference Include="..\Pdc.Infrastructure\Pdc.Infrastructure.csproj" />
     <ProjectReference Include="..\Pdc.WebAPI\Pdc.WebAPI.csproj" />
+    <ProjectReference Include="..\TestDataSeeder\TestDataSeeder.csproj" />
   </ItemGroup>
 
   <ItemGroup>
