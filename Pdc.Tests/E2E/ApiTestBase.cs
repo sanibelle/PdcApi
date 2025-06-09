@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pdc.Infrastructure.Identity;
-using Pdc.Infrastructure.Identity.TestAuthentication;
 using TestDataSeeder;
 
 namespace Pdc.E2ETests;
@@ -51,12 +50,6 @@ public class ApiTestBase
                     config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                           .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: false, reloadOnChange: true)
                           .AddEnvironmentVariables();
-                });
-
-                builder.ConfigureServices(services =>
-                {
-                    services.AddScoped<DataSeeder>();
-                    services.AddTestAuthentication();
                 });
             });
     }

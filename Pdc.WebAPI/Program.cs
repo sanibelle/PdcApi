@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Pdc.Application;
 using Pdc.Infrastructure;
 using Pdc.Infrastructure.Identity;
+using Pdc.Infrastructure.Identity.TestAuthentication;
 using Pdc.WebAPI.Middlewares;
 using Pdc.WebAPI.Services;
 using System.Text.Json;
+using TestDataSeeder;
 
 
 public class Program
@@ -31,7 +33,12 @@ public class Program
         Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
 
         // SECURE: Only add test authentication in Test environment
-        if (!string.IsNullOrEmpty(builder.Configuration["AzureAd:Instance"]))
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Test")
+        {
+            builder.Services.AddScoped<DataSeeder>();
+            builder.Services.AddTestAuthentication();
+        }
+        else if (!string.IsNullOrEmpty(builder.Configuration["AzureAd:Instance"]))
         {
             builder.Services.AddAzureAdAuthentication(builder.Configuration);
         }
