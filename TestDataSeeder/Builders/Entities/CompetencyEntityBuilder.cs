@@ -9,13 +9,13 @@ public class CompetencyEntityBuilder
 {
     private string _code = "00SU";
     private Units? _units = new Units(3);
-    private ProgramOfStudyEntity _programOfStudy = new ProgramOfStudyEntityBuilder().Build();
+    private ProgramOfStudyEntity? _programOfStudy;
     private bool _isMandatory = true;
     private bool _isOptionnal = false;
-    private string _statementOfCompetency = "Effectuer le déploiement de serveurs intranet";
+    private string _statementOfCompetency = "Effectuer le dÃ©ploiement de serveurs intranet";
     private IList<RealisationContextEntity> _realisationContexts = new List<RealisationContextEntity>();
     private IList<CompetencyElementEntity> _competencyElements = new List<CompetencyElementEntity>();
-    private ChangeRecordEntity _currentVersion;
+    private ChangeRecordEntity? _currentVersion;
 
     public CompetencyEntityBuilder WithCode(string code)
     {
@@ -89,7 +89,7 @@ public class CompetencyEntityBuilder
         {
             Code = _code,
             Units = _units,
-            ProgramOfStudy = _programOfStudy,
+            ProgramOfStudy = _programOfStudy ??  new ProgramOfStudyEntityBuilder().Build(),
             IsMandatory = _isMandatory,
             IsOptionnal = _isOptionnal,
             StatementOfCompetency = _statementOfCompetency,

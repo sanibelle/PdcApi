@@ -174,7 +174,7 @@ public class MinisterialCompetencyTest
             .WithPosition(1)
             .AddPerformanceCriteria(performanceCriteria)
             .WithId(_competencyElement.Id)
-            .AddComplementaryInformations(complementaryInformation)
+            .AddComplementaryInformation(complementaryInformation)
             .BuildCompetencyElement();
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
@@ -301,7 +301,7 @@ public class MinisterialCompetencyTest
         var competencyElement = new CompetencyElementDTOBuilder()
             .WithId(_competencyElement.Id)
             .WithPosition(1)
-            .AddComplementaryInformations(complementaryInformation)
+            .AddComplementaryInformation(complementaryInformation)
             .BuildCompetencyElement();
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
@@ -330,7 +330,7 @@ public class MinisterialCompetencyTest
             .AddPerformanceCriteria(performanceCriteria)
             .WithPosition(1)
             .WithId(_competencyElement.Id)
-            .AddComplementaryInformations(complementaryInformation)
+            .AddComplementaryInformation(complementaryInformation)
             .BuildCompetencyElement();
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithCompetencyElements(new List<CompetencyElementDTO> { competencyElement })

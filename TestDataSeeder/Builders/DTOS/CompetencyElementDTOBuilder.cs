@@ -34,28 +34,9 @@ public class CompetencyElementDTOBuilder
         return this;
     }
 
-    internal CompetencyElementDTOBuilder AddComplementaryInformation(ComplementaryInformationDTO complementaryInformation)
-    {
-        ComplementaryInformations.Add(complementaryInformation);
-        return this;
-    }
 
-    public CompetencyElementDTOBuilder WithComplementaryInformations(List<ChangeableDTO> performanceCriterias)
-    {
-        _performanceCriterias = performanceCriterias;
-        return this;
-    }
-    public CompetencyElementDTOBuilder WithPerformanceCriterias(List<ChangeableDTO> performanceCriterias)
-    {
-        _performanceCriterias = performanceCriterias;
-        return this;
-    }
 
-    public CompetencyElementDTOBuilder AddComplementaryInformations(ComplementaryInformationDTO complementaryInformation)
-    {
-        ComplementaryInformations.Add(complementaryInformation);
-        return this;
-    }
+
     public CompetencyElementDTOBuilder AddPerformanceCriteria(ChangeableDTO performanceCriteria)
     {
         _performanceCriterias.Add(performanceCriteria);

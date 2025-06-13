@@ -28,7 +28,8 @@ const upsertProgramOfStudyModal = useModal();
   </h1>
   <section>
     <div class="scholar-row">
-      <button @click="upsertProgramOfStudyModal.open()" class="scholar-btn">
+      <button @click="upsertProgramOfStudyModal.open()" class="scholar-btn" id="create-program-btn">
+        <span class="material-icons">add</span>
         {{ t('createButton') }}
       </button>
     </div>

@@ -24,8 +24,8 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "IIS Express Tests": {
-      "commandName": "IISExpress",
+    "Test": {
+      "commandName": "Project",
       "launchBrowser": false,
       "launchUrl": "swagger",
       "environmentVariables": {

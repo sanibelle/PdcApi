@@ -8,6 +8,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  id: {
+    type: String,
+    default: '',
+  },
 });
 
 const { t } = useI18n();
@@ -15,7 +19,7 @@ const { t } = useI18n();
 
 <template>
   <div class="wrapper">
-    <FormAtomsAButton :is-disabled="isDisabled || isSubmitting">
+    <FormAtomsAButton :is-disabled="isDisabled || isSubmitting" :id="id">
       <template v-if="isSubmitting">
         {{ t('submiting') }}
       </template>

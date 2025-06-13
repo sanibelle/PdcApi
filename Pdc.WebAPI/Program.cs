@@ -16,6 +16,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        Boolean isTest = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Test";
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
@@ -33,7 +34,7 @@ public class Program
         Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
 
         // SECURE: Only add test authentication in Test environment
-        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Test")
+        if (isTest)
         {
             builder.Services.AddScoped<DataSeeder>();
             builder.Services.AddTestAuthentication();
@@ -77,8 +78,11 @@ public class Program
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();
+        if (isTest)
+        {
+            app.UseMapSeederDataRoute();
+        }
         app.MapControllers();
-
         app.MapHealthChecks("/api/health");
         app.MapHealthChecks("/api/ping", new HealthCheckOptions
         {

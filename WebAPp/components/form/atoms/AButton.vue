@@ -4,11 +4,15 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  id: {
+    type: String,
+    default: '',
+  },
 });
 </script>
 
 <template>
-  <button type="submit" :disabled="isDisabled">
+  <button type="submit" :disabled="isDisabled" :id="id">
     <slot></slot>
   </button>
 </template>

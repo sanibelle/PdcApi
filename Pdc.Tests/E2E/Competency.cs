@@ -106,7 +106,7 @@ public class CompetencyApiTests : ApiTestBase
         competencyElement =new CompetencyElementDTOBuilder()
             .AddPerformanceCriteria(performanceCriteria)
             .WithPosition(1)
-            .AddComplementaryInformations(competencyElementComplementaryInformation)
+            .AddComplementaryInformation(competencyElementComplementaryInformation)
             .BuildCompetencyElement();
         competencyDTO =new CompetencyDTOBuilder()
             .AddCompetencyElements(competencyElement)
