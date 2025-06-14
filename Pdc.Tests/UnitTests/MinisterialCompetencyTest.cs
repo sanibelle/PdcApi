@@ -304,8 +304,8 @@ public class MinisterialCompetencyTest
             .AddComplementaryInformation(complementaryInformation)
             .BuildCompetencyElement();
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
-            .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
-            .WithCompetencyElements(new List<CompetencyElementDTO> { competencyElement })
+            .WithRealisationContexts([realisationContext])
+            .WithCompetencyElements([competencyElement])
             .WithCode(_competency2.Code)
             .Build();
 

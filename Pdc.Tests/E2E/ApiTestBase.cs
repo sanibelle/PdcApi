@@ -10,9 +10,9 @@ namespace Pdc.E2ETests;
 public class ApiTestBase
 {
     private static readonly Lazy<WebApplicationFactory<Program>> _lazyFactory =
-        new Lazy<WebApplicationFactory<Program>>(CreateFactory);
+        new(CreateFactory);
     private static readonly Lazy<Task> _lazyDataSeeding =
-        new Lazy<Task>(SeedDataAsync);
+        new(SeedDataAsync);
 
     // Static property to access the shared factory
     protected static WebApplicationFactory<Program> Factory => _lazyFactory.Value;

@@ -14,16 +14,16 @@ jobs:
       with:
         node-version: lts/*
     
-    - name: Install dependencies Frontend
+    - name: Install dependencies Playwright
       uses: borales/actions-yarn@v4
       with:
+        cmd: install
+      working-directory: Playwright
+
     - name: Install dependencies WebApp
        uses: borales/actions-yarn@v4
        with:
          cmd: install
-      working-directory: WebAPp
-      with:
-        cmd: install
       working-directory: WebAPp
     
     - name: Install Playwright Browsers

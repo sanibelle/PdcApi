@@ -116,9 +116,12 @@ public class CompetencyApiTests : ApiTestBase
 
     private void AssertComplementarytInformation(ComplementaryInformationDTO? i, ComplementaryInformationDTO? competencyElementComplementaryInformation)
     {
-        Assert.That(i?.Id != Guid.Empty || i.Id != null, "guid is not empty");
-        Assert.That(i?.WrittenOnVersion != null, "version is found");
-        Assert.That(i?.WrittenOnVersion == 1, "new version is always 1");
+        using (Assert.EnterMultipleScope())
+        {
+            Assert.That(i?.Id != Guid.Empty || i.Id != null, "guid is not empty");
+            Assert.That(i?.WrittenOnVersion != null, "version is found");
+            Assert.That(i?.WrittenOnVersion == 1, "new version is always 1");
+        }
         i.Should().BeEquivalentTo(competencyElementComplementaryInformation, options =>
            options.Excluding(x => x.WrittenOnVersion)
            .Excluding(x => x.CreatedBy));

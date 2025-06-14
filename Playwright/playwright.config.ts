@@ -29,7 +29,7 @@ export default defineConfig({
    timeout: 120000,
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-        baseURL: 'https://localhost:3000/',
+        baseURL: 'http://localhost:3000/',
 
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
@@ -70,15 +70,13 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
     webServer: [
     {
-      command: 'cd ../Pdc.WebAPI && dotnet run --urls "https://localhost:44360" --environment Test',
-      url: 'https://localhost:44360/init',
-      ignoreHTTPSErrors: true,
+      command: 'cd ../Pdc.WebAPI && dotnet run --launch-profile Test',
+      url: 'https://localhost:5001/init',
       reuseExistingServer: !process.env.CI,
     },
     {
-      command: 'cd ../WebAPp && yarn run dev',
-      url: 'https://localhost:3000',
-      ignoreHTTPSErrors: true,
+      command: 'cd ../WebAPp && yarn run playwright',
+      url: 'http://localhost:3000',
       reuseExistingServer: !process.env.CI,
     }
   ],

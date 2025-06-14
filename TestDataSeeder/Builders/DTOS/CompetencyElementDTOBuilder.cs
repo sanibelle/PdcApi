@@ -7,8 +7,8 @@ public class CompetencyElementDTOBuilder
     private Guid? _id = Guid.NewGuid();
     private string _value = "Default Value";
     private int? _position = null;
-    protected List<ComplementaryInformationDTO> ComplementaryInformations = new List<ComplementaryInformationDTO>();
-    private ICollection<ChangeableDTO> _performanceCriterias = new List<ChangeableDTO>();
+    protected List<ComplementaryInformationDTO> ComplementaryInformations = [];
+    private ICollection<ChangeableDTO> _performanceCriterias = [];
 
     public CompetencyElementDTOBuilder WithId(Guid? id)
     {
@@ -34,12 +34,19 @@ public class CompetencyElementDTOBuilder
         return this;
     }
 
-
-
-
     public CompetencyElementDTOBuilder AddPerformanceCriteria(ChangeableDTO performanceCriteria)
     {
         _performanceCriterias.Add(performanceCriteria);
+        return this;
+    }
+    public CompetencyElementDTOBuilder WithPerformanceCriterias(List<ChangeableDTO> performanceCriterias)
+    {
+        _performanceCriterias = performanceCriterias;
+        return this;
+    }
+    public CompetencyElementDTOBuilder AddComplementaryInformation(ComplementaryInformationDTO complementaryInformation)
+    {
+        ComplementaryInformations.Add(complementaryInformation);
         return this;
     }
 
@@ -54,6 +61,5 @@ public class CompetencyElementDTOBuilder
             PerformanceCriterias = _performanceCriterias
         };
     }
-
 
 }

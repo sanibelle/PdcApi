@@ -1,12 +1,17 @@
 import { resolve } from 'node:path';
+import { config } from 'dotenv'
 
+const isPlaywrightEnv = !!process.env.PLAYWRIGHT_TEST;
+if (isPlaywrightEnv)
+  config({ path: '.env.playwright' })
+console.log('Using environment:', isPlaywrightEnv ? 'playwright' : 'default');
 export default defineNuxtConfig({
   // Utilisé pour le https en local pour que les cookie secure soient acceptés
   devServer: {
-    https: {
+    https: isPlaywrightEnv ? {
       key: 'certificates/localhost-key.pem',
       cert: 'certificates/localhost.pem',
-    },
+    } : undefined,
   },
   build: {
     transpile: ['@vuepic/vue-datepicker'],

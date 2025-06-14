@@ -7,27 +7,19 @@ type TestFixtures = {
 };
 
 export const test = base.extend<TestFixtures>({
-  authenticatedPage: async ({ page }, use) => {
-    // Set default admin user
+  userPage: async ({ page }, use) => {
     await page.setExtraHTTPHeaders({
-      'Test-User': 'admin@test.com'
+      'Test-User': 'TestUser'
     });
     await use(page);
   },
 
   adminPage: async ({ page }, use) => {
     await page.setExtraHTTPHeaders({
-      'Test-User': 'admin@test.com'
+      'Test-User': 'TestAdmin'
     });
     await use(page);
   },
-
-  userPage: async ({ page }, use) => {
-    await page.setExtraHTTPHeaders({
-      'Test-User': 'user@test.com'
-    });
-    await use(page);
-  }
 });
 
 export { expect } from '@playwright/test';
