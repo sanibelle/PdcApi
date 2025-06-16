@@ -3,28 +3,47 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  test:
-    timeout-minutes: 15
+  install-dependencies:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory: [Playwright, WebAPp]
     steps:
-    
     - uses: actions/checkout@v4
 
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
     
-    - name: Install dependencies Playwright
+    - name: Install dependencies in ${{ matrix.directory }}
       uses: borales/actions-yarn@v4
       with:
         cmd: install
-      working-directory: Playwright
+      working-directory: ${{ matrix.directory }}
 
-    - name: Install dependencies WebApp
-       uses: borales/actions-yarn@v4
-       with:
-         cmd: install
-      working-directory: WebAPp
+    - name: Cache node_modules for ${{ matrix.directory }}
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ matrix.directory }}/node_modules
+        key: ${{ runner.os }}-${{ matrix.directory }}-${{ hashFiles(format('{0}/yarn.lock', matrix.directory)) }}
+
+  test:
+    needs: install-dependencies
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Restore cached node_modules for Playwright
+      uses: actions/cache/restore@v4
+      with:
+        path: Playwright/node_modules
+        key: ${{ runner.os }}-Playwright-${{ hashFiles('Playwright/yarn.lock') }}
+
+    - name: Restore cached node_modules for WebAPp
+      uses: actions/cache/restore@v4
+      with:
+        path: WebAPp/node_modules
+        key: ${{ runner.os }}-WebAPp-${{ hashFiles('WebAPp/yarn.lock') }}
     
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
@@ -38,5 +57,5 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
-        path: playwright-report/
-        retention-days: 30
+        path: Playwright/playwright-report/
+        retention-days: 7
