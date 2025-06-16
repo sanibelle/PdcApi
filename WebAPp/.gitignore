@@ -1,4 +1,4 @@
-# Nuxt dev/build outputs
+,e# Nuxt dev/build outputs
 .output
 .data
 .nuxt
@@ -20,7 +20,5 @@ logs
 
 # Local env files
 .env
-.env.*
-!.env.example
 
 /certificates

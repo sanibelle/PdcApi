@@ -49,7 +49,6 @@ public class Program
         builder.Services.AddScoped<UserControllerService>();
         builder.Services.AddSingleton<IAuthorizationHandler, AdminAuthorizationOverrideHandler>();
 
-        // Configure CORS TODO spécifier les headers.
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("DefaultPolicy", policy =>

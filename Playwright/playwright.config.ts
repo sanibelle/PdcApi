@@ -71,7 +71,7 @@ export default defineConfig({
     webServer: [
     {
       command: 'cd ../Pdc.WebAPI && dotnet run --launch-profile Test',
-      url: 'https://localhost:5001/init',
+      url: 'http://localhost:5001/init',
       reuseExistingServer: !process.env.CI,
     },
     {
