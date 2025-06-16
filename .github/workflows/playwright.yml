@@ -32,18 +32,37 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
+    
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
 
     - name: Restore cached node_modules for Playwright
       uses: actions/cache/restore@v4
       with:
         path: Playwright/node_modules
         key: ${{ runner.os }}-Playwright-${{ hashFiles('Playwright/yarn.lock') }}
+        fail-on-cache-miss: true
 
     - name: Restore cached node_modules for WebAPp
       uses: actions/cache/restore@v4
       with:
         path: WebAPp/node_modules
         key: ${{ runner.os }}-WebAPp-${{ hashFiles('WebAPp/yarn.lock') }}
+        fail-on-cache-miss: true
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: Restore .NET dependencies
+      run: dotnet restore Pdc.sln
+      
+    - name: Build .NET solution
+      run: dotnet build Pdc.sln --configuration Release --no-restore
     
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
@@ -52,6 +71,8 @@ jobs:
     - name: Run Playwright tests
       run: npx playwright test
       working-directory: Playwright
+      env:
+        CI: true
 
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
