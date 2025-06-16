@@ -41,9 +41,14 @@ public class TestAuthenticationHandler : AuthenticationHandler<TestAuthenticatio
         // Add standard claims
         var claimsList = new List<Claim>(claims)
         {
-            new Claim(ClaimTypes.Name, user.UserName),
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
         };
+
+        if (user.UserName is not null)
+        {
+            claimsList.Add(new(ClaimTypes.Name, user.UserName));
+
+        }
 
         // Add role claims
         foreach (var role in roles)

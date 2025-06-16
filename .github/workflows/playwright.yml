@@ -19,7 +19,7 @@ jobs:
       uses: borales/actions-yarn@v4
       with:
         cmd: install
-      working-directory: ${{ matrix.directory }}
+      dir: ${{ matrix.directory }}
 
     - name: Cache node_modules for ${{ matrix.directory }}
       uses: actions/cache/save@v4

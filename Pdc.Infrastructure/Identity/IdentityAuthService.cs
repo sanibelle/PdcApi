@@ -63,11 +63,7 @@ public class IdentityAuthService : IAuthService
         if (user == null || !user.Identity?.IsAuthenticated == false)
             return false;
 
-        var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId is null)
-        {
-            throw new Exception("userId is null");
-        }
+        var userId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new Exception("userId is null");
         var identityUser = await _userManager.FindByIdAsync(userId);
 
         return identityUser != null && await _userManager.IsInRoleAsync(identityUser, role);
@@ -85,10 +81,7 @@ public class IdentityAuthService : IAuthService
 
     public async Task AssignRoleAsync(string userId, string role)
     {
-        var identityUser = await _userManager.FindByIdAsync(userId);
-        if (identityUser == null)
-            throw new EntityNotFoundException(nameof(IdentityUserEntity), userId);
-
+        var identityUser = await _userManager.FindByIdAsync(userId) ?? throw new EntityNotFoundException(nameof(IdentityUserEntity), userId);
         var result = await _userManager.AddToRoleAsync(identityUser, role);
     }
 }
