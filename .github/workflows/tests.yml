@@ -16,7 +16,10 @@ jobs:
     outputs:
       code-changed: ${{ steps.changes.outputs.code }}
       tests-changed: ${{ steps.changes.outputs.tests }}
+      playwright-changed: ${{ steps.changes.outputs.playwright }}
+      webapp-changed: ${{ steps.changes.outputs.webapp }}
       should-run-tests: ${{ steps.decide.outputs.should-run }}
+      should-run-playwright: ${{ steps.decide.outputs.should-run-playwright }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -32,6 +35,10 @@ jobs:
             - 'Pdc.*/**'
           tests:
             - 'UnitTests/**'
+          playwright:
+            - 'Playwright/**'
+          webapp:
+            - 'WebAPp/**'
             
     - name: Check last workflow status
       id: last-status
@@ -53,14 +60,19 @@ jobs:
       run: |
         CODE_CHANGED="${{ steps.changes.outputs.code }}"
         TESTS_CHANGED="${{ steps.changes.outputs.tests }}"
+        PLAYWRIGHT_CHANGED="${{ steps.changes.outputs.playwright }}"
+        WEBAPP_CHANGED="${{ steps.changes.outputs.webapp }}"
         LAST_STATUS="${{ steps.last-status.outputs.last-status }}"
         
         # Check if commit message contains force test keywords
         COMMIT_MSG="$PR_TITLE ${{ github.event.head_commit.message }}"
         FORCE_TESTS=$(echo "$COMMIT_MSG" | grep -iE '\[run tests\]|\[force tests\]|\[test\]' || true)
+        FORCE_PLAYWRIGHT=$(echo "$COMMIT_MSG" | grep -iE '\[run playwright\]|\[force playwright\]|\[e2e\]' || true)
         
         echo "Code changed: $CODE_CHANGED"
         echo "Tests changed: $TESTS_CHANGED"
+        echo "Playwright changed: $PLAYWRIGHT_CHANGED"
+        echo "WebApp changed: $WEBAPP_CHANGED"
         echo "Last status: $LAST_STATUS"
         echo "Force tests: $([ -n "$FORCE_TESTS" ] && echo 'true' || echo 'false')"
         
@@ -81,7 +93,7 @@ jobs:
           echo "⏭️ Skipping tests - no relevant changes and last run was successful"
         fi
 
-  # Build and test job - now conditional
+  # Build and test job
   build-and-test:
     runs-on: ubuntu-latest
     needs: changes
@@ -159,6 +171,68 @@ jobs:
         verbose: true
         flags: unittests
         name: codecov-umbrella
+
+  # Playwright E2E Tests
+  playwright-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.should-run-tests == 'true'
+
+    steps:
+    
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+
+    - name: Install dependencies in Playwright
+      uses: borales/actions-yarn@v4
+      with:
+        cmd: install
+        dir: Playwright
+
+    - name: Install dependencies in WebAPp
+      uses: borales/actions-yarn@v4
+      with:
+        cmd: install
+        dir: WebAPp
+
+    - name: Restore cached node_modules for Playwright
+      uses: actions/cache/restore@v4
+      with:
+        path: Playwright/node_modules
+        key: ${{ runner.os }}-Playwright-${{ hashFiles('Playwright/yarn.lock') }}
+        fail-on-cache-miss: true
+
+    - name: Restore cached node_modules for WebAPp
+      uses: actions/cache/restore@v4
+      with:
+        path: WebAPp/node_modules
+        key: ${{ runner.os }}-WebAPp-${{ hashFiles('WebAPp/yarn.lock') }}
+        fail-on-cache-miss: true
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: Restore .NET dependencies
+      run: dotnet restore Pdc.sln
+      
+    - name: Build .NET solution
+      run: dotnet build Pdc.sln --configuration Release --no-restore
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+      working-directory: Playwright
+    
+    - name: Run Playwright tests
+      run: npx playwright test
+      working-directory: Playwright
+      env:
+        CI: true
 
   # Skipped tests notification
   tests-skipped:
