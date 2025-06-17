@@ -234,6 +234,14 @@ jobs:
       env:
         CI: true
 
+    - name: Upload Playwright Report
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: Playwright/playwright-report/
+        retention-days: 7
+
   # Skipped tests notification
   tests-skipped:
     runs-on: ubuntu-latest
@@ -281,7 +289,7 @@ jobs:
   # Test summary job - conditional
   test-summary:
     runs-on: ubuntu-latest
-    needs: [changes, build-and-test]
+    needs: [changes, build-and-test, playwright-tests]
     if: always() && needs.changes.outputs.should-run-tests == 'true'
     
     steps:
@@ -298,6 +306,13 @@ jobs:
       with:
         name: coverage-report
         path: ./coverage-report
+
+    - name: Download Playwright report
+      uses: actions/download-artifact@v4
+      continue-on-error: true
+      with:
+        name: playwright-report
+        path: ./playwright-report
         
     - name: Display Test Summary
       run: |
@@ -305,12 +320,21 @@ jobs:
         echo "" >> $GITHUB_STEP_SUMMARY
         
         # Count test result files
-        unit_tests=$(find ./test-results -name "*unit-test-results*.trx" | wc -l)
-        e2e_tests=$(find ./test-results -name "*e2e-test-results*.trx" | wc -l)
+        unit_tests=$(find ./test-results -name "*unit-test-results*.trx" 2>/dev/null | wc -l)
+        
+        # Check Playwright test status
+        playwright_status="❌ Failed or not run"
+        if [ -f ./playwright-report/index.html ]; then
+          playwright_status="✅ Completed - Report available"
+        elif [ "${{ needs.playwright-tests.result }}" == "success" ]; then
+          playwright_status="✅ Completed - No failures"
+        elif [ "${{ needs.playwright-tests.result }}" == "skipped" ]; then
+          playwright_status="⏭️ Skipped"
+        fi
         
         echo "### Test Execution" >> $GITHUB_STEP_SUMMARY
         echo "- Unit test configurations: $unit_tests" >> $GITHUB_STEP_SUMMARY
-        echo "- E2E test configurations: $e2e_tests" >> $GITHUB_STEP_SUMMARY
+        echo "- Playwright E2E tests: $playwright_status" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         
         if [ -f ./coverage-report/Summary.txt ]; then
@@ -322,6 +346,9 @@ jobs:
         fi
         
         echo "### 📁 Available Artifacts" >> $GITHUB_STEP_SUMMARY
-        echo "- Test results (TRX files)" >> $GITHUB_STEP_SUMMARY
+        echo "- Unit test results (TRX files)" >> $GITHUB_STEP_SUMMARY
         echo "- Code coverage report (HTML)" >> $GITHUB_STEP_SUMMARY
         echo "- Coverage data uploaded to Codecov" >> $GITHUB_STEP_SUMMARY
+        if [ -f ./playwright-report/index.html ]; then
+          echo "- 🎭 Playwright test report (HTML)" >> $GITHUB_STEP_SUMMARY
+        fi
