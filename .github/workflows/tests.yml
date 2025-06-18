@@ -222,7 +222,7 @@ jobs:
       run: dotnet restore Pdc.sln
       
     - name: Build .NET solution
-      run: dotnet build Pdc.sln --configuration Release --no-restore
+      run: dotnet build Pdc.sln --configuration Test --no-restore
     
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps

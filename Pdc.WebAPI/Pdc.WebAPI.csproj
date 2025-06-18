@@ -20,7 +20,10 @@
     <ProjectReference Include="..\Pdc.Application\Pdc.Application.csproj" />
     <ProjectReference Include="..\Pdc.Domain\Pdc.Domain.csproj" />
     <ProjectReference Include="..\Pdc.Infrastructure\Pdc.Infrastructure.csproj" />
-    <ProjectReference Include="..\TestDataSeeder\TestDataSeeder.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'TEST'">
+	<ProjectReference Include="..\TestDataSeeder\TestDataSeeder.csproj" />
   </ItemGroup>
 
 </Project>
