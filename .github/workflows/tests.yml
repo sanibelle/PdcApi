@@ -98,9 +98,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: changes
     if: needs.changes.outputs.should-run-tests == 'true'
-    strategy:
-      matrix:
-        configuration: [Debug, Release]
     
     steps:
     - name: Checkout code
@@ -123,16 +120,16 @@ jobs:
       run: dotnet restore ${{ env.SOLUTION_PATH }}
       
     - name: Build solution
-      run: dotnet build ${{ env.SOLUTION_PATH }} --configuration ${{ matrix.configuration }} --no-restore
+      run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Test --no-restore
       
     - name: Run Tests
       run: |
         dotnet test Pdc.Tests/Pdc.Tests.csproj \
-          --configuration ${{ matrix.configuration }} \
+          --configuration Test \
           --verbosity normal \
           --collect:"XPlat Code Coverage" \
           --results-directory ./coverage/unit \
-          --logger "trx;LogFileName=unit-test-results-${{ matrix.configuration }}.trx"
+          --logger "trx;LogFileName=unit-test-results-Test.trx"
           
     # Only generate coverage report for Release configuration
     - name: Install ReportGenerator
@@ -151,7 +148,7 @@ jobs:
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: test-results-${{ matrix.configuration }}
+        name: test-results-Test
         path: |
           coverage/**/*.trx
           
