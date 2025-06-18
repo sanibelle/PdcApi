@@ -1,7 +1,6 @@
 import { test as base, Page } from '@playwright/test';
 
 type TestFixtures = {
-  authenticatedPage: Page;
   adminPage: Page;
   userPage: Page;
 };

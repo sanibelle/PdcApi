@@ -2,10 +2,6 @@
 import { useField } from 'vee-validate';
 
 const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
   name: {
     type: String,
     required: true,
@@ -69,7 +65,7 @@ watch(
 </script>
 
 <template>
-  <input :name="name" :id="id" :value="value" :type="type" :placeholder="placeholder" :disabled="disabled"
+  <input :name="name" :value="value" :type="type" :placeholder="placeholder" :disabled="disabled"
     class="base-input" :class="{ error: errorMessage }" @input="onChange" @blur="onBlur" />
 </template>
 

@@ -6,18 +6,17 @@ defineProps({
   },
 });
 
-const ref = useTemplateRef('ref');
+const errorRef = ref<HTMLParagraphElement | null>(null)
 
-const  scrollTo = (element: HTMLParagraphElement  | null) => { 
-  element?.parentElement?.scrollIntoView({ behavior: 'smooth' }) 
+const scrollTo = async () => {
+  await nextTick()
+  errorRef.value?.parentElement?.scrollIntoView({ behavior: 'smooth' })
 }
-
 </script>
 
 <template>
-  
-  <transition name="fade" @after-enter="scrollTo(ref)">
-    <p v-if="message" ref="ref" class="error-message" role="alert" aria-live="assertive">{{ message }}</p>
+  <transition name="fade" @after-enter="scrollTo">
+    <p v-if="message" ref="errorRef" class="error-message" role="alert" aria-live="assertive">{{ message }}</p>
   </transition>
 </template>
 

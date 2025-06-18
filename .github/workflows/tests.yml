@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   pull_request:
-    branches: [ main, develop ]
+    branches: [main]
 
 env:
   DOTNET_VERSION: '9.0.x'

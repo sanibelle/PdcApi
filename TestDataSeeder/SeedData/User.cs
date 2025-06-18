@@ -5,7 +5,7 @@ namespace TestDataSeeder.SeedData;
 
 internal class User
 {
-    private UserManager<IdentityUserEntity> _userManager;
+    private readonly UserManager<IdentityUserEntity> _userManager;
     public User(UserManager<IdentityUserEntity> userManager)
     {
         _userManager = userManager;

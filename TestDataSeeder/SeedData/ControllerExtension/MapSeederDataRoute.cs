@@ -32,7 +32,7 @@ public static class UseSeederDataExtensions
             }
             catch (Exception ex)
             {
-                return Results.Problem($"Error seeding database: {ex.Message}");
+                return Results.Problem($"Error seeding database: {ex}");
             }
         });
         return app;

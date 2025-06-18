@@ -42,7 +42,7 @@ public class CompetencyApiTests : ApiTestBase
                 .Excluding(x => x.ComplementaryInformations)
                 .Excluding(x => x.Id));
 
-            AssertComplementarytInformation(r?.ComplementaryInformations?.FirstOrDefault(), realisationContextComplementaryInformation);
+            AssertComplementaryInformation(r?.ComplementaryInformations?.FirstOrDefault(), realisationContextComplementaryInformation);
         }
 
         // NOTE le foreach a un seul element
@@ -55,7 +55,7 @@ public class CompetencyApiTests : ApiTestBase
                 .Excluding(x => x.PerformanceCriterias)
                 .Excluding(x => x.ComplementaryInformations));
 
-            AssertComplementarytInformation(c?.ComplementaryInformations?.FirstOrDefault(), competencyElementComplementaryInformation);
+            AssertComplementaryInformation(c?.ComplementaryInformations?.FirstOrDefault(), competencyElementComplementaryInformation);
 
             foreach (var p in c?.PerformanceCriterias ?? [])
             {
@@ -66,7 +66,7 @@ public class CompetencyApiTests : ApiTestBase
                     .Excluding(x => x.Id)
                     .Excluding(x => x.ComplementaryInformations));
 
-                AssertComplementarytInformation(p?.ComplementaryInformations?.FirstOrDefault(), performanceCriteriaComplementaryInformation);
+                AssertComplementaryInformation(p?.ComplementaryInformations?.FirstOrDefault(), performanceCriteriaComplementaryInformation);
             }
         }
     }
@@ -114,7 +114,7 @@ public class CompetencyApiTests : ApiTestBase
             .Build();
     }
 
-    private void AssertComplementarytInformation(ComplementaryInformationDTO? i, ComplementaryInformationDTO? competencyElementComplementaryInformation)
+    private void AssertComplementaryInformation(ComplementaryInformationDTO? i, ComplementaryInformationDTO? competencyElementComplementaryInformation)
     {
         using (Assert.EnterMultipleScope())
         {

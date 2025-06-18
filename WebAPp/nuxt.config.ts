@@ -1,6 +1,6 @@
 import { resolve } from 'node:path';
 
-const isHTTPS = process.env.NUXT_PUBLIC_API_USE_HTTPS == 'true'
+const isHTTPS = process.env.NUXT_PUBLIC_API_USE_HTTPS === 'true'
 
 export default defineNuxtConfig({
   // Utilisé pour le https en local pour que les cookie secure soient acceptés
@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     https: isHTTPS ? {
       key: 'certificates/localhost-key.pem',
       cert: 'certificates/localhost.pem',
-    } : undefined,
+    } : false,
   },
   build: {
     transpile: ['@vuepic/vue-datepicker'],

@@ -9,7 +9,7 @@ namespace TestDataSeeder.SeedData;
 
 internal class ProgramOfStudy : ISeeder<ProgramOfStudyEntity>
 {
-    private AppDbContext _context;
+    private readonly AppDbContext _context;
     public ProgramOfStudy(AppDbContext context)
     {
         _context = context;

@@ -5,7 +5,7 @@ namespace TestDataSeeder.SeedData;
 
 internal class Role : ISeeder<List<IdentityRole<Guid>>>
 {
-    private RoleManager<IdentityRole<Guid>> _roleManager;
+    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
     public Role(RoleManager<IdentityRole<Guid>> roleManager)
     {
         _roleManager = roleManager;
