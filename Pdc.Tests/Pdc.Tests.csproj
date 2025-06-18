@@ -6,9 +6,9 @@
     <Nullable>enable</Nullable>
     <PreserveCompilationContext>true</PreserveCompilationContext>
 
-    <IsPackable>false</IsPackable>
+	  <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
-    <Configurations>Debug;Release;CodeAnalysis;Tests</Configurations>
+	  <Configurations>Debug;Release;CodeAnalysis;Tests</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
