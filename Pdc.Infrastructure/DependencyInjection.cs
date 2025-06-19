@@ -12,16 +12,16 @@ namespace Pdc.Infrastructure;
 public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(
-        this IServiceCollection services,
-        IConfiguration configuration)
+       this IServiceCollection services,
+       IConfiguration configuration)
     {
-        string connectionString = configuration.GetConnectionString("DefaultConnection");
-        if (connectionString is not null && connectionString.Contains("mode=memory"))
+        string? connectionString = configuration.GetConnectionString("DefaultConnection");
+        if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("mode=memory"))
         {
             services.AddDbContext<AppDbContext>(options =>
                 options.UseInMemoryDatabase(connectionString));
         }
-        else
+        else if (!string.IsNullOrEmpty(connectionString))
         {
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(
