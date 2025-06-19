@@ -9,19 +9,21 @@
     }
   },
   "profiles": {
-    "Pdc.E2ETests": {
-      "commandName": "Project",
-      "applicationUrl": "http://localhost:5001",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Test"
-      }
-    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": false,
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "Test": {
+      "commandName": "Project",
+      "launchBrowser": false,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5001",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Test"
       }
     }
   }

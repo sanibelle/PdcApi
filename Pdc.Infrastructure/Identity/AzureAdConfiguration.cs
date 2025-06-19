@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Exceptions;
@@ -24,12 +23,10 @@ public static class AzureAdConfiguration
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-        services.AddAuthorization(options =>
-        {
-            options.DefaultPolicy = new AuthorizationPolicyBuilder()
+        services.AddAuthorizationBuilder()
+            .SetDefaultPolicy(new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
-                .Build();
-        });
+                .Build());
 
         services.AddAuthentication(options =>
         {
@@ -102,7 +99,6 @@ public static class AzureAdConfiguration
         });
 
         services.AddHttpContextAccessor();
-        services.AddScoped<IAuthService, IdentityAuthService>();
         return services;
     }
 

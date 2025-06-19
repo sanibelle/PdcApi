@@ -2,8 +2,9 @@
 using FluentAssertions;
 using Pdc.Application.DTOS;
 using Pdc.Domain.Models.Common;
-using Pdc.Tests.Builders.DTOS;
 using System.Net.Http.Json;
+using TestDataSeeder;
+using TestDataSeeder.Builders.DTOS;
 
 namespace Pdc.E2ETests;
 
@@ -14,7 +15,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
     public async Task GivenSeededPrograms_WhenGetAllProgramsOfStudy_ThenShouldReturnSeededPrograms()
     {
         // Act
-        var response = await _client.GetAsync("/api/programofstudy");
+        var response = await _Client.GetAsync("/api/programofstudy");
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -22,7 +23,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
 
         Assert.That(programs, Is.Not.Null);
         Assert.That(programs.Count, Is.GreaterThan(0));
-        Assert.That(programs.Any(p => p.Code == TestDataSeeder.ProgramOfStudyEntity.Code), Is.True);
+        Assert.That(programs.Any(p => p.Code == DataSeeder.ProgramOfStudyEntity.Code), Is.True);
     }
 
     [Test]
@@ -32,7 +33,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
         ProgramOfStudyDTO newProgram = new ProgramOfStudyDTOBuilder().Build();
 
         // Act
-        HttpResponseMessage response = await _client.PostAsJsonAsync("/api/programofstudy", newProgram);
+        HttpResponseMessage response = await _Client.PostAsJsonAsync("/api/programofstudy", newProgram);
 
         // Assert
         response.EnsureSuccessStatusCode();
@@ -41,7 +42,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
         Assert.That(createdProgram, Is.Not.Null);
 
         // Verify it was added to the database
-        HttpResponseMessage getResponse = await _client.GetAsync($"/api/programofstudy/{createdProgram.Code}");
+        HttpResponseMessage getResponse = await _Client.GetAsync($"/api/programofstudy/{createdProgram.Code}");
         getResponse.EnsureSuccessStatusCode();
         ProgramOfStudyDTO? fetchedProgram = await getResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
         Assert.That(fetchedProgram, Is.Not.Null);
@@ -61,16 +62,16 @@ public class ProgramOfStudyApiTests : ApiTestBase
 
 
         // Act - Create the program
-        var createResponse = await _client.PostAsJsonAsync("/api/programofstudy", newProgram);
+        var createResponse = await _Client.PostAsJsonAsync("/api/programofstudy", newProgram);
         createResponse.EnsureSuccessStatusCode();
         var createdProgram = await createResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
         // Act - Delete the program
-        var deleteResponse = await _client.DeleteAsync($"/api/programofstudy/{createdProgram!.Code}");
+        var deleteResponse = await _Client.DeleteAsync($"/api/programofstudy/{createdProgram!.Code}");
         deleteResponse.EnsureSuccessStatusCode();
 
         // Assert - Verify the program was deleted
-        var getResponse = await _client.GetAsync($"/api/programofstudy/{createdProgram.Code}");
+        var getResponse = await _Client.GetAsync($"/api/programofstudy/{createdProgram.Code}");
         Assert.That(getResponse.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.NotFound));
     }
 
@@ -80,7 +81,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
         // Arrange
         ProgramOfStudyDTO newProgram = new ProgramOfStudyDTOBuilder().Build();
 
-        ProgramOfStudyDTO updatedProgramData = (ProgramOfStudyDTO)new ProgramOfStudyDTOBuilder()
+        ProgramOfStudyDTO updatedProgramData = new ProgramOfStudyDTOBuilder()
             .WithCode("421.B5")
             .WithName("Techniques de l'informatique 2.0")
             .WithProgramType(Pdc.Domain.Enums.ProgramType.AEC)
@@ -93,13 +94,13 @@ public class ProgramOfStudyApiTests : ApiTestBase
             .Build();
 
         // Act - Create the program
-        var createResponse = await _client.PostAsJsonAsync("/api/programofstudy", newProgram);
+        var createResponse = await _Client.PostAsJsonAsync("/api/programofstudy", newProgram);
         createResponse.EnsureSuccessStatusCode();
         var createdProgram = await createResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
         // Act - Uodate the program
         updatedProgramData.Code = createdProgram!.Code;
-        var updateResponse = await _client.PutAsJsonAsync($"/api/programofstudy/{updatedProgramData.Code}", updatedProgramData);
+        var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{updatedProgramData.Code}", updatedProgramData);
         updateResponse.EnsureSuccessStatusCode();
         var updatedProgram = await updateResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 

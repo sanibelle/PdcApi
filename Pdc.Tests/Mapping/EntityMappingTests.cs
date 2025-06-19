@@ -4,7 +4,7 @@ using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Mappings;
-using Pdc.Tests.Builders.Models;
+using TestDataSeeder.Builders.Models;
 
 namespace Pdc.Tests.Mapping;
 

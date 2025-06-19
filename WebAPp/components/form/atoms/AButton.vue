@@ -3,7 +3,7 @@ defineProps({
   isDisabled: {
     type: Boolean,
     default: false,
-  },
+  }
 });
 </script>
 

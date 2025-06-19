@@ -15,7 +15,10 @@ const { t } = useI18n();
 
 <template>
   <div class="wrapper">
-    <FormAtomsAButton :is-disabled="isDisabled || isSubmitting">
+    <FormAtomsAButton 
+      :is-disabled="isDisabled || isSubmitting" 
+      v-bind="$attrs"
+    >
       <template v-if="isSubmitting">
         {{ t('submiting') }}
       </template>

@@ -1,92 +1,70 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Pdc.Infrastructure.Data;
-using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Identity;
-using Pdc.Tests.Mocks;
+using TestDataSeeder;
 
 namespace Pdc.E2ETests;
 
 [TestFixture]
 public class ApiTestBase
 {
-    protected WebApplicationFactory<Program> _factory;
-    protected HttpClient _client;
-    protected AppDbContext _dbContext;
+    private static readonly Lazy<WebApplicationFactory<Program>> _lazyFactory =
+        new(CreateFactory);
+    private static readonly Lazy<Task> _lazyDataSeeding =
+        new(SeedDataAsync);
+
+    protected HttpClient _Client;
 
     [OneTimeSetUp]
     public async Task OneTimeSetUp()
     {
-        // Set environment to Test
-        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
-
-        _factory = new WebApplicationFactory<Program>()
-            .WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureAppConfiguration((context, config) =>
-                {
-                    var env = context.HostingEnvironment;
-                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: false, reloadOnChange: true)
-                          .AddEnvironmentVariables();
-                });
-                builder.ConfigureServices(services =>
-                {
-                    // Register TestDataSeeder
-                    services.AddScoped<TestDataSeeder>();
-
-                    // Replace the existing authentication with test authentication
-                    services.AddTestAuthentication();
-                });
-            });
-
-        // Create an HttpClient that uses the factory
-        _client = _factory.CreateClient();
-
-        // Retrieve the AppDbContext from the factory's service provider
-        using (var scope = _factory.Services.CreateScope())
-        {
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUserEntity>>();
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
-            _dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-            // Seed the test database
-            var seeder = scope.ServiceProvider.GetRequiredService<TestDataSeeder>();
-            await seeder.SeedTestData(userManager, roleManager);
-            SwitchUserRole(Roles.Admin);
-        }
+        _Client = _lazyFactory.Value.CreateClient();
+        await _lazyDataSeeding.Value;
+        SwitchUserRole(Roles.Admin);
     }
 
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
-        // With in-memory databases, we don't need to call EnsureDeleted()
-        _client.Dispose();
-        _factory.Dispose();
+        _Client?.Dispose();
     }
 
     /// <summary>
-    /// Login through the authentication controller
+    /// Creates the shared WebApplicationFactory. This method will only be called once.
     /// </summary>
-    /// <param name="user">The user to login</param>
-    /// <returns>The HTTP response from the login endpoint</returns>
+    private static WebApplicationFactory<Program> CreateFactory()
+    {
+        // Set environment to Test
+        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
+        return new WebApplicationFactory<Program>();
+    }
+
+
+    private static async Task SeedDataAsync()
+    {
+        using var scope = _lazyFactory.Value.Services.CreateScope();
+        var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+        await seeder.SeedAsync();
+    }
+
+    /// <summary>
+    /// Switch the user role for the current test class by modifying HTTP headers
+    /// </summary>
+    /// <param name="role">The role to switch to</param>
     protected void SwitchUserRole(string role)
     {
-
-        if (_client.DefaultRequestHeaders.Contains("Test-User"))
+        if (_Client.DefaultRequestHeaders.Contains("Test-User"))
         {
-            _client.DefaultRequestHeaders.Remove("Test-User");
+            _Client.DefaultRequestHeaders.Remove("Test-User");
         }
 
         switch (role)
         {
             case Roles.Admin:
-                _client.DefaultRequestHeaders.Add("Test-User", TestDataSeeder.Admin.UserName);
+                _Client.DefaultRequestHeaders.Add("Test-User", DataSeeder.Admin.UserName);
                 break;
             case Roles.User:
-                _client.DefaultRequestHeaders.Add("Test-User", TestDataSeeder.User.UserName);
+                _Client.DefaultRequestHeaders.Add("Test-User", DataSeeder.User.UserName);
                 break;
             default:
                 throw new ArgumentException($"Invalid role: {role}");

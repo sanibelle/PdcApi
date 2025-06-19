@@ -72,7 +72,7 @@ watch(
 
 <template>
   <VueDatePicker :model-value="value" :enable-time-picker="false" :teleport="true" :auto-apply="true"
-    :class="{ 'is-invalid': errorMessage }" :min-date="min" :max-date="max" @update:model-value="onChange" />
+    :class="{ 'is-invalid': errorMessage }" :min-date="min" :max-date="max" @update:model-value="onChange" :data-test-id="name" />
 </template>
 
 <style scoped>

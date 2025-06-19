@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Infrastructure.Data;
+using Pdc.Infrastructure.Identity;
 using Pdc.Infrastructure.Mappings;
 using Pdc.Infrastructure.Repositories;
 
@@ -11,25 +12,20 @@ namespace Pdc.Infrastructure;
 public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(
-        this IServiceCollection services,
-        IConfiguration configuration)
+       this IServiceCollection services,
+       IConfiguration configuration)
     {
-
-        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        if (environment == "Test")
+        string? connectionString = configuration.GetConnectionString("DefaultConnection");
+        if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("mode=memory"))
         {
-            // Register InMemory DbContext for tests
             services.AddDbContext<AppDbContext>(options =>
-                options.UseInMemoryDatabase("InMemoryTestDatabase")
-                .EnableDetailedErrors()
-                .EnableSensitiveDataLogging());
+                options.UseInMemoryDatabase("TestDataBase"));
         }
-        else
+        else if (!string.IsNullOrEmpty(connectionString))
         {
-            // Register SQL Server DbContext for production
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(
-                    configuration.GetConnectionString("DefaultConnection"),
+                    connectionString,
                     b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
         }
 
@@ -37,6 +33,7 @@ public static class DependencyInjection
         services.AddScoped<IProgramOfStudyRespository, ProgramOfStudyRespository>();
         services.AddScoped<ICompetencyRespository, CompetencyRepository>();
         services.AddAutoMapper(typeof(MappingProfile));
+        services.AddScoped<IAuthService, IdentityAuthService>();
 
         return services;
     }

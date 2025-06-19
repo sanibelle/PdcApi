@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { useField } from 'vee-validate';
+defineOptions({
+  inheritAttrs: false
+});
 
+const attrs = useAttrs();
 const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
   name: {
     type: String,
     required: true,
@@ -69,7 +69,7 @@ watch(
 
 <template>
   <div class="select-wrapper" :class="{ 'is-disabled': disabled }">
-    <select :id="id" :name="name" :value="value" :disabled="disabled" class="base-select"
+    <select v-bind="attrs" :name="name" :value="value" :disabled="disabled" class="base-select"
       :class="{ error: errorMessage }" @change="onChange" @blur="handleBlur">
       <option v-if="placeholder" value="" disabled>
         {{ placeholder }}

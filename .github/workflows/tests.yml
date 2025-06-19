@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   pull_request:
-    branches: [ main, develop ]
+    branches: [main]
 
 env:
   DOTNET_VERSION: '9.0.x'
@@ -16,7 +16,10 @@ jobs:
     outputs:
       code-changed: ${{ steps.changes.outputs.code }}
       tests-changed: ${{ steps.changes.outputs.tests }}
+      playwright-changed: ${{ steps.changes.outputs.playwright }}
+      webapp-changed: ${{ steps.changes.outputs.webapp }}
       should-run-tests: ${{ steps.decide.outputs.should-run }}
+      should-run-playwright: ${{ steps.decide.outputs.should-run-playwright }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -32,6 +35,10 @@ jobs:
             - 'Pdc.*/**'
           tests:
             - 'UnitTests/**'
+          playwright:
+            - 'Playwright/**'
+          webapp:
+            - 'WebAPp/**'
             
     - name: Check last workflow status
       id: last-status
@@ -53,14 +60,19 @@ jobs:
       run: |
         CODE_CHANGED="${{ steps.changes.outputs.code }}"
         TESTS_CHANGED="${{ steps.changes.outputs.tests }}"
+        PLAYWRIGHT_CHANGED="${{ steps.changes.outputs.playwright }}"
+        WEBAPP_CHANGED="${{ steps.changes.outputs.webapp }}"
         LAST_STATUS="${{ steps.last-status.outputs.last-status }}"
         
         # Check if commit message contains force test keywords
         COMMIT_MSG="$PR_TITLE ${{ github.event.head_commit.message }}"
         FORCE_TESTS=$(echo "$COMMIT_MSG" | grep -iE '\[run tests\]|\[force tests\]|\[test\]' || true)
+        FORCE_PLAYWRIGHT=$(echo "$COMMIT_MSG" | grep -iE '\[run playwright\]|\[force playwright\]|\[e2e\]' || true)
         
         echo "Code changed: $CODE_CHANGED"
         echo "Tests changed: $TESTS_CHANGED"
+        echo "Playwright changed: $PLAYWRIGHT_CHANGED"
+        echo "WebApp changed: $WEBAPP_CHANGED"
         echo "Last status: $LAST_STATUS"
         echo "Force tests: $([ -n "$FORCE_TESTS" ] && echo 'true' || echo 'false')"
         
@@ -81,14 +93,11 @@ jobs:
           echo "⏭️ Skipping tests - no relevant changes and last run was successful"
         fi
 
-  # Build and test job - now conditional
+  # Build and test job
   build-and-test:
     runs-on: ubuntu-latest
     needs: changes
     if: needs.changes.outputs.should-run-tests == 'true'
-    strategy:
-      matrix:
-        configuration: [Debug, Release]
     
     steps:
     - name: Checkout code
@@ -111,24 +120,21 @@ jobs:
       run: dotnet restore ${{ env.SOLUTION_PATH }}
       
     - name: Build solution
-      run: dotnet build ${{ env.SOLUTION_PATH }} --configuration ${{ matrix.configuration }} --no-restore
+      run: dotnet build ${{ env.SOLUTION_PATH }} --configuration Test --no-restore
       
     - name: Run Tests
       run: |
         dotnet test Pdc.Tests/Pdc.Tests.csproj \
-          --configuration ${{ matrix.configuration }} \
+          --configuration Test \
           --verbosity normal \
           --collect:"XPlat Code Coverage" \
           --results-directory ./coverage/unit \
-          --logger "trx;LogFileName=unit-test-results-${{ matrix.configuration }}.trx"
+          --logger "trx;LogFileName=unit-test-results-Test.trx"
           
-    # Only generate coverage report for Release configuration
     - name: Install ReportGenerator
-      if: matrix.configuration == 'Release'
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
       
     - name: Generate Code Coverage Report
-      if: matrix.configuration == 'Release'
       run: |
         reportgenerator \
           -reports:"coverage/**/coverage.cobertura.xml" \
@@ -139,26 +145,80 @@ jobs:
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: test-results-${{ matrix.configuration }}
+        name: test-results-Test
         path: |
           coverage/**/*.trx
           
     - name: Upload Coverage Report
       uses: actions/upload-artifact@v4
-      if: matrix.configuration == 'Release' && always()
       with:
         name: coverage-report
         path: coverage/report/
         
     - name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v4
-      if: matrix.configuration == 'Release'
       with:
         files: coverage/**/coverage.cobertura.xml
         fail_ci_if_error: false
         verbose: true
         flags: unittests
         name: codecov-umbrella
+
+  # Playwright E2E Tests
+  playwright-tests:
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.should-run-tests == 'true'
+
+    steps:
+    
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+
+    - name: Install dependencies in Playwright
+      uses: borales/actions-yarn@v4
+      with:
+        cmd: install
+        dir: Playwright
+
+    - name: Install dependencies in WebAPp
+      uses: borales/actions-yarn@v4
+      with:
+        cmd: install
+        dir: WebAPp
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x'
+        
+    - name: Restore .NET dependencies
+      run: dotnet restore Pdc.sln
+      
+    - name: Build .NET solution
+      run: dotnet build Pdc.sln --configuration Test --no-restore
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+      working-directory: Playwright
+    
+    - name: Run Playwright tests
+      run: npx playwright test
+      working-directory: Playwright
+      env:
+        CI: true
+
+    - name: Upload Playwright Report
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: Playwright/playwright-report/
+        retention-days: 7
 
   # Skipped tests notification
   tests-skipped:
@@ -198,7 +258,7 @@ jobs:
     - name: Run Code Analysis
       run: |
         dotnet build ${{ env.SOLUTION_PATH }} \
-          --configuration CodeAnalysis \
+          --configuration Release \
           --verbosity normal \
           /p:TreatWarningsAsErrors=true \
           /p:WarningsAsErrors="" \
@@ -207,7 +267,7 @@ jobs:
   # Test summary job - conditional
   test-summary:
     runs-on: ubuntu-latest
-    needs: [changes, build-and-test]
+    needs: [changes, build-and-test, playwright-tests]
     if: always() && needs.changes.outputs.should-run-tests == 'true'
     
     steps:
@@ -224,6 +284,13 @@ jobs:
       with:
         name: coverage-report
         path: ./coverage-report
+
+    - name: Download Playwright report
+      uses: actions/download-artifact@v4
+      continue-on-error: true
+      with:
+        name: playwright-report
+        path: ./playwright-report
         
     - name: Display Test Summary
       run: |
@@ -231,12 +298,21 @@ jobs:
         echo "" >> $GITHUB_STEP_SUMMARY
         
         # Count test result files
-        unit_tests=$(find ./test-results -name "*unit-test-results*.trx" | wc -l)
-        e2e_tests=$(find ./test-results -name "*e2e-test-results*.trx" | wc -l)
+        unit_tests=$(find ./test-results -name "*unit-test-results*.trx" 2>/dev/null | wc -l)
+        
+        # Check Playwright test status
+        playwright_status="❌ Failed or not run"
+        if [ -f ./playwright-report/index.html ]; then
+          playwright_status="✅ Completed - Report available"
+        elif [ "${{ needs.playwright-tests.result }}" == "success" ]; then
+          playwright_status="✅ Completed - No failures"
+        elif [ "${{ needs.playwright-tests.result }}" == "skipped" ]; then
+          playwright_status="⏭️ Skipped"
+        fi
         
         echo "### Test Execution" >> $GITHUB_STEP_SUMMARY
         echo "- Unit test configurations: $unit_tests" >> $GITHUB_STEP_SUMMARY
-        echo "- E2E test configurations: $e2e_tests" >> $GITHUB_STEP_SUMMARY
+        echo "- Playwright E2E tests: $playwright_status" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         
         if [ -f ./coverage-report/Summary.txt ]; then
@@ -248,6 +324,9 @@ jobs:
         fi
         
         echo "### 📁 Available Artifacts" >> $GITHUB_STEP_SUMMARY
-        echo "- Test results (TRX files)" >> $GITHUB_STEP_SUMMARY
+        echo "- Unit test results (TRX files)" >> $GITHUB_STEP_SUMMARY
         echo "- Code coverage report (HTML)" >> $GITHUB_STEP_SUMMARY
         echo "- Coverage data uploaded to Codecov" >> $GITHUB_STEP_SUMMARY
+        if [ -f ./playwright-report/index.html ]; then
+          echo "- 🎭 Playwright test report (HTML)" >> $GITHUB_STEP_SUMMARY
+        fi

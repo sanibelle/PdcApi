@@ -5,11 +5,18 @@ defineProps({
     default: '',
   },
 });
+
+const errorRef = ref<HTMLParagraphElement | null>(null)
+
+const scrollTo = async () => {
+  await nextTick()
+  errorRef.value?.parentElement?.scrollIntoView({ behavior: 'smooth' })
+}
 </script>
 
 <template>
-  <transition name="fade">
-    <p v-if="message" class="error-message" role="alert" aria-live="assertive">{{ message }}</p>
+  <transition name="fade" @after-enter="scrollTo">
+    <p v-if="message" ref="errorRef" class="error-message" role="alert" aria-live="assertive">{{ message }}</p>
   </transition>
 </template>
 

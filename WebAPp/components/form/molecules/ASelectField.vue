@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-const props = defineProps({
+defineProps({
   id: {
     type: String,
     required: false,
@@ -55,7 +55,7 @@ const errorMessage = ref('');
     <FormAtomsABaseLabel :for-id="id" :required="required" v-if="label">
       {{ label }}
     </FormAtomsABaseLabel>
-    <FormAtomsASelect :id="id" :name="name" :options="options" :placeholder="placeholder" :disabled="disabled"
+    <FormAtomsASelect v-bind="$attrs" :name="name" :options="options" :placeholder="placeholder" :disabled="disabled"
       :rules="rules" :modelValue="modelValue" @update:modelValue="emit('update:modelValue', $event)"
       @update:error-message="errorMessage = $event" />
     <FormAtomsAErrorMessage :message="errorMessage" />

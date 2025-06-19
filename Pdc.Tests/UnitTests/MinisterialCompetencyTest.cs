@@ -15,8 +15,8 @@ using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Infrastructure.Exceptions;
-using Pdc.Tests.Builders.DTOS;
-using Pdc.Tests.Builders.Models;
+using TestDataSeeder.Builders.DTOS;
+using TestDataSeeder.Builders.Models;
 
 namespace Pdc.Tests.UnitTests;
 
@@ -174,7 +174,7 @@ public class MinisterialCompetencyTest
             .WithPosition(1)
             .AddPerformanceCriteria(performanceCriteria)
             .WithId(_competencyElement.Id)
-            .AddComplementaryInformations(complementaryInformation)
+            .AddComplementaryInformation(complementaryInformation)
             .BuildCompetencyElement();
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
@@ -301,11 +301,11 @@ public class MinisterialCompetencyTest
         var competencyElement = new CompetencyElementDTOBuilder()
             .WithId(_competencyElement.Id)
             .WithPosition(1)
-            .AddComplementaryInformations(complementaryInformation)
+            .AddComplementaryInformation(complementaryInformation)
             .BuildCompetencyElement();
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
-            .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
-            .WithCompetencyElements(new List<CompetencyElementDTO> { competencyElement })
+            .WithRealisationContexts([realisationContext])
+            .WithCompetencyElements([competencyElement])
             .WithCode(_competency2.Code)
             .Build();
 
@@ -330,7 +330,7 @@ public class MinisterialCompetencyTest
             .AddPerformanceCriteria(performanceCriteria)
             .WithPosition(1)
             .WithId(_competencyElement.Id)
-            .AddComplementaryInformations(complementaryInformation)
+            .AddComplementaryInformation(complementaryInformation)
             .BuildCompetencyElement();
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithCompetencyElements(new List<CompetencyElementDTO> { competencyElement })
