@@ -15,22 +15,17 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-
-        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        if (environment == "Test")
+        string connectionString = configuration.GetConnectionString("DefaultConnection");
+        if (connectionString is not null && connectionString.Contains("mode=memory"))
         {
-            // Register InMemory DbContext for tests
             services.AddDbContext<AppDbContext>(options =>
-                options.UseInMemoryDatabase("InMemoryTestDatabase")
-                .EnableDetailedErrors()
-                .EnableSensitiveDataLogging());
+                options.UseInMemoryDatabase(connectionString));
         }
         else
         {
-            // Register SQL Server DbContext for production
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(
-                    configuration.GetConnectionString("DefaultConnection"),
+                    connectionString,
                     b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
         }
 

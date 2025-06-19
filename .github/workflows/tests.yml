@@ -131,13 +131,10 @@ jobs:
           --results-directory ./coverage/unit \
           --logger "trx;LogFileName=unit-test-results-Test.trx"
           
-    # Only generate coverage report for Release configuration
     - name: Install ReportGenerator
-      if: matrix.configuration == 'Release'
       run: dotnet tool install -g dotnet-reportgenerator-globaltool
       
     - name: Generate Code Coverage Report
-      if: matrix.configuration == 'Release'
       run: |
         reportgenerator \
           -reports:"coverage/**/coverage.cobertura.xml" \
@@ -154,14 +151,12 @@ jobs:
           
     - name: Upload Coverage Report
       uses: actions/upload-artifact@v4
-      if: matrix.configuration == 'Release' && always()
       with:
         name: coverage-report
         path: coverage/report/
         
     - name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v4
-      if: matrix.configuration == 'Release'
       with:
         files: coverage/**/coverage.cobertura.xml
         fail_ci_if_error: false
@@ -277,7 +272,7 @@ jobs:
     - name: Run Code Analysis
       run: |
         dotnet build ${{ env.SOLUTION_PATH }} \
-          --configuration CodeAnalysis \
+          --configuration Release \
           --verbosity normal \
           /p:TreatWarningsAsErrors=true \
           /p:WarningsAsErrors="" \

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pdc.Infrastructure.Identity;
 using TestDataSeeder;
@@ -14,23 +13,20 @@ public class ApiTestBase
     private static readonly Lazy<Task> _lazyDataSeeding =
         new(SeedDataAsync);
 
-    // Static property to access the shared factory
-    protected static WebApplicationFactory<Program> Factory => _lazyFactory.Value;
-    protected HttpClient _client;
+    protected HttpClient _Client;
 
     [OneTimeSetUp]
     public async Task OneTimeSetUp()
     {
-        // Ensure data seeding is completed (this will only run once across all test classes)
+        _Client = _lazyFactory.Value.CreateClient();
         await _lazyDataSeeding.Value;
-        _client = Factory.CreateClient();
         SwitchUserRole(Roles.Admin);
     }
 
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {
-        _client?.Dispose();
+        _Client?.Dispose();
     }
 
     /// <summary>
@@ -40,23 +36,13 @@ public class ApiTestBase
     {
         // Set environment to Test
         Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
-
-        return new WebApplicationFactory<Program>()
-            .WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureAppConfiguration((context, config) =>
-                {
-                    var env = context.HostingEnvironment;
-                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                          .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: false, reloadOnChange: true)
-                          .AddEnvironmentVariables();
-                });
-            });
+        return new WebApplicationFactory<Program>();
     }
+
 
     private static async Task SeedDataAsync()
     {
-        using var scope = Factory.Services.CreateScope();
+        using var scope = _lazyFactory.Value.Services.CreateScope();
         var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
         await seeder.SeedAsync();
     }
@@ -67,18 +53,18 @@ public class ApiTestBase
     /// <param name="role">The role to switch to</param>
     protected void SwitchUserRole(string role)
     {
-        if (_client.DefaultRequestHeaders.Contains("Test-User"))
+        if (_Client.DefaultRequestHeaders.Contains("Test-User"))
         {
-            _client.DefaultRequestHeaders.Remove("Test-User");
+            _Client.DefaultRequestHeaders.Remove("Test-User");
         }
 
         switch (role)
         {
             case Roles.Admin:
-                _client.DefaultRequestHeaders.Add("Test-User", DataSeeder.Admin.UserName);
+                _Client.DefaultRequestHeaders.Add("Test-User", DataSeeder.Admin.UserName);
                 break;
             case Roles.User:
-                _client.DefaultRequestHeaders.Add("Test-User", DataSeeder.User.UserName);
+                _Client.DefaultRequestHeaders.Add("Test-User", DataSeeder.User.UserName);
                 break;
             default:
                 throw new ArgumentException($"Invalid role: {role}");

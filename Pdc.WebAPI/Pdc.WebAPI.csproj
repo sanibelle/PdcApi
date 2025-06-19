@@ -4,7 +4,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Configurations>Debug;Release;CodeAnalysis;Tests</Configurations>
+    <Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,8 +22,12 @@
     <ProjectReference Include="..\Pdc.Infrastructure\Pdc.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Configuration)' == 'TEST'">
-	<ProjectReference Include="..\TestDataSeeder\TestDataSeeder.csproj" />
-  </ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Test'">
+		<DefineConstants>TEST</DefineConstants>
+	</PropertyGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Test'">
+	    <ProjectReference Include="..\TestDataSeeder\TestDataSeeder.csproj" />
+    </ItemGroup>
+
 
 </Project>

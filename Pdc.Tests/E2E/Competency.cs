@@ -24,7 +24,7 @@ public class CompetencyApiTests : ApiTestBase
         CreateCompetency(out realisationContextComplementaryInformation, out performanceCriteriaComplementaryInformation, out competencyElementComplementaryInformation, out realisationContext, out performanceCriteria, out competencyElement, out competencyDTO);
 
         // Act - Create the program
-        var createResponse = await _client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);
+        var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);
         createResponse.EnsureSuccessStatusCode();
         var createdCompetency = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
 
@@ -83,7 +83,7 @@ public class CompetencyApiTests : ApiTestBase
         CompetencyValidation validation = new CompetencyValidation();
         competencyDTO.Code = DataSeeder.CompetencyEntity.Code;
         validation.Validate(competencyDTO).IsValid.Should().BeTrue();
-        var createResponse = await _client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);
+        var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);
         var responseContent = await createResponse.Content.ReadAsStringAsync();
         createResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.Conflict);
     }

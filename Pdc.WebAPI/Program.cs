@@ -5,16 +5,18 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Pdc.Application;
 using Pdc.Infrastructure;
 using Pdc.Infrastructure.Identity;
+using Pdc.Infrastructure.Identity.TestAuthentication;
 using Pdc.WebAPI.Middlewares;
 using Pdc.WebAPI.Services;
 using System.Text.Json;
-
+#if TEST
+using TestDataSeeder;
+#endif
 
 public class Program
 {
     public static void Main(string[] args)
     {
-        Boolean isTest = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Test";
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
@@ -31,12 +33,9 @@ public class Program
         builder.Services.AddSwaggerGen();
         Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
 
-#if Test
-        if (isTest)
-        {
-            builder.Services.AddScoped<DataSeeder>();
-            builder.Services.AddTestAuthentication();
-        } 
+#if TEST
+        builder.Services.AddScoped<DataSeeder>();
+        builder.Services.AddTestAuthentication();
 #endif
         if (!string.IsNullOrEmpty(builder.Configuration["AzureAd:Instance"]))
         {
@@ -76,11 +75,8 @@ public class Program
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();
-#if Test
-        if (isTest)
-        {
-            app.UseMapSeederDataRoute();
-        }
+#if TEST
+        app.UseMapSeederDataRoute();
 #endif
         app.MapControllers();
         app.MapHealthChecks("/api/health");
