@@ -69,9 +69,10 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: "cd ../Pdc.WebAPI && dotnet run --launch-profile Test",
+      command: "cd ../Pdc.WebAPI && dotnet run --configuration Test --launch-profile Test",
       url: "http://localhost:5001/init",
       reuseExistingServer: !process.env.CI,
+      timeout: 120 * 1000, // 2 minutes
     },
     {
       command: "cd ../WebAPp && yarn run playwright",

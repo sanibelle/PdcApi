@@ -19,7 +19,7 @@ public static class DependencyInjection
         if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("mode=memory"))
         {
             services.AddDbContext<AppDbContext>(options =>
-                options.UseInMemoryDatabase(connectionString));
+                options.UseInMemoryDatabase("TestDataBase"));
         }
         else if (!string.IsNullOrEmpty(connectionString))
         {
