@@ -103,4 +103,10 @@ public class CompetencyRepository : ICompetencyRespository
         }
         return program;
     }
+
+    public async Task<List<MinisterialCompetency>> GetByProgramOfStudy(string programOfStudyCode)
+    {
+        ProgramOfStudyEntity programEntity = await FindProgramOfStudy(programOfStudyCode);
+        return _mapper.Map<List<MinisterialCompetency>>(programEntity.Competencies.ToList());
+    }
 }

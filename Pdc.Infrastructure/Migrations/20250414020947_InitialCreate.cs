@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -192,6 +193,7 @@ namespace Pdc.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    CreatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsDraft = table.Column<bool>(type: "bit", nullable: false),
                     VersionNumber = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
@@ -213,6 +215,12 @@ namespace Pdc.Infrastructure.Migrations
                         column: x => x.ParentVersionId,
                         principalTable: "ChangeRecords",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ChangeRecords_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ChangeRecords_Users_ValidatedById",
                         column: x => x.ValidatedById,
@@ -255,7 +263,7 @@ namespace Pdc.Infrastructure.Migrations
                     UnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ProgramOfStudyCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsMandatory = table.Column<bool>(type: "bit", nullable: false),
-                    IsOptional = table.Column<bool>(type: "bit", nullable: false),
+                    IsOptionnal = table.Column<bool>(type: "bit", nullable: false),
                     StatementOfCompetency = table.Column<string>(type: "nvarchar(1500)", maxLength: 1500, nullable: false),
                     CurrentVersionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -589,6 +597,11 @@ namespace Pdc.Infrastructure.Migrations
                 name: "IX_ChangeDetails_ChangeRecordId",
                 table: "ChangeDetails",
                 column: "ChangeRecordId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChangeRecords_CreatedById",
+                table: "ChangeRecords",
+                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChangeRecords_NextVersionId",

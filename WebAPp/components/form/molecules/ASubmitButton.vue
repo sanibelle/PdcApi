@@ -15,7 +15,7 @@ const { t } = useI18n();
 
 <template>
   <div class="wrapper">
-    <FormAtomsAButton 
+    <CommonAtomsAButton 
       :is-disabled="isDisabled || isSubmitting" 
       v-bind="$attrs"
     >
@@ -25,7 +25,7 @@ const { t } = useI18n();
       <template v-else>
         {{ t('submit') }}
       </template>
-    </FormAtomsAButton>
+    </CommonAtomsAButton>
   </div>
 </template>
 
@@ -44,6 +44,10 @@ const { t } = useI18n();
 }
 
 :deep(button) {
+  background-color: hsl(128, 56%, 29%);
+  &:hover {
+    background-color: hsl(128, 56%, 39%);
+  }
   min-width: 7rem;
 }
 </style>

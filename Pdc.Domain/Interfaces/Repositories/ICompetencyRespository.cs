@@ -12,4 +12,5 @@ public interface ICompetencyRespository
     Task Delete(string programOfStudyCode, string competencyCode);
     Task<bool> ExistsEntityByCode(string programOfStudyCode, string competencyCode);
     Task<MinisterialCompetency> Add(ProgramOfStudy program, MinisterialCompetency competency, User currentUser);
+    Task<List<MinisterialCompetency>> GetByProgramOfStudy(string programOfStudyCode);
 }

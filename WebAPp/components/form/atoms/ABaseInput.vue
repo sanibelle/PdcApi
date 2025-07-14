@@ -23,7 +23,7 @@ const props = defineProps({
     default: '',
   },
   modelValue: {
-    type: [String, Number],
+    type: [String, Number, Boolean],
     default: '',
   },
 });
@@ -49,11 +49,17 @@ watch(
 const onChange = (event: Event) => {
   handleChange(event, !!errorMessage.value);
   const target = event.target as HTMLInputElement;
+  console.log("🚀 ~ onChange ~ target:", target)
+  // emit the value as boolean if the type is checkbox
+  if (props.type === 'checkbox') {
+    emit('update:modelValue', target.checked);
+    return;
+  }
   emit('update:modelValue', target.value);
 };
 
 const onBlur = (event: Event) => {
-  handleBlur(event, true);
+  handleBlur(event, !!errorMessage.value);
 };
 
 watch(

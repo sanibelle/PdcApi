@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="UseCases\ProgramOfStudy\Interfaces\IGetAllProgramOfStudyUseCase.cs" />
+    <None Include="UseCases\ProgramOfStudy\Interfaces\IGetProgramOfStudiesUseCase.cs" />
   </ItemGroup>
 
   <ItemGroup>

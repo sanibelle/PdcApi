@@ -20,7 +20,7 @@ public class ProgramOfStudyTest
     Mock<IProgramOfStudyRespository> _programOfStudyRepositoryMock;
     ICreateProgramOfStudyUseCase _createProgramOfStudyUseCase;
     IDeleteProgramOfStudyUseCase _deleteProgramOfStudyUseCase;
-    IGetAllProgramOfStudyUseCase _getAllProgramOfStudyUseCase;
+    IGetProgramOfStudiesUseCase _getAllProgramOfStudyUseCase;
     IUpdateProgramOfStudyUseCase _updateProgramOfStudyUseCase;
     IMapper _mapper;
     IValidator<ProgramOfStudyDTO> _validator;
@@ -38,7 +38,7 @@ public class ProgramOfStudyTest
 
         _createProgramOfStudyUseCase = new CreateProgramOfStudy(_programOfStudyRepositoryMock.Object, _mapper, _validator);
         _deleteProgramOfStudyUseCase = new DeleteProgramOfStudy(_programOfStudyRepositoryMock.Object);
-        _getAllProgramOfStudyUseCase = new GetAllProgramOfStudy(_programOfStudyRepositoryMock.Object, _mapper);
+        _getAllProgramOfStudyUseCase = new GetProgramOfStudies(_programOfStudyRepositoryMock.Object, _mapper);
         _updateProgramOfStudyUseCase = new UpdateProgramOfStudy(_programOfStudyRepositoryMock.Object, _mapper, _validator);
 
         // Arrange

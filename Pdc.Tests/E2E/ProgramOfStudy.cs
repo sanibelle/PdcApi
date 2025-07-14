@@ -12,7 +12,7 @@ namespace Pdc.E2ETests;
 public class ProgramOfStudyApiTests : ApiTestBase
 {
     [Test]
-    public async Task GivenSeededPrograms_WhenGetAllProgramsOfStudy_ThenShouldReturnSeededPrograms()
+    public async Task GivenSeededPrograms_WhenGetProgramsOfStudies_ThenShouldReturnSeededPrograms()
     {
         // Act
         var response = await _Client.GetAsync("/api/programofstudy");

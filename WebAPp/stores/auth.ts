@@ -2,7 +2,7 @@ import { useApi } from '~/composables/services/ApiClient';
 export const useAuthStore = defineStore(
   'auth',
   () => {
-    const { fetchUser } = useUser();
+    const { fetchUser } = useUserClient();
     const user = ref<User | null>(null);
 
     const isAuthenticated = computed(() => user.value !== null);

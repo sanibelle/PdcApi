@@ -70,9 +70,8 @@ export default defineConfig({
   webServer: [
     {
       command: "cd ../Pdc.WebAPI && dotnet run --configuration Test --launch-profile Test",
-      url: "http://localhost:5001/init",
+      url: "http://localhost:5001/api/health",
       reuseExistingServer: !process.env.CI,
-      timeout: 120 * 1000, // 2 minutes
     },
     {
       command: "cd ../WebAPp && yarn run playwright",

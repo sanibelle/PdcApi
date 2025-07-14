@@ -121,6 +121,8 @@ public static class AzureAdConfiguration
             throw new Exception("Failed to find the object id");
         }
 
+        userManager.GetUsersInRoleAsync(Roles.Admin).GetAwaiter().GetResult(); // Ensure roles are loaded
+
         IdentityUserEntity? user = await userManager.FindByLoginAsync("AzureAD", objectId);
         if (user == null)
         {

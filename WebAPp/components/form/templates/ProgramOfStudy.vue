@@ -24,7 +24,7 @@ const { handleSubmit, isSubmitting } = useForm<ProgramOfStudy>({
   validateOnMount: false,
 });
 
-const { createProgram } = useProgramOfStudy();
+const { createProgram } = useProgramOfStudyClient();
 const onSubmit = handleSubmit(async () => {
 
   try {
@@ -48,7 +48,7 @@ const options: SelectOption[] = Object.entries(ProgramType)
 </script>
 
 <template>
-  <div class="user-form">
+  <div class="form">
     <form @submit="onSubmit" class="form-container">
       <FormATextInput name="name" :label="t('programName')" :placeholder="t('programNamePlaceholder')" :min="2"
         :max="50" v-model="programOfStudy.name" :required="true" />
@@ -111,25 +111,7 @@ const options: SelectOption[] = Object.entries(ProgramType)
 </i18n>
 
 <style scoped>
-.user-form {
+.form {
   padding: 0.5rem;
-}
-
-.form-title {
-  margin-bottom: 24px;
-  font-size: 24px;
-  font-weight: 600;
-  text-align: center;
-}
-
-.form-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 24px;
 }
 </style>

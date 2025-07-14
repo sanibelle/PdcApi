@@ -17,11 +17,12 @@ public static class DependencyInjection
         services.AddScoped<IProgramOfStudyRespository, ProgramOfStudyRespository>();
         services.AddScoped<ICreateProgramOfStudyUseCase, CreateProgramOfStudy>();
         services.AddScoped<IDeleteProgramOfStudyUseCase, DeleteProgramOfStudy>();
-        services.AddScoped<IGetAllProgramOfStudyUseCase, GetAllProgramOfStudy>();
+        services.AddScoped<IGetProgramOfStudiesUseCase, GetProgramOfStudies>();
         services.AddScoped<IUpdateProgramOfStudyUseCase, UpdateProgramOfStudy>();
         services.AddScoped<IGetProgramOfStudyUseCase, GetProgramOfStudy>();
         services.AddScoped<ICreateCompetencyUseCase, CreateCompetency>();
         services.AddScoped<IGetCompetencyUseCase, GetCompetency>();
+        services.AddScoped<IGetCompetenciesUseCase, GetCompetencies>();
 
         // Auth
         services.AddScoped<IUserService, UserService>();

@@ -15,30 +15,33 @@ public class ProgramOfStudyController : ControllerBase
     private ICreateProgramOfStudyUseCase _createUseCase;
     private ICreateCompetencyUseCase _createCompetencyUseCase;
     private IDeleteProgramOfStudyUseCase _deleteUseCase;
-    private IGetAllProgramOfStudyUseCase _getAllUseCase;
+    private IGetProgramOfStudiesUseCase _getProgramOfStudiesUseCase;
     private IUpdateProgramOfStudyUseCase _updateUseCase;
     private IGetProgramOfStudyUseCase _getUseCase;
     private IGetCompetencyUseCase _getCompetencyUseCase;
+    private IGetCompetenciesUseCase _getCompetenciesUseCase;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private UserControllerService _userControllerService;
 
     public ProgramOfStudyController(ICreateProgramOfStudyUseCase createUseCase,
                                     IDeleteProgramOfStudyUseCase deleteUseCase,
-                                    IGetProgramOfStudyUseCase getUseCase,
-                                    IGetAllProgramOfStudyUseCase getAllUseCase,
+                                    IGetProgramOfStudyUseCase getProgramOfStudyUseCase,
+                                    IGetProgramOfStudiesUseCase getProgramOfStudiesUseCase,
                                     IUpdateProgramOfStudyUseCase updateUseCase,
                                     ICreateCompetencyUseCase createCompetencyUseCase,
+                                    IGetCompetenciesUseCase getCompetenciesUseCase,
                                     IGetCompetencyUseCase getCompetencyUseCase,
                                     UserControllerService userControllerService,
                                     IHttpContextAccessor httpContextAccessor)
     {
         _createUseCase = createUseCase;
         _deleteUseCase = deleteUseCase;
-        _getAllUseCase = getAllUseCase;
-        _getUseCase = getUseCase;
+        _getProgramOfStudiesUseCase = getProgramOfStudiesUseCase;
+        _getUseCase = getProgramOfStudyUseCase;
         _updateUseCase=updateUseCase;
         _createCompetencyUseCase = createCompetencyUseCase;
         _getCompetencyUseCase = getCompetencyUseCase;
+        _getCompetenciesUseCase = getCompetenciesUseCase;
         _userControllerService = userControllerService;
         _httpContextAccessor=httpContextAccessor;
         _httpContextAccessor = httpContextAccessor;
@@ -48,7 +51,7 @@ public class ProgramOfStudyController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProgramOfStudyDTO>>> GetAll()
     {
-        var programOfStudies = await _getAllUseCase.Execute();
+        var programOfStudies = await _getProgramOfStudiesUseCase.Execute();
         return Ok(programOfStudies);
     }
 
@@ -107,6 +110,14 @@ public class ProgramOfStudyController : ControllerBase
     {
         CompetencyDTO competency = await _getCompetencyUseCase.Execute(programOfStudyCode, competencyCode);
         return Ok(competency);
+    }
+
+    //TODO test me
+    [HttpGet("{programOfStudyCode}/competency")]
+    public async Task<ActionResult<IList<CompetencyDTO>>> GetCompetencies(string programOfStudyCode)
+    {
+        IList<CompetencyDTO> competencies = await _getCompetenciesUseCase.Execute(programOfStudyCode);
+        return Ok(competencies);
     }
     #endregion
 }
