@@ -5,12 +5,12 @@ using Pdc.Domain.Models.MinisterialSpecification;
 
 namespace Pdc.Application.UseCase;
 
-public class GetCompetencies : IGetCompetenciesUseCase
+public class GetCompetenciesByProgramOfStudy : IGetCompetenciesByProgramOfStudyUseCase
 {
     private readonly ICompetencyRespository _competencyRespository;
     private readonly IMapper _mapper;
 
-    public GetCompetencies(ICompetencyRespository programOfStudyRespository, IMapper mapper)
+    public GetCompetenciesByProgramOfStudy(ICompetencyRespository programOfStudyRespository, IMapper mapper)
     {
         _competencyRespository = programOfStudyRespository;
         _mapper = mapper;

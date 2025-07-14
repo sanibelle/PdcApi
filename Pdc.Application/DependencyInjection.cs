@@ -22,7 +22,7 @@ public static class DependencyInjection
         services.AddScoped<IGetProgramOfStudyUseCase, GetProgramOfStudy>();
         services.AddScoped<ICreateCompetencyUseCase, CreateCompetency>();
         services.AddScoped<IGetCompetencyUseCase, GetCompetency>();
-        services.AddScoped<IGetCompetenciesUseCase, GetCompetencies>();
+        services.AddScoped<IGetCompetenciesByProgramOfStudyUseCase, GetCompetenciesByProgramOfStudy>();
 
         // Auth
         services.AddScoped<IUserService, UserService>();

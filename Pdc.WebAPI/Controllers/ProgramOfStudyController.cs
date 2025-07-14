@@ -19,7 +19,7 @@ public class ProgramOfStudyController : ControllerBase
     private IUpdateProgramOfStudyUseCase _updateUseCase;
     private IGetProgramOfStudyUseCase _getUseCase;
     private IGetCompetencyUseCase _getCompetencyUseCase;
-    private IGetCompetenciesUseCase _getCompetenciesUseCase;
+    private IGetCompetenciesByProgramOfStudyUseCase _getCompetenciesByProgramOfStudyUseCase;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private UserControllerService _userControllerService;
 
@@ -29,7 +29,7 @@ public class ProgramOfStudyController : ControllerBase
                                     IGetProgramOfStudiesUseCase getProgramOfStudiesUseCase,
                                     IUpdateProgramOfStudyUseCase updateUseCase,
                                     ICreateCompetencyUseCase createCompetencyUseCase,
-                                    IGetCompetenciesUseCase getCompetenciesUseCase,
+                                    IGetCompetenciesByProgramOfStudyUseCase getCompetenciesByProgramOfStudyUseCase,
                                     IGetCompetencyUseCase getCompetencyUseCase,
                                     UserControllerService userControllerService,
                                     IHttpContextAccessor httpContextAccessor)
@@ -41,7 +41,7 @@ public class ProgramOfStudyController : ControllerBase
         _updateUseCase=updateUseCase;
         _createCompetencyUseCase = createCompetencyUseCase;
         _getCompetencyUseCase = getCompetencyUseCase;
-        _getCompetenciesUseCase = getCompetenciesUseCase;
+        _getCompetenciesByProgramOfStudyUseCase = getCompetenciesByProgramOfStudyUseCase;
         _userControllerService = userControllerService;
         _httpContextAccessor=httpContextAccessor;
         _httpContextAccessor = httpContextAccessor;
@@ -116,7 +116,7 @@ public class ProgramOfStudyController : ControllerBase
     [HttpGet("{programOfStudyCode}/competency")]
     public async Task<ActionResult<IList<CompetencyDTO>>> GetCompetencies(string programOfStudyCode)
     {
-        IList<CompetencyDTO> competencies = await _getCompetenciesUseCase.Execute(programOfStudyCode);
+        IList<CompetencyDTO> competencies = await _getCompetenciesByProgramOfStudyUseCase.Execute(programOfStudyCode);
         return Ok(competencies);
     }
     #endregion
