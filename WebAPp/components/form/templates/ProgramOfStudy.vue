@@ -20,6 +20,7 @@ const programOfStudy = reactive<Partial<ProgramOfStudy>>({
     wholeUnit: 16,
   },
 });
+
 const { handleSubmit, isSubmitting } = useForm<ProgramOfStudy>({
   validateOnMount: false,
 });

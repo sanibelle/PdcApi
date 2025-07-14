@@ -49,13 +49,12 @@ watch(
 const onChange = (event: Event) => {
   handleChange(event, !!errorMessage.value);
   const target = event.target as HTMLInputElement;
-  console.log("🚀 ~ onChange ~ target:", target)
-  // emit the value as boolean if the type is checkbox
   if (props.type === 'checkbox') {
     emit('update:modelValue', target.checked);
-    return;
   }
-  emit('update:modelValue', target.value);
+  else {
+    emit('update:modelValue', target.value);
+  }
 };
 
 const onBlur = (event: Event) => {
