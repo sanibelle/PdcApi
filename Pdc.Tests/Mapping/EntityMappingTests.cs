@@ -62,7 +62,7 @@ internal class EntityMappingTests
     [Test]
     public async Task MappingMinisterialCompetency_ShouldKeepReferenceChangeRecordOnlyOnce()
     {
-        _ministerialCompetency.SetVersion(new ChangeRecord());
+        _ministerialCompetency.SetVersionOnUnversioned(new ChangeRecord());
         var entity = _mapper.Map<MinisterialCompetency>(_ministerialCompetency);
 
         // Assert

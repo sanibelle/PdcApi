@@ -1,16 +1,28 @@
 <script setup lang="ts">
-defineProps({
+
+const props = defineProps({
     isDisabled: {
+        type: Boolean,
+        default: false,
+    },
+    preventDefault: {
         type: Boolean,
         default: false,
     }
 });
 
-defineEmits(['click']);
+const emit = defineEmits(['click']);
 
+const handleClick = (event: Event) => {
+    if (props.preventDefault) {
+        event.preventDefault();
+    }
+    emit('click', event);
+};
 </script>
+
 <template>
-    <button :disabled="isDisabled" @click="$emit('click')">
+    <button :disabled="isDisabled" @click="handleClick">
         <slot></slot>
     </button>
 </template>

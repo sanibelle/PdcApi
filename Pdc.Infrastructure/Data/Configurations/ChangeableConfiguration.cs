@@ -9,6 +9,8 @@ public class ChangeableConfiguration : IEntityTypeConfiguration<ChangeableEntity
     public void Configure(EntityTypeBuilder<ChangeableEntity> builder)
     {
         builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id)
+            .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Value)
             .HasMaxLength(Constants.MaxChangeableLength);

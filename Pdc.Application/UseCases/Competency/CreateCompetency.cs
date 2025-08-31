@@ -14,11 +14,11 @@ namespace Pdc.Application.UseCase;
 public class CreateCompetency : ICreateCompetencyUseCase
 {
     private readonly IValidator<CompetencyDTO> _validator;
-    private readonly ICompetencyRespository _competencyRepository;
+    private readonly ICompetencyRepository _competencyRepository;
     private readonly IProgramOfStudyRespository _programOfStudyRepository;
     private readonly IMapper _mapper;
 
-    public CreateCompetency(ICompetencyRespository competencyRepository,
+    public CreateCompetency(ICompetencyRepository competencyRepository,
                             IProgramOfStudyRespository programOfStudyRepository,
                             IMapper mapper,
                             IValidator<CompetencyDTO> validator)
@@ -39,7 +39,7 @@ public class CreateCompetency : ICreateCompetencyUseCase
         await ThrowIfDuplicateCode(programOfStudyCode, createCompetencyDto.Code);
         ProgramOfStudy program = await _programOfStudyRepository.FindByCode(programOfStudyCode);
         MinisterialCompetency competency = _mapper.Map<MinisterialCompetency>(createCompetencyDto);
-        competency.SetVersion(new ChangeRecord());
+        competency.SetVersionOnUnversioned(new ChangeRecord());
         MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, competency, currentUser);
 
         return _mapper.Map<CompetencyDTO>(savedCompetency);

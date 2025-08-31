@@ -14,12 +14,15 @@ public class Competency
     public bool IsMandatory { get; set; }
     public bool IsOptionnal { get; set; }
     public string StatementOfCompetency { get; set; } = "";// Effectuer le déploiement de serveurs intranet
-    public required ChangeRecord CurrentVersion { get; set; }
+    public ChangeRecord? CurrentVersion { get; set; }
     public List<RealisationContext> RealisationContexts { get; set; } = new List<RealisationContext>(); // Critères de performance liés à l’ensemble de la compétence
 
-    public virtual void SetVersion(ChangeRecord version)
+    public virtual void SetVersionOnUnversioned(ChangeRecord version)
     {
-        CurrentVersion = version;
-        RealisationContexts.ForEach(x => x.SetVersion(version));
+        if (CurrentVersion == null)
+        {
+            CurrentVersion = version;
+        }
+        RealisationContexts.ForEach(x => x.SetVersionOnUnversioned(version));
     }
 }

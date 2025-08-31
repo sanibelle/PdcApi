@@ -17,69 +17,23 @@ public class CompetencyApiTests : ApiTestBase
     public async Task GivenExistingProgram_WhenCreatingCompetency_ThenShouldCreateCompetency()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
-        ComplementaryInformationDTO realisationContextComplementaryInformation, performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
-        ChangeableDTO realisationContext, performanceCriteria;
-        CompetencyElementDTO competencyElement;
-        CompetencyDTO competencyDTO;
-        CreateCompetency(out realisationContextComplementaryInformation, out performanceCriteriaComplementaryInformation, out competencyElementComplementaryInformation, out realisationContext, out performanceCriteria, out competencyElement, out competencyDTO);
+        CompetencyDTO competencyDTO = CreateCompetency();
 
-        // Act - Create the program
+        // Act - Create the competency
         var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);
         createResponse.EnsureSuccessStatusCode();
         var createdCompetency = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
-
-        createdCompetency.Should().BeEquivalentTo(competencyDTO, options =>
-            options
-            .Excluding(x => x.CompetencyElements)
-            .Excluding(x => x.RealisationContexts));
-
-        foreach (var r in createdCompetency.RealisationContexts)
-        {
-
-            Assert.That(r.Id != Guid.Empty || r.Id != null, "guid is not empty");
-            r.Should().BeEquivalentTo(realisationContext, options =>
-                options
-                .Excluding(x => x.ComplementaryInformations)
-                .Excluding(x => x.Id));
-
-            AssertComplementaryInformation(r?.ComplementaryInformations?.FirstOrDefault(), realisationContextComplementaryInformation);
-        }
-
-        // NOTE le foreach a un seul element
-        foreach (var c in createdCompetency.CompetencyElements)
-        {
-            Assert.That(c.Id != Guid.Empty || c.Id != null, "guid is not empty");
-            c.Should().BeEquivalentTo(competencyElement, options =>
-                options
-                .Excluding(x => x.Id)
-                .Excluding(x => x.PerformanceCriterias)
-                .Excluding(x => x.ComplementaryInformations));
-
-            AssertComplementaryInformation(c?.ComplementaryInformations?.FirstOrDefault(), competencyElementComplementaryInformation);
-
-            foreach (var p in c?.PerformanceCriterias ?? [])
-            {
-
-                Assert.That(p.Id != Guid.Empty || p.Id != null, "guid is not empty");
-                p.Should().BeEquivalentTo(performanceCriteria, options =>
-                    options
-                    .Excluding(x => x.Id)
-                    .Excluding(x => x.ComplementaryInformations));
-
-                AssertComplementaryInformation(p?.ComplementaryInformations?.FirstOrDefault(), performanceCriteriaComplementaryInformation);
-            }
-        }
+        var getResponse = await _Client.GetAsync($"/api/programofstudy/{_programCode}/competency/{createdCompetency.Code}");
+        getResponse.EnsureSuccessStatusCode();
+        AssertCompetencyBasedOnResponse(competencyDTO, createdCompetency);
     }
 
+
     [Test]
-    public async Task GivenExistingCompetency_WhenCreatingCompetency_ThenShouldReturnAnError()
+    public async Task GivenExistingCompetency_WhenCreatingCompetency_ThenShouldReturnADuplicateError()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
-        ComplementaryInformationDTO realisationContextComplementaryInformation, performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
-        ChangeableDTO realisationContext, performanceCriteria;
-        CompetencyElementDTO competencyElement;
-        CompetencyDTO competencyDTO;
-        CreateCompetency(out realisationContextComplementaryInformation, out performanceCriteriaComplementaryInformation, out competencyElementComplementaryInformation, out realisationContext, out performanceCriteria, out competencyElement, out competencyDTO);
+        CompetencyDTO competencyDTO = CreateCompetency();
         CompetencyValidation validation = new CompetencyValidation();
         competencyDTO.Code = DataSeeder.CompetencyEntity.Code;
         validation.Validate(competencyDTO).IsValid.Should().BeTrue();
@@ -88,42 +42,183 @@ public class CompetencyApiTests : ApiTestBase
         createResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.Conflict);
     }
 
-    private void CreateCompetency(out ComplementaryInformationDTO realisationContextComplementaryInformation, out ComplementaryInformationDTO performanceCriteriaComplementaryInformation, out ComplementaryInformationDTO competencyElementComplementaryInformation, out ChangeableDTO realisationContext, out ChangeableDTO performanceCriteria, out CompetencyElementDTO competencyElement, out CompetencyDTO competencyDTO)
+    [Test]
+
+    public async Task GivenExistingV1DraftCompetency_WhenUpdatingCompetency_ThenShouldUpdateCompetencyWithNoChangeDetails()
     {
-        realisationContextComplementaryInformation =new ComplementaryInformationDTOBuilder()
+        string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
+        ComplementaryInformationDTO realisationContextComplementaryInformation, performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
+        ChangeableDTO realisationContext, performanceCriteria;
+        CompetencyElementDTO competencyElement;
+        CompetencyDTO competencyToCreateDTO = CreateCompetency();
+
+        // Act - Create the competency
+        var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyToCreateDTO);
+        createResponse.EnsureSuccessStatusCode();
+        var competencyToUpdateDTO = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+
+        // Update the competency
+        competencyToUpdateDTO.StatementOfCompetency = "Updated competency statement";
+        competencyToUpdateDTO.IsOptionnal = true;
+
+        competencyToUpdateDTO.RealisationContexts.First().Value = "Updated realisation context of the existing element";
+        competencyToUpdateDTO.RealisationContexts.Add(realisationContext =new ChangeableDTOBuilder()
+            .WithValue("New realisation Context")
+            .Build());
+
+        competencyToUpdateDTO.CompetencyElements.Add(competencyElement = new CompetencyElementDTOBuilder()
+            .WithValue("New competency element")
+            .WithPosition(2)
+            .AddPerformanceCriteria(performanceCriteria = new ChangeableDTOBuilder()
+                .WithValue("New performance criteria")
+                .WithPosition(1)
+                .AddComplementaryInformation(performanceCriteriaComplementaryInformation = new ComplementaryInformationDTOBuilder()
+                    .WithText("New performance criteria complementary information")
+                    .Build())
+                .Build())
+            .AddComplementaryInformation(competencyElementComplementaryInformation = new ComplementaryInformationDTOBuilder()
+                .WithText("New competency element complementary information")
+                .Build())
+            .BuildCompetencyElement());
+
+        var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
+        updateResponse.EnsureSuccessStatusCode();
+        var updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+
+        AssertCompetencyBasedOnResponse(competencyToUpdateDTO, updatedCompetency);
+    }
+
+    [Test]
+
+    public async Task GivenExistingV1DraftCompetency_WhenUpdatingTHeCode_ThenShouldFailTheUpdate()
+    {
+        string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
+        ComplementaryInformationDTO realisationContextComplementaryInformation, performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
+        ChangeableDTO realisationContext, performanceCriteria;
+        CompetencyElementDTO competencyElement;
+        CompetencyDTO competencyToCreateDTO = CreateCompetency();
+
+        // Act - Create the competency
+        var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyToCreateDTO);
+        createResponse.EnsureSuccessStatusCode();
+        var competencyToUpdateDTO = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+
+        // Update the competency
+        competencyToUpdateDTO.StatementOfCompetency = "Updated competency statement";
+        competencyToUpdateDTO.RealisationContexts.Add(realisationContext =new ChangeableDTOBuilder()
+            .WithValue("New realisation Context")
+            .Build());
+
+        var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
+        updateResponse.EnsureSuccessStatusCode();
+        var updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+        Assert.That(updatedCompetency.StatementOfCompetency != competencyToCreateDTO.StatementOfCompetency);
+        Assert.That(updatedCompetency.RealisationContexts.Count == competencyToCreateDTO.RealisationContexts.Count + 1);
+        AssertCompetencyBasedOnResponse(competencyToUpdateDTO, updatedCompetency);
+        // TODO Changer le code ou la version ne devrait pas fonctionner.
+        //competencyToUpdateDTO.IsMandatory = true;
+        //competencyToUpdateDTO.IsOptionnal = true;
+        Assert.Fail();
+    }
+
+    private CompetencyDTO CreateCompetency()
+    {
+        var realisationContextComplementaryInformation = new ComplementaryInformationDTOBuilder()
+            .WithText("realisationContextComplementaryInformation")
             .Build();
-        performanceCriteriaComplementaryInformation =new ComplementaryInformationDTOBuilder()
+        var performanceCriteriaComplementaryInformation = new ComplementaryInformationDTOBuilder()
+            .WithText("performanceCriteriaComplementaryInformation ")
             .Build();
-        competencyElementComplementaryInformation =new ComplementaryInformationDTOBuilder()
+        var competencyElementComplementaryInformation = new ComplementaryInformationDTOBuilder()
+            .WithText("competencyElementComplementaryInformation")
             .Build();
-        realisationContext =new ChangeableDTOBuilder()
+        var realisationContext = new ChangeableDTOBuilder()
             .AddComplementaryInformation(realisationContextComplementaryInformation)
             .Build();
-        performanceCriteria =new ChangeableDTOBuilder()
+        var performanceCriteria = new ChangeableDTOBuilder()
             .AddComplementaryInformation(performanceCriteriaComplementaryInformation)
             .WithPosition(1)
             .Build();
-        competencyElement =new CompetencyElementDTOBuilder()
+        var competencyElement = new CompetencyElementDTOBuilder()
             .AddPerformanceCriteria(performanceCriteria)
             .WithPosition(1)
             .AddComplementaryInformation(competencyElementComplementaryInformation)
             .BuildCompetencyElement();
-        competencyDTO =new CompetencyDTOBuilder()
+        var competencyDTO = new CompetencyDTOBuilder()
             .AddCompetencyElements(competencyElement)
             .WithRealisationContexts(new List<ChangeableDTO> { realisationContext })
             .Build();
+
+        return competencyDTO;
     }
 
-    private void AssertComplementaryInformation(ComplementaryInformationDTO? i, ComplementaryInformationDTO? competencyElementComplementaryInformation)
+    private void AssertCompetencyBasedOnResponse(CompetencyDTO competencyDTO, CompetencyDTO competencyToCompare)
     {
+        competencyToCompare.Should().BeEquivalentTo(competencyDTO, options =>
+                    options
+                    .Excluding(x => x.IsDraft)
+                    .Excluding(x => x.VersionNumber)
+                    .Excluding(x => x.VersionId)
+                    .Excluding(x => x.CompetencyElements)
+                    .Excluding(x => x.RealisationContexts));
+
+        Assert.That(competencyToCompare.VersionNumber == 1);
+        Assert.That(competencyToCompare.IsDraft, Is.True);
+        Assert.That(competencyToCompare.VersionId, Is.TypeOf<Guid>());
+
+        foreach (var r in competencyToCompare.RealisationContexts)
+        {
+            Assert.That(r.Id != Guid.Empty || r.Id != null, "guid is not empty");
+            var realisationContext = competencyDTO.RealisationContexts.FirstOrDefault(x => x.Value == r.Value, null);
+            r.Should().BeEquivalentTo(realisationContext, options =>
+                options
+                .Excluding(x => x.ComplementaryInformations)
+                .Excluding(x => x.Id));
+
+            AssertComplementaryInformation(r?.ComplementaryInformations?.FirstOrDefault(), realisationContext?.ComplementaryInformations?.FirstOrDefault());
+        }
+
+        // NOTE le foreach a un seul element
+        foreach (var c in competencyToCompare.CompetencyElements)
+        {
+            Assert.That(c.Id != Guid.Empty || c.Id != null, "guid is not empty");
+            var competencyElement = competencyDTO.CompetencyElements.FirstOrDefault(x => x.Value == c.Value);
+            c.Should().BeEquivalentTo(competencyElement, options =>
+                options
+                .Excluding(x => x.Id)
+                .Excluding(x => x.PerformanceCriterias)
+                .Excluding(x => x.ComplementaryInformations));
+
+            AssertComplementaryInformation(c?.ComplementaryInformations?.FirstOrDefault(), competencyElement?.ComplementaryInformations?.FirstOrDefault());
+
+            foreach (var p in c?.PerformanceCriterias ?? [])
+            {
+                var performanceCriteria = competencyElement.PerformanceCriterias.FirstOrDefault(x => x.Value == p.Value);
+                Assert.That(p.Id != Guid.Empty || p.Id != null, "guid is not empty");
+                p.Should().BeEquivalentTo(performanceCriteria, options =>
+                    options
+                    .Excluding(x => x.Id)
+                    .Excluding(x => x.ComplementaryInformations));
+
+                AssertComplementaryInformation(p?.ComplementaryInformations?.FirstOrDefault(), performanceCriteria?.ComplementaryInformations?.FirstOrDefault());
+            }
+        }
+    }
+
+
+    private void AssertComplementaryInformation(ComplementaryInformationDTO? originalComplementaryInformation, ComplementaryInformationDTO? complementaryInformation)
+    {
+        if (originalComplementaryInformation == null && complementaryInformation == null) return;
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(i?.Id != Guid.Empty || i.Id != null, "guid is not empty");
-            Assert.That(i?.WrittenOnVersion != null, "version is found");
-            Assert.That(i?.WrittenOnVersion == 1, "new version is always 1");
+            Assert.That(originalComplementaryInformation?.Id != null && originalComplementaryInformation?.Id != Guid.Empty, $"guid is not empty");
+            Assert.That(originalComplementaryInformation?.WrittenOnVersion != null, $"version is not found");
+            originalComplementaryInformation?.WrittenOnVersion.Should().Be(1, "new or update version is always 1");
         }
-        i.Should().BeEquivalentTo(competencyElementComplementaryInformation, options =>
-           options.Excluding(x => x.WrittenOnVersion)
+        originalComplementaryInformation.Should().BeEquivalentTo(complementaryInformation, options =>
+           options
+           .Excluding(x => x.Id)
+           .Excluding(x => x.WrittenOnVersion)
            .Excluding(x => x.CreatedBy));
     }
 }

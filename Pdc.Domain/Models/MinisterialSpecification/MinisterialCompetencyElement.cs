@@ -6,9 +6,9 @@ public class MinisterialCompetencyElement : CompetencyElement
 {
     public List<PerformanceCriteria> PerformanceCriterias { get; set; } = new List<PerformanceCriteria>();
 
-    public override void SetVersion(ChangeRecord version)
+    public override void SetVersionOnUnversioned(ChangeRecord version)
     {
-        base.SetVersion(version);
-        PerformanceCriterias.ForEach(x => x.SetVersion(version));
+        base.SetVersionOnUnversioned(version);
+        PerformanceCriterias.ForEach(x => x.SetVersionOnUnversioned(version));
     }
 }

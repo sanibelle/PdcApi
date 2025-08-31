@@ -1,7 +1,5 @@
-export type CompetencyElement = {
-  id?: string;
+export type CompetencyElement = Changeable & {
   position: number;
-  text: string;
   performanceCriterias?: PerformanceCriteria[];
   complementaryInformations?: ComplementaryInformation[];
 };

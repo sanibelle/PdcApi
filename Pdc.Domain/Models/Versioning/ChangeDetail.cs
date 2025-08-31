@@ -4,8 +4,8 @@ namespace Pdc.Domain.Models.Versioning;
 
 public class ChangeDetail
 {
-    public required Guid Id { get; set; }
-    public required ChangeRecord ChangeRecord { get; set; }
+    public required Guid? Id { get; set; }
+    public required ChangeRecord WrittenOnVersion { get; set; }
     public required AChangeable Changeable { get; set; }
     public required ChangeType ChangeType { get; set; }
     /// <summary>

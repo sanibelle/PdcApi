@@ -26,6 +26,13 @@ const props = defineProps({
   },
 });
 
+const optionnalCompetency = computed({
+  get: () => !competency.isMandatory,
+  set: (value) => {
+    competency.isMandatory = !value;
+  }
+});
+
 const { createCompetency } = useCompetencyClient();
 const onSubmit = handleSubmit(async () => {
   try {
@@ -43,14 +50,15 @@ const onSubmit = handleSubmit(async () => {
 
 <template>
   <div class="form">
-    {{ competency }}
     <form @submit="onSubmit" class="form-container">
       <FormATextInput name="code" :label="t('competencyCode')" placeholder="Ex : 00SU" :min="3" :max="50"
         :required="true" v-model="competency.code" :errorMessage="codeExistingErrorMessage" />
       <FormATextInput name="statementOfCompetency" :label="t('statementOfCompetency')" :placeholder="t('statementOfCompetencyPlaceholder')" 
         :required="true" v-model="competency.statementOfCompetency" />
-      <FormACheckboxInput name="isMandatory" :label="competency.isMandatory ? t('mandatoryCompetency') : t('optionnalCompetency')" :hint="t('mandatoryCompetencyHint')" 
+      <FormACheckboxInput name="isMandatory" :label="t('mandatoryCompetency')" 
         :required="true" v-model="competency.isMandatory" />
+      <FormACheckboxInput name="isOptionnal" :label="t('optionnalCompetency')" 
+        :required="true" v-model="optionnalCompetency" />
       <div class="modal-footer">
         <FormMoleculesASubmitButton :isSubmitting="isSubmitting" id="submit-competency" />
       </div>
@@ -69,7 +77,6 @@ const onSubmit = handleSubmit(async () => {
     "codeExistingErrorMessage": "Le code de compétence existe déjà.",
     "optionnalCompetency": "Compétence optionnelle",
     "mandatoryCompetency": "Compétence obligatoire",
-    "mandatoryCompetencyHint": "Lorsque coché, la compétence est obligatoire pour le programme, sinon elle est optionnelle.",
   }
 }
 </i18n>

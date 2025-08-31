@@ -6,10 +6,6 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  type: {
-    type: String,
-    default: 'text',
-  },
   placeholder: {
     type: String,
     default: '',
@@ -23,8 +19,8 @@ const props = defineProps({
     default: '',
   },
   modelValue: {
-    type: [String, Number, Boolean],
-    default: '',
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -49,7 +45,7 @@ watch(
 const onChange = (event: Event) => {
   handleChange(event, !!errorMessage.value);
   const target = event.target as HTMLInputElement;
-  emit('update:modelValue', target.value);
+  emit('update:modelValue', target.checked);
 };
 
 const onBlur = (event: Event) => {
@@ -65,7 +61,7 @@ watch(
 </script>
 
 <template>
-  <input :name="name" :value="value" :type="type" :placeholder="placeholder" :disabled="disabled"
+  <input :name="name" :checked="value" type="checkbox" :placeholder="placeholder" :disabled="disabled"
     class="base-input" :class="{ error: errorMessage }" @input="onChange" @blur="onBlur" />
 </template>
 

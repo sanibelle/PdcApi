@@ -7,23 +7,7 @@ namespace Pdc.Infrastructure.Entities.Versioning;
 /// </summary>
 public class ChangeRecordEntity
 {
-    private Guid _id;
-    public Guid Id
-    {
-        get => _id;
-        set
-        {
-            if (Guid.Empty == value)
-            {
-                _id = Guid.NewGuid();
-            }
-            else
-            {
-                _id = value;
-            }
-        }
-    }
-
+    public required Guid? Id { get; set; }
     public IEnumerable<ComplementaryInformationEntity> ComplementaryInformations { get; set; } = new List<ComplementaryInformationEntity>();
     public IEnumerable<ChangeDetailEntity> ChangeDetails { get; set; } = new List<ChangeDetailEntity>();
     public DateTime CreatedOn { get; set; }
@@ -47,7 +31,6 @@ public class ChangeRecordEntity
     public ChangeRecordEntity()
     {
         CreatedOn = DateTime.Now;
-        Id = Guid.NewGuid();
     }
 
     internal void SetCreatedBy(IdentityUserEntity createdBy)

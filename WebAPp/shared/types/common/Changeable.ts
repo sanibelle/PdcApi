@@ -1,6 +1,5 @@
 export type Changeable = {
   id?: string;
-  position: number;
-  text: string;
+  value: string;
   complementaryInformations?: ComplementaryInformation[];
 };

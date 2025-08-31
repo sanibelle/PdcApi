@@ -19,12 +19,14 @@ const { t } = useI18n();
       :is-disabled="isDisabled || isSubmitting" 
       v-bind="$attrs"
     >
-      <template v-if="isSubmitting">
-        {{ t('submiting') }}
-      </template>
-      <template v-else>
-        {{ t('submit') }}
-      </template>
+      <slot>
+        <template v-if="isSubmitting">
+          {{ t('submiting') }}
+        </template>
+        <template v-else>
+          {{ t('submit') }}
+        </template>
+      </slot>
     </CommonAtomsAButton>
   </div>
 </template>

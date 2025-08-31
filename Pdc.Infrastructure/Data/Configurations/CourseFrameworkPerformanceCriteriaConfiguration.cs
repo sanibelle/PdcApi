@@ -8,6 +8,8 @@ public class CourseFrameworkPerformanceCriteriaConfiguration : IEntityTypeConfig
     public void Configure(EntityTypeBuilder<CourseFrameworkPerformanceCriteriaEntity> builder)
     {
         builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id)
+            .ValueGeneratedOnAdd();
 
         builder.HasOne(x => x.PerformanceCriteria)
             .WithMany()

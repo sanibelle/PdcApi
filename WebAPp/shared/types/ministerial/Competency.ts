@@ -8,5 +8,7 @@ export type Competency = {
   statementOfCompetency: string;
   realisationContexts: RealisationContext[];
   competencyElements: CompetencyElement[];
-  versionNumber?: number | null;
+  versionNumber: number;
+  isDraft: boolean;
+  versionId: string;
 };

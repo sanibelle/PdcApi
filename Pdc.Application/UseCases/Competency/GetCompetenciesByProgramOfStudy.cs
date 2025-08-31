@@ -7,10 +7,10 @@ namespace Pdc.Application.UseCase;
 
 public class GetCompetenciesByProgramOfStudy : IGetCompetenciesByProgramOfStudyUseCase
 {
-    private readonly ICompetencyRespository _competencyRespository;
+    private readonly ICompetencyRepository _competencyRespository;
     private readonly IMapper _mapper;
 
-    public GetCompetenciesByProgramOfStudy(ICompetencyRespository programOfStudyRespository, IMapper mapper)
+    public GetCompetenciesByProgramOfStudy(ICompetencyRepository programOfStudyRespository, IMapper mapper)
     {
         _competencyRespository = programOfStudyRespository;
         _mapper = mapper;

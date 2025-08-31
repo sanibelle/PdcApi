@@ -6,9 +6,9 @@ namespace Pdc.Application.UseCase;
 
 public class DeleteCompetency : IDeleteCompetencyUseCase
 {
-    private readonly ICompetencyRespository _programOfStudyRespository;
+    private readonly ICompetencyRepository _programOfStudyRespository;
 
-    public DeleteCompetency(ICompetencyRespository programOfStudyRespository)
+    public DeleteCompetency(ICompetencyRepository programOfStudyRespository)
     {
         _programOfStudyRespository = programOfStudyRespository;
     }

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.EquivalencyExpression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pdc.Domain.Interfaces.Repositories;
@@ -19,7 +21,8 @@ public static class DependencyInjection
         if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("mode=memory"))
         {
             services.AddDbContext<AppDbContext>(options =>
-                options.UseInMemoryDatabase("TestDataBase"));
+                options.UseInMemoryDatabase("TestDataBase")
+                .EnableSensitiveDataLogging());
         }
         else if (!string.IsNullOrEmpty(connectionString))
         {
@@ -31,8 +34,12 @@ public static class DependencyInjection
 
         // Register Repositories
         services.AddScoped<IProgramOfStudyRespository, ProgramOfStudyRespository>();
-        services.AddScoped<ICompetencyRespository, CompetencyRepository>();
-        services.AddAutoMapper(typeof(MappingProfile));
+        services.AddScoped<ICompetencyRepository, CompetencyRepository>();
+        services.AddAutoMapper((serviceProvider, automapper) =>
+        {
+            automapper.AddCollectionMappers();
+            automapper.UseEntityFrameworkCoreModel<AppDbContext>(serviceProvider);
+        }, typeof(MappingProfile));
         services.AddScoped<IAuthService, IdentityAuthService>();
 
         return services;

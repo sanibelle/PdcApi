@@ -7,7 +7,7 @@ namespace Pdc.Application.DTOS.Common;
 /// </summary>
 public class ChangeRecordDTO
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public int VersionNumber { get; set; }
     private IEnumerable<ComplementaryInformation> _complementaryInformations { get; set; } = new List<ComplementaryInformation>();
     private IEnumerable<ChangeDetail> _changeDetails { get; set; } = new List<ChangeDetail>();

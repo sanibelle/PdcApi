@@ -10,7 +10,7 @@ public class ChangeRecord
     public int VersionNumber { get; set; }
     private IEnumerable<ComplementaryInformation> _complementaryInformations { get; set; } = new List<ComplementaryInformation>();
     private IEnumerable<ChangeDetail> _changeDetails { get; set; } = new List<ChangeDetail>();
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public DateTime CreatedOn { get; set; }
     /// <summary>
     /// Premet d'avoir plusieurs copies d'une version. Un seul est actif à la fois.
@@ -39,7 +39,6 @@ public class ChangeRecord
     /// </summary>
     public ChangeRecord()
     {
-        Id = Guid.NewGuid();
         VersionNumber = 1;
         CreatedOn = DateTime.Now;
         IsDraft = true;

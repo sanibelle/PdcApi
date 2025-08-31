@@ -16,6 +16,7 @@ public class ProgramOfStudyController : ControllerBase
     private ICreateCompetencyUseCase _createCompetencyUseCase;
     private IDeleteProgramOfStudyUseCase _deleteUseCase;
     private IGetProgramOfStudiesUseCase _getProgramOfStudiesUseCase;
+    private IUpdateDraftV1CompetencyUseCase _updateDraftV1CompetencyUseCase;
     private IUpdateProgramOfStudyUseCase _updateUseCase;
     private IGetProgramOfStudyUseCase _getUseCase;
     private IGetCompetencyUseCase _getCompetencyUseCase;
@@ -29,6 +30,7 @@ public class ProgramOfStudyController : ControllerBase
                                     IGetProgramOfStudiesUseCase getProgramOfStudiesUseCase,
                                     IUpdateProgramOfStudyUseCase updateUseCase,
                                     ICreateCompetencyUseCase createCompetencyUseCase,
+                                    IUpdateDraftV1CompetencyUseCase updateDraftV1CompetencyUseCase,
                                     IGetCompetenciesByProgramOfStudyUseCase getCompetenciesByProgramOfStudyUseCase,
                                     IGetCompetencyUseCase getCompetencyUseCase,
                                     UserControllerService userControllerService,
@@ -40,6 +42,7 @@ public class ProgramOfStudyController : ControllerBase
         _getUseCase = getProgramOfStudyUseCase;
         _updateUseCase=updateUseCase;
         _createCompetencyUseCase = createCompetencyUseCase;
+        _updateDraftV1CompetencyUseCase = updateDraftV1CompetencyUseCase;
         _getCompetencyUseCase = getCompetencyUseCase;
         _getCompetenciesByProgramOfStudyUseCase = getCompetenciesByProgramOfStudyUseCase;
         _userControllerService = userControllerService;
@@ -90,7 +93,6 @@ public class ProgramOfStudyController : ControllerBase
     }
     #endregion
     #region Competency
-    //TODO ROLES
     [Authorize(Roles = Roles.Competency)]
     [HttpPost("{programOfStudyCode}/competency")]
     public async Task<ActionResult<CompetencyDTO>> AddCompetency(string programOfStudyCode, [FromBody] CompetencyDTO createCompetencyDTO)
@@ -104,7 +106,8 @@ public class ProgramOfStudyController : ControllerBase
             competency);
     }
 
-
+    //TODO test me
+    [Authorize(Roles = Roles.Competency)]
     [HttpGet("{programOfStudyCode}/competency/{competencyCode}")]
     public async Task<ActionResult<CompetencyDTO>> GetCompetency(string programOfStudyCode, string competencyCode)
     {
@@ -113,11 +116,31 @@ public class ProgramOfStudyController : ControllerBase
     }
 
     //TODO test me
+    [Authorize(Roles = Roles.Competency)]
     [HttpGet("{programOfStudyCode}/competency")]
     public async Task<ActionResult<IList<CompetencyDTO>>> GetCompetencies(string programOfStudyCode)
     {
         IList<CompetencyDTO> competencies = await _getCompetenciesByProgramOfStudyUseCase.Execute(programOfStudyCode);
         return Ok(competencies);
+    }
+
+    [Authorize(Roles = Roles.Competency)]
+    [HttpPut("{programOfStudyCode}/competency/{competencyCode}")]
+    public async Task<ActionResult<CompetencyDTO>> UpdateCompetency(string programOfStudyCode, [FromBody] CompetencyDTO updateCompetencyDTO)
+    {
+        if (updateCompetencyDTO.VersionNumber == 1 && updateCompetencyDTO.IsDraft)
+        {
+            CompetencyDTO competency = await _updateDraftV1CompetencyUseCase.Execute(programOfStudyCode, updateCompetencyDTO);
+
+            return CreatedAtAction(
+                nameof(GetCompetency),
+                new { programOfStudyCode, competencyCode = competency.Code },
+                competency);
+        }
+        else
+        {
+            throw new NotSupportedException("Not coded yet");
+        }
     }
     #endregion
 }

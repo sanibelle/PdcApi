@@ -13,7 +13,8 @@ public class CompetencyDTO
     public ICollection<ChangeableDTO> RealisationContexts { get; set; } = new List<ChangeableDTO>();
     public ICollection<CompetencyElementDTO> CompetencyElements { get; set; } = new List<CompetencyElementDTO>();
     public int? VersionNumber { get; set; }
-
+    public Guid? VersionId { get; set; }
+    public bool IsDraft { get; set; } = false;
     public CompetencyDTO() { }
 
 

@@ -9,10 +9,10 @@ namespace Pdc.Application.UseCase;
 
 public class GetCompetency : IGetCompetencyUseCase
 {
-    private readonly ICompetencyRespository _competencyRespository;
+    private readonly ICompetencyRepository _competencyRespository;
     private readonly IMapper _mapper;
 
-    public GetCompetency(ICompetencyRespository competencyRespository, IMapper mapper)
+    public GetCompetency(ICompetencyRepository competencyRespository, IMapper mapper)
     {
         _competencyRespository = competencyRespository;
         _mapper = mapper;

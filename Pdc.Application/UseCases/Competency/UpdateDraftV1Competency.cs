@@ -1,0 +1,48 @@
+﻿using AutoMapper;
+using FluentValidation;
+using Pdc.Application.DTOS;
+using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Models.MinisterialSpecification;
+
+
+namespace Pdc.Application.UseCase;
+
+public class UpdateDraftV1Competency : IUpdateDraftV1CompetencyUseCase
+{
+    private readonly IValidator<CompetencyDTO> _validator;
+    private readonly ICompetencyRepository _competencyRespository;
+    private readonly IMapper _mapper;
+
+    public UpdateDraftV1Competency(ICompetencyRepository competencyRespository,
+                               IMapper mapper,
+                               IValidator<CompetencyDTO> validator)
+    {
+        _competencyRespository = competencyRespository;
+        _mapper = mapper;
+        _validator = validator;
+    }
+
+    public async Task<CompetencyDTO> Execute(string programOfStudyCode, CompetencyDTO updateCompetencyDto)
+    {
+        var validationResult = await _validator.ValidateAsync(updateCompetencyDto);
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+        MinisterialCompetency competencyToUpdate = await _competencyRespository.FindByCode(programOfStudyCode, updateCompetencyDto.Code);
+        if (!competencyToUpdate.CurrentVersion.IsDraft || competencyToUpdate.CurrentVersion.VersionNumber > 1)
+        {
+            throw new InvalidOperationException("Cannot update a non-draft competency with version greater than 1.");
+        }
+        _mapper.Map(updateCompetencyDto, competencyToUpdate);
+        // On prend la version actuelle et on l'assigne à tous les objets qui ont une version.
+        competencyToUpdate.SetVersionOnUnversioned(competencyToUpdate.CurrentVersion);
+        MinisterialCompetency updatedProgramOfStudy = await _competencyRespository.Update(competencyToUpdate);
+        return _mapper.Map<CompetencyDTO>(updatedProgramOfStudy);
+
+        // TODO
+        // Si la compétence est en V1 et draft, on update sans tracker
+        // Un autre use case pour les changements mineurs en !IsDraft. Normalement, comme un changeable a toujours sa valeur la plus à jour, il ne devrait pas y avoir de problème à faire des updates mineurs.
+        // Finalement, si on fait des updates majeurs sur une version 1+, on track les changements de vn à vn+1.
+    }
+}
