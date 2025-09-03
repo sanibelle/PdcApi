@@ -126,11 +126,11 @@ public class ProgramOfStudyController : ControllerBase
 
     [Authorize(Roles = Roles.Competency)]
     [HttpPut("{programOfStudyCode}/competency/{competencyCode}")]
-    public async Task<ActionResult<CompetencyDTO>> UpdateCompetency(string programOfStudyCode, [FromBody] CompetencyDTO updateCompetencyDTO)
+    public async Task<ActionResult<CompetencyDTO>> UpdateCompetency(string programOfStudyCode, string competencyCode, [FromBody] CompetencyDTO updateCompetencyDTO)
     {
         if (updateCompetencyDTO.VersionNumber == 1 && updateCompetencyDTO.IsDraft)
         {
-            CompetencyDTO competency = await _updateDraftV1CompetencyUseCase.Execute(programOfStudyCode, updateCompetencyDTO);
+            CompetencyDTO competency = await _updateDraftV1CompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO);
 
             return CreatedAtAction(
                 nameof(GetCompetency),

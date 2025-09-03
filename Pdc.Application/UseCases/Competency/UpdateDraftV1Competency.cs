@@ -22,12 +22,16 @@ public class UpdateDraftV1Competency : IUpdateDraftV1CompetencyUseCase
         _validator = validator;
     }
 
-    public async Task<CompetencyDTO> Execute(string programOfStudyCode, CompetencyDTO updateCompetencyDto)
+    public async Task<CompetencyDTO> Execute(string programOfStudyCode, string competencyCode, CompetencyDTO updateCompetencyDto)
     {
         var validationResult = await _validator.ValidateAsync(updateCompetencyDto);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
+        }
+        if (competencyCode != updateCompetencyDto.Code)
+        {
+            throw new ValidationException("Competency code in the URL does not match the code in the body. The code should not be changed.");
         }
         MinisterialCompetency competencyToUpdate = await _competencyRespository.FindByCode(programOfStudyCode, updateCompetencyDto.Code);
         if (!competencyToUpdate.CurrentVersion.IsDraft || competencyToUpdate.CurrentVersion.VersionNumber > 1)

@@ -342,7 +342,7 @@ public class MinisterialCompetencyTest
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithCode(_competencyToUpdateV1Draft.Code)
             .Build();
-        var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO);
+        var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO);
     }
 
     [Test]
@@ -353,7 +353,7 @@ public class MinisterialCompetencyTest
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithCode(_competencyToUpdateV1Draft.Code)
             .Build();
-        var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO);
+        var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO);
         Assert.That(result.VersionNumber == 1, "Updating a draft V1 competency should not create a new version");
         _competencyRepositoryMock.Verify(repo => repo.Update(It.IsAny<MinisterialCompetency>()), Times.Once);
     }
@@ -367,7 +367,7 @@ public class MinisterialCompetencyTest
 
         // Assert
         Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO));
+                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO));
     }
 
     [Test]
@@ -379,7 +379,7 @@ public class MinisterialCompetencyTest
 
         // Assert
         Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO));
+                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO));
     }
 
     [Test]
@@ -391,7 +391,7 @@ public class MinisterialCompetencyTest
 
         // Assert
         Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO));
+                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO));
     }
 
     //TODO gestion de la version. Quand on crée un programme, on crée une nouvelle version

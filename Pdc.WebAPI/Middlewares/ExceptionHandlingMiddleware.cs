@@ -1,5 +1,5 @@
-﻿using Pdc.Domain.Exceptions;
-using System.ComponentModel.DataAnnotations;
+﻿using FluentValidation;
+using Pdc.Domain.Exceptions;
 
 namespace Pdc.WebAPI.Middlewares;
 

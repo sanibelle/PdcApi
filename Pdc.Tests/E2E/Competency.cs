@@ -47,7 +47,7 @@ public class CompetencyApiTests : ApiTestBase
     public async Task GivenExistingV1DraftCompetency_WhenUpdatingCompetency_ThenShouldUpdateCompetencyWithNoChangeDetails()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
-        ComplementaryInformationDTO realisationContextComplementaryInformation, performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
+        ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
         ChangeableDTO realisationContext, performanceCriteria;
         CompetencyElementDTO competencyElement;
         CompetencyDTO competencyToCreateDTO = CreateCompetency();
@@ -80,7 +80,6 @@ public class CompetencyApiTests : ApiTestBase
                 .WithText("New competency element complementary information")
                 .Build())
             .BuildCompetencyElement());
-
         var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
         updateResponse.EnsureSuccessStatusCode();
         var updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
@@ -90,35 +89,29 @@ public class CompetencyApiTests : ApiTestBase
 
     [Test]
 
-    public async Task GivenExistingV1DraftCompetency_WhenUpdatingTHeCode_ThenShouldFailTheUpdate()
+    public async Task GivenExistingV1DraftCompetency_WhenUpdatingTheCode_ThenShouldFailTheUpdate()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
-        ComplementaryInformationDTO realisationContextComplementaryInformation, performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
-        ChangeableDTO realisationContext, performanceCriteria;
-        CompetencyElementDTO competencyElement;
+        ChangeableDTO realisationContext;
         CompetencyDTO competencyToCreateDTO = CreateCompetency();
 
         // Act - Create the competency
         var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyToCreateDTO);
         createResponse.EnsureSuccessStatusCode();
         var competencyToUpdateDTO = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
-
+        var oldCode = competencyToUpdateDTO.Code;
         // Update the competency
-        competencyToUpdateDTO.StatementOfCompetency = "Updated competency statement";
+        competencyToUpdateDTO.Code = "BADCOD";
         competencyToUpdateDTO.RealisationContexts.Add(realisationContext =new ChangeableDTOBuilder()
             .WithValue("New realisation Context")
             .Build());
 
-        var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
-        updateResponse.EnsureSuccessStatusCode();
-        var updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
-        Assert.That(updatedCompetency.StatementOfCompetency != competencyToCreateDTO.StatementOfCompetency);
-        Assert.That(updatedCompetency.RealisationContexts.Count == competencyToCreateDTO.RealisationContexts.Count + 1);
-        AssertCompetencyBasedOnResponse(competencyToUpdateDTO, updatedCompetency);
-        // TODO Changer le code ou la version ne devrait pas fonctionner.
-        //competencyToUpdateDTO.IsMandatory = true;
-        //competencyToUpdateDTO.IsOptionnal = true;
-        Assert.Fail();
+        var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{oldCode}", competencyToUpdateDTO);
+        updateResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        var res = await _Client.GetAsync($"/api/programofstudy/{_programCode}/competency/{oldCode}");
+        var notUpdatedCompetency = await res.Content.ReadFromJsonAsync<CompetencyDTO>();
+        notUpdatedCompetency.Should().NotBeNull();
+        notUpdatedCompetency.RealisationContexts.Should().HaveCount(1, "No realisation contexts added.");
     }
 
     private CompetencyDTO CreateCompetency()
