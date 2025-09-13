@@ -14,7 +14,8 @@ public class ProgramOfStudyController : ControllerBase
 {
     private ICreateProgramOfStudyUseCase _createUseCase;
     private ICreateCompetencyUseCase _createCompetencyUseCase;
-    private IDeleteProgramOfStudyUseCase _deleteUseCase;
+    private IDeleteCompetencyUseCase _deleteCompetencyUseCase;
+    private IDeleteProgramOfStudyUseCase _deleteProgramOfStudyUseCase;
     private IGetProgramOfStudiesUseCase _getProgramOfStudiesUseCase;
     private IUpdateDraftV1CompetencyUseCase _updateDraftV1CompetencyUseCase;
     private IUpdateProgramOfStudyUseCase _updateUseCase;
@@ -25,11 +26,12 @@ public class ProgramOfStudyController : ControllerBase
     private UserControllerService _userControllerService;
 
     public ProgramOfStudyController(ICreateProgramOfStudyUseCase createUseCase,
-                                    IDeleteProgramOfStudyUseCase deleteUseCase,
+                                    IDeleteProgramOfStudyUseCase deleteProgramOfStudyUseCase,
                                     IGetProgramOfStudyUseCase getProgramOfStudyUseCase,
                                     IGetProgramOfStudiesUseCase getProgramOfStudiesUseCase,
                                     IUpdateProgramOfStudyUseCase updateUseCase,
                                     ICreateCompetencyUseCase createCompetencyUseCase,
+                                    IDeleteCompetencyUseCase deleteCompetencyUseCase,
                                     IUpdateDraftV1CompetencyUseCase updateDraftV1CompetencyUseCase,
                                     IGetCompetenciesByProgramOfStudyUseCase getCompetenciesByProgramOfStudyUseCase,
                                     IGetCompetencyUseCase getCompetencyUseCase,
@@ -37,8 +39,9 @@ public class ProgramOfStudyController : ControllerBase
                                     IHttpContextAccessor httpContextAccessor)
     {
         _createUseCase = createUseCase;
-        _deleteUseCase = deleteUseCase;
+        _deleteProgramOfStudyUseCase = deleteProgramOfStudyUseCase;
         _getProgramOfStudiesUseCase = getProgramOfStudiesUseCase;
+        _deleteCompetencyUseCase = deleteCompetencyUseCase;
         _getUseCase = getProgramOfStudyUseCase;
         _updateUseCase=updateUseCase;
         _createCompetencyUseCase = createCompetencyUseCase;
@@ -88,7 +91,7 @@ public class ProgramOfStudyController : ControllerBase
     [HttpDelete("{code}")]
     public async Task<IActionResult> Delete(string code)
     {
-        await _deleteUseCase.Execute(code);
+        await _deleteProgramOfStudyUseCase.Execute(code);
         return NoContent();
     }
     #endregion
@@ -141,6 +144,14 @@ public class ProgramOfStudyController : ControllerBase
         {
             throw new NotSupportedException("Not coded yet");
         }
+    }
+
+    [Authorize(Roles = Roles.Competency)]
+    [HttpDelete("{programOfStudyCode}/competency/{competencyCode}")]
+    public async Task<ActionResult<CompetencyDTO>> DeleteCompetency(string programOfStudyCode, string competencyCode)
+    {
+        await _deleteCompetencyUseCase.Execute(programOfStudyCode, competencyCode);
+        return NoContent();
     }
     #endregion
 }

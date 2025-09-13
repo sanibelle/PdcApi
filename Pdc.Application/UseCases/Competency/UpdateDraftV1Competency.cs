@@ -34,7 +34,7 @@ public class UpdateDraftV1Competency : IUpdateDraftV1CompetencyUseCase
             throw new ValidationException("Competency code in the URL does not match the code in the body. The code should not be changed.");
         }
         MinisterialCompetency competencyToUpdate = await _competencyRespository.FindByCode(programOfStudyCode, updateCompetencyDto.Code);
-        if (!competencyToUpdate.CurrentVersion.IsDraft || competencyToUpdate.CurrentVersion.VersionNumber > 1)
+        if (!competencyToUpdate.IsDraftAndV1OrNull())
         {
             throw new InvalidOperationException("Cannot update a non-draft competency with version greater than 1.");
         }

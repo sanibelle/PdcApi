@@ -6,23 +6,27 @@ namespace Pdc.Application.UseCase;
 
 public class DeleteCompetency : IDeleteCompetencyUseCase
 {
-    private readonly ICompetencyRepository _programOfStudyRespository;
+    private readonly ICompetencyRepository _competencyRespository;
 
-    public DeleteCompetency(ICompetencyRepository programOfStudyRespository)
+    public DeleteCompetency(ICompetencyRepository competencyRespository)
     {
-        _programOfStudyRespository = programOfStudyRespository;
+        _competencyRespository = competencyRespository;
     }
 
     public async Task Execute(string programOfStudyCode, string competencyCode)
     {
         try
         {
-            await _programOfStudyRespository.FindByCode(programOfStudyCode, competencyCode);
+            var competency = await _competencyRespository.FindByCode(programOfStudyCode, competencyCode);
+            if (!competency.IsDraftAndV1OrNull())
+            {
+                throw new InvalidOperationException("Cannot delete a non-draft competency with version greater than 1.");
+            }
         }
         catch (EntityNotFoundException)
         {
             throw new NotFoundException();
         }
-        await _programOfStudyRespository.Delete(programOfStudyCode, competencyCode);
+        await _competencyRespository.Delete(programOfStudyCode, competencyCode);
     }
 }

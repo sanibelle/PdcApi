@@ -6,6 +6,15 @@ public class MinisterialCompetency : Competency
 {
     public List<MinisterialCompetencyElement> CompetencyElements { get; set; } = new List<MinisterialCompetencyElement>();
 
+    public bool IsDraftAndV1OrNull()
+    {
+        if (CurrentVersion == null)
+        {
+            return true;
+        }
+        return CurrentVersion.IsDraft && CurrentVersion.VersionNumber == 1;
+    }
+
     public override void SetVersionOnUnversioned(ChangeRecord version)
     {
         base.SetVersionOnUnversioned(version);

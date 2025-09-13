@@ -34,8 +34,8 @@ public class MappingProfile : Profile
             opt.Condition(src => !string.IsNullOrEmpty(src.CreatedBy?.DisplayName)); // Only map if source has CreatedBy
             opt.MapFrom(src => src.CreatedBy);
         })
-        .PreserveReferences()
         .ForMember(dest => dest.WrittenOnVersion, opt => opt.Ignore())
+        .PreserveReferences()
         .ReverseMap()
         .ForMember(dest => dest.WrittenOnVersion, opt => opt.MapFrom(src => src.WrittenOnVersion != null ? src.WrittenOnVersion.VersionNumber : (int?)default));
     }

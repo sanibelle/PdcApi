@@ -43,7 +43,6 @@ public class CompetencyApiTests : ApiTestBase
     }
 
     [Test]
-
     public async Task GivenExistingV1DraftCompetency_WhenUpdatingCompetency_ThenShouldUpdateCompetencyWithNoChangeDetails()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
@@ -88,7 +87,88 @@ public class CompetencyApiTests : ApiTestBase
     }
 
     [Test]
+    public async Task GivenExistingV1DraftCompetency_WhenDeletingElementsOfTheCompetencyCompetency_ThenShouldDeleteTheElements()
+    {
+        string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
+        ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
+        ChangeableDTO realisationContext, performanceCriteria;
+        CompetencyElementDTO competencyElement;
+        CompetencyDTO competencyToCreateDTO = CreateCompetency();
 
+        // Act - Create the competency
+        var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyToCreateDTO);
+        createResponse.EnsureSuccessStatusCode();
+        var competencyToUpdateDTO = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+
+        // Deleting the elements one by one
+        // Realisation context
+        competencyToUpdateDTO.RealisationContexts.Clear();
+        //competencyToUpdateDTO.RealisationContexts.Add(realisationContext =new ChangeableDTOBuilder()
+        //    .WithValue("New realisation Context")
+        //    .Build());
+
+
+        var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
+        updateResponse.EnsureSuccessStatusCode();
+        var updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+
+
+        // performance criteria complementary information
+        competencyToUpdateDTO.CompetencyElements.First().PerformanceCriterias.First().ComplementaryInformations.Clear();
+        updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
+        updateResponse.EnsureSuccessStatusCode();
+        updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+        updatedCompetency.CompetencyElements.First().PerformanceCriterias.First().ComplementaryInformations.Should().BeEmpty();
+
+
+
+        // Adding competency Element and deleting
+        var deletedId = competencyToUpdateDTO.CompetencyElements.First().Id;
+        competencyToUpdateDTO.CompetencyElements.Clear();
+        competencyToUpdateDTO.CompetencyElements.Add(competencyElement = new CompetencyElementDTOBuilder()
+            .WithValue("New competency element")
+            .WithPosition(1)
+            .AddPerformanceCriteria(performanceCriteria = new ChangeableDTOBuilder()
+                .WithValue("New performance criteria")
+                .WithPosition(1)
+                .AddComplementaryInformation(performanceCriteriaComplementaryInformation = new ComplementaryInformationDTOBuilder()
+                    .WithText("New performance criteria complementary information")
+                    .Build())
+                .Build())
+            .AddComplementaryInformation(competencyElementComplementaryInformation = new ComplementaryInformationDTOBuilder()
+                .WithText("New competency element complementary information")
+                .Build())
+            .BuildCompetencyElement());
+        updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
+        updateResponse.EnsureSuccessStatusCode();
+        updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+        updatedCompetency.CompetencyElements.Should().HaveCount(1);
+        updatedCompetency.CompetencyElements.First().Id.Should().NotBe(deletedId.ToString());
+    }
+
+    [Test]
+    public async Task GivenExistingV1DraftCompetency_WhenDeletingCompetency_ThenShouldDeleteCompetencyWithNoChangeDetails()
+    {
+        string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
+        ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
+        ChangeableDTO realisationContext, performanceCriteria;
+        CompetencyElementDTO competencyElement;
+        CompetencyDTO competencyToCreateDTO = CreateCompetency();
+
+        // Act - Create the competency
+        var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyToCreateDTO);
+        createResponse.EnsureSuccessStatusCode();
+        var competencyToUpdateDTO = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+
+        // Act - Delete the competency
+        var deletedResponse = await _Client.DeleteAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}");
+        deletedResponse.EnsureSuccessStatusCode();
+
+        var getResponse = _Client.GetAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}");
+        getResponse.Result.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+    }
+
+    [Test]
     public async Task GivenExistingV1DraftCompetency_WhenUpdatingTheCode_ThenShouldFailTheUpdate()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
@@ -113,6 +193,8 @@ public class CompetencyApiTests : ApiTestBase
         notUpdatedCompetency.Should().NotBeNull();
         notUpdatedCompetency.RealisationContexts.Should().HaveCount(1, "No realisation contexts added.");
     }
+
+
 
     private CompetencyDTO CreateCompetency()
     {

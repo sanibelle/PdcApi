@@ -26,6 +26,7 @@ public static class DependencyInjection
         services.AddScoped<IGetCompetencyUseCase, GetCompetency>();
         services.AddScoped<IGetCompetenciesByProgramOfStudyUseCase, GetCompetenciesByProgramOfStudy>();
         services.AddScoped<IUpdateDraftV1CompetencyUseCase, UpdateDraftV1Competency>();
+        services.AddScoped<IDeleteCompetencyUseCase, DeleteCompetency>();
 
         // Auth
         services.AddScoped<IUserService, UserService>();
