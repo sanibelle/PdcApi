@@ -40,7 +40,7 @@ public class UpdateDraftV1Competency : IUpdateDraftV1CompetencyUseCase
         }
         _mapper.Map(updateCompetencyDto, competencyToUpdate);
         // On prend la version actuelle et on l'assigne à tous les objets qui ont une version.
-        competencyToUpdate.SetVersionOnUnversioned(competencyToUpdate.CurrentVersion);
+        competencyToUpdate.SetVersionOnUnversioned(competencyToUpdate.CurrentVersion!);
         MinisterialCompetency updatedProgramOfStudy = await _competencyRespository.Update(competencyToUpdate);
         return _mapper.Map<CompetencyDTO>(updatedProgramOfStudy);
 
