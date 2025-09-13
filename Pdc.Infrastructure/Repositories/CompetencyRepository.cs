@@ -39,7 +39,7 @@ public class CompetencyRepository : ICompetencyRepository
         IdentityUserEntity? user = _context.Users.FirstOrDefault(x => x.Id == currentUser.Id);
         if (user is null)
         {
-            throw new EntityNotFoundException(nameof(IdentityUserEntity), currentUser.Id);
+            throw new EntityNotFoundException(nameof(IdentityUserEntity), currentUser?.Id != null ? currentUser.Id : "id not found");
         }
         entity.SetCreatedBy(user);
         // End of TODO.
@@ -61,7 +61,11 @@ public class CompetencyRepository : ICompetencyRepository
 
     public async Task Delete(string programOfStudyCode, string competencyCode)
     {
-        CompetencyEntity entity = await _context.Competencies.SingleOrDefaultAsync(x => x.Code == competencyCode && x.ProgramOfStudy.Code == programOfStudyCode);
+        CompetencyEntity? entity = await _context.Competencies.SingleOrDefaultAsync(x => x.Code == competencyCode && x.ProgramOfStudy.Code == programOfStudyCode);
+        if (entity == null)
+        {
+            throw new EntityNotFoundException(nameof(MinisterialCompetency), competencyCode);
+        }
         _context.Competencies.Remove(entity);
         await _context.SaveChangesAsync();
     }
@@ -85,16 +89,16 @@ public class CompetencyRepository : ICompetencyRepository
             .Include(c => c.RealisationContexts)
                 .ThenInclude(rc => rc.ComplementaryInformations)
                     .ThenInclude(cr => cr.WrittenOnVersion)
-                        .ThenInclude(ci => ci.CreatedBy)
+                        .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.CompetencyElements)
                 .ThenInclude(ce => ce.ComplementaryInformations)
                     .ThenInclude(cr => cr.WrittenOnVersion)
-                        .ThenInclude(ci => ci.CreatedBy)
+                        .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.CompetencyElements)
                 .ThenInclude(ce => ce.PerformanceCriterias)
                     .ThenInclude(pc => pc.ComplementaryInformations)
                         .ThenInclude(cr => cr.WrittenOnVersion)
-                            .ThenInclude(ci => ci.CreatedBy)
+                            .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.ProgramOfStudy)
             .Include(c => c.CurrentVersion)
                 .ThenInclude(v => v.CreatedBy)
