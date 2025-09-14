@@ -20,10 +20,10 @@ This is a .NET 9 Web API project using Clean Architecture with the following str
 To set up the database:
 
 1. Build the solution: `dotnet build Pdc.sln`
-2. Install Entity Framework tools: `dotnet tool install --global dotnet-ef`
-3. Create migration: `dotnet ef migrations add InitialCreate --startup-project Pdc.WebAPI --project Pdc.Infrastructure`
-4. Update database: `dotnet ef database update --startup-project Pdc.WebAPI --project Pdc.Infrastructure`
-
+2. Create local tool manifest (once): `dotnet new tool-manifest`
+3. Install EF tools locally: `dotnet tool install dotnet-ef`
+4. Create migration: `dotnet ef migrations add InitialCreate --startup-project Pdc.WebAPI --project Pdc.Infrastructure`
+5. Update database: `dotnet ef database update --startup-project Pdc.WebAPI --project Pdc.Infrastructure`
 ## Common Commands
 
 ### Build and Test
