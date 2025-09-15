@@ -59,16 +59,13 @@ const errorMessage = ref(props.errorMessage, 'errorMessage');
     <FormAtomsABaseLabel :for-id="id" :required="required" v-if="label">
       {{ label }}
     </FormAtomsABaseLabel>
-    <template v-if="type === 'checkbox'">
-      <FormAtomsACheckboxInput v-bind="$attrs" :id="id" :name="name" :placeholder="placeholder" :disabled="disabled"
+      <FormAtomsACheckboxInput v-if="type === 'checkbox'" v-bind="$attrs" :id="id" :name="name" :placeholder="placeholder" :disabled="disabled"
         :rules="rules" :modelValue="modelValue" @update:modelValue="$emit('update:modelValue', $event)"
         @update:error-message="errorMessage = $event" />
-    </template>
-    <template v-else>
-    <FormAtomsABaseInput v-bind="$attrs" :id="id" :name="name" :placeholder="placeholder" :disabled="disabled"
+    <FormAtomsABaseInput v-else v-bind="$attrs" :id="id" :name="name" :placeholder="placeholder" :disabled="disabled"
       :rules="rules" :modelValue="modelValue" @update:modelValue="$emit('update:modelValue', $event)"
       @update:error-message="errorMessage = $event" />
-      </template>
     <FormAtomsAErrorMessage :message="errorMessage" />
+    <FormAtomsAHint v-if="hint" :text="hint" />
   </div>
 </template>

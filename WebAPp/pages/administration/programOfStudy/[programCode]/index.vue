@@ -11,16 +11,23 @@ defineI18nRoute({
 
 const { fetchProgramByCode } = useProgramOfStudyClient();
 const { fetchCompetencies } = useCompetencyClient();
-const programsOfStudy = ref<ProgramOfStudy>();
+const programOfStudy = ref<ProgramOfStudy>();
 const competencies = ref<Competency[]>([]);
 
 onMounted(async () => {
-  programsOfStudy.value = await fetchProgramByCode(programCode);
+try {
+  programOfStudy.value = await fetchProgramByCode(programCode);
   competencies.value = await fetchCompetencies(programCode);
+} catch (e) {
+  console.error(e);
+  alert("ERREUR")
+  // TODO manage error (e.g., show a notification or redirect)
+}
 });
 
-const handleSubmitted = (programOfStudy: ProgramOfStudy) => {
+const  handleSubmitted = async () => {
   upsertCompetencyModal.close()
+  competencies.value = await fetchCompetencies(programCode);
 };
 
 const upsertCompetencyModal = useModal();
@@ -53,7 +60,7 @@ const upsertCompetencyModal = useModal();
     </tbody>
   </table>
   <CommonAModal v-model="upsertCompetencyModal.isOpen.value" :title="t('title')" :hide-footer="true">
-    <FormTemplatesCompetency @submited="handleSubmitted" :program-code="programCode" />
+    <FormTemplatesCompetency @submitted="handleSubmitted" :program-code="programCode" />
   </CommonAModal>
 </template>
 
@@ -71,7 +78,8 @@ const upsertCompetencyModal = useModal();
     "programType.DEC": "Technique",
     "programType.AEC": "Attestation d'études collégiales", 
     "programType.PREU": "Préuniversitaire",
-    "noCompetenciesYet": "Aucune compétence ajoutées pour ce programme."
+    "noCompetenciesYet": "Aucune compétence ajoutée pour ce programme.",
+    "action": "Actions"
   }
 }</i18n>
 

@@ -1,5 +1,3 @@
-import type { Unit } from '../common/Unit';
-
 export type Competency = {
   code: string;
   units?: Unit | null;
@@ -8,7 +6,7 @@ export type Competency = {
   statementOfCompetency: string;
   realisationContexts: RealisationContext[];
   competencyElements: CompetencyElement[];
-  versionNumber: number;
   isDraft: boolean;
-  versionId: string;
+  versionNumber?: number;
+  versionId?: string;
 };

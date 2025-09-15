@@ -8,12 +8,16 @@ const props = defineProps({
     preventDefault: {
         type: Boolean,
         default: false,
-    }
+    },
+    type: {
+        type: String as PropType<'button' | 'submit' | 'reset' | undefined>,
+        default: 'button',
+    },
 });
 
 const emit = defineEmits(['click']);
 
-const handleClick = (event: Event) => {
+const handleClick = (event: MouseEvent) => {
     if (props.preventDefault) {
         event.preventDefault();
     }
@@ -22,19 +26,13 @@ const handleClick = (event: Event) => {
 </script>
 
 <template>
-    <button :disabled="isDisabled" @click="handleClick">
+    <button :type="type" :disabled="isDisabled" @click="handleClick">
         <slot></slot>
     </button>
 </template>
 
 
-<style scoped>
-/* Example utility classes, adjust as needed */
-button {
-    background-color: #4caf50;
-    /* Green */
-}
-
+<style lang="scss" scoped>
 button {
     margin: 4px 2px;
     font-size: 16px;

@@ -1,16 +1,16 @@
-        <script setup lang="ts">
-        const { t } = useI18n();
+<script setup lang="ts">
+const { t } = useI18n();
 
-        const props = defineProps({
-            versionNumber: {
-                type: Number,
-                required: true,
-            },
-            isDraft: {
-                type: Boolean,
-                default: false,
-            },
-        });
+const props = defineProps({
+    versionNumber: {
+        type: Number,
+        required: true,
+    },
+    isDraft: {
+        type: Boolean,
+        default: false,
+    },
+});
 </script>
 
 <template>
@@ -19,6 +19,7 @@
         <span v-if="isDraft" class="draft-label">{{ t('draft') }}
             <br>
             <template v-if="versionNumber !== 1">{{ t('notv1') }}</template>
+            -    <div class="version-badge" :class="{ 'draft': isDraft }">
         </span>
         <span v-else class="draft-label">{{ t('notdraft') }}
             <br>
@@ -35,7 +36,7 @@
     "fr": {
         "draft": "Cette version est en cours de rédaction.",
         "notv1": "Tous les changements effectués à cette version seront suivis et auront un impact dans tous les documents qui y sont liés.",
-        "notdraft": "Cette version est approuvée. Seule les modifications mineures sont possibles (ex : corriger les fautes de frappe).",
+        "notdraft": "Cette version est approuvée. Seules les modifications mineures sont possibles (ex : corriger les fautes de frappe).",
         "newVersion": "Pour effectuer des modifications majeures, veuillez créer une nouvelle version.",
     }
 }

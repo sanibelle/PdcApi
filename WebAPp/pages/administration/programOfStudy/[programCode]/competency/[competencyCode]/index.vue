@@ -17,6 +17,7 @@ onMounted(async () => {
   competency.value = await fetchCompetencyByCode(programCode, competencyCode);
 });
 
+// TODO la modale est toujours utile??
 const handleSubmitted = (competency: Competency) => {
   upsertCompetencyModal.close()
 };
@@ -29,8 +30,8 @@ const upsertCompetencyModal = useModal();
     {{ t('title') }}
   </h1>
   <CommonAVersion v-if="competency?.versionNumber" :version-number="competency?.versionNumber" :is-draft="competency?.isDraft" />
-  <section>
-    <FormTemplatesDetailedCompetency @submited="handleSubmitted" :competency="competency"
+  <section v-if="competency">
+    <FormTemplatesDetailedCompetency @submitted="handleSubmitted" :competency="competency"
       :program-code="programCode" />
   </section>
 
@@ -50,7 +51,7 @@ const upsertCompetencyModal = useModal();
     "programType.DEC": "Technique",
     "programType.AEC": "Attestation d'études collégiales",
     "programType.PREU": "Préuniversitaire",
-    "noCompetenciesYet": "Aucune compétence ajoutées pour ce programme."
+    "noCompetenciesYet": "Aucune compétence ajoutée pour ce programme."
   }
 }</i18n>
 

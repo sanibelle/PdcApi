@@ -4,7 +4,7 @@ import { useForm } from 'vee-validate';
 
 const { t } = useI18n();
 
-const emit = defineEmits(['submited']);
+const emit = defineEmits(['submitted']);
 const codeExistingErrorMessage = ref('');
 
 // Form values
@@ -22,7 +22,7 @@ const { handleSubmit, isSubmitting } = useForm<Competency>({
 const props = defineProps({
   programCode: {
     type: String,
-    default: () => ({}),
+    default: '',
   },
 });
 
@@ -34,9 +34,11 @@ const optionnalCompetency = computed({
 });
 
 const { createCompetency } = useCompetencyClient();
+
 const onSubmit = handleSubmit(async () => {
   try {
-    emit('submited', await createCompetency(props.programCode, competency as Competency));
+    // TODO valider qui crée la compétence.... Le parent?
+    emit('submitted', await createCompetency(props.programCode, competency as Competency));
   } catch (e) {
     if (e instanceof DuplicateException) {
       codeExistingErrorMessage.value = t('codeExistingErrorMessage');
@@ -46,11 +48,13 @@ const onSubmit = handleSubmit(async () => {
     }
   }
 });
+
+watch(() => competency.code, () => { codeExistingErrorMessage.value = ''; });
 </script>
 
 <template>
   <div class="form">
-    <form @submit="onSubmit" class="form-container">
+    <form @submit.prevent="onSubmit" class="form-container">
       <FormATextInput name="code" :label="t('competencyCode')" placeholder="Ex : 00SU" :min="3" :max="50"
         :required="true" v-model="competency.code" :errorMessage="codeExistingErrorMessage" />
       <FormATextInput name="statementOfCompetency" :label="t('statementOfCompetency')" :placeholder="t('statementOfCompetencyPlaceholder')" 

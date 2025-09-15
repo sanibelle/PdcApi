@@ -9,6 +9,7 @@ defineI18nRoute({
 });
 const localePath = useLocalePath();
 
+// TODO remove me. This is used for deubugging routes
 onMounted(() => {
   const router = useRouter();
   const routes = router.getRoutes();

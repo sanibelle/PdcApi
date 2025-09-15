@@ -1,2 +1,1 @@
-export type RealisationContext = {
-} & Changeable;
+export type RealisationContext = Changeable;

@@ -4,7 +4,7 @@ import { useForm } from 'vee-validate';
 
 const { t } = useI18n();
 
-const emit = defineEmits(['submited']);
+const emit = defineEmits(['submitted']);
 const codeExistingErrorMessage = ref('');
 
 // Form values
@@ -29,7 +29,7 @@ const { createProgram } = useProgramOfStudyClient();
 const onSubmit = handleSubmit(async () => {
 
   try {
-    emit('submited', await createProgram(programOfStudy as ProgramOfStudy));
+    emit('submitted', await createProgram(programOfStudy as ProgramOfStudy));
   } catch (e) {
     if (e instanceof DuplicateException) {
       codeExistingErrorMessage.value = t('codeExistingErrorMessage');

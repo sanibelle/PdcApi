@@ -6,10 +6,6 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  placeholder: {
-    type: String,
-    default: '',
-  },
   disabled: {
     type: Boolean,
     default: false,
@@ -61,11 +57,11 @@ watch(
 </script>
 
 <template>
-  <input :name="name" :checked="value" type="checkbox" :placeholder="placeholder" :disabled="disabled"
-    class="base-input" :class="{ error: errorMessage }" @input="onChange" @blur="onBlur" />
+  <input :name="name" :checked="value" type="checkbox" :disabled="disabled"
+    class="base-input" :class="{ error: errorMessage }" @change="onChange" @blur="onBlur" />
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .base-input {
   width: 100%;
   padding: 8px 12px;

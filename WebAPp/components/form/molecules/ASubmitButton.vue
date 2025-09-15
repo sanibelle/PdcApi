@@ -17,6 +17,7 @@ const { t } = useI18n();
   <div class="wrapper">
     <CommonAtomsAButton 
       :is-disabled="isDisabled || isSubmitting" 
+      :type="'submit'"
       v-bind="$attrs"
     >
       <slot>
@@ -40,7 +41,7 @@ const { t } = useI18n();
 }
 </i18n>
 
-<style scoped>
+<style lang="scss" scoped>
 .wrapper {
   height: 30px;
 }

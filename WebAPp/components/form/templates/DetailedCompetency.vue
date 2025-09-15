@@ -4,7 +4,7 @@ import { useForm } from 'vee-validate';
 
 const { t } = useI18n();
 
-const emit = defineEmits(['submited']);
+const emit = defineEmits(['submitted']);
 const codeExistingErrorMessage = ref('');
 
 const { handleSubmit, isSubmitting } = useForm<Competency>({
@@ -14,7 +14,7 @@ const { handleSubmit, isSubmitting } = useForm<Competency>({
 const props = defineProps({
   programCode: {
     type: String,
-    default: () => ({}),
+    default: '',
   },
   competency: {
     type: Object as () => Partial<Competency>,
@@ -30,11 +30,11 @@ const props = defineProps({
 const competency = computed({
   get: () => props.competency,
   set: (value) => {
-    emit('submited', value)
+    emit('submitted', value)
   }
 });
 
-const isMandatory = computed({
+const isOptionnal = computed({
   get: () => !competency.value.isMandatory,
   set: (value) => {
     competency.value.isMandatory = !value;
@@ -45,7 +45,7 @@ const { updateCompetency } = useCompetencyClient();
 
 const onSubmit = handleSubmit(async () => {
   try {
-    emit('submited', await updateCompetency(props.programCode, competency.value as Competency));
+    emit('submitted', await updateCompetency(props.programCode, competency.value as Competency));
   } catch (e) {
     if (e instanceof DuplicateException) {
       codeExistingErrorMessage.value = t('codeExistingErrorMessage');
@@ -58,7 +58,6 @@ const onSubmit = handleSubmit(async () => {
 
 const addRealisationContextRow = () => {
   competency.value.realisationContexts?.push({
-    position: competency.value.realisationContexts.length +1,
     value: '',
   });
 };
@@ -84,7 +83,7 @@ const removeRealisationContextRow = (index: number) => {
         <FormACheckboxInput name="isMandatory" :label="t('mandatoryCompetency')" :required="true"
           v-model="competency.isMandatory" />
         <FormACheckboxInput name="isOptionnal" :label="t('optionnalCompetency')" :required="true"
-          v-model="isMandatory" />
+          v-model="isOptionnal" />
       </div>
       <div class="row-container">
         <h2>{{ t('realisationContext') }}</h2>

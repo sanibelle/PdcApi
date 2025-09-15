@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Pdc.Domain.Exceptions;
+﻿using Pdc.Domain.Exceptions;
 
 namespace Pdc.WebAPI.Middlewares;
 
@@ -23,6 +22,7 @@ public class ExceptionHandlingMiddleware
         }
         catch (Exception ex)
         {
+
             _logger.LogError(ex, "Une exception non traitée a été levée");
             await HandleExceptionAsync(context, ex);
         }
@@ -31,12 +31,12 @@ public class ExceptionHandlingMiddleware
     private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var statusCode = GetStatusCode(exception);
-
+        var env = context.RequestServices.GetRequiredService<IHostEnvironment>();
         var response = new
         {
             status = statusCode,
             message = exception.Message,
-            detail = exception.StackTrace
+            detail = env.IsDevelopment() ? exception.StackTrace : null
         };
 
         context.Response.ContentType = "application/json";
@@ -49,7 +49,8 @@ public class ExceptionHandlingMiddleware
         // TODO log not managed exception
         return exception switch
         {
-            ValidationException => StatusCodes.Status400BadRequest,
+            System.ComponentModel.DataAnnotations.ValidationException => StatusCodes.Status400BadRequest,
+            FluentValidation.ValidationException => StatusCodes.Status400BadRequest,
             NotFoundException => StatusCodes.Status404NotFound,
             DuplicateException => StatusCodes.Status409Conflict,
             _ => StatusCodes.Status500InternalServerError

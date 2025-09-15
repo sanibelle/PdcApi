@@ -70,7 +70,7 @@ export default defineConfig({
   webServer: [
     {
       command: "cd ../Pdc.WebAPI && dotnet run --configuration Test --launch-profile Test",
-      url: "http://localhost:5001/api/health",
+      url: "http://localhost:5001/init",
       reuseExistingServer: !process.env.CI,
     },
     {

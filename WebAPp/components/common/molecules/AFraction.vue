@@ -1,6 +1,6 @@
-<script>
+<script setup lang="ts">
 
-defineProps({
+const props = defineProps({
     numerator: {
         type: [String, Number],
         required: true
@@ -22,9 +22,9 @@ defineProps({
 
 <template>
     <div class="fraction">
-        <CommonAtomsAText :text="numerator" :size="size" :color="color" class="numerator" />
-        <div class="fraction-line"></div>
-        <CommonAtomsAText :text="denominator" :size="size" :color="color" class="denominator" />
+        <CommonAtomsAText :size="size" :color="color">{{props.numerator}}</CommonAtomsAText>
+        <div class="line"></div>
+        <CommonAtomsAText :size="size" :color="color">{{props.denominator}} </CommonAtomsAText>
     </div>
 </template>
 
@@ -34,11 +34,6 @@ defineProps({
     flex-direction: column;
     align-items: center;
     vertical-align: middle;
-}
-
-.numerator,
-.denominator {
-    text-align: center;
 }
 
 .fraction-line {

@@ -2,17 +2,13 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-    tag: {
-        type: String,
-        default: 'span'
-    },
     size: {
         type: String,
         default: 'base' // e.g., 'sm', 'base', 'lg'
     },
     color: {
         type: String,
-        default: 'text-black'
+        default: undefined
     },
     weight: {
         type: String,
