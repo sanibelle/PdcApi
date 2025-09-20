@@ -21,8 +21,15 @@ public static class DependencyInjection
         if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("mode=memory"))
         {
             services.AddDbContext<AppDbContext>(options =>
-                options.UseInMemoryDatabase("TestDataBase")
-                .EnableSensitiveDataLogging());
+            {
+                options.UseInMemoryDatabase("TestDataBase");
+                var env = configuration["ASPNETCORE_ENVIRONMENT"];
+                if (env == "Development" || env == "Testing")
+                {
+                    options.UseInMemoryDatabase("TestDataBase")
+                        .EnableSensitiveDataLogging();
+                }
+            });
         }
         else if (!string.IsNullOrEmpty(connectionString))
         {
@@ -33,7 +40,7 @@ public static class DependencyInjection
         }
 
         // Register Repositories
-        services.AddScoped<IProgramOfStudyRespository, ProgramOfStudyRespository>();
+        services.AddScoped<IProgramOfStudyRepository, ProgramOfStudyRespository>();
         services.AddScoped<ICompetencyRepository, CompetencyRepository>();
         services.AddAutoMapper((serviceProvider, automapper) =>
         {

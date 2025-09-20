@@ -5,16 +5,16 @@ using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Infrastructure.Exceptions;
 
-namespace Pdc.Application.UseCase;
+namespace Pdc.Application.UseCases;
 
 public class GetCompetency : IGetCompetencyUseCase
 {
-    private readonly ICompetencyRepository _competencyRespository;
+    private readonly ICompetencyRepository _competencyRepository;
     private readonly IMapper _mapper;
 
-    public GetCompetency(ICompetencyRepository competencyRespository, IMapper mapper)
+    public GetCompetency(ICompetencyRepository competencyRepository, IMapper mapper)
     {
-        _competencyRespository = competencyRespository;
+        _competencyRepository = competencyRepository;
         _mapper = mapper;
     }
 
@@ -22,7 +22,7 @@ public class GetCompetency : IGetCompetencyUseCase
     {
         try
         {
-            MinisterialCompetency competency = await _competencyRespository.FindByCode(programOfStudyCode, competencyCode);
+            MinisterialCompetency competency = await _competencyRepository.FindByCode(programOfStudyCode, competencyCode);
             return _mapper.Map<CompetencyDTO>(competency);
         }
         catch (EntityNotFoundException)

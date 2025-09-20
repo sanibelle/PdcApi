@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Pdc.Application.Mappings;
 using Pdc.Application.Services.UserService;
-using Pdc.Application.UseCase;
+using Pdc.Application.UseCases;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Infrastructure.Repositories;
 using System.Reflection;
@@ -15,7 +15,7 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         // ProgramOfStudy
-        services.AddScoped<IProgramOfStudyRespository, ProgramOfStudyRespository>();
+        services.AddScoped<IProgramOfStudyRepository, ProgramOfStudyRespository>();
         services.AddScoped<ICreateProgramOfStudyUseCase, CreateProgramOfStudy>();
         services.AddScoped<IDeleteProgramOfStudyUseCase, DeleteProgramOfStudy>();
         services.AddScoped<IGetProgramOfStudiesUseCase, GetProgramOfStudies>();

@@ -5,19 +5,19 @@ using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
 
-namespace Pdc.Application.UseCase;
+namespace Pdc.Application.UseCases;
 
 public class UpdateProgramOfStudy : IUpdateProgramOfStudyUseCase
 {
     private readonly IValidator<ProgramOfStudyDTO> _validator;
-    private readonly IProgramOfStudyRespository _programOfStudyRespository;
+    private readonly IProgramOfStudyRepository _programOfStudyRepository;
     private readonly IMapper _mapper;
 
-    public UpdateProgramOfStudy(IProgramOfStudyRespository programOfStudyRespository,
+    public UpdateProgramOfStudy(IProgramOfStudyRepository programOfStudyRepository,
                                IMapper mapper,
                                IValidator<ProgramOfStudyDTO> validator)
     {
-        _programOfStudyRespository = programOfStudyRespository;
+        _programOfStudyRepository = programOfStudyRepository;
         _mapper = mapper;
         _validator = validator;
     }
@@ -29,13 +29,13 @@ public class UpdateProgramOfStudy : IUpdateProgramOfStudyUseCase
         {
             throw new ValidationException(validationResult.Errors);
         }
-        if (updateProgramOfStudyDto.Code != code && await _programOfStudyRespository.ExistsByCode(updateProgramOfStudyDto.Code))
+        if (updateProgramOfStudyDto.Code != code && await _programOfStudyRepository.ExistsByCode(updateProgramOfStudyDto.Code))
         {
             throw new DuplicateException("programOfStudyCodeExists");
         }
-        ProgramOfStudy existingProgramOfStudy = await _programOfStudyRespository.FindByCode(code);
+        ProgramOfStudy existingProgramOfStudy = await _programOfStudyRepository.FindByCode(code);
         _mapper.Map(updateProgramOfStudyDto, existingProgramOfStudy);
-        ProgramOfStudy updatedProgramOfStudy = await _programOfStudyRespository.Update(existingProgramOfStudy);
+        ProgramOfStudy updatedProgramOfStudy = await _programOfStudyRepository.Update(existingProgramOfStudy);
         return _mapper.Map<ProgramOfStudyDTO>(updatedProgramOfStudy);
     }
 }

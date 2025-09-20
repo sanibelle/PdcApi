@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -263,7 +262,7 @@ namespace Pdc.Infrastructure.Migrations
                     UnitsId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ProgramOfStudyCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     IsMandatory = table.Column<bool>(type: "bit", nullable: false),
-                    IsOptionnal = table.Column<bool>(type: "bit", nullable: false),
+                    IsOptional = table.Column<bool>(type: "bit", nullable: false),
                     StatementOfCompetency = table.Column<string>(type: "nvarchar(1500)", maxLength: 1500, nullable: false),
                     CurrentVersionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },

@@ -31,9 +31,12 @@ public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEn
             .WithMany()
             .HasForeignKey("NextVersionId");
 
-        // TODO mettre a jour le diagramme de la base de données avec les CreatedBy, mettre à jour lesc schemas et les builders.
         builder.HasOne(x => x.ValidatedBy)
             .WithMany()
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.CreatedBy)
+            .WithMany()
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

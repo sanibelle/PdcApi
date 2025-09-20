@@ -4,7 +4,7 @@ using Moq;
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
 using Pdc.Application.Mappings;
-using Pdc.Application.UseCase;
+using Pdc.Application.UseCases;
 using Pdc.Application.Validators;
 using Pdc.Domain.Enums;
 using Pdc.Domain.Interfaces.Repositories;
@@ -23,7 +23,7 @@ namespace Pdc.Tests.UnitTests;
 public class MinisterialCompetencyTest
 {
     //// Repository mocks
-    Mock<IProgramOfStudyRespository> _programOfStudyRepositoryMock;
+    Mock<IProgramOfStudyRepository> _programOfStudyRepositoryMock;
     Mock<ICompetencyRepository> _competencyRepositoryMock;
 
     //// Competency use cases
@@ -96,7 +96,7 @@ public class MinisterialCompetencyTest
             .WithUnits(new Units(10))
             .WithProgramOfStudyCode("POS1234")
             .WithIsMandatory(false)
-            .WithIsOptionnal(true)
+            .WithIsOptinoal(true)
             .WithStatementOfCompetency("Test Statement")
             .AddRealisationContexts(_realisationContext)
             .AddCompetencyElements(_competencyElement)
@@ -107,7 +107,7 @@ public class MinisterialCompetencyTest
             .WithUnits(new Units(11))
             .WithProgramOfStudyCode("POS2345")
             .WithIsMandatory(true)
-            .WithIsOptionnal(false)
+            .WithIsOptinoal(false)
             .WithStatementOfCompetency("Test Statement 2")
             .AddRealisationContexts(_realisationContext)
             .AddCompetencyElements(_competencyElement)
@@ -122,7 +122,7 @@ public class MinisterialCompetencyTest
             .WithProgramOfStudyCode("POS1234")
             .WithStatementOfCompetency("UpdateMe")
             .WithIsMandatory(false)
-            .WithIsOptionnal(true)
+            .WithIsOptinoal(true)
             .Build();
 
         _competencyToUpdateV1NotDraft = new MinisterialCompetencyBuilder()
@@ -134,7 +134,7 @@ public class MinisterialCompetencyTest
             .WithProgramOfStudyCode("POS1234")
             .WithStatementOfCompetency("UpdateMe")
             .WithIsMandatory(false)
-            .WithIsOptionnal(true)
+            .WithIsOptinoal(true)
             .Build();
 
         _competencyToUpdateV2Draft = new MinisterialCompetencyBuilder()
@@ -146,7 +146,7 @@ public class MinisterialCompetencyTest
             .WithProgramOfStudyCode("POS1234")
             .WithStatementOfCompetency("UpdateMe")
             .WithIsMandatory(false)
-            .WithIsOptionnal(true)
+            .WithIsOptinoal(true)
             .Build();
 
         _competencyToUpdateV2NotDraft = new MinisterialCompetencyBuilder()
@@ -158,14 +158,14 @@ public class MinisterialCompetencyTest
             .WithProgramOfStudyCode("POS1234")
             .WithStatementOfCompetency("UpdateMe")
             .WithIsMandatory(false)
-            .WithIsOptionnal(true)
+            .WithIsOptinoal(true)
             .Build();
 
 
         // Initialize repository mocks
-        //    _programOfStudyRepositoryMock = new Mock<IProgramOfStudyRespository>();
+        //    _programOfStudyRepositoryMock = new Mock<IProgramOfStudyRepository>();
         _competencyRepositoryMock = new Mock<ICompetencyRepository>();
-        _programOfStudyRepositoryMock = new Mock<IProgramOfStudyRespository>();
+        _programOfStudyRepositoryMock = new Mock<IProgramOfStudyRepository>();
 
         // Initialize mapper
         _mapper = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()).CreateMapper();
@@ -337,16 +337,16 @@ public class MinisterialCompetencyTest
     [Test]
     public async Task GivenDraftV1MinisterialCompetency_WhenUpdatingDraft_ThenItShouldUpdate()
     {
-        // Assert
-
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithCode(_competencyToUpdateV1Draft.Code)
             .Build();
         var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO);
+        Assert.That(result.VersionNumber == 1);
+        _competencyRepositoryMock.Verify(repo => repo.Update(It.IsAny<MinisterialCompetency>()), Times.Once);
     }
 
     [Test]
-    public async Task GivenMinisterialCompetency_WhenUpdatingCompetencyCode_ThenItShouldNotUpdate()
+    public async Task GivenMinisterialCompetency_WhenUpdatingCompetencyCode_ThenItShouldFail()
     {
         // Assert
 
@@ -355,7 +355,8 @@ public class MinisterialCompetencyTest
             .Build();
         var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO);
         Assert.That(result.VersionNumber == 1, "Updating a draft V1 competency should not create a new version");
-        _competencyRepositoryMock.Verify(repo => repo.Update(It.IsAny<MinisterialCompetency>()), Times.Once);
+        Assert.ThrowsAsync<ValidationException>(async () =>
+            await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, _competencyToUpdateV1Draft.Code, competencyDTO));
     }
 
     [Test]

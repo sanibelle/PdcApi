@@ -18,11 +18,6 @@ public class MinisterialCompetency : Competency
     public override void SetVersionOnUnversioned(ChangeRecord version)
     {
         base.SetVersionOnUnversioned(version);
-        if (CurrentVersion == null)
-        {
-            CurrentVersion = version;
-        }
         CompetencyElements.ForEach(x => x.SetVersionOnUnversioned(version));
-        RealisationContexts.ForEach(x => x.SetVersionOnUnversioned(version));
     }
 }

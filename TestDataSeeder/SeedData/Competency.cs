@@ -38,7 +38,7 @@ internal class Competency : ISeeder<CompetencyEntity>
             .WithCode("SEE.DED")
             .WithUnits(new Units(10))
             .WithIsMandatory(false)
-            .WithIsOptionnal(true)
+            .WithIsOptional(true)
             .WithStatementOfCompetency("Test Statement")
             .AddRealisationContexts(realisationContext)
             .AddCompetencyElements(competencyElement)

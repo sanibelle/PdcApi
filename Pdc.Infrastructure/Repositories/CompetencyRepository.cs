@@ -36,7 +36,7 @@ public class CompetencyRepository : ICompetencyRepository
             .Persist(_mapper)
             .InsertOrUpdateAsync(competency);
         // TODO move that into the usecase logic.
-        IdentityUserEntity? user = _context.Users.FirstOrDefault(x => x.Id == currentUser.Id);
+        IdentityUserEntity? user = await _context.Users.FirstOrDefaultAsync(x => x.Id == currentUser.Id);
         if (user is null)
         {
             throw new EntityNotFoundException(nameof(IdentityUserEntity), currentUser?.Id != null ? currentUser.Id : "id not found");
@@ -126,7 +126,12 @@ public class CompetencyRepository : ICompetencyRepository
 
     public async Task<List<MinisterialCompetency>> GetByProgramOfStudy(string programOfStudyCode)
     {
-        ProgramOfStudyEntity programEntity = await FindProgramOfStudy(programOfStudyCode);
-        return _mapper.Map<List<MinisterialCompetency>>(programEntity.Competencies.ToList());
+        List<CompetencyEntity> comps = await _context.Competencies
+            .AsNoTracking()
+            .Include(c => c.CurrentVersion)
+                .ThenInclude(v => v.CreatedBy)
+            .Where(c => c.ProgramOfStudy.Code == programOfStudyCode)
+            .ToListAsync();
+        return _mapper.Map<List<MinisterialCompetency>>(comps);
     }
 }

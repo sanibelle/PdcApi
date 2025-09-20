@@ -3,6 +3,7 @@ using FluentAssertions;
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
 using Pdc.Application.Validators;
+using System.Net;
 using System.Net.Http.Json;
 using TestDataSeeder;
 using TestDataSeeder.Builders.DTOS;
@@ -23,9 +24,11 @@ public class CompetencyApiTests : ApiTestBase
         var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);
         createResponse.EnsureSuccessStatusCode();
         var createdCompetency = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
-        var getResponse = await _Client.GetAsync($"/api/programofstudy/{_programCode}/competency/{createdCompetency.Code}");
+        var getResponse = await _Client.GetAsync($"/api/programofstudy/{_programCode}/competency/{createdCompetency!.Code}");
         getResponse.EnsureSuccessStatusCode();
-        AssertCompetencyBasedOnResponse(competencyDTO, createdCompetency);
+        var fetched = await getResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+        fetched.Should().NotBeNull();
+        AssertCompetencyBasedOnResponse(competencyDTO, fetched!);
     }
 
 
@@ -39,7 +42,7 @@ public class CompetencyApiTests : ApiTestBase
         validation.Validate(competencyDTO).IsValid.Should().BeTrue();
         var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);
         var responseContent = await createResponse.Content.ReadAsStringAsync();
-        createResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.Conflict);
+        createResponse.StatusCode.Should().Be(HttpStatusCode.Conflict);
     }
 
     [Test]
@@ -58,7 +61,7 @@ public class CompetencyApiTests : ApiTestBase
 
         // Update the competency
         competencyToUpdateDTO.StatementOfCompetency = "Updated competency statement";
-        competencyToUpdateDTO.IsOptionnal = true;
+        competencyToUpdateDTO.IsOptional = true;
 
         competencyToUpdateDTO.RealisationContexts.First().Value = "Updated realisation context of the existing element";
         competencyToUpdateDTO.RealisationContexts.Add(realisationContext =new ChangeableDTOBuilder()
@@ -243,8 +246,8 @@ public class CompetencyApiTests : ApiTestBase
 
         foreach (var r in competencyToCompare.RealisationContexts)
         {
-            Assert.That(r.Id != Guid.Empty || r.Id != null, "guid is not empty");
-            var realisationContext = competencyDTO.RealisationContexts.FirstOrDefault(x => x.Value == r.Value, null);
+            Assert.That(r.Id.HasValue && r.Id.Value != Guid.Empty, "guid is not empty");
+            var realisationContext = competencyDTO.RealisationContexts.FirstOrDefault(x => x.Value == r.Value);
             r.Should().BeEquivalentTo(realisationContext, options =>
                 options
                 .Excluding(x => x.ComplementaryInformations)
@@ -256,7 +259,7 @@ public class CompetencyApiTests : ApiTestBase
         // NOTE le foreach a un seul element
         foreach (var c in competencyToCompare.CompetencyElements)
         {
-            Assert.That(c.Id != Guid.Empty || c.Id != null, "guid is not empty");
+            Assert.That(c.Id.HasValue && c.Id.Value != Guid.Empty, "guid is not empty");
             var competencyElement = competencyDTO.CompetencyElements.FirstOrDefault(x => x.Value == c.Value);
             c.Should().BeEquivalentTo(competencyElement, options =>
                 options
@@ -269,7 +272,7 @@ public class CompetencyApiTests : ApiTestBase
             foreach (var p in c?.PerformanceCriterias ?? [])
             {
                 var performanceCriteria = competencyElement.PerformanceCriterias.FirstOrDefault(x => x.Value == p.Value);
-                Assert.That(p.Id != Guid.Empty || p.Id != null, "guid is not empty");
+                Assert.That(p.Id.HasValue && p.Id.Value != Guid.Empty, "guid is not empty");
                 p.Should().BeEquivalentTo(performanceCriteria, options =>
                     options
                     .Excluding(x => x.Id)

@@ -5,19 +5,19 @@ using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.MinisterialSpecification;
 
 
-namespace Pdc.Application.UseCase;
+namespace Pdc.Application.UseCases;
 
 public class UpdateDraftV1Competency : IUpdateDraftV1CompetencyUseCase
 {
     private readonly IValidator<CompetencyDTO> _validator;
-    private readonly ICompetencyRepository _competencyRespository;
+    private readonly ICompetencyRepository _competencyRepository;
     private readonly IMapper _mapper;
 
-    public UpdateDraftV1Competency(ICompetencyRepository competencyRespository,
+    public UpdateDraftV1Competency(ICompetencyRepository competencyRepository,
                                IMapper mapper,
                                IValidator<CompetencyDTO> validator)
     {
-        _competencyRespository = competencyRespository;
+        _competencyRepository = competencyRepository;
         _mapper = mapper;
         _validator = validator;
     }
@@ -33,7 +33,7 @@ public class UpdateDraftV1Competency : IUpdateDraftV1CompetencyUseCase
         {
             throw new ValidationException("Competency code in the URL does not match the code in the body. The code should not be changed.");
         }
-        MinisterialCompetency competencyToUpdate = await _competencyRespository.FindByCode(programOfStudyCode, updateCompetencyDto.Code);
+        MinisterialCompetency competencyToUpdate = await _competencyRepository.FindByCode(programOfStudyCode, updateCompetencyDto.Code);
         if (!competencyToUpdate.IsDraftAndV1OrNull())
         {
             throw new InvalidOperationException("Cannot update a non-draft competency with version greater than 1.");
@@ -41,7 +41,7 @@ public class UpdateDraftV1Competency : IUpdateDraftV1CompetencyUseCase
         _mapper.Map(updateCompetencyDto, competencyToUpdate);
         // On prend la version actuelle et on l'assigne à tous les objets qui ont une version.
         competencyToUpdate.SetVersionOnUnversioned(competencyToUpdate.CurrentVersion!);
-        MinisterialCompetency updatedProgramOfStudy = await _competencyRespository.Update(competencyToUpdate);
+        MinisterialCompetency updatedProgramOfStudy = await _competencyRepository.Update(competencyToUpdate);
         return _mapper.Map<CompetencyDTO>(updatedProgramOfStudy);
 
         // TODO

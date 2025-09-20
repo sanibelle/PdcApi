@@ -98,7 +98,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
         createResponse.EnsureSuccessStatusCode();
         var createdProgram = await createResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
-        // Act - Uodate the program
+        // Act - Update the program
         updatedProgramData.Code = createdProgram!.Code;
         var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{updatedProgramData.Code}", updatedProgramData);
         updateResponse.EnsureSuccessStatusCode();

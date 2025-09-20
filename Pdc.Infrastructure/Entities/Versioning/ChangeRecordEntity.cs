@@ -7,7 +7,7 @@ namespace Pdc.Infrastructure.Entities.Versioning;
 /// </summary>
 public class ChangeRecordEntity
 {
-    public required Guid? Id { get; set; }
+    public Guid? Id { get; set; }
     public IEnumerable<ComplementaryInformationEntity> ComplementaryInformations { get; set; } = new List<ComplementaryInformationEntity>();
     public IEnumerable<ChangeDetailEntity> ChangeDetails { get; set; } = new List<ChangeDetailEntity>();
     public DateTime CreatedOn { get; set; }

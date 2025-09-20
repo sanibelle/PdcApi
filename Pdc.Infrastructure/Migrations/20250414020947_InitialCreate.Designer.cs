@@ -464,7 +464,7 @@ namespace Pdc.Infrastructure.Migrations
                     b.Property<bool>("IsMandatory")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsOptionnal")
+                    b.Property<bool>("IsOptional")
                         .HasColumnType("bit");
 
                     b.Property<string>("ProgramOfStudyCode")

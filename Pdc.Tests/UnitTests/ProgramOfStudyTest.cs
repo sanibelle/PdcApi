@@ -3,7 +3,7 @@ using FluentValidation;
 using Moq;
 using Pdc.Application.DTOS;
 using Pdc.Application.Mappings;
-using Pdc.Application.UseCase;
+using Pdc.Application.UseCases;
 using Pdc.Application.Validators;
 using Pdc.Domain.Enums;
 using Pdc.Domain.Exceptions;
@@ -17,7 +17,7 @@ namespace Pdc.Tests.UnitTests;
 
 public class ProgramOfStudyTest
 {
-    Mock<IProgramOfStudyRespository> _programOfStudyRepositoryMock;
+    Mock<IProgramOfStudyRepository> _programOfStudyRepositoryMock;
     ICreateProgramOfStudyUseCase _createProgramOfStudyUseCase;
     IDeleteProgramOfStudyUseCase _deleteProgramOfStudyUseCase;
     IGetProgramOfStudiesUseCase _getAllProgramOfStudyUseCase;
@@ -32,7 +32,7 @@ public class ProgramOfStudyTest
     [SetUp]
     public void Setup()
     {
-        _programOfStudyRepositoryMock = new Mock<IProgramOfStudyRespository>();
+        _programOfStudyRepositoryMock = new Mock<IProgramOfStudyRepository>();
         _mapper = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()).CreateMapper();
         _validator = new ProgramOfStudyValidation();
 

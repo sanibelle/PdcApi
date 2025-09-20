@@ -8,5 +8,5 @@ public class ChangeableDTO
     public Guid? Id { get; set; }
     public required string Value { get; set; }
     public int? Position { get; set; }
-    public IList<ComplementaryInformationDTO>? ComplementaryInformations { get; set; }
+    public IList<ComplementaryInformationDTO> ComplementaryInformations { get; set; } = [];
 }

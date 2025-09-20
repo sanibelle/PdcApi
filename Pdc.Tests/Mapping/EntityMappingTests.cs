@@ -49,7 +49,7 @@ internal class EntityMappingTests
             .WithUnits(new Units(10))
             .WithProgramOfStudyCode("POS1234")
             .WithIsMandatory(false)
-            .WithIsOptionnal(true)
+            .WithIsOptinoal(true)
             .WithStatementOfCompetency("Test Statement")
             .AddRealisationContexts(realisationContext)
             .AddCompetencyElements(competencyElement)
@@ -60,7 +60,7 @@ internal class EntityMappingTests
     }
 
     [Test]
-    public async Task MappingMinisterialCompetency_ShouldKeepReferenceChangeRecordOnlyOnce()
+    public void MappingMinisterialCompetency_ShouldKeepReferenceChangeRecordOnlyOnce()
     {
         _ministerialCompetency.SetVersionOnUnversioned(new ChangeRecord());
         var entity = _mapper.Map<MinisterialCompetency>(_ministerialCompetency);
@@ -92,6 +92,9 @@ internal class EntityMappingTests
         Assert.That(entity.RealisationContexts[0].ComplementaryInformations[0].WrittenOnVersion, Is.InstanceOf<ChangeRecord>());
         // The version is the same object
         Assert.That(entity.RealisationContexts[0].ComplementaryInformations[0].WrittenOnVersion == entity.CompetencyElements[0].ComplementaryInformations[0].WrittenOnVersion);
+        Assert.That(
+            entity.RealisationContexts[0].ComplementaryInformations[0].WrittenOnVersion,
+            Is.SameAs(entity.CompetencyElements[0].ComplementaryInformations[0].WrittenOnVersion));
     }
 
     [Test]

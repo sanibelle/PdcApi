@@ -1,6 +1,6 @@
 ﻿using Pdc.Application.DTOS;
 
-namespace Pdc.Application.UseCase;
+namespace Pdc.Application.UseCases;
 
 public interface ICreateProgramOfStudyUseCase
 {

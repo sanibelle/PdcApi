@@ -9,7 +9,7 @@ using Pdc.Infrastructure.Exceptions;
 
 namespace Pdc.Infrastructure.Repositories;
 
-public class ProgramOfStudyRespository : IProgramOfStudyRespository
+public class ProgramOfStudyRespository : IProgramOfStudyRepository
 {
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;

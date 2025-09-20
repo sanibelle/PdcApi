@@ -9,8 +9,8 @@ public class ChangeRecordDTO
 {
     public Guid? Id { get; set; }
     public int VersionNumber { get; set; }
-    private IEnumerable<ComplementaryInformation> _complementaryInformations { get; set; } = new List<ComplementaryInformation>();
-    private IEnumerable<ChangeDetail> _changeDetails { get; set; } = new List<ChangeDetail>();
+    public IEnumerable<ComplementaryInformation> _complementaryInformations { get; set; } = [];
+    public IEnumerable<ChangeDetail> _changeDetails { get; set; } = [];
     public DateTime CreatedOn { get; set; }
     public bool IsDraft { get; set; }
     public string? Description { get; set; }

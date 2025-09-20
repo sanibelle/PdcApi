@@ -12,7 +12,7 @@ public class Competency
     public Units? Units { get; set; } = null;
     public string ProgramOfStudyCode { get; set; } = "";
     public bool IsMandatory { get; set; }
-    public bool IsOptionnal { get; set; }
+    public bool IsOptional { get; set; }
     public string StatementOfCompetency { get; set; } = "";// Effectuer le déploiement de serveurs intranet
     public ChangeRecord? CurrentVersion { get; set; }
     public List<RealisationContext> RealisationContexts { get; set; } = new List<RealisationContext>(); // Critères de performance liés à l’ensemble de la compétence

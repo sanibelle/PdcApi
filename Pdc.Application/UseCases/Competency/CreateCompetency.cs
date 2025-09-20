@@ -9,17 +9,17 @@ using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 
-namespace Pdc.Application.UseCase;
+namespace Pdc.Application.UseCases;
 
 public class CreateCompetency : ICreateCompetencyUseCase
 {
     private readonly IValidator<CompetencyDTO> _validator;
     private readonly ICompetencyRepository _competencyRepository;
-    private readonly IProgramOfStudyRespository _programOfStudyRepository;
+    private readonly IProgramOfStudyRepository _programOfStudyRepository;
     private readonly IMapper _mapper;
 
     public CreateCompetency(ICompetencyRepository competencyRepository,
-                            IProgramOfStudyRespository programOfStudyRepository,
+                            IProgramOfStudyRepository programOfStudyRepository,
                             IMapper mapper,
                             IValidator<CompetencyDTO> validator)
     {
