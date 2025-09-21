@@ -22,13 +22,8 @@ public static class DependencyInjection
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseInMemoryDatabase("TestDataBase");
-                var env = configuration["ASPNETCORE_ENVIRONMENT"];
-                if (env == "Development" || env == "Testing")
-                {
-                    options.UseInMemoryDatabase("TestDataBase")
-                        .EnableSensitiveDataLogging();
-                }
+                options.UseInMemoryDatabase("TestDataBase")
+                    .EnableSensitiveDataLogging();
             });
         }
         else if (!string.IsNullOrEmpty(connectionString))

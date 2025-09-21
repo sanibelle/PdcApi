@@ -18,7 +18,8 @@ public class CompetencyValidation : AbstractValidator<CompetencyDTO>
             .MaximumLength(500);
 
         RuleFor(x => x.RealisationContexts)
-            .ForEach(y => y.SetValidator(new ChangeableValidation()));
+            .ForEach(y => y.SetValidator(new ChangeableValidation()))
+            .When(x => x.RealisationContexts is not null);
 
         RuleFor(x => x.CompetencyElements)
             .Custom((x, context) => ThrowIfPositionsInvalid(x, context))

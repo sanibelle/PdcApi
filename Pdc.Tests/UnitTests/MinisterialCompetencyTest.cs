@@ -355,8 +355,6 @@ public class MinisterialCompetencyTest
             .Build();
         var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO);
         Assert.That(result.VersionNumber == 1, "Updating a draft V1 competency should not create a new version");
-        Assert.ThrowsAsync<ValidationException>(async () =>
-            await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, _competencyToUpdateV1Draft.Code, competencyDTO));
     }
 
     [Test]

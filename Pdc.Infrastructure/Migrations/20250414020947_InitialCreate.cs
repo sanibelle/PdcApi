@@ -219,7 +219,7 @@ namespace Pdc.Infrastructure.Migrations
                         column: x => x.CreatedById,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ChangeRecords_Users_ValidatedById",
                         column: x => x.ValidatedById,
@@ -319,7 +319,8 @@ namespace Pdc.Infrastructure.Migrations
                         name: "FK_ComplementaryInformations_Users_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
