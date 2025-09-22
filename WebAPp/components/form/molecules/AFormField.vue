@@ -40,7 +40,7 @@ const props = defineProps({
     default: '',
   },
   modelValue: {
-    type: [String, Number],
+    type: [String, Number, Boolean],
     default: '',
   },
   hint: {
@@ -59,10 +59,13 @@ const errorMessage = ref(props.errorMessage, 'errorMessage');
     <FormAtomsABaseLabel :for-id="id" :required="required" v-if="label">
       {{ label }}
     </FormAtomsABaseLabel>
-    <FormAtomsABaseInput v-bind="$attrs" :id="id" :name="name" :type="type" :placeholder="placeholder" :disabled="disabled"
+      <FormAtomsACheckboxInput v-if="type === 'checkbox'" v-bind="$attrs" :id="id" :name="name" :placeholder="placeholder" :disabled="disabled"
+        :rules="rules" :modelValue="modelValue" @update:modelValue="$emit('update:modelValue', $event)"
+        @update:error-message="errorMessage = $event" />
+    <FormAtomsABaseInput v-else v-bind="$attrs" :id="id" :name="name" :placeholder="placeholder" :disabled="disabled"
       :rules="rules" :modelValue="modelValue" @update:modelValue="$emit('update:modelValue', $event)"
       @update:error-message="errorMessage = $event" />
-    <FormAtomsAHint :hint="hint" />
     <FormAtomsAErrorMessage :message="errorMessage" />
+    <FormAtomsAHint v-if="hint" :text="hint" />
   </div>
 </template>

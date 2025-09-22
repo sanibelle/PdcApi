@@ -1,27 +1,27 @@
 ﻿using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 
-namespace Pdc.Application.UseCase;
+namespace Pdc.Application.UseCases;
 
 public class DeleteProgramOfStudy : IDeleteProgramOfStudyUseCase
 {
-    private readonly IProgramOfStudyRespository _programOfStudyRespository;
+    private readonly IProgramOfStudyRepository _programOfStudyRepository;
 
-    public DeleteProgramOfStudy(IProgramOfStudyRespository programOfStudyRespository)
+    public DeleteProgramOfStudy(IProgramOfStudyRepository programOfStudyRepository)
     {
-        _programOfStudyRespository = programOfStudyRespository;
+        _programOfStudyRepository = programOfStudyRepository;
     }
 
     public async Task Execute(string code)
     {
         try
         {
-            await _programOfStudyRespository.FindByCode(code);
+            await _programOfStudyRepository.FindByCode(code);
         }
         catch
         {
             throw new NotFoundException();
         }
-        await _programOfStudyRespository.Delete(code);
+        await _programOfStudyRepository.Delete(code);
     }
 }

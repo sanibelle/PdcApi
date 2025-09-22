@@ -4,7 +4,7 @@ namespace Pdc.Infrastructure.Entities.Versioning;
 
 public class ChangeDetailEntity
 {
-    public required Guid Id { get; set; }
+    public Guid? Id { get; set; }
     public required ChangeRecordEntity ChangeRecord { get; set; }
     public required ChangeableEntity Changeable { get; set; }
     public required ChangeType ChangeType { get; set; }

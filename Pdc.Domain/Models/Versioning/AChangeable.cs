@@ -2,12 +2,13 @@
 
 public abstract class AChangeable
 {
-    public required Guid Id { get; set; }
+    public required Guid? Id { get; set; }
     public required string Value { get; set; }
-    public required List<ComplementaryInformation> ComplementaryInformations { get; set; }
+    public required List<ComplementaryInformation> ComplementaryInformations { get; set; } = [];
 
-    public virtual void SetVersion(ChangeRecord version)
+    public virtual void SetVersionOnUnversioned(ChangeRecord version)
     {
-        ComplementaryInformations.ForEach(x => x.SetVersion(version));
+        if (version is null) throw new ArgumentNullException(nameof(version));
+        ComplementaryInformations.ForEach(x => x.SetVersionOnUnversioned(version));
     }
 }

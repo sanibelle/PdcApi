@@ -366,11 +366,11 @@ namespace Pdc.Infrastructure.Migrations
                     b.Property<Guid?>("OptionalUnitsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateOnly>("PublishedOn")
-                        .HasColumnType("date");
-
                     b.Property<int>("ProgramType")
                         .HasColumnType("int");
+
+                    b.Property<DateOnly>("PublishedOn")
+                        .HasColumnType("date");
 
                     b.Property<int>("SpecificDurationHours")
                         .HasColumnType("int");
@@ -524,6 +524,9 @@ namespace Pdc.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -552,6 +555,8 @@ namespace Pdc.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
 
                     b.HasIndex("NextVersionId");
 
@@ -890,6 +895,12 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", b =>
                 {
+                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "NextVersion")
                         .WithMany()
                         .HasForeignKey("NextVersionId");
@@ -902,6 +913,8 @@ namespace Pdc.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("ValidatedById")
                         .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("CreatedBy");
 
                     b.Navigation("NextVersion");
 

@@ -9,6 +9,9 @@ public class CourseFrameworkPerformanceCriteriaConfiguration : IEntityTypeConfig
     {
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.Id)
+            .ValueGeneratedOnAdd();
+
         builder.HasOne(x => x.PerformanceCriteria)
             .WithMany()
             .HasForeignKey("PerformanceCriteriaId")

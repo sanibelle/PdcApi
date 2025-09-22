@@ -1,6 +1,6 @@
 using AutoMapper;
+using AutoMapper.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
@@ -13,7 +13,7 @@ using Pdc.Infrastructure.Exceptions;
 
 namespace Pdc.Infrastructure.Repositories;
 
-public class CompetencyRepository : ICompetencyRespository
+public class CompetencyRepository : ICompetencyRepository
 {
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
@@ -26,38 +26,46 @@ public class CompetencyRepository : ICompetencyRespository
 
     public async Task<List<MinisterialCompetency>> GetAll()
     {
-        List<CompetencyEntity> entities = await _context.Competencies.ToListAsync();
+        List<CompetencyEntity> entities = await _context.Competencies.AsNoTracking().ToListAsync();
         return _mapper.Map<List<MinisterialCompetency>>(entities);
     }
 
     public async Task<MinisterialCompetency> Add(ProgramOfStudy program, MinisterialCompetency competency, User currentUser)
     {
-        var competencyEntity = _mapper.Map<CompetencyEntity>(competency);
-        IdentityUserEntity? user = _context.Users.FirstOrDefault(x => x.Id == currentUser.Id);
+        CompetencyEntity entity = await _context.Competencies
+            .Persist(_mapper)
+            .InsertOrUpdateAsync(competency);
+        // TODO move that into the usecase logic.
+        IdentityUserEntity? user = await _context.Users.FirstOrDefaultAsync(x => x.Id == currentUser.Id);
         if (user is null)
         {
-            throw new EntityNotFoundException(nameof(IdentityUserEntity), currentUser.Id);
+            throw new EntityNotFoundException(nameof(IdentityUserEntity), currentUser?.Id != null ? currentUser.Id : "id not found");
         }
-        competencyEntity.SetCreatedBy(user);
-        EntityEntry<CompetencyEntity> addedEntity = await _context.Competencies.AddAsync(competencyEntity);
+        entity.SetCreatedBy(user);
+        // End of TODO.
+        var addedEntity = _context.Competencies.Add(entity);
         ProgramOfStudyEntity programEntity = await FindProgramOfStudy(program.Code);
         programEntity.Competencies.Add(addedEntity.Entity);
         await _context.SaveChangesAsync();
-        return _mapper.Map<MinisterialCompetency>(addedEntity.Entity);
+        return _mapper.Map<MinisterialCompetency>(entity);
     }
 
     public async Task<MinisterialCompetency> Update(MinisterialCompetency competency)
     {
-        CompetencyEntity entity = await FindEntityByCode(competency.ProgramOfStudyCode, competency.Code);
-        _mapper.Map(competency, entity);
-        EntityEntry<CompetencyEntity> updatedEntity = _context.Competencies.Update(entity);
+        CompetencyEntity entity = await _context.Competencies
+            .Persist(_mapper)
+            .InsertOrUpdateAsync(competency);
         await _context.SaveChangesAsync();
-        return _mapper.Map<MinisterialCompetency>(updatedEntity.Entity);
+        return _mapper.Map<MinisterialCompetency>(entity);
     }
 
     public async Task Delete(string programOfStudyCode, string competencyCode)
     {
-        CompetencyEntity entity = await FindEntityByCode(programOfStudyCode, competencyCode);
+        CompetencyEntity? entity = await _context.Competencies.SingleOrDefaultAsync(x => x.Code == competencyCode && x.ProgramOfStudy.Code == programOfStudyCode);
+        if (entity == null)
+        {
+            throw new EntityNotFoundException(nameof(MinisterialCompetency), competencyCode);
+        }
         _context.Competencies.Remove(entity);
         await _context.SaveChangesAsync();
     }
@@ -71,19 +79,31 @@ public class CompetencyRepository : ICompetencyRespository
     public async Task<bool> ExistsEntityByCode(string programOfStudyCode, string competencyCode)
     {
         return await _context.Competencies
-            .Include(c => c.RealisationContexts)
-            .Include(c => c.CompetencyElements)
             .Where(x => x.Code == competencyCode && x.ProgramOfStudy.Code == programOfStudyCode)
             .AnyAsync();
     }
 
     private async Task<CompetencyEntity> FindEntityByCode(string programOfStudyCode, string competencyCode)
     {
-        CompetencyEntity? competency = await _context.Competencies
+        CompetencyEntity? competency = await _context.Competencies.AsNoTracking()
             .Include(c => c.RealisationContexts)
+                .ThenInclude(rc => rc.ComplementaryInformations)
+                    .ThenInclude(cr => cr.WrittenOnVersion)
+                        .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.CompetencyElements)
+                .ThenInclude(ce => ce.ComplementaryInformations)
+                    .ThenInclude(cr => cr.WrittenOnVersion)
+                        .ThenInclude(ci => ci!.CreatedBy)
+            .Include(c => c.CompetencyElements)
+                .ThenInclude(ce => ce.PerformanceCriterias)
+                    .ThenInclude(pc => pc.ComplementaryInformations)
+                        .ThenInclude(cr => cr.WrittenOnVersion)
+                            .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.ProgramOfStudy)
+            .Include(c => c.CurrentVersion)
+                .ThenInclude(v => v.CreatedBy)
             .SingleOrDefaultAsync(x => x.Code == competencyCode && x.ProgramOfStudy.Code == programOfStudyCode);
+
         if (competency == null)
         {
             throw new EntityNotFoundException(nameof(MinisterialCompetency), competencyCode);
@@ -102,5 +122,16 @@ public class CompetencyRepository : ICompetencyRespository
             throw new EntityNotFoundException(nameof(ProgramOfStudy), code);
         }
         return program;
+    }
+
+    public async Task<List<MinisterialCompetency>> GetByProgramOfStudy(string programOfStudyCode)
+    {
+        List<CompetencyEntity> comps = await _context.Competencies
+            .AsNoTracking()
+            .Include(c => c.CurrentVersion)
+                .ThenInclude(v => v.CreatedBy)
+            .Where(c => c.ProgramOfStudy.Code == programOfStudyCode)
+            .ToListAsync();
+        return _mapper.Map<List<MinisterialCompetency>>(comps);
     }
 }

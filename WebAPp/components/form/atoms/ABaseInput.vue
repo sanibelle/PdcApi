@@ -23,7 +23,7 @@ const props = defineProps({
     default: '',
   },
   modelValue: {
-    type: [String, Number],
+    type: [String, Number, Boolean],
     default: '',
   },
 });
@@ -53,7 +53,7 @@ const onChange = (event: Event) => {
 };
 
 const onBlur = (event: Event) => {
-  handleBlur(event, true);
+  handleBlur(event, !!errorMessage.value);
 };
 
 watch(

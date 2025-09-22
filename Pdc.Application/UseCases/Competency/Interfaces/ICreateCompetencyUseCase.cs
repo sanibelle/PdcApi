@@ -1,4 +1,4 @@
-﻿namespace Pdc.Application.UseCase;
+﻿namespace Pdc.Application.UseCases;
 using Pdc.Application.DTOS;
 using Pdc.Domain.Models.Security;
 

@@ -1,13 +1,16 @@
+﻿using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
+using Pdc.Domain.Models.Security;
 
-namespace Pdc.Domain.Interfaces.Repositories
+namespace Pdc.Domain.Interfaces.Repositories;
+
+public interface ICompetencyRepository
 {
-    public interface ICompetencyRepository
-    {
-        Task<List<MinisterialCompetency>> GetAll();
-        Task<MinisterialCompetency> Add(MinisterialCompetency competency);
-        Task<MinisterialCompetency> Update(MinisterialCompetency competency);
-        Task Delete(string code);
-        Task<MinisterialCompetency> FindByCode(string code);
-    }
+    Task<List<MinisterialCompetency>> GetAll();
+    Task<MinisterialCompetency> FindByCode(string programOfStudyCode, string competencyCode);
+    Task<MinisterialCompetency> Update(MinisterialCompetency entity);
+    Task Delete(string programOfStudyCode, string competencyCode);
+    Task<bool> ExistsEntityByCode(string programOfStudyCode, string competencyCode);
+    Task<MinisterialCompetency> Add(ProgramOfStudy program, MinisterialCompetency competency, User currentUser);
+    Task<List<MinisterialCompetency>> GetByProgramOfStudy(string programOfStudyCode);
 }

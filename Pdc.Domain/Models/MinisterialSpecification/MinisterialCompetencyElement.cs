@@ -4,11 +4,12 @@ namespace Pdc.Domain.Models.MinisterialSpecification;
 
 public class MinisterialCompetencyElement : CompetencyElement
 {
-    public List<PerformanceCriteria> PerformanceCriterias { get; set; } = new List<PerformanceCriteria>();
+    public List<PerformanceCriteria> PerformanceCriterias { get; set; } = [];
 
-    public override void SetVersion(ChangeRecord version)
+    public override void SetVersionOnUnversioned(ChangeRecord version)
     {
-        base.SetVersion(version);
-        PerformanceCriterias.ForEach(x => x.SetVersion(version));
+        if (version is null) throw new ArgumentNullException(nameof(version));
+        base.SetVersionOnUnversioned(version);
+        PerformanceCriterias.ForEach(x => x.SetVersionOnUnversioned(version));
     }
 }

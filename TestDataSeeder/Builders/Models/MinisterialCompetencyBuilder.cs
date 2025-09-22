@@ -10,7 +10,7 @@ public class MinisterialCompetencyBuilder
     private Units? _units = new Units(5);
     private string _programOfStudyCode = "POS" + new Random().Next(1000, 9999);
     private bool _isMandatory = true;
-    private bool _isOptionnal = false;
+    private bool _isOptional = false;
     private string _statementOfCompetency = "Default Statement";
     private List<RealisationContext> _realisationContexts = new List<RealisationContext>();
     private List<MinisterialCompetencyElement> _competencyElements = new List<MinisterialCompetencyElement>();
@@ -42,9 +42,9 @@ public class MinisterialCompetencyBuilder
         return this;
     }
 
-    public MinisterialCompetencyBuilder WithIsOptionnal(bool isOptionnal)
+    public MinisterialCompetencyBuilder WithIsOptinoal(bool isOptional)
     {
-        _isOptionnal = isOptionnal;
+        _isOptional = isOptional;
         return this;
     }
 
@@ -92,7 +92,7 @@ public class MinisterialCompetencyBuilder
             Units = _units,
             ProgramOfStudyCode = _programOfStudyCode,
             IsMandatory = _isMandatory,
-            IsOptionnal = _isOptionnal,
+            IsOptional = _isOptional,
             StatementOfCompetency = _statementOfCompetency,
             RealisationContexts = _realisationContexts,
             CompetencyElements = _competencyElements,

@@ -4,7 +4,7 @@ namespace Pdc.Domain.Models.Versioning;
 
 public class ComplementaryInformation  // Informations supplémentaires comme des notes. Utilisé comme 4ieme colonne des éléments de contenu
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
     /// <summary>
     /// Version à laquelle l'information a été ajoutée
     /// </summary>
@@ -13,9 +13,12 @@ public class ComplementaryInformation  // Informations supplémentaires comme de
     public required DateTime CreatedOn { get; set; }
     public required string Text { get; set; }
     public required User CreatedBy { get; set; }
-    public void SetVersion(ChangeRecord version)
+    public void SetVersionOnUnversioned(ChangeRecord version)
     {
-        WrittenOnVersion = version;
+        if (WrittenOnVersion == null)
+        {
+            WrittenOnVersion = version;
+        }
     }
     public ComplementaryInformation()
     {

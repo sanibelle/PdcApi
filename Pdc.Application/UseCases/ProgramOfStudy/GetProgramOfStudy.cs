@@ -5,16 +5,16 @@ using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Infrastructure.Exceptions;
 
-namespace Pdc.Application.UseCase;
+namespace Pdc.Application.UseCases;
 
 public class GetProgramOfStudy : IGetProgramOfStudyUseCase
 {
-    private readonly IProgramOfStudyRespository _programOfStudyRespository;
+    private readonly IProgramOfStudyRepository _programOfStudyRepository;
     private readonly IMapper _mapper;
 
-    public GetProgramOfStudy(IProgramOfStudyRespository programOfStudyRespository, IMapper mapper)
+    public GetProgramOfStudy(IProgramOfStudyRepository programOfStudyRepository, IMapper mapper)
     {
-        _programOfStudyRespository = programOfStudyRespository;
+        _programOfStudyRepository = programOfStudyRepository;
         _mapper = mapper;
     }
 
@@ -22,7 +22,7 @@ public class GetProgramOfStudy : IGetProgramOfStudyUseCase
     {
         try
         {
-            ProgramOfStudy program = await _programOfStudyRespository.FindByCode(code);
+            ProgramOfStudy program = await _programOfStudyRepository.FindByCode(code);
             return _mapper.Map<ProgramOfStudyDTO>(program);
         }
         catch (EntityNotFoundException)

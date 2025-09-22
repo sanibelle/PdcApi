@@ -12,7 +12,7 @@ namespace Pdc.E2ETests;
 public class ProgramOfStudyApiTests : ApiTestBase
 {
     [Test]
-    public async Task GivenSeededPrograms_WhenGetAllProgramsOfStudy_ThenShouldReturnSeededPrograms()
+    public async Task GivenSeededPrograms_WhenGetProgramsOfStudies_ThenShouldReturnSeededPrograms()
     {
         // Act
         var response = await _Client.GetAsync("/api/programofstudy");
@@ -98,7 +98,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
         createResponse.EnsureSuccessStatusCode();
         var createdProgram = await createResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
-        // Act - Uodate the program
+        // Act - Update the program
         updatedProgramData.Code = createdProgram!.Code;
         var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{updatedProgramData.Code}", updatedProgramData);
         updateResponse.EnsureSuccessStatusCode();

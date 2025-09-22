@@ -60,14 +60,11 @@ jobs:
       run: |
         CODE_CHANGED="${{ steps.changes.outputs.code }}"
         TESTS_CHANGED="${{ steps.changes.outputs.tests }}"
-        PLAYWRIGHT_CHANGED="${{ steps.changes.outputs.playwright }}"
-        WEBAPP_CHANGED="${{ steps.changes.outputs.webapp }}"
         LAST_STATUS="${{ steps.last-status.outputs.last-status }}"
         
         # Check if commit message contains force test keywords
         COMMIT_MSG="$PR_TITLE ${{ github.event.head_commit.message }}"
         FORCE_TESTS=$(echo "$COMMIT_MSG" | grep -iE '\[run tests\]|\[force tests\]|\[test\]' || true)
-        FORCE_PLAYWRIGHT=$(echo "$COMMIT_MSG" | grep -iE '\[run playwright\]|\[force playwright\]|\[e2e\]' || true)
         
         echo "Code changed: $CODE_CHANGED"
         echo "Tests changed: $TESTS_CHANGED"

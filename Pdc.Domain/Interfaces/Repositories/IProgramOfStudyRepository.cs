@@ -2,7 +2,7 @@
 
 namespace Pdc.Domain.Interfaces.Repositories;
 
-public interface IProgramOfStudyRespository
+public interface IProgramOfStudyRepository
 {
     Task<List<ProgramOfStudy>> GetAll();
     Task<ProgramOfStudy> FindByCode(string code);

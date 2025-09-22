@@ -6,17 +6,17 @@ using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
 
-namespace Pdc.Application.UseCase;
+namespace Pdc.Application.UseCases;
 
 public class CreateProgramOfStudy : ICreateProgramOfStudyUseCase
 {
     private readonly IValidator<ProgramOfStudyDTO> _validator;
-    private readonly IProgramOfStudyRespository _programOfStudyRespository;
+    private readonly IProgramOfStudyRepository _programOfStudyRepository;
     private readonly IMapper _mapper;
 
-    public CreateProgramOfStudy(IProgramOfStudyRespository programOfStudyRespository, IMapper mapper, IValidator<ProgramOfStudyDTO> validator)
+    public CreateProgramOfStudy(IProgramOfStudyRepository programOfStudyRepository, IMapper mapper, IValidator<ProgramOfStudyDTO> validator)
     {
-        _programOfStudyRespository = programOfStudyRespository;
+        _programOfStudyRepository = programOfStudyRepository;
         _mapper = mapper;
         _validator = validator;
     }
@@ -28,13 +28,13 @@ public class CreateProgramOfStudy : ICreateProgramOfStudyUseCase
         {
             throw new ValidationException(validationResult.Errors);
         }
-        if (await _programOfStudyRespository.ExistsByCode(createProgramOfStudyDto.Code))
+        if (await _programOfStudyRepository.ExistsByCode(createProgramOfStudyDto.Code))
         {
             throw new DuplicateException("programOfStudyCodeExists");
         }
 
         ProgramOfStudy programOfStudy = _mapper.Map<ProgramOfStudy>(createProgramOfStudyDto);
-        ProgramOfStudy savedProgramOfStudy = await _programOfStudyRespository.Add(programOfStudy);
+        ProgramOfStudy savedProgramOfStudy = await _programOfStudyRepository.Add(programOfStudy);
 
         return _mapper.Map<ProgramOfStudyDTO>(savedProgramOfStudy);
     }

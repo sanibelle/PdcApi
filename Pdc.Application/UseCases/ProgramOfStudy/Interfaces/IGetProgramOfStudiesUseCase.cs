@@ -1,7 +1,7 @@
 ﻿using Pdc.Application.DTOS;
 
-namespace Pdc.Application.UseCase;
-public interface IGetAllProgramOfStudyUseCase
+namespace Pdc.Application.UseCases;
+public interface IGetProgramOfStudiesUseCase
 {
     Task<IList<ProgramOfStudyDTO>> Execute();
 }

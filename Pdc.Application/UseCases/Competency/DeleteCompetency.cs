@@ -2,27 +2,31 @@
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Infrastructure.Exceptions;
 
-namespace Pdc.Application.UseCase;
+namespace Pdc.Application.UseCases;
 
 public class DeleteCompetency : IDeleteCompetencyUseCase
 {
-    private readonly ICompetencyRespository _programOfStudyRespository;
+    private readonly ICompetencyRepository _competencyRepository;
 
-    public DeleteCompetency(ICompetencyRespository programOfStudyRespository)
+    public DeleteCompetency(ICompetencyRepository competencyRepository)
     {
-        _programOfStudyRespository = programOfStudyRespository;
+        _competencyRepository = competencyRepository;
     }
 
     public async Task Execute(string programOfStudyCode, string competencyCode)
     {
         try
         {
-            await _programOfStudyRespository.FindByCode(programOfStudyCode, competencyCode);
+            var competency = await _competencyRepository.FindByCode(programOfStudyCode, competencyCode);
+            if (!competency.IsDraftAndV1OrNull())
+            {
+                throw new InvalidOperationException("Cannot delete a non-draft competency with version greater than 1.");
+            }
+            await _competencyRepository.Delete(programOfStudyCode, competencyCode);
         }
         catch (EntityNotFoundException)
         {
             throw new NotFoundException();
         }
-        await _programOfStudyRespository.Delete(programOfStudyCode, competencyCode);
     }
 }

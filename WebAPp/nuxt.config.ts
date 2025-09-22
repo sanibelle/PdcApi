@@ -3,7 +3,9 @@ import { resolve } from 'node:path';
 const isHTTPS = process.env.NUXT_PUBLIC_API_USE_HTTPS === 'true'
 
 export default defineNuxtConfig({
-  // Utilisé pour le https en local pour que les cookie secure soient acceptés
+  experimental: {
+    scanPageMeta: true
+  },
   devServer: {
     https: isHTTPS ? {
       key: 'certificates/localhost-key.pem',
@@ -34,6 +36,7 @@ export default defineNuxtConfig({
   i18n: {
     bundle: {
       optimizeTranslationDirective: false,
+      runtimeOnly: false // Ensure macros are processed
     },
     strategy: 'prefix_except_default',
     customRoutes: 'page',
@@ -41,6 +44,13 @@ export default defineNuxtConfig({
     locales: [{ code: 'fr', iso: 'fr-CA', name: 'Français', file: 'fr.json' }],
     detectBrowserLanguage: {
       useCookie: true,
+    },
+    pages: {
+      about: { fr: '/a-propos' },
+      contact: { fr: '/contact' },
+      home: { fr: '/' },
+      login: { fr: '/connexion' },
+      register: { fr: '/inscription' },
     },
   },
   modules: [

@@ -39,9 +39,11 @@ public class AppDbContext : IdentityDbContext<IdentityUserEntity, IdentityRole<G
 
         // Changeable sera directement intégré dans les classes qui l'utilisent
         modelBuilder.Entity<ChangeableEntity>().ToTable("Changeables").UseTptMappingStrategy();
+
         // TODO valider si utile.
         modelBuilder.Entity<CompetencyElementEntity>().ToTable("CompetencyElements").HasBaseType<ChangeableEntity>();
         modelBuilder.Entity<CourseFrameworkCompetencyEntity>().ToTable("CourseFrameworkCompetencies");
+
         // If you need additional configuration for abstract classes or TPH inheritance
         //modelBuilder.Entity<ContentElement>()
         //    .HasDiscriminator<string>("ContentElementType")

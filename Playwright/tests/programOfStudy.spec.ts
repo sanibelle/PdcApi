@@ -1,11 +1,7 @@
 import { test, expect } from './test-fixtures';
 
 test('Creating a full valid program of study', async ({ adminPage }) => {
-  // await adminPage.route('**/*', async (route, request) => {
-  //   console.log('Headers:', request.headers());
-  //   await route.continue();
-  // });
-  await adminPage.goto('/gestion');
+  await adminPage.goto('/administration/programOfStudy');
   await adminPage.waitForLoadState('networkidle');
 
   await adminPage.locator('#create-program-btn').first().click();
@@ -14,7 +10,7 @@ test('Creating a full valid program of study', async ({ adminPage }) => {
   await expect(adminPage.locator('.modal-overlay')).toBeVisible();
    
   await adminPage.locator('input[name="name"]').fill('Creating a full valid program of study')
-  await adminPage.locator('input[name="code"]').fill('code1')
+  await adminPage.locator('input[name="code"]').fill('code3')
   await adminPage.locator('select[name="programType"]').selectOption('1');
   await adminPage.locator('input[name="monthsDuration"]').fill('24')
   await adminPage.locator('input[name="specificDurationHours"]').fill('123')
@@ -45,7 +41,7 @@ test('Creating a full valid program of study', async ({ adminPage }) => {
 });
 
 test('Creating a minimal valid program of study', async ({ page }) => {
-  await page.goto('/gestion');
+  await page.goto('/administration/programOfStudy');
   await page.waitForLoadState('networkidle');
 
   await page.locator('#create-program-btn').first().click();
@@ -54,7 +50,7 @@ test('Creating a minimal valid program of study', async ({ page }) => {
   await expect(page.locator('.modal-overlay')).toBeVisible();
   
   await page.locator('input[name="name"]').fill('Creating a minimal valid program of study')
-  await page.locator('input[name="code"]').fill('code2')
+  await page.locator('input[name="code"]').fill('code4')
   await page.locator('select[name="programType"]').selectOption('2');
   await page.locator('input[name="monthsDuration"]').fill('24')
   await page.locator('input[name="specificDurationHours"]').fill('123')

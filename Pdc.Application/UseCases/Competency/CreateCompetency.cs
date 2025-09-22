@@ -9,17 +9,17 @@ using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 
-namespace Pdc.Application.UseCase;
+namespace Pdc.Application.UseCases;
 
 public class CreateCompetency : ICreateCompetencyUseCase
 {
     private readonly IValidator<CompetencyDTO> _validator;
-    private readonly ICompetencyRespository _competencyRepository;
-    private readonly IProgramOfStudyRespository _programOfStudyRepository;
+    private readonly ICompetencyRepository _competencyRepository;
+    private readonly IProgramOfStudyRepository _programOfStudyRepository;
     private readonly IMapper _mapper;
 
-    public CreateCompetency(ICompetencyRespository competencyRepository,
-                            IProgramOfStudyRespository programOfStudyRepository,
+    public CreateCompetency(ICompetencyRepository competencyRepository,
+                            IProgramOfStudyRepository programOfStudyRepository,
                             IMapper mapper,
                             IValidator<CompetencyDTO> validator)
     {
@@ -39,7 +39,7 @@ public class CreateCompetency : ICreateCompetencyUseCase
         await ThrowIfDuplicateCode(programOfStudyCode, createCompetencyDto.Code);
         ProgramOfStudy program = await _programOfStudyRepository.FindByCode(programOfStudyCode);
         MinisterialCompetency competency = _mapper.Map<MinisterialCompetency>(createCompetencyDto);
-        competency.SetVersion(new ChangeRecord());
+        competency.SetVersionOnUnversioned(new ChangeRecord());
         MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, competency, currentUser);
 
         return _mapper.Map<CompetencyDTO>(savedCompetency);

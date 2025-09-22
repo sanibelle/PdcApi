@@ -1,4 +1,4 @@
-﻿namespace Pdc.Application.UseCase;
+﻿namespace Pdc.Application.UseCases;
 
 public interface IDeleteCompetencyUseCase
 {

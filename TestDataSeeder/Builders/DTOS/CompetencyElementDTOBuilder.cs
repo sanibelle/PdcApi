@@ -4,7 +4,7 @@ namespace TestDataSeeder.Builders.DTOS;
 
 public class CompetencyElementDTOBuilder
 {
-    private Guid? _id = Guid.NewGuid();
+    private Guid? _id = null;
     private string _value = "Default Value";
     private int? _position = null;
     protected List<ComplementaryInformationDTO> ComplementaryInformations = [];

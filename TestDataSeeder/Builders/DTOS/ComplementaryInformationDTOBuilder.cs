@@ -4,11 +4,12 @@ namespace TestDataSeeder.Builders.DTOS;
 
 public class ComplementaryInformationDTOBuilder
 {
-    private Guid? _id = Guid.NewGuid();
+    private Guid? _id;
     private string _text = "Test DATA";
-    private DateTime _modifiedOn = new DateTime(2025, 04, 05);
-    private int _versionNumber;
-    private UserDTO _createdBy;
+    private DateTime _modifiedOn = new DateTime(2025, 04, 06, 0, 0, 0, DateTimeKind.Utc);
+    private DateTime _createdOn = new DateTime(2025, 04, 05, 0, 0, 0, DateTimeKind.Utc);
+    private int? _versionNumber;
+    private UserDTO? _createdBy = null;
 
     public ComplementaryInformationDTOBuilder WithId(Guid? id)
     {
@@ -42,7 +43,7 @@ public class ComplementaryInformationDTOBuilder
             Text = _text,
             ModifiedOn = _modifiedOn,
             WrittenOnVersion = _versionNumber,
-            CreatedOn = DateTime.Now,
+            CreatedOn = _createdOn,
             CreatedBy =  _createdBy
         };
     }

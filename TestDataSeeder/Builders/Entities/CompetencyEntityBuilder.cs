@@ -11,7 +11,7 @@ public class CompetencyEntityBuilder
     private Units? _units = new Units(3);
     private ProgramOfStudyEntity? _programOfStudy;
     private bool _isMandatory = true;
-    private bool _isOptionnal = false;
+    private bool _isOptional = false;
     private string _statementOfCompetency = "Effectuer le déploiement de serveurs intranet";
     private IList<RealisationContextEntity> _realisationContexts = new List<RealisationContextEntity>();
     private IList<CompetencyElementEntity> _competencyElements = new List<CompetencyElementEntity>();
@@ -41,9 +41,9 @@ public class CompetencyEntityBuilder
         return this;
     }
 
-    public CompetencyEntityBuilder WithIsOptionnal(bool isOptionnal)
+    public CompetencyEntityBuilder WithIsOptional(bool isOptional)
     {
-        _isOptionnal = isOptionnal;
+        _isOptional = isOptional;
         return this;
     }
 
@@ -91,7 +91,7 @@ public class CompetencyEntityBuilder
             Units = _units,
             ProgramOfStudy = _programOfStudy ??  new ProgramOfStudyEntityBuilder().Build(),
             IsMandatory = _isMandatory,
-            IsOptionnal = _isOptionnal,
+            IsOptional = _isOptional,
             StatementOfCompetency = _statementOfCompetency,
             RealisationContexts = _realisationContexts,
             CompetencyElements = _competencyElements,

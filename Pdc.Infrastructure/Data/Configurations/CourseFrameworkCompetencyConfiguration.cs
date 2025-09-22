@@ -8,6 +8,8 @@ public class CourseFrameworkCompetencyConfiguration : IEntityTypeConfiguration<C
     public void Configure(EntityTypeBuilder<CourseFrameworkCompetencyEntity> builder)
     {
         builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id)
+            .ValueGeneratedOnAdd();
 
         builder.HasOne(x => x.Competency)
             .WithMany()

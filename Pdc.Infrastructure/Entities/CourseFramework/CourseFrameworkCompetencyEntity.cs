@@ -7,7 +7,7 @@ namespace Pdc.Infrastructure.Entities.CourseFramework;
 /// </summary>
 public class CourseFrameworkCompetencyEntity
 {
-    public required Guid Id { get; set; } = Guid.NewGuid();
+    public Guid? Id { get; set; }
     public required CompetencyEntity Competency { get; set; }
     public required CourseFrameworkEntity CourseFramework { get; set; }
     public required int Hours { get; set; }

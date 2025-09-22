@@ -9,7 +9,7 @@ public class CompetencyDTOBuilder
     private string _code = $"TEST{Random.Shared.Next(0, 10000)}";
     private Units? _units = null;
     private bool _isMandatory = false;
-    private bool _isOptionnal = false;
+    private bool _isOptional = false;
     private string _statementOfCompetency = "Default Statement";
     private ICollection<ChangeableDTO> _realisationContexts = new List<ChangeableDTO>();
     private ICollection<CompetencyElementDTO> _competencyElements = new List<CompetencyElementDTO>();
@@ -33,9 +33,9 @@ public class CompetencyDTOBuilder
         return this;
     }
 
-    public CompetencyDTOBuilder WithIsOptionnal(bool isOptionnal)
+    public CompetencyDTOBuilder WithIsOptional(bool isOptional)
     {
-        _isOptionnal = isOptionnal;
+        _isOptional = isOptional;
         return this;
     }
 
@@ -76,7 +76,7 @@ public class CompetencyDTOBuilder
             Code = _code,
             Units = _units,
             IsMandatory = _isMandatory,
-            IsOptionnal = _isOptionnal,
+            IsOptional = _isOptional,
             StatementOfCompetency = _statementOfCompetency,
             RealisationContexts = _realisationContexts,
             CompetencyElements = _competencyElements,

@@ -6,11 +6,18 @@ public class MinisterialCompetency : Competency
 {
     public List<MinisterialCompetencyElement> CompetencyElements { get; set; } = new List<MinisterialCompetencyElement>();
 
-    public override void SetVersion(ChangeRecord version)
+    public bool IsDraftAndV1OrNull()
     {
-        base.SetVersion(version);
-        CurrentVersion = version;
-        CompetencyElements.ForEach(x => x.SetVersion(version));
-        RealisationContexts.ForEach(x => x.SetVersion(version));
+        if (CurrentVersion == null)
+        {
+            return true;
+        }
+        return CurrentVersion.IsDraft && CurrentVersion.VersionNumber == 1;
+    }
+
+    public override void SetVersionOnUnversioned(ChangeRecord version)
+    {
+        base.SetVersionOnUnversioned(version);
+        CompetencyElements.ForEach(x => x.SetVersionOnUnversioned(version));
     }
 }

@@ -192,6 +192,7 @@ namespace Pdc.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    CreatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsDraft = table.Column<bool>(type: "bit", nullable: false),
                     VersionNumber = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
@@ -213,6 +214,12 @@ namespace Pdc.Infrastructure.Migrations
                         column: x => x.ParentVersionId,
                         principalTable: "ChangeRecords",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ChangeRecords_Users_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_ChangeRecords_Users_ValidatedById",
                         column: x => x.ValidatedById,
@@ -312,7 +319,8 @@ namespace Pdc.Infrastructure.Migrations
                         name: "FK_ComplementaryInformations_Users_CreatedById",
                         column: x => x.CreatedById,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -589,6 +597,11 @@ namespace Pdc.Infrastructure.Migrations
                 name: "IX_ChangeDetails_ChangeRecordId",
                 table: "ChangeDetails",
                 column: "ChangeRecordId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChangeRecords_CreatedById",
+                table: "ChangeRecords",
+                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChangeRecords_NextVersionId",

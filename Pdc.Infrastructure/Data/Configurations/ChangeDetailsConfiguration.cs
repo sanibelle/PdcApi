@@ -10,6 +10,8 @@ public class ChangeDetailConfiguration : IEntityTypeConfiguration<ChangeDetailEn
     {
         builder.HasKey(x => x.Id);
 
+        builder.Property(x => x.Id)
+            .ValueGeneratedOnAdd();
         builder.Property(x => x.OldValue)
             .HasMaxLength(Constants.MaxChangeableLength);
 

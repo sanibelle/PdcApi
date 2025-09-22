@@ -1,5 +1,4 @@
 ﻿using Pdc.Domain.Exceptions;
-using System.ComponentModel.DataAnnotations;
 
 namespace Pdc.WebAPI.Middlewares;
 
@@ -23,7 +22,11 @@ public class ExceptionHandlingMiddleware
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Une exception non traitée a été levée");
+            var status = GetStatusCode(ex);
+            if (status >= 500)
+                _logger.LogError(ex, "Unhandled exception.");
+            else
+                _logger.LogWarning(ex, "Handled exception with status {Status}.", status);
             await HandleExceptionAsync(context, ex);
         }
     }
@@ -31,12 +34,12 @@ public class ExceptionHandlingMiddleware
     private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var statusCode = GetStatusCode(exception);
-
+        var env = context.RequestServices.GetRequiredService<IHostEnvironment>();
         var response = new
         {
             status = statusCode,
             message = exception.Message,
-            detail = exception.StackTrace
+            detail = env.IsDevelopment() ? exception.StackTrace : null
         };
 
         context.Response.ContentType = "application/json";
@@ -49,7 +52,8 @@ public class ExceptionHandlingMiddleware
         // TODO log not managed exception
         return exception switch
         {
-            ValidationException => StatusCodes.Status400BadRequest,
+            System.ComponentModel.DataAnnotations.ValidationException => StatusCodes.Status422UnprocessableEntity,
+            FluentValidation.ValidationException => StatusCodes.Status422UnprocessableEntity,
             NotFoundException => StatusCodes.Status404NotFound,
             DuplicateException => StatusCodes.Status409Conflict,
             _ => StatusCodes.Status500InternalServerError

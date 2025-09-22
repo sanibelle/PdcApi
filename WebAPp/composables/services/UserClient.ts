@@ -1,6 +1,6 @@
 import { useApi } from './ApiClient';
 
-export const useUser = () => {
+export const useUserClient = () => {
   const fetchUser = async (): Promise<User> => {
     const api = useApi();
     const user = await api.Get<User>('/Auth/profile');

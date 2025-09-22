@@ -15,17 +15,20 @@ const { t } = useI18n();
 
 <template>
   <div class="wrapper">
-    <FormAtomsAButton 
+    <CommonAtomsAButton 
       :is-disabled="isDisabled || isSubmitting" 
+      :type="'submit'"
       v-bind="$attrs"
     >
-      <template v-if="isSubmitting">
-        {{ t('submiting') }}
-      </template>
-      <template v-else>
-        {{ t('submit') }}
-      </template>
-    </FormAtomsAButton>
+      <slot>
+        <template v-if="isSubmitting">
+          {{ t('submiting') }}
+        </template>
+        <template v-else>
+          {{ t('submit') }}
+        </template>
+      </slot>
+    </CommonAtomsAButton>
   </div>
 </template>
 
@@ -38,12 +41,16 @@ const { t } = useI18n();
 }
 </i18n>
 
-<style scoped>
+<style lang="scss" scoped>
 .wrapper {
   height: 30px;
 }
 
 :deep(button) {
+  background-color: hsl(128, 56%, 29%);
+  &:hover {
+    background-color: hsl(128, 56%, 39%);
+  }
   min-width: 7rem;
 }
 </style>
