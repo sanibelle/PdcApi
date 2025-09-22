@@ -190,7 +190,7 @@ public class CompetencyApiTests : ApiTestBase
             .Build());
 
         var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{oldCode}", competencyToUpdateDTO);
-        updateResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        updateResponse.StatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);
         var res = await _Client.GetAsync($"/api/programofstudy/{_programCode}/competency/{oldCode}");
         var notUpdatedCompetency = await res.Content.ReadFromJsonAsync<CompetencyDTO>();
         notUpdatedCompetency.Should().NotBeNull();

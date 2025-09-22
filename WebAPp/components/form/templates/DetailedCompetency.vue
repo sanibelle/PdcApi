@@ -59,6 +59,7 @@ const onSubmit = handleSubmit(async () => {
 const addRealisationContextRow = () => {
   competency.value.realisationContexts?.push({
     value: '',
+    position: competency.value.realisationContexts.length + 1,
   });
 };
 
