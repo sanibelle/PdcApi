@@ -25,13 +25,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  modelValue: {
-    type: Boolean, // lorsque vide, c'est un String
-    default: false,
-  },
 });
-
-const emit = defineEmits(['update:modelValue']);
+const model = defineModel<boolean>({
+  required: true,
+})
 
 const validationRules = computed(() => {
   const rules: any[] = [];
@@ -42,6 +39,5 @@ const validationRules = computed(() => {
 
 <template>
   <FormMoleculesAFormField :name="name" :label="label" type="checkbox" :placeholder="placeholder" :disabled="disabled"
-    :required="required" :rules="validationRules" :hint="hint" :modelValue="modelValue"
-    @update:modelValue="$emit('update:modelValue', $event)" />
+    :required="required" :rules="validationRules" :hint="hint" v-model="model" />
 </template>

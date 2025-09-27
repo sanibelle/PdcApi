@@ -34,10 +34,6 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  modelValue: {
-    type: Date,
-    default: undefined,
-  },
   min: {
     type: Date,
     default: null,
@@ -48,9 +44,11 @@ const props = defineProps({
   },
 });
 
-defineEmits(['update:modelValue']);
 const errorMessage = ref('');
 
+const model = defineModel<Date>({
+  required: true,
+})
 </script>
 
 <template>
@@ -59,8 +57,7 @@ const errorMessage = ref('');
       {{ label }}
     </FormAtomsABaseLabel>
     <FormAtomsADateInput :id="id" :name="name" :placeholder="placeholder" :disabled="disabled" :rules="rules"
-      :modelValue="modelValue" @update:modelValue="$emit('update:modelValue', $event)" :max="max" :min="min"
-      @update:error-message="errorMessage = $event" :date-only="true" />
+      v-model="model" :max="max" :min="min" @update:error-message="errorMessage = $event" :date-only="true" />
     <FormAtomsAErrorMessage :message="errorMessage" />
     <FormAtomsAHint :hint="hint" />
   </div>

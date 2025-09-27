@@ -22,16 +22,13 @@ const props = defineProps({
   required: {
     type: Boolean,
     default: false,
-  },
-  modelValue: {
-    type: Object as () => Partial<Unit>,
-    default: {},
-  },
+  }
 });
 
-const emit = defineEmits(['update:modelValue']);
+const unit = defineModel<Unit>({
+  required: true,
+})
 
-const unit = toRef(props, 'modelValue');
 
 const validationRules = computed(() => {
   const rules = [];
@@ -69,17 +66,14 @@ const numeratorOption = computed(() =>
 
 const handleNumeratorChange = (value: number) => {
   unit.value.numerator = value === 0 || value ? value : null;
-  emit('update:modelValue', unit);
 };
 
 const handleDenominatorChange = (value: number) => {
   unit.value.denominator = value === 0 || value ? value : null;
-  emit('update:modelValue', unit);
 };
 
 const handleWholeUnitChange = (value: number) => {
   unit.value.wholeUnit = value;
-  emit('update:modelValue', unit);
 };
 </script>
 
@@ -90,16 +84,13 @@ const handleWholeUnitChange = (value: number) => {
     </FormAtomsABaseLabel>
     <div class="flex">
       <FormANumberInput :name="`${name}.wholeUnit`" :label="t('wholeUnit')" :disabled="props.disabled"
-        :required="props.required" :integer="true" :rules="validationRules" :modelValue="unit.wholeUnit"
-        @update:modelValue="handleWholeUnitChange" />
+        :required="props.required" :integer="true" :rules="validationRules" v-model="unit.wholeUnit" />
       <FormMoleculesASelectField :name="`${name}.numerator`" :label="t('numerator')" type="text"
         :disabled="props.disabled" :required="numeratorAndDenominatorRules.length > 0"
-        :rules="numeratorAndDenominatorRules" :options="numeratorOption" :modelValue="unit.numerator"
-        @update:modelValue="handleNumeratorChange" />/
+        :rules="numeratorAndDenominatorRules" :options="numeratorOption" v-model="unit.numerator" />
       <FormMoleculesASelectField :name="`${name}.denominator`" :label="t('denominator')" type="text"
         :required="numeratorAndDenominatorRules.length > 0" :disabled="props.disabled"
-        :rules="numeratorAndDenominatorRules" :options="denominatorOption" :modelValue="unit.denominator"
-        @update:modelValue="handleDenominatorChange" />
+        :rules="numeratorAndDenominatorRules" :options="denominatorOption" v-model="unit.denominator" />
     </div>
     <FormAtomsAHint :hint="hint" />
   </div>
