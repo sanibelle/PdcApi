@@ -5,10 +5,12 @@ using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
+using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
+using Pdc.Infrastructure.Entities.Versioning;
 using Pdc.Infrastructure.Exceptions;
 
 namespace Pdc.Infrastructure.Repositories;
@@ -52,11 +54,29 @@ public class CompetencyRepository : ICompetencyRepository
 
     public async Task<MinisterialCompetency> Update(MinisterialCompetency competency)
     {
+        CompetencyEntity existingCompetency = await FindEntityByCode(competency.Code);
+        MarkAllRemovedElementsForDeletion(competency, existingCompetency);
         CompetencyEntity entity = await _context.Competencies
             .Persist(_mapper)
             .InsertOrUpdateAsync(competency);
+
         await _context.SaveChangesAsync();
         return _mapper.Map<MinisterialCompetency>(entity);
+    }
+
+    private void MarkAllRemovedElementsForDeletion(MinisterialCompetency competency, CompetencyEntity existingCompetency)
+    {
+        List<ChangeableEntity> realisationContextToDelete = FindMissingAChangeableForDeletion(competency.RealisationContexts.Cast<AChangeable>().ToList(), existingCompetency.RealisationContexts.Cast<ChangeableEntity>().ToList());
+        _context.RealisationContexts.RemoveRange(realisationContextToDelete.Cast<RealisationContextEntity>().ToList());
+    }
+
+    //TODO put that into an utils?
+    private List<ChangeableEntity> FindMissingAChangeableForDeletion(List<AChangeable> listWithMissing, List<ChangeableEntity> listToCompare)
+    {
+        return listToCompare
+            .Where(x => !listWithMissing
+            .Select(y => y.Id).Contains(x.Id))
+            .ToList();
     }
 
     public async Task Delete(string programOfStudyCode, string competencyCode)
@@ -70,9 +90,9 @@ public class CompetencyRepository : ICompetencyRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<MinisterialCompetency> FindByCode(string programOfStudyCode, string competencyCode)
+    public async Task<MinisterialCompetency> FindByCode(string competencyCode)
     {
-        CompetencyEntity entity = await FindEntityByCode(programOfStudyCode, competencyCode);
+        CompetencyEntity entity = await FindEntityByCode(competencyCode);
         return _mapper.Map<MinisterialCompetency>(entity);
     }
 
@@ -83,7 +103,7 @@ public class CompetencyRepository : ICompetencyRepository
             .AnyAsync();
     }
 
-    private async Task<CompetencyEntity> FindEntityByCode(string programOfStudyCode, string competencyCode)
+    private async Task<CompetencyEntity> FindEntityByCode(string competencyCode)
     {
         CompetencyEntity? competency = await _context.Competencies.AsNoTracking()
             .Include(c => c.RealisationContexts)
@@ -102,7 +122,7 @@ public class CompetencyRepository : ICompetencyRepository
             .Include(c => c.ProgramOfStudy)
             .Include(c => c.CurrentVersion)
                 .ThenInclude(v => v.CreatedBy)
-            .SingleOrDefaultAsync(x => x.Code == competencyCode && x.ProgramOfStudy.Code == programOfStudyCode);
+            .SingleOrDefaultAsync(x => x.Code == competencyCode);
 
         if (competency == null)
         {
@@ -118,6 +138,7 @@ public class CompetencyRepository : ICompetencyRepository
             .Include(p => p.Competencies)
             .SingleOrDefaultAsync(x => x.Code == code);
         if (program == null)
+
         {
             throw new EntityNotFoundException(nameof(ProgramOfStudy), code);
         }

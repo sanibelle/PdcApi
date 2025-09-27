@@ -1,5 +1,4 @@
-<script setup>
-import { useField } from 'vee-validate';
+<script setup lang="ts">
 
 const props = defineProps({
   id: {
@@ -39,18 +38,17 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  modelValue: {
-    type: [String, Number, Boolean],
-    default: '',
-  },
   hint: {
     type: String,
     default: '',
   },
 });
 
-defineEmits(['update:modelValue']);
-const errorMessage = ref(props.errorMessage, 'errorMessage');
+const model = defineModel<string | number | boolean | undefined | null>({
+  required: true,
+})
+
+const error = toRef(props.errorMessage);
 
 </script>
 
@@ -59,13 +57,11 @@ const errorMessage = ref(props.errorMessage, 'errorMessage');
     <FormAtomsABaseLabel :for-id="id" :required="required" v-if="label">
       {{ label }}
     </FormAtomsABaseLabel>
-      <FormAtomsACheckboxInput v-if="type === 'checkbox'" v-bind="$attrs" :id="id" :name="name" :placeholder="placeholder" :disabled="disabled"
-        :rules="rules" :modelValue="modelValue" @update:modelValue="$emit('update:modelValue', $event)"
-        @update:error-message="errorMessage = $event" />
+    <FormAtomsACheckboxInput v-if="type === 'checkbox'" v-bind="$attrs" :id="id" :name="name" :placeholder="placeholder"
+      :disabled="disabled" :rules="rules" v-model="model as any" @update:error-message="error = $event" />
     <FormAtomsABaseInput v-else v-bind="$attrs" :id="id" :name="name" :placeholder="placeholder" :disabled="disabled"
-      :rules="rules" :modelValue="modelValue" @update:modelValue="$emit('update:modelValue', $event)"
-      @update:error-message="errorMessage = $event" />
-    <FormAtomsAErrorMessage :message="errorMessage" />
+      :rules="rules" v-model="model as any" @update:error-message="error = $event" />
+    <FormAtomsAErrorMessage :message="error" />
     <FormAtomsAHint v-if="hint" :text="hint" />
   </div>
 </template>

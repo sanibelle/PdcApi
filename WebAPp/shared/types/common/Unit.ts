@@ -1,6 +1,6 @@
 type Unit = {
   id?: string; // Guid as string
-  wholeUnit: number;
+  wholeUnit?: number | null;
   numerator?: number | null;
   denominator?: number | null;
 };

@@ -28,13 +28,7 @@ const props = defineProps({
     type: Date,
     default: null,
   },
-  modelValue: {
-    type: Date,
-    default: undefined,
-  },
 });
-
-const emit = defineEmits(['update:modelValue']);
 
 // Computed validation rules based on props
 const validationRules = computed(() => {
@@ -45,10 +39,13 @@ const validationRules = computed(() => {
   }
   return rules.join('|');
 });
+
+const model = defineModel<Date | undefined>({
+  required: true,
+})
 </script>
 
 <template>
   <FormMoleculesADateField :name="name" :label="label" type="date" :disabled="disabled" :required="required"
-    :rules="validationRules" :hint="hint" :modelValue="modelValue" :max="max" :min="min"
-    @update:modelValue="$emit('update:modelValue', $event)" />
+    :rules="validationRules" :hint="hint" v-model="model" :max="max" :min="min" />
 </template>

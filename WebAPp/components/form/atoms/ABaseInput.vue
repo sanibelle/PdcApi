@@ -21,24 +21,24 @@ const props = defineProps({
   rules: {
     type: [String, Object],
     default: '',
-  },
-  modelValue: {
-    type: [String, Number, Boolean],
-    default: '',
-  },
+  }
 });
 
-const emit = defineEmits(['update:modelValue', 'update:errorMessage']);
+const emit = defineEmits(['update:errorMessage']);
+
+const model = defineModel<string | number>({
+  required: true,
+})
 
 const { value, errorMessage, handleBlur, setValue, handleChange } = useField(props.name, props.rules, {
   validateOnMount: false,
-  initialValue: props.modelValue,
+  initialValue: model.value,
   validateOnValueUpdate: false,
 });
 
 
 watch(
-  () => props.modelValue,
+  () => model.value,
   (newValue) => {
     if (newValue !== value.value) {
       setValue(newValue);
@@ -49,7 +49,7 @@ watch(
 const onChange = (event: Event) => {
   handleChange(event, !!errorMessage.value);
   const target = event.target as HTMLInputElement;
-  emit('update:modelValue', target.value);
+  model.value = target.value;
 };
 
 const onBlur = (event: Event) => {
@@ -65,8 +65,8 @@ watch(
 </script>
 
 <template>
-  <input :name="name" :value="value" :type="type" :placeholder="placeholder" :disabled="disabled"
-    class="base-input" :class="{ error: errorMessage }" @input="onChange" @blur="onBlur" />
+  <input :name="name" :value="value" :type="type" :placeholder="placeholder" :disabled="disabled" class="base-input"
+    :class="{ error: errorMessage }" @input="onChange" @blur="onBlur" />
 </template>
 
 <style scoped>

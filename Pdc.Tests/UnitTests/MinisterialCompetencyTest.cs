@@ -185,12 +185,12 @@ public class MinisterialCompetencyTest
 
         // Setup Competency Repository mock
         _competencyRepositoryMock.Setup(repo => repo.Add(It.IsAny<ProgramOfStudy>(), It.IsAny<MinisterialCompetency>(), It.IsAny<User>())).ReturnsAsync(_competency2);
-        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _codeOfAFakeProgram), It.Is<string>(x => x == _competency1.Code))).ReturnsAsync(_competency1);
-        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _codeOfAFakeProgram), It.Is<string>(x => x != _competency1.Code))).Throws(new EntityNotFoundException(nameof(CompetencyEntity), _competency2.Code));
-        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _codeOfAFakeProgram), It.Is<string>(x => x == _competencyToUpdateV1Draft.Code))).ReturnsAsync(_competencyToUpdateV1Draft);
-        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _codeOfAFakeProgram), It.Is<string>(x => x == _competencyToUpdateV1NotDraft.Code))).ReturnsAsync(_competencyToUpdateV1NotDraft);
-        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _codeOfAFakeProgram), It.Is<string>(x => x == _competencyToUpdateV2Draft.Code))).ReturnsAsync(_competencyToUpdateV2Draft);
-        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _codeOfAFakeProgram), It.Is<string>(x => x == _competencyToUpdateV2NotDraft.Code))).ReturnsAsync(_competencyToUpdateV2NotDraft);
+        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _competency1.Code))).ReturnsAsync(_competency1);
+        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x != _competency1.Code))).Throws(new EntityNotFoundException(nameof(CompetencyEntity), _competency2.Code));
+        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _competencyToUpdateV1Draft.Code))).ReturnsAsync(_competencyToUpdateV1Draft);
+        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _competencyToUpdateV1NotDraft.Code))).ReturnsAsync(_competencyToUpdateV1NotDraft);
+        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _competencyToUpdateV2Draft.Code))).ReturnsAsync(_competencyToUpdateV2Draft);
+        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _competencyToUpdateV2NotDraft.Code))).ReturnsAsync(_competencyToUpdateV2NotDraft);
         _competencyRepositoryMock.Setup(repo => repo.Update(It.IsAny<MinisterialCompetency>())).ReturnsAsync(_competencyToUpdateV1Draft);
         //    _competencyRepositoryMock.Setup(repo => repo.GetAll()).ReturnsAsync(new List<MinisterialCompetency> { competency1, competency2 });
         //    _competencyRepositoryMock.Setup(repo => repo.FindByCode(program1.Code, competency1.Code)).ReturnsAsync(competency1);

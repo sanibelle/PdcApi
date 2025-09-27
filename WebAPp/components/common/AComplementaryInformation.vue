@@ -2,9 +2,9 @@
 const { t } = useI18n();
 
 const props = defineProps({
-    versionNumber: {
-        type: Number,
-        required: true,
+    complementaryInformations: {
+        type: Array<ComplementaryInformation>,
+        default: [],
     },
     isDraft: {
         type: Boolean,
@@ -15,16 +15,6 @@ const props = defineProps({
 
 <template>
     <div class="version-badge" :class="{ 'draft': isDraft }">
-        <span class="version-text">v{{ versionNumber }}</span>
-        <span v-if="isDraft" class="draft-label">{{ t('draft') }}
-            <br>
-            <template v-if="versionNumber !== 1">{{ t('notv1') }}</template>
-            <div class="version-badge" :class="{ 'draft': isDraft }"></div>
-        </span>
-        <span v-else class="draft-label">{{ t('notdraft') }}
-            <br>
-            {{ t('newVersion') }}
-        </span>
     </div>
 </template>
 

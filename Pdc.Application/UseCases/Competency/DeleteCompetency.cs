@@ -17,7 +17,7 @@ public class DeleteCompetency : IDeleteCompetencyUseCase
     {
         try
         {
-            var competency = await _competencyRepository.FindByCode(programOfStudyCode, competencyCode);
+            var competency = await _competencyRepository.FindByCode(competencyCode);
             if (!competency.IsDraftAndV1OrNull())
             {
                 throw new InvalidOperationException("Cannot delete a non-draft competency with version greater than 1.");
