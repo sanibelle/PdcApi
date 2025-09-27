@@ -18,7 +18,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:errorMessage']);
 
-const model = defineModel<boolean>({
+const model = defineModel<boolean | undefined>({
   required: true,
 })
 
@@ -32,7 +32,7 @@ const { value, errorMessage, handleBlur, setValue, handleChange } = useField(pro
 watch(
   () => model.value,
   (newValue) => {
-    if (newValue !== value.value) {
+    if (newValue !== value.value && newValue !== undefined) {
       setValue(newValue);
     }
   }

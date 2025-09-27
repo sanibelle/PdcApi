@@ -39,7 +39,7 @@ const props = defineProps({
   },
 });
 
-const model = defineModel<number | undefined>({
+const model = defineModel<number | undefined | null>({
   required: true,
 })
 

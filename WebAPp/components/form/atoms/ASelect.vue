@@ -30,7 +30,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:errorMessage']);
 
-const model = defineModel<string | number | null>({
+const model = defineModel<string | number | undefined | null>({
   required: true,
 })
 
@@ -46,7 +46,7 @@ watch(
   () => model.value,
   async (newVal) => {
     // Devrait prévenir la recursion infinie
-    if (newVal !== value.value) {
+    if (newVal !== value.value && newVal !== undefined) {
       await setValue(newVal);
     }
   }

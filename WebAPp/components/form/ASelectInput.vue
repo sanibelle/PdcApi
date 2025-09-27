@@ -40,7 +40,7 @@ const validationRules = computed(() => {
   return rules.join('|');
 });
 
-const model = defineModel<string | undefined>({
+const model = defineModel<number | string | undefined>({
   required: true,
 })
 

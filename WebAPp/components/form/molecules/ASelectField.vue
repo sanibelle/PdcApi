@@ -43,7 +43,7 @@ defineProps({
 // Get the error message from VeeValidate
 const errorMessage = ref('');
 
-const model = defineModel<string | number | null>({
+const model = defineModel<string | number | undefined | null>({
   required: true,
 })
 </script>

@@ -36,7 +36,8 @@ const emit = defineEmits(['update:errorMessage']);
 
 // Use VeeValidate's useField to handle validation
 const { value, handleChange, setValue, errorMessage } = useField(props.name, props.rules);
-const model = defineModel<Date | null>({
+
+const model = defineModel<Date | undefined>({
   required: true,
 })
 watch(

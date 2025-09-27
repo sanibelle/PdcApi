@@ -26,7 +26,7 @@ const props = defineProps({
     default: '',
   },
 });
-const model = defineModel<boolean>({
+const model = defineModel<boolean | undefined>({
   required: true,
 })
 

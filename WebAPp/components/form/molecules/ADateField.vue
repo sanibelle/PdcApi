@@ -46,7 +46,7 @@ const props = defineProps({
 
 const errorMessage = ref('');
 
-const model = defineModel<Date>({
+const model = defineModel<Date | undefined>({
   required: true,
 })
 </script>

@@ -44,7 +44,7 @@ const props = defineProps({
   },
 });
 
-const model = defineModel<string | number | boolean | undefined>({
+const model = defineModel<string | number | boolean | undefined | null>({
   required: true,
 })
 
