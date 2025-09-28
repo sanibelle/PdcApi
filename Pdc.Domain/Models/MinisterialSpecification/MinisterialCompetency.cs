@@ -16,7 +16,7 @@ public class MinisterialCompetency : Competency
         return CurrentVersion.IsDraft && CurrentVersion.VersionNumber == 1;
     }
 
-    public void SetCreatedByOnUntracked(User user)
+    public override void SetCreatedByOnUntracked(User user)
     {
         base.SetCreatedByOnUntracked(user);
         CompetencyElements.ForEach(x => x.SetCreatedByOnUntracked(user));

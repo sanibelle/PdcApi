@@ -27,7 +27,7 @@ public class Competency
         RealisationContexts.ForEach(x => x.SetVersionOnUntracked(version));
     }
 
-    internal void SetCreatedByOnUntracked(User user)
+    public virtual void SetCreatedByOnUntracked(User user)
     {
         RealisationContexts.ForEach(x => x.SetCreatedByOnUntracked(user));
     }
