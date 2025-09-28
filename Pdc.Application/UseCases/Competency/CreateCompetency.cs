@@ -39,8 +39,9 @@ public class CreateCompetency : ICreateCompetencyUseCase
         await ThrowIfDuplicateCode(programOfStudyCode, createCompetencyDto.Code);
         ProgramOfStudy program = await _programOfStudyRepository.FindByCode(programOfStudyCode);
         MinisterialCompetency competency = _mapper.Map<MinisterialCompetency>(createCompetencyDto);
-        competency.SetVersionOnUnversioned(new ChangeRecord());
-        MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, competency, currentUser);
+        competency.SetVersionOnUntracked(new ChangeRecord(currentUser));
+        competency.SetCreatedByOnUntracked(currentUser);
+        MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, competency);
 
         return _mapper.Map<CompetencyDTO>(savedCompetency);
     }

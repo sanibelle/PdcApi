@@ -13,6 +13,7 @@ public class ChangeRecordBuilder
     private ChangeRecord? _nextVersion = null;
     private ChangeRecord? _parentVersion = null;
     private User _validatedBy;
+    private User _createdBy;
 
     public ChangeRecordBuilder() { }
 
@@ -64,9 +65,15 @@ public class ChangeRecordBuilder
         return this;
     }
 
+    public ChangeRecordBuilder WithCreatedBy(User createdBy)
+    {
+        _createdBy = createdBy;
+        return this;
+    }
+
     public ChangeRecord Build()
     {
-        return new ChangeRecord
+        return new ChangeRecord(_createdBy)
         {
             Id = _id,
             CreatedOn = _createdOn,

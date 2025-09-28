@@ -40,13 +40,12 @@ public class DataSeeder : IDataSeeder
     public async Task SeedAsync()
     {
         await _context.Database.EnsureCreatedAsync();
-        ProgramOfStudyEntity = await new ProgramOfStudy(_context).SeedAsync();
-        CompetencyEntity =  await new Competency(ProgramOfStudyEntity, _context).SeedAsync();
-
-        // Access
         await new Role(_roleManager).SeedAsync();
         Admin = await new User(_userManager).SeedAsync(Roles.Admin);
         User = await new User(_userManager).SeedAsync(Roles.User);
+
+        ProgramOfStudyEntity = await new ProgramOfStudy(_context).SeedAsync();
+        CompetencyEntity =  await new Competency(ProgramOfStudyEntity, _context).SeedAsync();
         await _context.SaveChangesAsync();
     }
 }

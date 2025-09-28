@@ -129,9 +129,10 @@ public class ProgramOfStudyController : ControllerBase
     [HttpPut("{programOfStudyCode}/competency/{competencyCode}")]
     public async Task<ActionResult<CompetencyDTO>> UpdateCompetency(string programOfStudyCode, string competencyCode, [FromBody] CompetencyDTO updateCompetencyDTO)
     {
+        User user = _userControllerService.GetUserFromHttpContext(_httpContextAccessor);
         if (updateCompetencyDTO.VersionNumber == 1 && updateCompetencyDTO.IsDraft)
         {
-            CompetencyDTO competency = await _updateDraftV1CompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO);
+            CompetencyDTO competency = await _updateDraftV1CompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO, user);
 
             return Ok(competency);
         }

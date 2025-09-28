@@ -1,4 +1,5 @@
-﻿using Pdc.Domain.Models.Versioning;
+﻿using Pdc.Domain.Models.Security;
+using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.MinisterialSpecification;
 
@@ -6,10 +7,16 @@ public class MinisterialCompetencyElement : CompetencyElement
 {
     public List<PerformanceCriteria> PerformanceCriterias { get; set; } = [];
 
-    public override void SetVersionOnUnversioned(ChangeRecord version)
+    public override void SetVersionOnUntracked(ChangeRecord version)
     {
         if (version is null) throw new ArgumentNullException(nameof(version));
-        base.SetVersionOnUnversioned(version);
-        PerformanceCriterias.ForEach(x => x.SetVersionOnUnversioned(version));
+        base.SetVersionOnUntracked(version);
+        PerformanceCriterias.ForEach(x => x.SetVersionOnUntracked(version));
+    }
+
+    public override void SetCreatedByOnUntracked(User user)
+    {
+        base.SetCreatedByOnUntracked(user);
+        PerformanceCriterias.ForEach(x => x.SetCreatedByOnUntracked(user));
     }
 }

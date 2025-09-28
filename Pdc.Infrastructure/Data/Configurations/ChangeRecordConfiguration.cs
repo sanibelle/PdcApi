@@ -33,10 +33,12 @@ public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEn
 
         builder.HasOne(x => x.ValidatedBy)
             .WithMany()
+            .HasForeignKey(c => c.ValidatedById)
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
+            .HasForeignKey(c => c.CreatedById)
             .OnDelete(DeleteBehavior.Restrict);
     }
 }

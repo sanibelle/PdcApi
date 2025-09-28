@@ -3,6 +3,7 @@ using FluentValidation;
 using Pdc.Application.DTOS;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.MinisterialSpecification;
+using Pdc.Domain.Models.Security;
 
 
 namespace Pdc.Application.UseCases;
@@ -22,7 +23,7 @@ public class UpdateDraftV1Competency : IUpdateDraftV1CompetencyUseCase
         _validator = validator;
     }
 
-    public async Task<CompetencyDTO> Execute(string programOfStudyCode, string competencyCode, CompetencyDTO updateCompetencyDto)
+    public async Task<CompetencyDTO> Execute(string programOfStudyCode, string competencyCode, CompetencyDTO updateCompetencyDto, User currentUser)
     {
         var validationResult = await _validator.ValidateAsync(updateCompetencyDto);
         if (!validationResult.IsValid)
@@ -40,7 +41,8 @@ public class UpdateDraftV1Competency : IUpdateDraftV1CompetencyUseCase
         }
         _mapper.Map(updateCompetencyDto, competencyToUpdate);
         // On prend la version actuelle et on l'assigne à tous les objets qui ont une version.
-        competencyToUpdate.SetVersionOnUnversioned(competencyToUpdate.CurrentVersion!);
+        competencyToUpdate.SetVersionOnUntracked(competencyToUpdate.CurrentVersion!);
+        competencyToUpdate.SetCreatedByOnUntracked(currentUser);
         MinisterialCompetency updatedProgramOfStudy = await _competencyRepository.Update(competencyToUpdate);
         return _mapper.Map<CompetencyDTO>(updatedProgramOfStudy);
 

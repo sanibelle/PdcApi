@@ -184,7 +184,7 @@ public class MinisterialCompetencyTest
         _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsIn(_codeOfAFakeProgram))).ReturnsAsync(_programOfSudy);
 
         // Setup Competency Repository mock
-        _competencyRepositoryMock.Setup(repo => repo.Add(It.IsAny<ProgramOfStudy>(), It.IsAny<MinisterialCompetency>(), It.IsAny<User>())).ReturnsAsync(_competency2);
+        _competencyRepositoryMock.Setup(repo => repo.Add(It.IsAny<ProgramOfStudy>(), It.IsAny<MinisterialCompetency>())).ReturnsAsync(_competency2);
         _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _competency1.Code))).ReturnsAsync(_competency1);
         _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x != _competency1.Code))).Throws(new EntityNotFoundException(nameof(CompetencyEntity), _competency2.Code));
         _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _competencyToUpdateV1Draft.Code))).ReturnsAsync(_competencyToUpdateV1Draft);
@@ -340,7 +340,7 @@ public class MinisterialCompetencyTest
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithCode(_competencyToUpdateV1Draft.Code)
             .Build();
-        var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO);
+        var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user);
         Assert.That(result.VersionNumber == 1);
         _competencyRepositoryMock.Verify(repo => repo.Update(It.IsAny<MinisterialCompetency>()), Times.Once);
     }
@@ -353,7 +353,7 @@ public class MinisterialCompetencyTest
         CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
             .WithCode(_competencyToUpdateV1Draft.Code)
             .Build();
-        var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO);
+        var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user);
         Assert.That(result.VersionNumber == 1, "Updating a draft V1 competency should not create a new version");
     }
 
@@ -366,7 +366,7 @@ public class MinisterialCompetencyTest
 
         // Assert
         Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO));
+                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user));
     }
 
     [Test]
@@ -378,7 +378,7 @@ public class MinisterialCompetencyTest
 
         // Assert
         Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO));
+                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user));
     }
 
     [Test]
@@ -390,7 +390,7 @@ public class MinisterialCompetencyTest
 
         // Assert
         Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO));
+                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user));
     }
 
     //TODO gestion de la version. Quand on crée un programme, on crée une nouvelle version
