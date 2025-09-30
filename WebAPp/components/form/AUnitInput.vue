@@ -73,10 +73,10 @@ const numeratorOption = computed(() =>
     <div class="flex">
       <FormANumberInput :name="`${name}.wholeUnit`" :label="t('wholeUnit')" :disabled="props.disabled"
         :required="props.required" :integer="true" :rules="validationRules" v-model="unit.wholeUnit" />
-      <FormMoleculesASelectField :name="`${name}.numerator`" :label="t('numerator')" type="text"
+      <FormMoleculesASelectField :name="`${name}.numerator`" :label="t('numerator')"
         :disabled="props.disabled" :required="numeratorAndDenominatorRules.length > 0"
         :rules="numeratorAndDenominatorRules" :options="numeratorOption" v-model="unit.numerator" />
-      <FormMoleculesASelectField :name="`${name}.denominator`" :label="t('denominator')" type="text"
+      <FormMoleculesASelectField :name="`${name}.denominator`" :label="t('denominator')"
         :required="numeratorAndDenominatorRules.length > 0" :disabled="props.disabled"
         :rules="numeratorAndDenominatorRules" :options="denominatorOption" v-model="unit.denominator" />
     </div>

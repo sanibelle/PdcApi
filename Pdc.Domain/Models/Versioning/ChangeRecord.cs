@@ -51,7 +51,7 @@ public class ChangeRecord
 
     public void SetCreatedByOnUntracked(User user)
     {
-        if (CreatedBy != null)
+        if (CreatedBy == null)
         {
             CreatedBy = user;
         }

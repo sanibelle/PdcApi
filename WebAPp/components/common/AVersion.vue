@@ -16,11 +16,11 @@ const props = defineProps({
 <template>
     <div class="version-badge" :class="{ 'draft': isDraft }">
         <span class="version-text">v{{ versionNumber }}</span>
-        <span v-if="isDraft" class="draft-label">{{ t('draft') }}
+        <div v-if="isDraft" class="draft-label">{{ t('draft') }}
             <br>
             <template v-if="versionNumber !== 1">{{ t('notv1') }}</template>
             <div class="version-badge" :class="{ 'draft': isDraft }"></div>
-        </span>
+        </div>
         <span v-else class="draft-label">{{ t('notdraft') }}
             <br>
             {{ t('newVersion') }}

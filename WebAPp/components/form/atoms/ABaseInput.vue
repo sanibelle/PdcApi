@@ -26,11 +26,11 @@ const props = defineProps({
 
 const emit = defineEmits(['update:errorMessage']);
 
-const model = defineModel<string | number>({
+const model = defineModel<string | number | undefined>({
   required: true,
 })
 
-const { value, errorMessage, handleBlur, setValue, handleChange } = useField(props.name, props.rules, {
+const { value, errorMessage, handleBlur, setValue, handleChange } = useField<string | number | undefined>(props.name, props.rules, {
   validateOnMount: false,
   initialValue: model.value,
   validateOnValueUpdate: false,

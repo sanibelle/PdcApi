@@ -40,6 +40,7 @@ const { value, handleChange, setValue, errorMessage } = useField(props.name, pro
 const model = defineModel<Date | undefined>({
   required: true,
 })
+
 watch(
   () => model.value,
   (newValue) => {
@@ -48,12 +49,6 @@ watch(
     }
   }
 );
-
-watch(value, (newVal) => {
-  // Devrait prévenir la recursion infinie
-  if (newVal !== model.value) {
-  }
-});
 
 const onChange = (date: Date) => {
   handleChange(date, !!errorMessage.value);

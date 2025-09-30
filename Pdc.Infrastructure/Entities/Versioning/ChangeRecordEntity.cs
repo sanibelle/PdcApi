@@ -27,7 +27,7 @@ public class ChangeRecordEntity
     /// The version with the changes
     /// </summary>
     public ChangeRecordEntity? NextVersion { get; set; } = null;
-    public Guid ValidatedById { get; set; }
+    public Guid? ValidatedById { get; set; }
 
     public IdentityUserEntity? ValidatedBy { get; set; }
     public DateTime? ValidatedOn { get; set; }

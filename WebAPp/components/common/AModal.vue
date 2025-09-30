@@ -32,7 +32,7 @@ const confirm = () => {
 <template>
   <Teleport to="body">
     <Transition name="modal">
-      <div v-if="modelValue" class="modal-overlay" @click="model = false">
+      <div v-if="model" class="modal-overlay" @click="model = !closeOnOverlayClick">
         <div class="modal" @click.stop>
           <div class="modal-header">
             <slot name="header">

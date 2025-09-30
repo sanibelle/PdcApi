@@ -47,6 +47,6 @@ const model = defineModel<number | string | undefined>({
 </script>
 
 <template>
-  <FormMoleculesASelectField :name="name" :label="label" type="text" :placeholder="placeholder" :disabled="disabled"
+  <FormMoleculesASelectField :name="name" :label="label" :placeholder="placeholder" :disabled="disabled"
     :required="required" :rules="validationRules" :hint="hint" :options="options" v-model="model" />
 </template>

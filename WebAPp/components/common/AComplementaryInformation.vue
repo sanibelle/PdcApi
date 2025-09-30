@@ -3,8 +3,8 @@ const { t } = useI18n();
 
 const props = defineProps({
     complementaryInformations: {
-        type: Array<ComplementaryInformation>,
-        default: [],
+        type: Array as PropType<ComplementaryInformation[]>,
+        default: () => [],
     },
     isDraft: {
         type: Boolean,

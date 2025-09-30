@@ -34,7 +34,7 @@ const model = defineModel<string | number | undefined | null>({
   required: true,
 })
 
-const { value, errorMessage, handleBlur, setValue, handleChange } = useField(props.name, props.rules,
+const { value, errorMessage, handleBlur, setValue, handleChange } = useField<string | number | undefined | null>(props.name, props.rules,
   {
     validateOnMount: false,
     initialValue: model.value,
@@ -46,7 +46,7 @@ watch(
   () => model.value,
   async (newVal) => {
     // Devrait prévenir la recursion infinie
-    if (newVal !== value.value && newVal !== undefined) {
+    if (newVal !== value.value) {
       await setValue(newVal);
     }
   }
@@ -55,7 +55,7 @@ watch(
 const onChange = async (event: Event): Promise<void> => {
   handleChange(event, !!errorMessage.value);
   const target = event.target as HTMLSelectElement;
-  const newValue = target.value === '' ? null : target.value;
+  model.value = target.value === '' ? null : target.value;
 };
 
 watch(
