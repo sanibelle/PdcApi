@@ -1,5 +1,5 @@
 interface SelectOption {
-  value: string | number;
+  value: string | number | null;
   label: string;
   isSelected?: boolean;
 }

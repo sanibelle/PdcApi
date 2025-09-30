@@ -9,10 +9,20 @@ const codeExistingErrorMessage = ref('');
 
 // Form values
 const programOfStudy = reactive<Partial<ProgramOfStudy>>({
-  specificUnits: {},
-  optionalUnits: {},
+  specificUnits: {
+    denominator: null,
+    numerator: null,
+    wholeUnit: null,
+  },
+  optionalUnits: {
+    denominator: null,
+    numerator: null,
+    wholeUnit: null,
+  },
   complementaryUnits: {
     wholeUnit: 6,
+    numerator: null,
+    denominator: null,
   },
   generalUnits: {
     denominator: 3,
@@ -69,8 +79,7 @@ const options: SelectOption[] = Object.entries(ProgramType)
         :required="true" :hint="t('specificUnitsHint')" />
       <FormAUnitInput name="optionalUnits" :label="t('optionalUnits')" v-model="programOfStudy.optionalUnits"
         :required="true" :hint="t('optionalUnitsHint')" />
-      <FormAUnitInput name="generalUnits" :label="t('generalUnits')" v-model="programOfStudy.generalUnits"
-        :required="true" />
+      <FormAUnitInput name="generalUnits" :label="t('generalUnits')" v-model="programOfStudy.generalUnits" />
       <FormAUnitInput name="complementaryUnits" :label="t('complementaryUnits')"
         v-model="programOfStudy.complementaryUnits" />
       <div class="modal-footer">

@@ -25,8 +25,8 @@ const props = defineProps({
   }
 });
 
-const unit = defineModel<Unit | undefined | null>({
-  required: true,
+const unit = defineModel<Unit>({
+  default: () => ({ wholeUnit: null, numerator: null, denominator: null }),
 })
 
 
@@ -47,7 +47,7 @@ const numeratorAndDenominatorRules = computed(() => {
 });
 
 const options: SelectOption[] = [
-  { label: '-', value: '' },
+  { label: '-', value: null },
   { label: '1', value: 1 },
   { label: '2', value: 2 },
   { label: '3', value: 3 },
@@ -72,13 +72,13 @@ const numeratorOption = computed(() =>
     </FormAtomsABaseLabel>
     <div class="flex">
       <FormANumberInput :name="`${name}.wholeUnit`" :label="t('wholeUnit')" :disabled="props.disabled"
-        :required="props.required" :integer="true" :rules="validationRules" v-model="unit?.wholeUnit" />
+        :required="props.required" :integer="true" :rules="validationRules" v-model="unit.wholeUnit" />
       <FormMoleculesASelectField :name="`${name}.numerator`" :label="t('numerator')" type="text"
         :disabled="props.disabled" :required="numeratorAndDenominatorRules.length > 0"
-        :rules="numeratorAndDenominatorRules" :options="numeratorOption" v-model="unit?.numerator" />
+        :rules="numeratorAndDenominatorRules" :options="numeratorOption" v-model="unit.numerator" />
       <FormMoleculesASelectField :name="`${name}.denominator`" :label="t('denominator')" type="text"
         :required="numeratorAndDenominatorRules.length > 0" :disabled="props.disabled"
-        :rules="numeratorAndDenominatorRules" :options="denominatorOption" v-model="unit?.denominator" />
+        :rules="numeratorAndDenominatorRules" :options="denominatorOption" v-model="unit.denominator" />
     </div>
     <FormAtomsAHint :hint="hint" />
   </div>

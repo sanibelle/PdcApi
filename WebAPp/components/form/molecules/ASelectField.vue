@@ -54,8 +54,7 @@ const model = defineModel<string | number | undefined | null>({
       {{ label }}
     </FormAtomsABaseLabel>
     <FormAtomsASelect v-bind="$attrs" :name="name" :options="options" :placeholder="placeholder" :disabled="disabled"
-      :rules="rules" v-model="model" @update:error-message="errorMessage = $event" />
-    @update:error-message="errorMessage = $event" />
+      :rules="rules" v-model="model" @update:error-message="errorMessage = $event"/>
     <FormAtomsAErrorMessage :message="errorMessage" />
     <FormAtomsAHint :hint="hint" />
   </div>
