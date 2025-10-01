@@ -26,6 +26,7 @@ public class MappingProfile : Profile
             .EqualityComparison((dto, entity) => dto.Id == entity.Id)
             .ReverseMap()
             .PreserveReferences();
+
         CreateMap<PerformanceCriteria, PerformanceCriteriaEntity>()
             .PreserveReferences()
             .EqualityComparison((dto, entity) => dto.Id == entity.Id)
@@ -34,12 +35,13 @@ public class MappingProfile : Profile
 
         CreateMap<ComplementaryInformation, ComplementaryInformationEntity>()
             .EqualityComparison((dto, entity) => dto.Id == entity.Id)
-            .ForMember(dest => dest.CreatedBy, opt =>
-            {
-                opt.Condition(src => src.CreatedBy != null && src.CreatedBy.Id != null);
-                opt.MapFrom(src => src.CreatedBy);
-            })
-            .ReverseMap();
+            .ForMember(dest => dest.CreatedById,
+               opt => opt.MapFrom(src => src.CreatedBy != null ? src.CreatedBy.Id : null))
+            .ForMember(dest => dest.CreatedBy,
+                opt => opt.Ignore()) // will not track and only use the id to prevent ef core trying to create an new user.
+            .PreserveReferences()
+            .ReverseMap()
+            .PreserveReferences();
 
         CreateMap<ContentElement, ContentElementEntity>()
             .PreserveReferences()
@@ -56,6 +58,14 @@ public class MappingProfile : Profile
         CreateMap<ChangeRecord, ChangeRecordEntity>()
             .PreserveReferences()
             .EqualityComparison((dto, entity) => dto.Id == entity.Id)
+            .ForMember(dest => dest.CreatedById,
+               opt => opt.MapFrom(src => src.CreatedBy != null ? src.CreatedBy.Id : null))
+            .ForMember(dest => dest.CreatedBy,
+                opt => opt.Ignore()) // will not track and only use the id to prevent ef core trying to create an new user.
+            .ForMember(dest => dest.ValidatedById,
+               opt => opt.MapFrom(src => src.ValidatedBy != null ? src.ValidatedBy.Id : null))
+            .ForMember(dest => dest.ValidatedBy,// will not track and only use the id to prevent ef core trying to create an new user.
+                opt => opt.Ignore())
             .ReverseMap()
             .PreserveReferences();
 

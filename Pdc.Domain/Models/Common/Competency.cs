@@ -1,4 +1,5 @@
 ﻿using Pdc.Domain.Models.Common;
+using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.MinisterialSpecification;
@@ -17,12 +18,17 @@ public class Competency
     public ChangeRecord? CurrentVersion { get; set; }
     public List<RealisationContext> RealisationContexts { get; set; } = new List<RealisationContext>(); // Critères de performance liés à l’ensemble de la compétence
 
-    public virtual void SetVersionOnUnversioned(ChangeRecord version)
+    public virtual void SetVersionOnUntracked(ChangeRecord version)
     {
         if (CurrentVersion == null)
         {
             CurrentVersion = version;
         }
-        RealisationContexts.ForEach(x => x.SetVersionOnUnversioned(version));
+        RealisationContexts.ForEach(x => x.SetVersionOnUntracked(version));
+    }
+
+    public virtual void SetCreatedByOnUntracked(User user)
+    {
+        RealisationContexts.ForEach(x => x.SetCreatedByOnUntracked(user));
     }
 }

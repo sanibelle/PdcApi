@@ -25,25 +25,25 @@ const props = defineProps({
   options: {
     type: Array as () => SelectOption[],
     required: true,
-  },
-  modelValue: {
-    type: [String, Number, null],
-    default: null,
-  },
+  }
 });
 
-const emit = defineEmits(['update:modelValue', 'update:errorMessage']);
+const emit = defineEmits(['update:errorMessage']);
 
-const { value, errorMessage, handleBlur, setValue, handleChange } = useField(props.name, props.rules,
+const model = defineModel<string | number | undefined | null>({
+  required: true,
+})
+
+const { value, errorMessage, handleBlur, setValue, handleChange } = useField<string | number | undefined | null>(props.name, props.rules,
   {
     validateOnMount: false,
-    initialValue: props.modelValue,
+    initialValue: model.value,
     validateOnValueUpdate: false,
   });
 
 // Watch parent → field
 watch(
-  () => props.modelValue,
+  () => model.value,
   async (newVal) => {
     // Devrait prévenir la recursion infinie
     if (newVal !== value.value) {
@@ -55,8 +55,7 @@ watch(
 const onChange = async (event: Event): Promise<void> => {
   handleChange(event, !!errorMessage.value);
   const target = event.target as HTMLSelectElement;
-  const newValue = target.value === '' ? null : target.value;
-  emit('update:modelValue', newValue);
+  model.value = target.value === '' ? null : target.value;
 };
 
 watch(
@@ -69,7 +68,7 @@ watch(
 
 <template>
   <div class="select-wrapper" :class="{ 'is-disabled': disabled }">
-    <select v-bind="attrs" :name="name" :value="value" :disabled="disabled" class="base-select"
+    <select v-bind="attrs" :name="name" v-model="model" :disabled="disabled" class="base-select"
       :class="{ error: errorMessage }" @change="onChange" @blur="handleBlur">
       <option v-if="placeholder" value="" disabled>
         {{ placeholder }}

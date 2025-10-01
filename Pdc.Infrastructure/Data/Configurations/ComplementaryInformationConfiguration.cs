@@ -23,7 +23,8 @@ public class ComplementaryInformationConfiguration : IEntityTypeConfiguration<Co
         // TODO mettre a jour le diagramme de la base de données avec les CreatedBy, mettre à jour lesc schemas et les builders.
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
-            .OnDelete(DeleteBehavior.NoAction)
+            .HasForeignKey(c => c.CreatedById)
+            .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
     }
 }

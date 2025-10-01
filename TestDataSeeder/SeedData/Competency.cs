@@ -12,17 +12,20 @@ internal class Competency : ISeeder<CompetencyEntity>
     public Competency(ProgramOfStudyEntity programOfStudyEntity, AppDbContext context)
     {
         _context  = context;
+        var user = _context.Users.First();
         var changeRecord = new ChangeRecordEntityBuilder()
             .Build();
 
         var realisationContext = new RealisationContextEntityBuilder()
             .AddComplementaryInformations(new ComplementaryInformationEntityBuilder()
-                .WithChangeRecord(changeRecord)
+        .WithChangeRecord(changeRecord)
+                .WithCreatedBy(user)
                 .Build())
             .Build();
 
         var performanceCriteria = new PerformanceCriteriaEntityBuilder()
             .AddComplementaryInformation(new ComplementaryInformationEntityBuilder()
+                .WithCreatedBy(user)
                 .WithChangeRecord(changeRecord)
                 .Build())
             .Build();
@@ -30,6 +33,7 @@ internal class Competency : ISeeder<CompetencyEntity>
         var competencyElement = new CompetencyElementEntityBuilder()
             .AddPerformanceCriteria(performanceCriteria)
             .AddComplementaryInformation(new ComplementaryInformationEntityBuilder()
+                .WithCreatedBy(user)
                 .WithChangeRecord(changeRecord)
                 .Build())
             .Build();

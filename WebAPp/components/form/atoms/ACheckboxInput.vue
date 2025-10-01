@@ -13,26 +13,26 @@ const props = defineProps({
   rules: {
     type: [String, Object],
     default: '',
-  },
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
+  }
 });
 
-const emit = defineEmits(['update:modelValue', 'update:errorMessage']);
+const emit = defineEmits(['update:errorMessage']);
+
+const model = defineModel<boolean | undefined>({
+  required: true,
+})
 
 const { value, errorMessage, handleBlur, setValue, handleChange } = useField(props.name, props.rules, {
   validateOnMount: false,
-  initialValue: props.modelValue,
+  initialValue: model.value,
   validateOnValueUpdate: false,
 });
 
 
 watch(
-  () => props.modelValue,
+  () => model.value,
   (newValue) => {
-    if (newValue !== value.value) {
+    if (newValue !== value.value && newValue !== undefined) {
       setValue(newValue);
     }
   }
@@ -40,8 +40,6 @@ watch(
 
 const onChange = (event: Event) => {
   handleChange(event, !!errorMessage.value);
-  const target = event.target as HTMLInputElement;
-  emit('update:modelValue', target.checked);
 };
 
 const onBlur = (event: Event) => {
@@ -57,8 +55,8 @@ watch(
 </script>
 
 <template>
-  <input :name="name" :checked="value" type="checkbox" :disabled="disabled"
-    class="base-input" :class="{ error: errorMessage }" @change="onChange" @blur="onBlur" />
+  <input :name="name" :checked="model" type="checkbox" :disabled="disabled" class="base-input"
+    :class="{ error: errorMessage }" @change="onChange" @blur="onBlur" />
 </template>
 
 <style lang="scss" scoped>

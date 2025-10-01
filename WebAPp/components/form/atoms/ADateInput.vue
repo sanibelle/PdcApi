@@ -29,20 +29,20 @@ const props = defineProps({
   max: {
     type: Date,
     default: null,
-  },
-  modelValue: {
-    type: Date,
-    default: undefined,
-  },
+  }
 });
 
-const emit = defineEmits(['update:modelValue', 'update:errorMessage']);
+const emit = defineEmits(['update:errorMessage']);
 
 // Use VeeValidate's useField to handle validation
 const { value, handleChange, setValue, errorMessage } = useField(props.name, props.rules);
 
+const model = defineModel<Date | undefined>({
+  required: true,
+})
+
 watch(
-  () => props.modelValue,
+  () => model.value,
   (newValue) => {
     if (newValue !== value.value) {
       setValue(newValue);
@@ -50,16 +50,8 @@ watch(
   }
 );
 
-watch(value, (newVal) => {
-  // Devrait prévenir la recursion infinie
-  if (newVal !== props.modelValue) {
-    emit('update:modelValue', newVal);
-  }
-});
-
 const onChange = (date: Date) => {
   handleChange(date, !!errorMessage.value);
-  emit('update:modelValue', date);
 };
 
 watch(
@@ -71,8 +63,9 @@ watch(
 </script>
 
 <template>
-  <VueDatePicker :model-value="value" :enable-time-picker="false" :teleport="true" :auto-apply="true"
-    :class="{ 'is-invalid': errorMessage }" :min-date="min" :max-date="max" @update:model-value="onChange" :data-test-id="name" />
+  <VueDatePicker v-model="model" :enable-time-picker="false" :teleport="true" :auto-apply="true"
+    :class="{ 'is-invalid': errorMessage }" :min-date="min" :max-date="max" @update:model-value="onChange"
+    :data-test-id="name" />
 </template>
 
 <style scoped>

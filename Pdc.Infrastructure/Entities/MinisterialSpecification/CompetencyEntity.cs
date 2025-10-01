@@ -1,6 +1,5 @@
 ﻿using Pdc.Domain.Models.Common;
 using Pdc.Infrastructure.Entities.CourseFramework;
-using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Entities.Versioning;
 
 namespace Pdc.Infrastructure.Entities.MinisterialSpecification;
@@ -21,13 +20,5 @@ public class CompetencyEntity : VersionableEntity
 
     public CompetencyEntity()
     {
-
-    }
-
-    internal override void SetCreatedBy(IdentityUserEntity createdBy)
-    {
-        base.SetCreatedBy(createdBy);
-        RealisationContexts.ToList().ForEach(x => x.SetCreatedBy(createdBy));
-        CompetencyElements.ToList().ForEach(x => x.SetCreatedBy(createdBy));
     }
 }

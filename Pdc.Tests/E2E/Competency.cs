@@ -103,13 +103,8 @@ public class CompetencyApiTests : ApiTestBase
         createResponse.EnsureSuccessStatusCode();
         var competencyToUpdateDTO = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
 
-        // Deleting the elements one by one
-        // Realisation context
+        // Clear the realisation contexts
         competencyToUpdateDTO.RealisationContexts.Clear();
-        //competencyToUpdateDTO.RealisationContexts.Add(realisationContext =new ChangeableDTOBuilder()
-        //    .WithValue("New realisation Context")
-        //    .Build());
-
 
         var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
         updateResponse.EnsureSuccessStatusCode();
@@ -122,8 +117,6 @@ public class CompetencyApiTests : ApiTestBase
         updateResponse.EnsureSuccessStatusCode();
         updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
         updatedCompetency.CompetencyElements.First().PerformanceCriterias.First().ComplementaryInformations.Should().BeEmpty();
-
-
 
         // Adding competency Element and deleting
         var deletedId = competencyToUpdateDTO.CompetencyElements.First().Id;
@@ -147,6 +140,8 @@ public class CompetencyApiTests : ApiTestBase
         updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
         updatedCompetency.CompetencyElements.Should().HaveCount(1);
         updatedCompetency.CompetencyElements.First().Id.Should().NotBe(deletedId.ToString());
+        updatedCompetency.CompetencyElements.First().ComplementaryInformations.First().CreatedBy.Should().NotBe(null);
+        updatedCompetency.VersionId.Should().NotBe(Guid.Empty);
     }
 
     [Test]

@@ -28,14 +28,8 @@ const props = defineProps({
   options: {
     type: Array<SelectOption>,
     required: true
-  },
-  modelValue: {
-    type: [String, Number],
-    default: '',
-  },
+  }
 });
-
-const emit = defineEmits(['update:modelValue']);
 
 // Computed validation rules based on props
 const validationRules = computed(() => {
@@ -45,10 +39,14 @@ const validationRules = computed(() => {
   }
   return rules.join('|');
 });
+
+const model = defineModel<number | string | undefined>({
+  required: true,
+})
+
 </script>
 
 <template>
-  <FormMoleculesASelectField :name="name" :label="label" type="text" :placeholder="placeholder" :disabled="disabled"
-    :required="required" :rules="validationRules" :hint="hint" :options="options" :modelValue="modelValue"
-    @update:modelValue="$emit('update:modelValue', $event)" />
+  <FormMoleculesASelectField :name="name" :label="label" :placeholder="placeholder" :disabled="disabled"
+    :required="required" :rules="validationRules" :hint="hint" :options="options" v-model="model" />
 </template>

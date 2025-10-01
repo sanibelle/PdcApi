@@ -41,13 +41,7 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  modelValue: {
-    type: String,
-    default: '',
-  },
 });
-
-const emit = defineEmits(['update:modelValue']);
 
 const validationRules = computed(() => {
   const rules = [];
@@ -70,10 +64,13 @@ const validationRules = computed(() => {
 
   return rules.join('|');
 });
+
+const model = defineModel<string | number | undefined>({
+  required: true,
+})
 </script>
 
 <template>
   <FormMoleculesAFormField :name="name" :label="label" type="text" :placeholder="placeholder" :disabled="disabled"
-    :required="required" :rules="validationRules" :hint="hint" :modelValue="modelValue" :error-message="errorMessage"
-    @update:modelValue="$emit('update:modelValue', $event)" />
+    :required="required" :rules="validationRules" :hint="hint" v-model="model" :error-message="errorMessage" />
 </template>

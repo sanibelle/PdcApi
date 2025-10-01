@@ -26,6 +26,10 @@ public class ChangeRecord
     /// </summary>
     public ChangeRecord? NextVersion { get; set; }
     /// <summary>
+    /// Who created the version
+    /// </summary>
+    public User? CreatedBy { get; set; } // TODO faire un useCase pour valider la version.
+    /// <summary>
     /// Who validated the version (changed IsDraft to false)
     /// </summary>
     public User? ValidatedBy { get; set; } // TODO faire un useCase pour valider la version.
@@ -37,19 +41,19 @@ public class ChangeRecord
     /// <summary>
     /// Creates a default version with the version number statring at 1
     /// </summary>
-    public ChangeRecord()
+    public ChangeRecord(User createdBy)
     {
         VersionNumber = 1;
         CreatedOn = DateTime.Now;
         IsDraft = true;
+        CreatedBy = createdBy;
     }
 
-    /// <summary>
-    /// Used when the version is incoming from the front-end
-    /// </summary>
-    /// <param name="writtenOnVersion"></param>
-    public ChangeRecord(int writtenOnVersion)
+    public void SetCreatedByOnUntracked(User user)
     {
-        VersionNumber = writtenOnVersion;
+        if (CreatedBy == null)
+        {
+            CreatedBy = user;
+        }
     }
 }

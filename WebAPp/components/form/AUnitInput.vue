@@ -22,16 +22,13 @@ const props = defineProps({
   required: {
     type: Boolean,
     default: false,
-  },
-  modelValue: {
-    type: Object as () => Partial<Unit>,
-    default: {},
-  },
+  }
 });
 
-const emit = defineEmits(['update:modelValue']);
+const unit = defineModel<Unit>({
+  default: () => ({ wholeUnit: null, numerator: null, denominator: null }),
+})
 
-const unit = toRef(props, 'modelValue');
 
 const validationRules = computed(() => {
   const rules = [];
@@ -43,14 +40,14 @@ const validationRules = computed(() => {
 
 const numeratorAndDenominatorRules = computed(() => {
   const rules = [];
-  if (unit.value.denominator || unit.value.numerator) {
+  if (unit.value?.denominator || unit.value?.numerator) {
     rules.push('required');
   }
   return rules.join('|');
 });
 
 const options: SelectOption[] = [
-  { label: '-', value: '' },
+  { label: '-', value: null },
   { label: '1', value: 1 },
   { label: '2', value: 2 },
   { label: '3', value: 3 },
@@ -60,27 +57,12 @@ const denominatorOption: SelectOption[] = options.filter((x) => x.value !== 1);
 
 const numeratorOption = computed(() =>
   options.filter((x) => {
-    if (unit.value.denominator && typeof x.value === 'number') {
+    if (unit.value?.denominator && typeof x.value === 'number') {
       return x.value < unit.value.denominator;
     }
     return true;
   })
 );
-
-const handleNumeratorChange = (value: number) => {
-  unit.value.numerator = value === 0 || value ? value : null;
-  emit('update:modelValue', unit);
-};
-
-const handleDenominatorChange = (value: number) => {
-  unit.value.denominator = value === 0 || value ? value : null;
-  emit('update:modelValue', unit);
-};
-
-const handleWholeUnitChange = (value: number) => {
-  unit.value.wholeUnit = value;
-  emit('update:modelValue', unit);
-};
 </script>
 
 <template>
@@ -90,16 +72,13 @@ const handleWholeUnitChange = (value: number) => {
     </FormAtomsABaseLabel>
     <div class="flex">
       <FormANumberInput :name="`${name}.wholeUnit`" :label="t('wholeUnit')" :disabled="props.disabled"
-        :required="props.required" :integer="true" :rules="validationRules" :modelValue="unit.wholeUnit"
-        @update:modelValue="handleWholeUnitChange" />
-      <FormMoleculesASelectField :name="`${name}.numerator`" :label="t('numerator')" type="text"
+        :required="props.required" :integer="true" :rules="validationRules" v-model="unit.wholeUnit" />
+      <FormMoleculesASelectField :name="`${name}.numerator`" :label="t('numerator')"
         :disabled="props.disabled" :required="numeratorAndDenominatorRules.length > 0"
-        :rules="numeratorAndDenominatorRules" :options="numeratorOption" :modelValue="unit.numerator"
-        @update:modelValue="handleNumeratorChange" />/
-      <FormMoleculesASelectField :name="`${name}.denominator`" :label="t('denominator')" type="text"
+        :rules="numeratorAndDenominatorRules" :options="numeratorOption" v-model="unit.numerator" />
+      <FormMoleculesASelectField :name="`${name}.denominator`" :label="t('denominator')"
         :required="numeratorAndDenominatorRules.length > 0" :disabled="props.disabled"
-        :rules="numeratorAndDenominatorRules" :options="denominatorOption" :modelValue="unit.denominator"
-        @update:modelValue="handleDenominatorChange" />
+        :rules="numeratorAndDenominatorRules" :options="denominatorOption" v-model="unit.denominator" />
     </div>
     <FormAtomsAHint :hint="hint" />
   </div>

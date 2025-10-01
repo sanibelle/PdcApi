@@ -11,26 +11,20 @@ const { handleSubmit, isSubmitting } = useForm<Competency>({
   validateOnMount: false,
 });
 
+const competency = defineModel<Competency>('competency', {
+  required: true,
+  default: () => ({
+    isMandatory: false,
+    code: '',
+    statementOfCompetency: '',
+    realisationContexts: [],
+  }),
+})
+
 const props = defineProps({
   programCode: {
     type: String,
     default: '',
-  },
-  competency: {
-    type: Object as () => Partial<Competency>,
-      default: () => ({
-        isMandatory: false,
-        code: '',
-        statementOfCompetency: '',
-      realisationContexts: [],
-    }),
-  },
-});
-
-const competency = computed({
-  get: () => props.competency,
-  set: (value) => {
-    emit('submitted', value)
   }
 });
 
@@ -67,14 +61,14 @@ const removeRealisationContextRow = (index: number) => {
   competency.value.realisationContexts?.splice(index, 1);
   // Update positions after removal
   competency.value.realisationContexts?.forEach((context, idx) => {
-    context.position = idx +1;
+    context.position = idx + 1;
   });
 };
 </script>
 
 <template>
   <div class="form">
-    <form @submit="onSubmit" class="form-container">
+    <form @submit="onSubmit" class="form-container" v-if="competency">
       <div class="top-row">
         <FormATextInput name="code" :label="t('competencyCode')" placeholder="Ex : 00SU" :min="3" :max="50"
           :required="true" v-model="competency.code" :errorMessage="codeExistingErrorMessage" />
@@ -91,10 +85,8 @@ const removeRealisationContextRow = (index: number) => {
         <div class="row" v-for="(realisationContext, index) in competency.realisationContexts" :key="index">
           <ul>
             <li>
-              <FormATextInput :name="`competency.realisationContexts[${index}].value`" :min="3" :max="100"
-                :required="true" v-model="realisationContext.value" />
-              <CommonAtomsAButton @click.prevent="removeRealisationContextRow(index)" :preventDefault="true">-
-              </CommonAtomsAButton>
+              <FormMinisterialARealisationContext :index="index" v-model="competency.realisationContexts[index]!"
+                @deleteRow="removeRealisationContextRow" />
             </li>
           </ul>
         </div>

@@ -3,10 +3,6 @@ import '~/assets/css/form.css'
 
 const { t } = useI18n();
 defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true,
-  },
   title: {
     type: String,
     default: 'Modal',
@@ -21,32 +17,35 @@ defineProps({
   },
 });
 
-const emit = defineEmits(['update:modelValue', 'confirm']);
+const model = defineModel<boolean>({
+  required: true,
+});
+
+const emit = defineEmits(['confirm']);
 
 const confirm = () => {
   emit('confirm');
-  emit('update:modelValue', false);
+  model.value = false;
 };
 </script>
 
 <template>
   <Teleport to="body">
     <Transition name="modal">
-      <div v-if="modelValue" class="modal-overlay"
-        @click="closeOnOverlayClick ? $emit('update:modelValue', false) : null">
+      <div v-if="model" class="modal-overlay" @click="model = !closeOnOverlayClick">
         <div class="modal" @click.stop>
           <div class="modal-header">
             <slot name="header">
               <h3>{{ title }}</h3>
             </slot>
-            <button class="close-button" @click="$emit('update:modelValue', false)">×</button>
+            <button class="close-button" @click="model = false">×</button>
           </div>
           <div class="modal-body">
             <slot />
           </div>
           <div class="modal-footer" v-if="!hideFooter">
             <slot name="footer">
-              <button class="modal-button cancel" @click="$emit('update:modelValue', false)">
+              <button class="modal-button cancel" @click="model = false">
                 {{ t('cancel') }}
               </button>
               <button class="modal-button confirm" @click="confirm"> {{ t('confirm') }}
