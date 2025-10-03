@@ -85,8 +85,10 @@ const removeRealisationContextRow = (index: number) => {
         <div class="row" v-for="(realisationContext, index) in competency.realisationContexts" :key="index">
           <ul>
             <li>
-              <FormMinisterialARealisationContext :index="index" v-model="competency.realisationContexts[index]!"
-                @deleteRow="removeRealisationContextRow" />
+              <FormCommonAComplementaryInformations :index="index" v-model="competency.realisationContexts[index]!.complementaryInformations!" :name="`competency.realisationContexts[${index}]`"> 
+                <FormMinisterialARealisationContext :index="index" v-model="competency.realisationContexts[index]!"
+                  @deleteRow="removeRealisationContextRow" />
+              </FormCommonAComplementaryInformations>
             </li>
           </ul>
         </div>

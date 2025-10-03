@@ -70,17 +70,24 @@ public class CompetencyRepository : ICompetencyRepository
         {
             throw new EntityNotFoundException(nameof(MinisterialCompetency), competency.Code);
         }
-        List<ChangeableEntity> realisationContextToDelete = FindMissingAChangeableForDeletion(competency.RealisationContexts.Cast<AChangeable>().ToList(), existingCompetency.RealisationContexts.Cast<ChangeableEntity>().ToList());
+        (List<ChangeableEntity> realisationContextToDelete, List<ComplementaryInformationEntity> complementaryInformationsToDelete) = FindMissingAChangeableAndComplementaryInformationsForDeletion(competency.RealisationContexts.Cast<AChangeable>().ToList(), existingCompetency.RealisationContexts.Cast<ChangeableEntity>().ToList());
         _context.RealisationContexts.RemoveRange(realisationContextToDelete.Cast<RealisationContextEntity>().ToList());
+        _context.ComplementaryInformations.RemoveRange(complementaryInformationsToDelete);
     }
 
     //TODO put that into an utils?
-    private List<ChangeableEntity> FindMissingAChangeableForDeletion(List<AChangeable> listWithMissing, List<ChangeableEntity> listToCompare)
+    private (List<ChangeableEntity>, List<ComplementaryInformationEntity>) FindMissingAChangeableAndComplementaryInformationsForDeletion(List<AChangeable> listWithMissing, List<ChangeableEntity> listToCompare)
     {
-        return listToCompare
+        var changeableToDelete = listToCompare
             .Where(x => !listWithMissing
-            .Select(y => y.Id).Contains(x.Id))
+                .Select(y => y.Id).Contains(x.Id))
             .ToList();
+
+        List<ComplementaryInformationEntity> complementaryInformationsToRemove = listToCompare.SelectMany(x => x.ComplementaryInformations)
+            .Where(x => !listWithMissing.SelectMany(x => x.ComplementaryInformations).Any(y => y.Id == x.Id))
+            .ToList();
+
+        return (changeableToDelete, complementaryInformationsToRemove);
     }
 
     public async Task Delete(string programOfStudyCode, string competencyCode)

@@ -295,8 +295,8 @@ namespace Pdc.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ChangeableId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     WrittenOnVersionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "GETDATE()"),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     CreatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false)
                 },

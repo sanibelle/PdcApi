@@ -103,12 +103,21 @@ public class CompetencyApiTests : ApiTestBase
         createResponse.EnsureSuccessStatusCode();
         var competencyToUpdateDTO = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
 
-        // Clear the realisation contexts
-        competencyToUpdateDTO.RealisationContexts.Clear();
+        // Clear the realisation contexts complementary information
+        competencyToUpdateDTO.RealisationContexts.First().ComplementaryInformations.Clear();
 
         var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
         updateResponse.EnsureSuccessStatusCode();
         var updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+
+        competencyToUpdateDTO.RealisationContexts.First().ComplementaryInformations.Should().BeEmpty();
+
+        // Clear the realisation contexts
+        competencyToUpdateDTO.RealisationContexts.Clear();
+
+        updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
+        updateResponse.EnsureSuccessStatusCode();
+        updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
 
 
         // performance criteria complementary information

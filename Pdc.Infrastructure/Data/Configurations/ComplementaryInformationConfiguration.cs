@@ -12,7 +12,7 @@ public class ComplementaryInformationConfiguration : IEntityTypeConfiguration<Co
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
 
-        builder.Property(x => x.ModifiedOn)
+        builder.Property(x => x.CreatedOn)
             .HasDefaultValueSql("GETDATE()")
             .IsRequired();
 
