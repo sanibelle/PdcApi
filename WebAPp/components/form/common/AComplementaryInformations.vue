@@ -28,8 +28,6 @@ const deleteComplementaryInformation = (index: number) => {
 
 <template>
     <div class="flex">
-        Rendu à supprimer les infos complémentaires et aussi à fixer la createdAt date dans la bd.
-        Aussi quand je save après avoir ajouté une info complémentaire, je ne met pas la liste à jour avec l'info (mettre à jour le modèle après un submit successfull?)
         <slot></slot>
         <div v-if="model && model.length > 0" class="flex flex-col gap-2 ml-4">
             <div v-for ="(information, index) in model" :key="index" class="flex items">
