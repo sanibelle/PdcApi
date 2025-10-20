@@ -6,10 +6,6 @@ defineProps({
     name: {
         type: String,
         default: [],
-    },
-    index: {
-        type: Number,
-        required: true,
     }
 })
 
@@ -30,14 +26,17 @@ const deleteComplementaryInformation = (index: number) => {
     <div class="flex">
         <slot></slot>
         <div v-if="model && model.length > 0" class="flex flex-col gap-2 ml-4">
-            <div v-for ="(information, index) in model" :key="index" class="flex items">
-                <FormATextInput :name="`${name}.complementaryInformations[${index}].value`" :min="3" :max="5000" :required="true"
-                    v-model="information.text" />
-                <CommonAtomsAButton @click.prevent="() => deleteComplementaryInformation(index)" :preventDefault="true">-
+            <div v-for="(information, index) in model" :key="index" class="flex items">
+                <FormATextInput :name="`${name}.complementaryInformations[${index}].value`" :min="3" :max="5000"
+                    :required="true" v-model="information.text" />
+                <CommonAtomsAButton :data-testid="`delete-complementary-information-${name}-${index}`"
+                    @click.prevent="() => deleteComplementaryInformation(index)" :preventDefault="true">
+                    -
                 </CommonAtomsAButton>
             </div>
         </div>
-        <CommonAtomsAButton @click.prevent="addComplementaryInformation" :preventDefault="true">+</CommonAtomsAButton>
+        <CommonAtomsAButton @click.prevent="addComplementaryInformation" :preventDefault="true"
+            :data-testid="`add-complementary-information-${name}`">+</CommonAtomsAButton>
     </div>
 </template>
 

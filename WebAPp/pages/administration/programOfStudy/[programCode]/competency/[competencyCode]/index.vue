@@ -29,7 +29,8 @@ const upsertCompetencyModal = useModal();
   <h1>
     {{ t('title') }}
   </h1>
-  <CommonAVersion v-if="competency?.versionNumber" :version-number="competency?.versionNumber" :is-draft="competency?.isDraft" />
+  <CommonAVersion v-if="competency?.versionNumber" :version-number="competency?.versionNumber"
+    :is-draft="competency?.isDraft" />
   <section v-if="competency">
     <FormTemplatesDetailedCompetency @submitted="handleSubmitted" :competency="competency"
       :program-code="programCode" />

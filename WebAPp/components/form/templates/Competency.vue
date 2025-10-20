@@ -57,14 +57,15 @@ watch(() => competency.code, () => { codeExistingErrorMessage.value = ''; });
     <form @submit.prevent="onSubmit" class="form-container">
       <FormATextInput name="code" :label="t('competencyCode')" placeholder="Ex : 00SU" :min="3" :max="50"
         :required="true" v-model="competency.code" :errorMessage="codeExistingErrorMessage" />
-      <FormATextInput name="statementOfCompetency" :label="t('statementOfCompetency')" :placeholder="t('statementOfCompetencyPlaceholder')" 
-        :required="true" v-model="competency.statementOfCompetency" />
-      <FormACheckboxInput name="isMandatory" :label="t('mandatoryCompetency')" 
-        :required="true" v-model="competency.isMandatory" />
-      <FormACheckboxInput name="isOptionnal" :label="t('optionnalCompetency')" 
-        :required="true" v-model="optionnalCompetency" />
+      <FormATextInput name="statementOfCompetency" :label="t('statementOfCompetency')"
+        :placeholder="t('statementOfCompetencyPlaceholder')" :required="true"
+        v-model="competency.statementOfCompetency" />
+      <FormACheckboxInput name="isMandatory" :label="t('mandatoryCompetency')" :required="true"
+        v-model="competency.isMandatory" />
+      <FormACheckboxInput name="isOptionnal" :label="t('optionnalCompetency')" :required="true"
+        v-model="optionnalCompetency" />
       <div class="modal-footer">
-        <FormMoleculesASubmitButton :isSubmitting="isSubmitting" id="submit-competency" />
+        <FormMoleculesASubmitButton :isSubmitting="isSubmitting" data-testid="submit-competency" />
       </div>
     </form>
   </div>
