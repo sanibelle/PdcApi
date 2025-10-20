@@ -43,16 +43,24 @@ public class CompetencyRepository : ICompetencyRepository
 
     public async Task<MinisterialCompetency> Update(MinisterialCompetency competency)
     {
-        await MarkAllRemovedElementsForDeletion(competency);
+        using var transaction = await _context.Database.BeginTransactionAsync();
+
+        await RemoveDeletedElements(competency);
+        var test = _context.ChangeTracker.DebugView.LongView;
+        await _context.SaveChangesAsync();
+        _context.ChangeTracker.Clear();
 
         CompetencyEntity entity = await _context.Competencies
             .Persist(_mapper)
             .InsertOrUpdateAsync(competency);
+        test = _context.ChangeTracker.DebugView.LongView;
         await _context.SaveChangesAsync();
+
+        await transaction.CommitAsync();
         return _mapper.Map<MinisterialCompetency>(entity);
     }
 
-    private async Task MarkAllRemovedElementsForDeletion(MinisterialCompetency competency)
+    private async Task RemoveDeletedElements(MinisterialCompetency competency)
     {
         CompetencyEntity? existingCompetency = await _context.Competencies
             .AsNoTracking()
@@ -70,9 +78,28 @@ public class CompetencyRepository : ICompetencyRepository
         {
             throw new EntityNotFoundException(nameof(MinisterialCompetency), competency.Code);
         }
-        (List<ChangeableEntity> realisationContextToDelete, List<ComplementaryInformationEntity> complementaryInformationsToDelete) = FindMissingAChangeableAndComplementaryInformationsForDeletion(competency.RealisationContexts.Cast<AChangeable>().ToList(), existingCompetency.RealisationContexts.Cast<ChangeableEntity>().ToList());
+        (List<ChangeableEntity> realisationContextToDelete, List<ComplementaryInformationEntity> realisationContextComplementaryInformationsToDelete) = FindMissingAChangeableAndComplementaryInformationsForDeletion(competency.RealisationContexts.Cast<AChangeable>().ToList(), existingCompetency.RealisationContexts.Cast<ChangeableEntity>().ToList());
+        (List<ChangeableEntity> competencyElementsToDelete, List<ComplementaryInformationEntity> competencyElementsComplementaryInformationsToDelete) = FindMissingAChangeableAndComplementaryInformationsForDeletion(competency.CompetencyElements.Cast<AChangeable>().ToList(), existingCompetency.CompetencyElements.Cast<ChangeableEntity>().ToList());
+        (List<ChangeableEntity> performanceCriteriasToDelete, List<ComplementaryInformationEntity> performanceCriteriasComplementaryInformationsToDelete) = FindMissingAChangeableAndComplementaryInformationsForDeletion(competency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<AChangeable>().ToList(), existingCompetency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<ChangeableEntity>().ToList());
+
+        _context.ComplementaryInformations.AttachRange(realisationContextComplementaryInformationsToDelete);
+        _context.ComplementaryInformations.RemoveRange(realisationContextComplementaryInformationsToDelete);
+
+        _context.ComplementaryInformations.AttachRange(competencyElementsComplementaryInformationsToDelete);
+        _context.ComplementaryInformations.RemoveRange(competencyElementsComplementaryInformationsToDelete);
+
+        _context.ComplementaryInformations.AttachRange(performanceCriteriasComplementaryInformationsToDelete);
+        _context.ComplementaryInformations.RemoveRange(performanceCriteriasComplementaryInformationsToDelete);
+
+        _context.RealisationContexts.AttachRange(realisationContextToDelete.Cast<RealisationContextEntity>().ToList());
         _context.RealisationContexts.RemoveRange(realisationContextToDelete.Cast<RealisationContextEntity>().ToList());
-        _context.ComplementaryInformations.RemoveRange(complementaryInformationsToDelete);
+
+        _context.PerformanceCriterias.AttachRange(performanceCriteriasToDelete.Cast<PerformanceCriteriaEntity>().ToList());
+        _context.PerformanceCriterias.RemoveRange(performanceCriteriasToDelete.Cast<PerformanceCriteriaEntity>().ToList());
+
+        _context.CompetencyElements.AttachRange(competencyElementsToDelete.Cast<CompetencyElementEntity>().ToList());
+        _context.CompetencyElements.RemoveRange(competencyElementsToDelete.Cast<CompetencyElementEntity>().ToList());
+
     }
 
     //TODO put that into an utils?
@@ -87,6 +114,8 @@ public class CompetencyRepository : ICompetencyRepository
             .Where(x => !listWithMissing.SelectMany(x => x.ComplementaryInformations).Any(y => y.Id == x.Id))
             .ToList();
 
+        // Not needed, cascade delete should do the trick.
+        // complementaryInformationsToRemove.AddRange(changeableToDelete.SelectMany(x => x.ComplementaryInformations).ToList());
         return (changeableToDelete, complementaryInformationsToRemove);
     }
 

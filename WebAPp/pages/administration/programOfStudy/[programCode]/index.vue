@@ -15,17 +15,17 @@ const programOfStudy = ref<ProgramOfStudy>();
 const competencies = ref<Competency[]>([]);
 
 onMounted(async () => {
-try {
-  programOfStudy.value = await fetchProgramByCode(programCode);
-  competencies.value = await fetchCompetencies(programCode);
-} catch (e) {
-  console.error(e);
-  alert("ERREUR")
-  // TODO manage error (e.g., show a notification or redirect)
-}
+  try {
+    programOfStudy.value = await fetchProgramByCode(programCode);
+    competencies.value = await fetchCompetencies(programCode);
+  } catch (e) {
+    console.error(e);
+    alert("ERREUR")
+    // TODO manage error (e.g., show a notification or redirect)
+  }
 });
 
-const  handleSubmitted = async () => {
+const handleSubmitted = async () => {
   upsertCompetencyModal.close()
   competencies.value = await fetchCompetencies(programCode);
 };
@@ -34,12 +34,13 @@ const upsertCompetencyModal = useModal();
 </script>
 
 <template>
-<h1>
+  <h1>
     {{ t('title') }}
   </h1>
   <section>
     <div class="flex-center">
-      <CommonAtomsAButton @click="upsertCompetencyModal.open()" id="create-program-btn">{{ t('createButton') }}</CommonAtomsAButton>
+      <CommonAtomsAButton @click="upsertCompetencyModal.open()">{{ t('createButton') }}
+      </CommonAtomsAButton>
     </div>
   </section>
   <div v-if="competencies.length === 0">{{ t('noCompetenciesYet') }}</div>
@@ -55,7 +56,10 @@ const upsertCompetencyModal = useModal();
       <tr v-for="competency in competencies" :key="competency.code" class="flex-center">
         <td>{{ competency.code }}</td>
         <td>{{ competency.statementOfCompetency }}</td>
-        <td>    <NuxtLink :to="$localePath(`/administration/programOfStudy/${programCode}/competency/${competency.code}`)">CLIKCMEEEEEEEEEE GOOOOOOOOOOOO</NuxtLink></td>
+        <td>
+          <NuxtLink :to="$localePath(`/administration/programOfStudy/${programCode}/competency/${competency.code}`)">
+            CLIKCMEEEEEEEEEE GOOOOOOOOOOOO</NuxtLink>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -76,7 +80,7 @@ const upsertCompetencyModal = useModal();
     "monthsDuration": "Durée en mois",
     "publishedOn": "Publié le",
     "programType.DEC": "Technique",
-    "programType.AEC": "Attestation d'études collégiales", 
+    "programType.AEC": "Attestation d'études collégiales",
     "programType.PREU": "Préuniversitaire",
     "noCompetenciesYet": "Aucune compétence ajoutée pour ce programme.",
     "action": "Actions"
@@ -94,7 +98,8 @@ const upsertCompetencyModal = useModal();
   text-decoration: underline;
 }
 
-.loading, .error {
+.loading,
+.error {
   padding: 1rem;
   text-align: center;
   font-size: 1.1rem;

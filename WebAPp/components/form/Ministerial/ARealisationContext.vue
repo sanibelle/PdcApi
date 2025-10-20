@@ -17,7 +17,8 @@ const model = defineModel<RealisationContext>({
 <template>
     <FormATextInput :name="`competency.realisationContexts[${index}].value`" :min="3" :max="100" :required="true"
         v-model="model.value" />
-    <CommonAtomsAButton @click.prevent="() => emit('deleteRow', index)" :preventDefault="true">-
+    <CommonAtomsAButton :data-testid="`delete-realisation-context-button-${index}`"
+        @click.prevent="() => emit('deleteRow', index)" :preventDefault="true">-
     </CommonAtomsAButton>
 </template>
 

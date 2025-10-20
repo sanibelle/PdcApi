@@ -3,7 +3,11 @@ import '~/assets/css/form.css'
 
 const emit = defineEmits(['deleteRow']);
 defineProps({
-    index: {
+    competencyElementIndex: {
+        type: Number,
+        required: true,
+    },
+    performanceCriteriaIndex: {
         type: Number,
         required: true,
     }
@@ -15,9 +19,13 @@ const model = defineModel<PerformanceCriteria>({
 </script>
 
 <template>
-    <FormATextInput :name="`competency.performanceCriterias[${index}].value`" :min="3" :max="100" :required="true"
-        v-model="model.value" />
-    <CommonAtomsAButton @click.prevent="() => emit('deleteRow', index)" :preventDefault="true">-
+    <FormATextInput
+        :name="`competency.competencyElements[${competencyElementIndex}].performanceCriterias[${performanceCriteriaIndex}].value`"
+        :min="3" :max="100" :required="true" v-model="model.value" />
+    <CommonAtomsAButton v-if="performanceCriteriaIndex !== 0"
+        :data-testid="`delete-performance-criteria-button-${competencyElementIndex}-${performanceCriteriaIndex}`"
+        @click.prevent="() => emit('deleteRow', competencyElementIndex, performanceCriteriaIndex)"
+        :preventDefault="true">-
     </CommonAtomsAButton>
 </template>
 

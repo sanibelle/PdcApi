@@ -33,11 +33,13 @@ test('Creating a full valid program of study', async ({ adminPage }) => {
   await adminPage.locator('select[name="complementaryUnits.numerator"]').selectOption('1');
   await adminPage.locator('select[name="complementaryUnits.denominator"]').selectOption('3');
 
-  await adminPage.locator('#submit-program').first().click();
-  await expect(adminPage.locator('.modal-overlay')).toBeHidden();
+  const [response] = await Promise.all([
+    adminPage.waitForResponse(response => response.url().includes('/ProgramOfStudy') && response.request().method() === 'POST'),
+    adminPage.locator('#submit-program').first().click()
+  ]);
 
-  // todo valider que le programme a été créé dans la liste
-  // valider un 201 dans le network
+  expect(response.status()).toBe(201);
+  await expect(adminPage.locator('.modal-overlay')).toBeHidden();
 });
 
 test('Creating a minimal valid program of study', async ({ page }) => {

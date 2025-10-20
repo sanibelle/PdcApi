@@ -17,7 +17,8 @@ const model = defineModel<CompetencyElement>({
 <template>
     <FormATextInput :name="`competency.competencyElements[${index}].value`" :min="3" :max="100" :required="true"
         v-model="model.value" />
-    <CommonAtomsAButton @click.prevent="() => emit('deleteRow', index)" :preventDefault="true">-
+    <CommonAtomsAButton :data-testid="`delete-competency-element-button-${index}`"
+        @click.prevent="() => emit('deleteRow', index)" :preventDefault="true">-
     </CommonAtomsAButton>
 </template>
 

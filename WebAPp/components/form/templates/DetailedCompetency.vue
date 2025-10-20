@@ -73,6 +73,7 @@ const addCompetencyElementRow = () => {
     complementaryInformations: [],
     performanceCriterias: []
   });
+  addPerformanceCriteriaRow(competency.value.competencyElements.length - 1);
 };
 
 const removeCompetencyElementRow = (index: number) => {
@@ -83,7 +84,7 @@ const removeCompetencyElementRow = (index: number) => {
   });
 };
 
-const addPerformanceCriteriaRow = (competencyElementIndex: number ) => {
+const addPerformanceCriteriaRow = (competencyElementIndex: number) => {
   if (!competency.value.competencyElements[competencyElementIndex]?.performanceCriterias) {
     competency.value.competencyElements[competencyElementIndex]!.performanceCriterias = [];
   }
@@ -120,55 +121,56 @@ const removePerformanceCriteriaRow = (competencyElementIndex: number, performanc
       <div class="row-container">
         <h2>{{ t('realisationContext') }}</h2>
         <div class="row" v-for="(_, index) in competency.realisationContexts" :key="index">
-              <FormCommonAComplementaryInformations :index="index" v-model="competency.realisationContexts[index]!.complementaryInformations!" :name="`competency.realisationContexts[${index}]`"> 
-                <FormMinisterialARealisationContext :index="index" v-model="competency.realisationContexts[index]!"
-                  @deleteRow="removeRealisationContextRow" />
-              </FormCommonAComplementaryInformations>
+          <FormCommonAComplementaryInformations :index="index"
+            v-model="competency.realisationContexts[index]!.complementaryInformations!"
+            :name="`competency.realisationContexts[${index}]`">
+            <FormMinisterialARealisationContext :index="index" v-model="competency.realisationContexts[index]!"
+              @deleteRow="removeRealisationContextRow" />
+          </FormCommonAComplementaryInformations>
         </div>
-        <CommonAtomsAButton @click.prevent="addRealisationContextRow" :preventDefault="true">+</CommonAtomsAButton>
+        <CommonAtomsAButton @click.prevent="addRealisationContextRow" :preventDefault="true"
+          data-testid="add-realisation-context">+</CommonAtomsAButton>
       </div>
       <div class="row-container flex-row">
         <h2>{{ t('competencyElement') }}</h2>
-        <div class="row" v-for="(_, competencyElementIndex) in competency.competencyElements" :key="competencyElementIndex">
-              <FormCommonAComplementaryInformations :index="competencyElementIndex" v-model="competency.competencyElements[competencyElementIndex]!.complementaryInformations!" :name="`competency.competencyElements[${competencyElementIndex}]`"> 
-                <FormMinisterialACompetencyElement :index="competencyElementIndex" v-model="competency.competencyElements[competencyElementIndex]!"
-                  @deleteRow="removeCompetencyElementRow" />
+        <div class="row" v-for="(_, competencyElementIndex) in competency.competencyElements"
+          :key="competencyElementIndex">
+          <FormCommonAComplementaryInformations :index="competencyElementIndex"
+            v-model="competency.competencyElements[competencyElementIndex]!.complementaryInformations!"
+            :name="`competency.competencyElements[${competencyElementIndex}]`">
+            <FormMinisterialACompetencyElement :index="competencyElementIndex"
+              v-model="competency.competencyElements[competencyElementIndex]!"
+              @deleteRow="removeCompetencyElementRow" />
+          </FormCommonAComplementaryInformations>
+          <div>
+            <h2>{{ t('performanceCriteria') }}</h2>
+            <div class="row"
+              v-for="(_, performanceCriteriaIndex) in competency.competencyElements[competencyElementIndex]!.performanceCriterias"
+              :key="competencyElementIndex">
+              <FormCommonAComplementaryInformations :index="performanceCriteriaIndex"
+                v-model="competency.competencyElements[competencyElementIndex]!.performanceCriterias[performanceCriteriaIndex]!.complementaryInformations!"
+                :name="`competency.competencyElements[${competencyElementIndex}].performanceCriterias[${performanceCriteriaIndex}]`">
+                <FormMinisterialAPerformanceCriteria :competencyElementIndex="competencyElementIndex"
+                  :performanceCriteriaIndex="performanceCriteriaIndex"
+                  v-model="competency.competencyElements[competencyElementIndex]!.performanceCriterias[performanceCriteriaIndex]!"
+                  @deleteRow="removePerformanceCriteriaRow(competencyElementIndex, performanceCriteriaIndex)" />
               </FormCommonAComplementaryInformations>
-              <div>
-                <h2>{{ t('performanceCriteria') }}</h2>
-                <div  class="row" v-for="(_, performanceCriteriaIndex) in competency.competencyElements[competencyElementIndex]!.performanceCriterias" :key="competencyElementIndex">
-                  <FormCommonAComplementaryInformations :index="performanceCriteriaIndex" v-model="competency.competencyElements[competencyElementIndex]!.performanceCriterias[performanceCriteriaIndex]!.complementaryInformations!" :name="`competency.competencyElements[${performanceCriteriaIndex}]`"> 
-                  <FormMinisterialAPerformanceCriteria :index="performanceCriteriaIndex" v-model="competency.competencyElements[competencyElementIndex]!.performanceCriterias[performanceCriteriaIndex]!"
-                      @deleteRow="removePerformanceCriteriaRow(competencyElementIndex, performanceCriteriaIndex)" />
-                  </FormCommonAComplementaryInformations>
-                </div>
-                <CommonAtomsAButton @click.prevent="addPerformanceCriteriaRow(competencyElementIndex)" :preventDefault="true">+</CommonAtomsAButton>
-              </div>
-        </div>
-        <CommonAtomsAButton @click.prevent="addCompetencyElementRow" :preventDefault="true">+</CommonAtomsAButton>
-      </div>
-      rendu ici
-      <!-- <div>
-        <div class="row-container flex-row">
-          <div class="row" v-for="(realisationContext, index) in competency.realisationContexts" :key="index">
-            <ul>
-              <li>
-                <FormATextInput :name="`competency.realisationContexts[${index}].text`" :min="3" :max="100"
-                :required="true" v-model="realisationContext.text" />
-                <FormANumberInput :name="`competency.realisationContexts[${index}].position`" hidden="true" v-model="realisationContext.position" />
-                <CommonAtomsAButton @click.prevent="removeRealisationContextRow(index)" :preventDefault="true">-</CommonAtomsAButton>
-                {{ realisationContext }}
-              </li>
-            </ul>
+            </div>
+            <CommonAtomsAButton @click.prevent="addPerformanceCriteriaRow(competencyElementIndex)"
+              :preventDefault="true" :data-testid="`add-performance-criteria-${competencyElementIndex}`">+
+            </CommonAtomsAButton>
           </div>
-          <CommonAtomsAButton @click.prevent="addRealisationContextRow" :preventDefault="true">+</CommonAtomsAButton>
         </div>
-      </div> -->
+        <CommonAtomsAButton @click.prevent="addCompetencyElementRow" :preventDefault="true"
+          data-testid="add-competency-element">
+          +</CommonAtomsAButton>
+      </div>
+      Rendu à faire les tests.
       <div class="buttons">
-        <FormMoleculesASubmitButton :isSubmitting="isSubmitting">
+        <FormMoleculesASubmitButton :isSubmitting="isSubmitting" data-testid="submit-draft-button">
           {{ t('applyModification') }}
         </FormMoleculesASubmitButton>
-        <FormMoleculesASubmitButton :isSubmitting="isSubmitting">
+        <FormMoleculesASubmitButton :isSubmitting="isSubmitting" data-testid="approve-this-version-button">
           {{ t('approveThisVersion') }}
         </FormMoleculesASubmitButton>
       </div>
