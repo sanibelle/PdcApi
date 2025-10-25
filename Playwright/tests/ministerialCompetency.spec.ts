@@ -60,7 +60,7 @@ test.describe("ministerial competency", () => {
       await adminPage.getByTestId('add-realisation-context').click();
       await adminPage.locator(`input[name="competency\\.realisationContexts\\[${parentIndex}\\]\\.value"]`).fill(`realisation context ${parentIndex + 1}`);
       await adminPage.getByTestId('add-complementary-information-competency.realisationContexts[0]').click();
-      await adminPage.locator(`input[name="competency\\.realisationContexts\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.value"]`).fill(`complementary information ${parentIndex + 1} for rc 1`);
+      await adminPage.locator(`input[name="competency\\.realisationContexts\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.text"]`).fill(`complementary information ${parentIndex + 1} for rc 1`);
 
       // competency elements, performance criteria and complementary information
       await adminPage.getByTestId('add-competency-element').click();
@@ -74,11 +74,11 @@ test.describe("ministerial competency", () => {
 
       // complementary information for first competency element
       await adminPage.getByTestId('add-complementary-information-competency.competencyElements[0]').click();
-      await adminPage.locator(`input[name="competency\\.competencyElements\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.value"]`).fill(`complementary information ${parentIndex + 1} for competency element 1`);
+      await adminPage.locator(`input[name="competency\\.competencyElements\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.text"]`).fill(`complementary information ${parentIndex + 1} for competency element 1`);
 
       // complementary information for first performance criteria of first competency element
       await adminPage.getByTestId('add-complementary-information-competency.competencyElements[0].performanceCriterias[0]').click();
-      await adminPage.locator(`input[name="competency\\.competencyElements\\[0\\]\\.performanceCriterias\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.value"]`).fill(`complementary information ${parentIndex + 1} for pc 1 for element 1`);
+      await adminPage.locator(`input[name="competency\\.competencyElements\\[0\\]\\.performanceCriterias\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.text"]`).fill(`complementary information ${parentIndex + 1} for pc 1 for element 1`);
     }
 
     const [response] = await Promise.all([
@@ -151,7 +151,7 @@ test.describe("ministerial competency", () => {
     await adminPage.getByTestId('add-realisation-context').click();
     await adminPage.locator(`input[name="competency\\.realisationContexts\\[${parentIndex}\\]\\.value"]`).fill(`realisation context ${parentIndex + 2}`);
     await adminPage.getByTestId('add-complementary-information-competency.realisationContexts[0]').click();
-    await adminPage.locator(`input[name="competency\\.realisationContexts\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.value"]`).fill(`complementary information ${parentIndex + 2} for rc 1`);
+    await adminPage.locator(`input[name="competency\\.realisationContexts\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.text"]`).fill(`complementary information ${parentIndex + 2} for rc 1`);
 
     // competency elements, performance criteria and complementary information
     await adminPage.getByTestId('add-competency-element').click();
@@ -166,11 +166,11 @@ test.describe("ministerial competency", () => {
 
     // complementary information for first competency element
     await adminPage.getByTestId('add-complementary-information-competency.competencyElements[0]').click();
-    await adminPage.locator(`input[name="competency\\.competencyElements\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.value"]`).fill(`complementary information ${parentIndex + 2} for competency element 1`);
+    await adminPage.locator(`input[name="competency\\.competencyElements\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.text"]`).fill(`complementary information ${parentIndex + 2} for competency element 1`);
 
     // complementary information for first performance criteria of first competency element
     await adminPage.getByTestId('add-complementary-information-competency.competencyElements[0].performanceCriterias[0]').click();
-    await adminPage.locator(`input[name="competency\\.competencyElements\\[0\\]\\.performanceCriterias\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.value"]`).fill(`complementary information ${parentIndex + 2} for pc 1 for element 1`);
+    await adminPage.locator(`input[name="competency\\.competencyElements\\[0\\]\\.performanceCriterias\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.text"]`).fill(`complementary information ${parentIndex + 2} for pc 1 for element 1`);
 
     // validation before submit
     for (let parentIndex = 1; parentIndex <= 4; parentIndex++) {

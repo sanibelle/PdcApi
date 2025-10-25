@@ -26,7 +26,7 @@ export default defineConfig({
     ? [["github"], ["html", { open: "never" }]]
     : [["list"], ["html", { open: "never" }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  timeout: 120000,
+  timeout: !process.env.CI ? 120000 : 10000,
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: "http://localhost:3000/",
@@ -67,16 +67,31 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: [
-    {
-      command: "cd ../Pdc.WebAPI && dotnet run --configuration Test --launch-profile Test",
-      url: "http://localhost:5001/init",
-      reuseExistingServer: !process.env.CI,
-    },
-    {
-      command: "cd ../WebAPp && yarn run playwright",
-      url: "http://localhost:3000",
-      reuseExistingServer: !process.env.CI,
-    },
-  ],
+  webServer: process.env.CI
+    ? [
+        {
+          command:
+            "cd ../Pdc.WebAPI && dotnet run --configuration Test --launch-profile Test",
+          url: "http://localhost:5001/init",
+          reuseExistingServer: !process.env.CI,
+        },
+        {
+          command: "cd ../WebAPp && yarn run playwright",
+          url: "http://localhost:3000",
+          reuseExistingServer: !process.env.CI,
+        },
+      ]
+    : [
+        {
+          command:
+            "cd ../Pdc.WebAPI && dotnet run --configuration Test --launch-profile Test",
+          url: "http://localhost:5001/init",
+          reuseExistingServer: !process.env.CI,
+        },
+        {
+          command: "cd ../WebAPp && yarn run playwright",
+          url: "http://localhost:3000",
+          reuseExistingServer: !process.env.CI,
+        },
+      ],
 });

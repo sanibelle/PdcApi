@@ -158,7 +158,7 @@ const removePerformanceCriteriaRow = (competencyElementIndex: number, performanc
             </div>
             <CommonAtomsAButton @click.prevent="addPerformanceCriteriaRow(competencyElementIndex)"
               :preventDefault="true" :aria-label="t('addPerformanceCriteria')"
-              data-testid="`add-performance-criteria-${competencyElementIndex}`">+
+              :data-testid="`add-performance-criteria-${competencyElementIndex}`">+
             </CommonAtomsAButton>
           </div>
         </div>

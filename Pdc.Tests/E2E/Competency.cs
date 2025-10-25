@@ -110,7 +110,7 @@ public class CompetencyApiTests : ApiTestBase
         updateResponse.EnsureSuccessStatusCode();
         var updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
 
-        updatedCompetency.RealisationContexts.First().ComplementaryInformations.Should().BeEmpty();
+        competencyToUpdateDTO.RealisationContexts.First().ComplementaryInformations.Should().BeEmpty();
 
         // Clear the realisation contexts
         competencyToUpdateDTO.RealisationContexts.Clear();
