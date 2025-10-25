@@ -12,15 +12,15 @@ using Pdc.Infrastructure.Data;
 namespace Pdc.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250414021132_AddDefaultRolesToDataBase")]
-    partial class AddDefaultRolesToDataBase
+    [Migration("20251023023147_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.4")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -366,11 +366,11 @@ namespace Pdc.Infrastructure.Migrations
                     b.Property<Guid?>("OptionalUnitsId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateOnly>("PublishedOn")
-                        .HasColumnType("date");
-
                     b.Property<int>("ProgramType")
                         .HasColumnType("int");
+
+                    b.Property<DateOnly>("PublishedOn")
+                        .HasColumnType("date");
 
                     b.Property<int>("SpecificDurationHours")
                         .HasColumnType("int");
@@ -524,6 +524,9 @@ namespace Pdc.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -552,6 +555,8 @@ namespace Pdc.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
 
                     b.HasIndex("NextVersionId");
 
@@ -593,12 +598,12 @@ namespace Pdc.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ModifiedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -890,6 +895,12 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", b =>
                 {
+                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "NextVersion")
                         .WithMany()
                         .HasForeignKey("NextVersionId");
@@ -901,7 +912,9 @@ namespace Pdc.Infrastructure.Migrations
                     b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "ValidatedBy")
                         .WithMany()
                         .HasForeignKey("ValidatedById")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedBy");
 
                     b.Navigation("NextVersion");
 
@@ -921,7 +934,7 @@ namespace Pdc.Infrastructure.Migrations
                     b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "WrittenOnVersion")

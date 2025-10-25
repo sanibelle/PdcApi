@@ -55,7 +55,7 @@ watch(
 </script>
 
 <template>
-  <input :name="name" :checked="model" type="checkbox" :disabled="disabled" class="base-input"
+  <input :name="name" v-model="model" type="checkbox" :disabled="disabled" class="base-input"
     :class="{ error: errorMessage }" @change="onChange" @blur="onBlur" />
 </template>
 

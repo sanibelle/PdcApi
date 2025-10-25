@@ -1,20 +1,21 @@
 <script setup lang="ts">
 const { t } = useI18n();
 
+
 const props = defineProps({
     complementaryInformations: {
         type: Array as PropType<ComplementaryInformation[]>,
         default: () => [],
-    },
-    isDraft: {
-        type: Boolean,
-        default: false,
-    },
+    }
 });
 </script>
 
 <template>
-    <div class="version-badge" :class="{ 'draft': isDraft }">
+    <div v-if="complementaryInformations.length > 0" class="mt-4 space-y-2">
+        <div v-for="(complementaryInformation, index) in complementaryInformations" :key="index" class="p-4 border border-gray-300 rounded-md bg-gray-50">
+            <div class="mt-2 text-gray-800" v-html="complementaryInformation.text"></div>
+            TODO : À Finir en vue
+        </div>
     </div>
 </template>
 

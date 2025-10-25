@@ -13,12 +13,6 @@ const { handleSubmit, isSubmitting } = useForm<Competency>({
 
 const competency = defineModel<Competency>('competency', {
   required: true,
-  default: () => ({
-    isMandatory: false,
-    code: '',
-    statementOfCompetency: '',
-    realisationContexts: [],
-  }),
 })
 
 const props = defineProps({
@@ -51,9 +45,13 @@ const onSubmit = handleSubmit(async () => {
 });
 
 const addRealisationContextRow = () => {
-  competency.value.realisationContexts?.push({
+  if (!competency.value.realisationContexts) {
+    competency.value.realisationContexts = [];
+  }
+  competency.value.realisationContexts.push({
     value: '',
     position: competency.value.realisationContexts.length + 1,
+    complementaryInformations: [],
   });
 };
 
@@ -61,6 +59,46 @@ const removeRealisationContextRow = (index: number) => {
   competency.value.realisationContexts?.splice(index, 1);
   // Update positions after removal
   competency.value.realisationContexts?.forEach((context, idx) => {
+    context.position = idx + 1;
+  });
+};
+
+const addCompetencyElementRow = () => {
+  if (!competency.value.competencyElements) {
+    competency.value.competencyElements = [];
+  }
+  competency.value.competencyElements.push({
+    value: '',
+    position: competency.value.competencyElements.length + 1,
+    complementaryInformations: [],
+    performanceCriterias: []
+  });
+  addPerformanceCriteriaRow(competency.value.competencyElements.length - 1);
+};
+
+const removeCompetencyElementRow = (index: number) => {
+  competency.value.competencyElements?.splice(index, 1);
+  // Update positions after removal
+  competency.value.competencyElements?.forEach((context, idx) => {
+    context.position = idx + 1;
+  });
+};
+
+const addPerformanceCriteriaRow = (competencyElementIndex: number) => {
+  if (!competency.value.competencyElements[competencyElementIndex]?.performanceCriterias) {
+    competency.value.competencyElements[competencyElementIndex]!.performanceCriterias = [];
+  }
+  competency.value.competencyElements[competencyElementIndex]!.performanceCriterias.push({
+    value: '',
+    position: competency.value.competencyElements[competencyElementIndex]!.performanceCriterias.length + 1,
+    complementaryInformations: [],
+  });
+};
+
+const removePerformanceCriteriaRow = (competencyElementIndex: number, performanceCriteriaIndex: number) => {
+  competency.value.competencyElements[competencyElementIndex]!.performanceCriterias?.splice(performanceCriteriaIndex, 1);
+  // Update positions after removal
+  competency.value.competencyElements[competencyElementIndex]!.performanceCriterias?.forEach((context, idx) => {
     context.position = idx + 1;
   });
 };
@@ -82,42 +120,57 @@ const removeRealisationContextRow = (index: number) => {
       </div>
       <div class="row-container">
         <h2>{{ t('realisationContext') }}</h2>
-        <div class="row" v-for="(realisationContext, index) in competency.realisationContexts" :key="index">
-          <ul>
-            <li>
-              <FormMinisterialARealisationContext :index="index" v-model="competency.realisationContexts[index]!"
-                @deleteRow="removeRealisationContextRow" />
-            </li>
-          </ul>
+        <div class="row" v-for="(_, index) in competency.realisationContexts" :key="index">
+          <FormCommonAComplementaryInformations :index="index"
+            v-model="competency.realisationContexts[index]!.complementaryInformations!"
+            :name="`competency.realisationContexts[${index}]`">
+            <FormMinisterialARealisationContext :index="index" v-model="competency.realisationContexts[index]!"
+              @deleteRow="removeRealisationContextRow" />
+          </FormCommonAComplementaryInformations>
         </div>
-        <CommonAtomsAButton @click.prevent="addRealisationContextRow" :preventDefault="true">+</CommonAtomsAButton>
+        <CommonAtomsAButton @click.prevent="addRealisationContextRow" :preventDefault="true"
+          :aria-label="t('addRealisationContext')" data-testid="add-realisation-context">+</CommonAtomsAButton>
       </div>
       <div class="row-container flex-row">
         <h2>{{ t('competencyElement') }}</h2>
-        <h2>{{ t('performanceCriteria') }}</h2>
-      </div>
-      rendu ici
-      <!-- <div>
-        <div class="row-container flex-row">
-          <div class="row" v-for="(realisationContext, index) in competency.realisationContexts" :key="index">
-            <ul>
-              <li>
-                <FormATextInput :name="`competency.realisationContexts[${index}].text`" :min="3" :max="100"
-                :required="true" v-model="realisationContext.text" />
-                <FormANumberInput :name="`competency.realisationContexts[${index}].position`" hidden="true" v-model="realisationContext.position" />
-                <CommonAtomsAButton @click.prevent="removeRealisationContextRow(index)" :preventDefault="true">-</CommonAtomsAButton>
-                {{ realisationContext }}
-              </li>
-            </ul>
+        <div class="row" v-for="(_, competencyElementIndex) in competency.competencyElements"
+          :key="competencyElementIndex">
+          <FormCommonAComplementaryInformations :index="competencyElementIndex"
+            v-model="competency.competencyElements[competencyElementIndex]!.complementaryInformations!"
+            :name="`competency.competencyElements[${competencyElementIndex}]`">
+            <FormMinisterialACompetencyElement :index="competencyElementIndex"
+              v-model="competency.competencyElements[competencyElementIndex]!"
+              @deleteRow="removeCompetencyElementRow" />
+          </FormCommonAComplementaryInformations>
+          <div>
+            <h2>{{ t('performanceCriteria') }}</h2>
+            <div class="row"
+              v-for="(_, performanceCriteriaIndex) in competency.competencyElements[competencyElementIndex]!.performanceCriterias"
+              :key="performanceCriteriaIndex">
+              <FormCommonAComplementaryInformations :index="performanceCriteriaIndex"
+                v-model="competency.competencyElements[competencyElementIndex]!.performanceCriterias[performanceCriteriaIndex]!.complementaryInformations!"
+                :name="`competency.competencyElements[${competencyElementIndex}].performanceCriterias[${performanceCriteriaIndex}]`">
+                <FormMinisterialAPerformanceCriteria :competencyElementIndex="competencyElementIndex"
+                  :performanceCriteriaIndex="performanceCriteriaIndex"
+                  v-model="competency.competencyElements[competencyElementIndex]!.performanceCriterias[performanceCriteriaIndex]!"
+                  @deleteRow="removePerformanceCriteriaRow(competencyElementIndex, performanceCriteriaIndex)" />
+              </FormCommonAComplementaryInformations>
+            </div>
+            <CommonAtomsAButton @click.prevent="addPerformanceCriteriaRow(competencyElementIndex)"
+              :preventDefault="true" :aria-label="t('addPerformanceCriteria')"
+              :data-testid="`add-performance-criteria-${competencyElementIndex}`">+
+            </CommonAtomsAButton>
           </div>
-          <CommonAtomsAButton @click.prevent="addRealisationContextRow" :preventDefault="true">+</CommonAtomsAButton>
         </div>
-      </div> -->
+        <CommonAtomsAButton @click.prevent="addCompetencyElementRow" :preventDefault="true"
+          :aria-label="t('addCompetencyElement')" data-testid="add-competency-element">
+          +</CommonAtomsAButton>
+      </div>
       <div class="buttons">
-        <FormMoleculesASubmitButton :isSubmitting="isSubmitting">
+        <FormMoleculesASubmitButton :isSubmitting="isSubmitting" data-testid="submit-draft-button">
           {{ t('applyModification') }}
         </FormMoleculesASubmitButton>
-        <FormMoleculesASubmitButton :isSubmitting="isSubmitting">
+        <FormMoleculesASubmitButton :isSubmitting="isSubmitting" data-testid="approve-this-version-button">
           {{ t('approveThisVersion') }}
         </FormMoleculesASubmitButton>
       </div>
@@ -140,7 +193,10 @@ const removeRealisationContextRow = (index: number) => {
     "optionnalCompetency": "Compétence optionnelle",
     "mandatoryCompetency": "Compétence obligatoire",
     "applyModification": "Appliquer les modifications",
-    "approveThisVersion": "Approuver cette version (il ne sera plus possible d'ajouter ou de modifier d'éléments sur cette version, seul la modification sera possible)"
+    "approveThisVersion": "Approuver cette version (il ne sera plus possible d'ajouter ou de modifier d'éléments sur cette version, seul la modification sera possible)",
+    "addRealisationContext": "Ajouter un contexte de réalisation",
+    "addCompetencyElement": "Ajouter un élément de compétence",
+    "addPerformanceCriteria": "Ajouter un critère de performance"
   }
 }
 </i18n>

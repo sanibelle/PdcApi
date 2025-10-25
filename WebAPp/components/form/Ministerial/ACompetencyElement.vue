@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import '~/assets/css/form.css'
 
-const emit = defineEmits(['deleteRow']);
+const emit = defineEmits<{
+    (e: 'deleteRow', index: number): void
+}>();
 defineProps({
     index: {
         type: Number,
@@ -9,15 +11,15 @@ defineProps({
     }
 })
 
-const model = defineModel<RealisationContext>({
+const model = defineModel<CompetencyElement>({
     required: true,
 })
 </script>
 
 <template>
-    <FormATextInput :name="`competency.realisationContexts[${index}].value`" :min="3" :max="100" :required="true"
+    <FormATextInput :name="`competency.competencyElements[${index}].value`" :min="3" :max="100" :required="true"
         v-model="model.value" />
-    <CommonAtomsAButton :data-testid="`delete-realisation-context-button-${index}`"
+    <CommonAtomsAButton :data-testid="`delete-competency-element-button-${index}`"
         @click.prevent="() => emit('deleteRow', index)" :preventDefault="true">-
     </CommonAtomsAButton>
 </template>

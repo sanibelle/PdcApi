@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.EquivalencyExpression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pdc.Domain.Interfaces.Repositories;
@@ -23,6 +24,7 @@ public static class DependencyInjection
             services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseInMemoryDatabase("TestDataBase")
+                    .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning)) // used to prevent break on BeginTransaction calls
                     .EnableSensitiveDataLogging();
             });
         }

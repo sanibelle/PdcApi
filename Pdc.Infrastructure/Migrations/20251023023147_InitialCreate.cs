@@ -191,7 +191,7 @@ namespace Pdc.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSUTCDATETIME()"),
                     CreatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsDraft = table.Column<bool>(type: "bit", nullable: false),
                     VersionNumber = table.Column<int>(type: "int", nullable: false),
@@ -224,7 +224,8 @@ namespace Pdc.Infrastructure.Migrations
                         name: "FK_ChangeRecords_Users_ValidatedById",
                         column: x => x.ValidatedById,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -295,8 +296,8 @@ namespace Pdc.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ChangeableId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     WrittenOnVersionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "SYSUTCDATETIME()"),
                     CreatedById = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: false)
                 },

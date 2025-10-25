@@ -11,9 +11,9 @@ public class ComplementaryInformationConfiguration : IEntityTypeConfiguration<Co
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
-
-        builder.Property(x => x.ModifiedOn)
-            .HasDefaultValueSql("GETDATE()")
+        builder.Property(x => x.CreatedOn)
+            .HasDefaultValueSql("SYSUTCDATETIME()")
+            .ValueGeneratedOnAdd()
             .IsRequired();
 
         builder.Property(x => x.Text)
