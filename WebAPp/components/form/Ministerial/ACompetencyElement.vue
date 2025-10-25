@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import '~/assets/css/form.css'
 
-const emit = defineEmits(['deleteRow']);
+const emit = defineEmits<{
+    (e: 'deleteRow', index: number): void
+}>();
 defineProps({
     index: {
         type: Number,

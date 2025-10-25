@@ -44,20 +44,27 @@ public class CompetencyRepository : ICompetencyRepository
     public async Task<MinisterialCompetency> Update(MinisterialCompetency competency)
     {
         using var transaction = await _context.Database.BeginTransactionAsync();
+        try
+        {
+            await RemoveDeletedElements(competency);
+            var test = _context.ChangeTracker.DebugView.LongView;
+            await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
 
-        await RemoveDeletedElements(competency);
-        var test = _context.ChangeTracker.DebugView.LongView;
-        await _context.SaveChangesAsync();
-        _context.ChangeTracker.Clear();
+            CompetencyEntity entity = await _context.Competencies
+                .Persist(_mapper)
+                .InsertOrUpdateAsync(competency);
+            test = _context.ChangeTracker.DebugView.LongView;
+            await _context.SaveChangesAsync();
 
-        CompetencyEntity entity = await _context.Competencies
-            .Persist(_mapper)
-            .InsertOrUpdateAsync(competency);
-        test = _context.ChangeTracker.DebugView.LongView;
-        await _context.SaveChangesAsync();
-
-        await transaction.CommitAsync();
-        return _mapper.Map<MinisterialCompetency>(entity);
+            await transaction.CommitAsync();
+            return _mapper.Map<MinisterialCompetency>(entity);
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
     }
 
     private async Task RemoveDeletedElements(MinisterialCompetency competency)

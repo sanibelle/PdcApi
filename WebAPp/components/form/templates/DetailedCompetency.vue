@@ -129,7 +129,7 @@ const removePerformanceCriteriaRow = (competencyElementIndex: number, performanc
           </FormCommonAComplementaryInformations>
         </div>
         <CommonAtomsAButton @click.prevent="addRealisationContextRow" :preventDefault="true"
-          data-testid="add-realisation-context">+</CommonAtomsAButton>
+          :aria-label="t('addRealisationContext')" data-testid="add-realisation-context">+</CommonAtomsAButton>
       </div>
       <div class="row-container flex-row">
         <h2>{{ t('competencyElement') }}</h2>
@@ -146,7 +146,7 @@ const removePerformanceCriteriaRow = (competencyElementIndex: number, performanc
             <h2>{{ t('performanceCriteria') }}</h2>
             <div class="row"
               v-for="(_, performanceCriteriaIndex) in competency.competencyElements[competencyElementIndex]!.performanceCriterias"
-              :key="competencyElementIndex">
+              :key="performanceCriteriaIndex">
               <FormCommonAComplementaryInformations :index="performanceCriteriaIndex"
                 v-model="competency.competencyElements[competencyElementIndex]!.performanceCriterias[performanceCriteriaIndex]!.complementaryInformations!"
                 :name="`competency.competencyElements[${competencyElementIndex}].performanceCriterias[${performanceCriteriaIndex}]`">
@@ -157,15 +157,15 @@ const removePerformanceCriteriaRow = (competencyElementIndex: number, performanc
               </FormCommonAComplementaryInformations>
             </div>
             <CommonAtomsAButton @click.prevent="addPerformanceCriteriaRow(competencyElementIndex)"
-              :preventDefault="true" :data-testid="`add-performance-criteria-${competencyElementIndex}`">+
+              :preventDefault="true" :aria-label="t('addPerformanceCriteria')"
+              data-testid="`add-performance-criteria-${competencyElementIndex}`">+
             </CommonAtomsAButton>
           </div>
         </div>
         <CommonAtomsAButton @click.prevent="addCompetencyElementRow" :preventDefault="true"
-          data-testid="add-competency-element">
+          :aria-label="t('addCompetencyElement')" data-testid="add-competency-element">
           +</CommonAtomsAButton>
       </div>
-      Rendu à faire les tests.
       <div class="buttons">
         <FormMoleculesASubmitButton :isSubmitting="isSubmitting" data-testid="submit-draft-button">
           {{ t('applyModification') }}
@@ -193,7 +193,10 @@ const removePerformanceCriteriaRow = (competencyElementIndex: number, performanc
     "optionnalCompetency": "Compétence optionnelle",
     "mandatoryCompetency": "Compétence obligatoire",
     "applyModification": "Appliquer les modifications",
-    "approveThisVersion": "Approuver cette version (il ne sera plus possible d'ajouter ou de modifier d'éléments sur cette version, seul la modification sera possible)"
+    "approveThisVersion": "Approuver cette version (il ne sera plus possible d'ajouter ou de modifier d'éléments sur cette version, seul la modification sera possible)",
+    "addRealisationContext": "Ajouter un contexte de réalisation",
+    "addCompetencyElement": "Ajouter un élément de compétence",
+    "addPerformanceCriteria": "Ajouter un critère de performance"
   }
 }
 </i18n>

@@ -1,4 +1,3 @@
-import { exec } from "child_process";
 import { test, expect } from "./test-fixtures";
 
 test.describe("ministerial competency", () => {
@@ -45,7 +44,7 @@ test.describe("ministerial competency", () => {
       adminPage.getByTestId("submit-competency").first().click(),
     ]);
 
-    expect(response.status()).toBe(201);
+    await expect(response.status()).toBe(201);
     await expect(adminPage.locator(".modal-overlay")).toBeHidden();
   });
 
@@ -92,19 +91,19 @@ test.describe("ministerial competency", () => {
     ]);
 
     // expectations
-    expect(response.status()).toBe(200);
+    await expect(response.status()).toBe(200);
     await expect(adminPage.locator(".modal-overlay")).toBeHidden();
 
     for (let parentIndex = 1; parentIndex <= 3; parentIndex++) {
       // realisation contexts complementary information
-      expect(await adminPage.getByText(`realisation context ${parentIndex}`)).toBeTruthy();
-      expect(await adminPage.getByText(`complementary information ${parentIndex} for rc 1`)).toBeTruthy();
-      expect(await adminPage.getByText(`competency element ${parentIndex}`)).toBeTruthy();
-      expect(await adminPage.getByText(`complementary information ${parentIndex} for competency element 1`)).toBeTruthy();
-      expect(await adminPage.getByText(`complementary information ${parentIndex} for pc 1 for element 1`)).toBeTruthy();
+      await expect(await adminPage.getByText(`realisation context ${parentIndex}`)).toBeTruthy();
+      await expect(await adminPage.getByText(`complementary information ${parentIndex} for rc 1`)).toBeTruthy();
+      await expect(await adminPage.getByText(`competency element ${parentIndex}`)).toBeTruthy();
+      await expect(await adminPage.getByText(`complementary information ${parentIndex} for competency element 1`)).toBeTruthy();
+      await expect(await adminPage.getByText(`complementary information ${parentIndex} for pc 1 for element 1`)).toBeTruthy();
       
       for (let pcIndex = 1; pcIndex <= 3; pcIndex++) {
-        expect(await adminPage.getByText(`performance criteria ${pcIndex} for element ${parentIndex}`)).toBeTruthy();
+        await expect(await adminPage.getByText(`performance criteria ${pcIndex} for element ${parentIndex}`)).toBeTruthy();
       }
     }
 
@@ -112,14 +111,14 @@ test.describe("ministerial competency", () => {
     await adminPage.goto("/administration/programOfStudy/Seededprogram/competency/code1");
     for (let parentIndex = 1; parentIndex <= 3; parentIndex++) {
       // realisation contexts complementary information
-      expect(await adminPage.getByText(`realisation context ${parentIndex}`)).toBeTruthy();
-      expect(await adminPage.getByText(`complementary information ${parentIndex} for rc 1`)).toBeTruthy();
-      expect(await adminPage.getByText(`competency element ${parentIndex}`)).toBeTruthy();
-      expect(await adminPage.getByText(`complementary information ${parentIndex} for competency element 1`)).toBeTruthy();
-      expect(await adminPage.getByText(`complementary information ${parentIndex} for pc 1 for element 1`)).toBeTruthy();
+      await expect(await adminPage.getByText(`realisation context ${parentIndex}`)).toBeTruthy();
+      await expect(await adminPage.getByText(`complementary information ${parentIndex} for rc 1`)).toBeTruthy();
+      await expect(await adminPage.getByText(`competency element ${parentIndex}`)).toBeTruthy();
+      await expect(await adminPage.getByText(`complementary information ${parentIndex} for competency element 1`)).toBeTruthy();
+      await expect(await adminPage.getByText(`complementary information ${parentIndex} for pc 1 for element 1`)).toBeTruthy();
       
       for (let pcIndex = 1; pcIndex <= 3; pcIndex++) {
-        expect(await adminPage.getByText(`performance criteria ${pcIndex} for element ${parentIndex}`)).toBeTruthy();
+        await expect(await adminPage.getByText(`performance criteria ${pcIndex} for element ${parentIndex}`)).toBeTruthy();
       }
     }
   });
@@ -178,15 +177,15 @@ test.describe("ministerial competency", () => {
       // skipping number 2
       if (parentIndex === 2) continue;
       // realisation contexts complementary information
-      expect(await adminPage.getByText(`realisation context ${parentIndex}`)).toBeTruthy();
-      expect(await adminPage.getByText(`complementary information ${parentIndex} for rc 1`)).toBeTruthy();
-      expect(await adminPage.getByText(`competency element ${parentIndex}`)).toBeTruthy();
-      expect(await adminPage.getByText(`complementary information ${parentIndex} for competency element 1`)).toBeTruthy();
-      expect(await adminPage.getByText(`complementary information ${parentIndex} for pc 1 for element 1`)).toBeTruthy();
+      await expect(await adminPage.getByText(`realisation context ${parentIndex}`)).toBeTruthy();
+      await expect(await adminPage.getByText(`complementary information ${parentIndex} for rc 1`)).toBeTruthy();
+      await expect(await adminPage.getByText(`competency element ${parentIndex}`)).toBeTruthy();
+      await expect(await adminPage.getByText(`complementary information ${parentIndex} for competency element 1`)).toBeTruthy();
+      await expect(await adminPage.getByText(`complementary information ${parentIndex} for pc 1 for element 1`)).toBeTruthy();
       
       for (let pcIndex = 1; pcIndex <= 4; pcIndex++) {
         if (parentIndex === 2) continue;
-          expect(await adminPage.getByText(`performance criteria ${pcIndex} for element ${parentIndex}`)).toBeTruthy();
+          await expect(await adminPage.getByText(`performance criteria ${pcIndex} for element ${parentIndex}`)).toBeTruthy();
       }
     }
 
@@ -200,22 +199,22 @@ test.describe("ministerial competency", () => {
       adminPage.getByTestId("submit-draft-button").first().click(),
     ]);
 
-    expect(response.status()).toBe(200);
+    await expect(response.status()).toBe(200);
 
     // validation after submit
     for (let parentIndex = 1; parentIndex <= 4; parentIndex++) {
       // skipping number 2
       if (parentIndex === 2) continue;
       // realisation contexts complementary information
-      expect(await adminPage.getByText(`realisation context ${parentIndex}`)).toBeTruthy();
-      expect(await adminPage.getByText(`complementary information ${parentIndex} for rc 1`)).toBeTruthy();
-      expect(await adminPage.getByText(`competency element ${parentIndex}`)).toBeTruthy();
-      expect(await adminPage.getByText(`complementary information ${parentIndex} for competency element 1`)).toBeTruthy();
-      expect(await adminPage.getByText(`complementary information ${parentIndex} for pc 1 for element 1`)).toBeTruthy();
+      await expect(await adminPage.getByText(`realisation context ${parentIndex}`)).toBeTruthy();
+      await expect(await adminPage.getByText(`complementary information ${parentIndex} for rc 1`)).toBeTruthy();
+      await expect(await adminPage.getByText(`competency element ${parentIndex}`)).toBeTruthy();
+      await expect(await adminPage.getByText(`complementary information ${parentIndex} for competency element 1`)).toBeTruthy();
+      await expect(await adminPage.getByText(`complementary information ${parentIndex} for pc 1 for element 1`)).toBeTruthy();
       
       for (let pcIndex = 1; pcIndex <= 4; pcIndex++) {
         if (parentIndex === 2) continue;
-        expect(await adminPage.getByText(`performance criteria ${pcIndex} for element ${parentIndex}`)).toBeTruthy();
+        await expect(await adminPage.getByText(`performance criteria ${pcIndex} for element ${parentIndex}`)).toBeTruthy();
       }
     }
   });

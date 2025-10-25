@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import '~/assets/css/form.css'
+const { t } = useI18n();
 
-const emit = defineEmits(['deleteRow']);
+const emit = defineEmits<{
+    (e: 'deleteRow', competencyElementIndex: number, performanceCriteriaIndex: number): void
+}>();
+
 defineProps({
     competencyElementIndex: {
         type: Number,
@@ -22,13 +26,18 @@ const model = defineModel<PerformanceCriteria>({
     <FormATextInput
         :name="`competency.competencyElements[${competencyElementIndex}].performanceCriterias[${performanceCriteriaIndex}].value`"
         :min="3" :max="100" :required="true" v-model="model.value" />
-    <CommonAtomsAButton v-if="performanceCriteriaIndex !== 0"
+    <CommonAtomsAButton v-if="performanceCriteriaIndex !== 0" :aria-label="t('deleteButtonText')"
         :data-testid="`delete-performance-criteria-button-${competencyElementIndex}-${performanceCriteriaIndex}`"
         @click.prevent="() => emit('deleteRow', competencyElementIndex, performanceCriteriaIndex)"
         :preventDefault="true">-
     </CommonAtomsAButton>
 </template>
 
+<i18n lang="json">{
+    "fr": {
+        "deleteButtonText": "Supprimer un critère de performance",
+    }
+}</i18n>
 
 <style scoped>
 .form {
