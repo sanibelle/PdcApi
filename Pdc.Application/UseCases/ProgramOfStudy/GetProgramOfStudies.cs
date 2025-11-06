@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Pdc.Application.DTOS;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.UseCases.ProgramOfStudy;
 
 namespace Pdc.Application.UseCases;
 

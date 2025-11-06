@@ -4,6 +4,7 @@ using Pdc.Application.DTOS;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
+using Pdc.Domain.UseCases.Competency;
 
 
 namespace Pdc.Application.UseCases;

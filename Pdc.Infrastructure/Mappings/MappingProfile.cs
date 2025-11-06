@@ -97,7 +97,6 @@ public class MappingProfile : Profile
 
         // CourseFrameworkCompetency
         CreateMap<CourseFrameworkCompetency, CourseFrameworkCompetencyEntity>()
-            // TODO
             .PreserveReferences() // used for the versions references
             .ReverseMap();
 

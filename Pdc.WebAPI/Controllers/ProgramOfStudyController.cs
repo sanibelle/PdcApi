@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Pdc.Application.DTOS;
 using Pdc.Application.UseCases;
 using Pdc.Domain.Models.Security;
+using Pdc.Domain.UseCases.Competency;
+using Pdc.Domain.UseCases.ProgramOfStudy;
 using Pdc.Infrastructure.Identity;
 using Pdc.WebAPI.Services;
 
@@ -116,7 +118,6 @@ public class ProgramOfStudyController : ControllerBase
         return Ok(competency);
     }
 
-    //TODO test me
     [Authorize(Roles = Roles.Competency)]
     [HttpGet("{programOfStudyCode}/competency")]
     public async Task<ActionResult<IList<CompetencyDTO>>> GetCompetencies(string programOfStudyCode)

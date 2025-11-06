@@ -18,7 +18,6 @@ public static class AzureAdConfiguration
     public static IServiceCollection AddAzureAdAuthentication(
         this IServiceCollection services, IConfiguration configuration)
     {
-        // TODO mapper IdentityUserEntity
         services.AddIdentity<IdentityUserEntity, IdentityRole<Guid>>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
@@ -39,13 +38,11 @@ public static class AzureAdConfiguration
             {
                 OnRedirectToLogin = context =>
                 {
-                    //TODO utile?
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     return Task.CompletedTask;
                 },
                 OnRedirectToAccessDenied = context =>
                 {
-                    //TODO utile?
                     context.Response.StatusCode = StatusCodes.Status403Forbidden;
                     return Task.CompletedTask;
                 }
@@ -147,7 +144,6 @@ public static class AzureAdConfiguration
 
     private static async Task<string> GetDefaultRole(UserManager<IdentityUserEntity> userManager)
     {
-        // TODO ajouter une logique d'init de l'app qui ne fonctionne que la première fois et qui est retirée par la suite pour éviter une attaque par buffre overflow.
         var users = await userManager.GetUsersInRoleAsync(Roles.Admin);
         var role = users.Count == 0 ? Roles.Admin : Roles.User;
         return role;

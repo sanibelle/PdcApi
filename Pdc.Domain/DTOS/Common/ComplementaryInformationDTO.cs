@@ -1,11 +1,9 @@
-﻿using Pdc.Infrastructure.Entities.Identity;
-
-namespace Pdc.Application.DTOS.Common;
+﻿namespace Pdc.Application.DTOS.Common;
 
 public class ComplementaryInformationDTO
 {
     public Guid? Id { get; set; }
-    public IdentityUserEntity? ModifiedBy { get; set; }
+    public UserDTO? ModifiedBy { get; set; }
     /// <summary>
     /// Version à laquelle l'information a été ajoutée
     /// </summary>

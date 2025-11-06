@@ -4,6 +4,7 @@ using Pdc.Application.DTOS;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
+using Pdc.Domain.UseCases.ProgramOfStudy;
 
 namespace Pdc.Application.UseCases;
 

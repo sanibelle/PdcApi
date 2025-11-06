@@ -13,6 +13,7 @@ using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
+using Pdc.Domain.UseCases.Competency;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Infrastructure.Exceptions;
 using TestDataSeeder.Builders.DTOS;

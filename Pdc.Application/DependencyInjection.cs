@@ -4,6 +4,8 @@ using Pdc.Application.Mappings;
 using Pdc.Application.Services.UserService;
 using Pdc.Application.UseCases;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.UseCases.Competency;
+using Pdc.Domain.UseCases.ProgramOfStudy;
 using Pdc.Infrastructure.Repositories;
 using System.Reflection;
 

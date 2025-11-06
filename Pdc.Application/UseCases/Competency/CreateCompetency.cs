@@ -8,6 +8,7 @@ using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
+using Pdc.Domain.UseCases.Competency;
 
 namespace Pdc.Application.UseCases;
 

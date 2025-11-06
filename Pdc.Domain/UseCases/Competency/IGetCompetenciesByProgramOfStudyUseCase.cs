@@ -1,6 +1,6 @@
 ﻿using Pdc.Application.DTOS;
 
-namespace Pdc.Application.UseCases;
+namespace Pdc.Domain.UseCases.Competency;
 public interface IGetCompetenciesByProgramOfStudyUseCase
 {
     Task<IList<CompetencyDTO>> Execute(string programOfStudyCode);

@@ -12,7 +12,7 @@ using Pdc.Infrastructure.Data;
 namespace Pdc.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251023023147_InitialCreate")]
+    [Migration("20250323023147_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -258,7 +258,7 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.HasIndex("CourseFrameworkCourseCode");
 
-                    b.ToTable("CourseFrameworkCompetencies", (string)null);
+                    b.ToTable("CourseFrameworkCompetencies");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", b =>
@@ -654,7 +654,7 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.HasIndex("CompetencyId");
 
-                    b.ToTable("CompetencyElements", (string)null);
+                    b.ToTable("CompetencyElements");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", b =>
