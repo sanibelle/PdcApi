@@ -38,19 +38,6 @@ public class AppDbContext : IdentityDbContext<IdentityUserEntity, IdentityRole<G
         // C'est ce qui permet de mapper Changeables dans sa propre table.
         modelBuilder.Entity<ChangeableEntity>().ToTable("Changeables").UseTptMappingStrategy();
 
-        // TODO valider si utile.
-        //modelBuilder.Entity<CompetencyElementEntity>().ToTable("CompetencyElements").HasBaseType<ChangeableEntity>();
-        //modelBuilder.Entity<CourseFrameworkCompetencyEntity>().ToTable("CourseFrameworkCompetencies");
-
-        // If you need additional configuration for abstract classes or TPH inheritance
-        //modelBuilder.Entity<ContentElement>()
-        //    .HasDiscriminator<string>("ContentElementType")
-        //    .HasValue<CourseFrameworkContentElement>(nameof(CourseFrameworkContentElement));
-
-        //modelBuilder.Entity<ContentSpecification>()
-        //    .HasDiscriminator<string>("ContentSpecificationType")
-        //    .HasValue<CourseFrameworkContentSpecification>(nameof(CourseFrameworkContentSpecification));
-
         modelBuilder.Entity<IdentityUserLogin<Guid>>(b =>
         {
             b.HasKey(l => new { l.LoginProvider, l.ProviderKey });

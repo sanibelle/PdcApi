@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Pdc.Domain.Exceptions;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Exceptions;
@@ -34,6 +35,8 @@ public static class AzureAdConfiguration
         })
         .AddCookie(options =>
         {
+            int hours = configuration.GetValue<int>("AuthCookie:HoursTimeSpan");
+            bool isSliding = configuration.GetValue<bool>("AuthCookie:IsSliding");
             options.Events = new CookieAuthenticationEvents
             {
                 OnRedirectToLogin = context =>
@@ -47,8 +50,8 @@ public static class AzureAdConfiguration
                     return Task.CompletedTask;
                 }
             };
-            options.ExpireTimeSpan = TimeSpan.FromHours(1); // Set the expiration time for the cookie
-            options.SlidingExpiration = true; // Enable sliding expiration
+            options.ExpireTimeSpan = TimeSpan.FromHours(hours); // Set the expiration time for the cookie
+            options.SlidingExpiration = isSliding; // extends the cookie expiration by another ExpireTimeSpan on each request
         })
         .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
         {
@@ -107,15 +110,14 @@ public static class AzureAdConfiguration
         SignInManager<IdentityUserEntity> signInManager = context.HttpContext.RequestServices
         .GetRequiredService<SignInManager<IdentityUserEntity>>();
 
-        // TODO ameliorer lagestion des erreurs
         if (context.Principal == null)
         {
-            throw new Exception("context.Principal should not be null");
+            throw new AuthException("context.Principal should not be null");
         }
         string? objectId = context.Principal.FindFirstValue(AzureAdClaimTypes.ObjectId);
         if (string.IsNullOrEmpty(objectId))
         {
-            throw new Exception("Failed to find the object id");
+            throw new AuthException("Failed to find the azureAdClaimTypes object id");
         }
 
         userManager.GetUsersInRoleAsync(Roles.Admin).GetAwaiter().GetResult(); // Ensure roles are loaded
@@ -138,7 +140,6 @@ public static class AzureAdConfiguration
             await HandleIdentityResultAsync(() => userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, fullName)), "Failed to add claim");
             await HandleIdentityResultAsync(() => userManager.AddLoginAsync(user, new UserLoginInfo("AzureAD", objectId, user.UserName)), "Failed to add login");
         }
-        //TODO gérer l'expiration du cookie.
         await signInManager.SignInAsync(user, isPersistent: true);
     }
 
