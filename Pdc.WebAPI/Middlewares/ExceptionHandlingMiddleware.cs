@@ -56,6 +56,7 @@ public class ExceptionHandlingMiddleware
             NotFoundException => StatusCodes.Status404NotFound,
             DuplicateException => StatusCodes.Status409Conflict,
             AuthException => StatusCodes.Status401Unauthorized,
+            ForbiddenException => StatusCodes.Status403Forbidden, // Add this line
             _ => StatusCodes.Status500InternalServerError
         };
     }

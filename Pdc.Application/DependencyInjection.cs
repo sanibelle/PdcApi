@@ -32,6 +32,7 @@ public static class DependencyInjection
         //User
         services.AddScoped<IGetUsersUseCase, GetUsers>();
         services.AddScoped<ISetUserRolesUseCase, SetUserRoles>();
+        services.AddScoped<IGetUserUseCase, GetUser>();
 
         // Auth
         services.AddScoped<IUserService, UserService>();

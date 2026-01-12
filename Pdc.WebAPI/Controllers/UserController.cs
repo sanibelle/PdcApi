@@ -16,15 +16,18 @@ namespace Pdc.WebAPI.Controllers;
 [Route("api/[controller]")]
 public class UserController : ControllerBase
 {
+    private readonly IGetUserUseCase _getUserUseCase;
     private readonly IGetUsersUseCase _getUsersUseCase;
     private readonly ISetUserRolesUseCase _setUserRolesUseCase;
     private readonly UserControllerService _userControllerService;
 
     public UserController(
+                            IGetUserUseCase getUserUseCase,
                             IGetUsersUseCase getUsersUseCase,
                             ISetUserRolesUseCase setUserRolesUseCase,
                             UserControllerService userControllerService)
     {
+        _getUserUseCase = getUserUseCase;
         _getUsersUseCase = getUsersUseCase;
         _setUserRolesUseCase = setUserRolesUseCase;
         _userControllerService = userControllerService;
@@ -39,10 +42,19 @@ public class UserController : ControllerBase
     }
 
     [Authorize(Roles = Roles.Access)]
+    [HttpGet("{userId}")]
+    public async Task<ActionResult<UserDTO>> SetRoles(Guid userId)
+    {
+        User currentUser = _userControllerService.GetUserFromHttpContext();
+        return Ok(await _getUserUseCase.Execute(userId));
+    }
+
+    [Authorize(Roles = Roles.Access)]
     [HttpPut("{userId}/roles")]
     public async Task<ActionResult<UserDTO>> SetRoles(Guid userId, [FromBody] string[] roles)
     {
-        return Ok(await _setUserRolesUseCase.Execute(userId, roles));
+        User currentUser = _userControllerService.GetUserFromHttpContext();
+        return Ok(await _setUserRolesUseCase.Execute(userId, roles, currentUser));
     }
 
     //[Authorize(Roles = Roles.StudyProgram)]
