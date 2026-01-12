@@ -1,6 +1,6 @@
 ﻿using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
-using Pdc.Domain.UseCases.Competency;
+using Pdc.Domain.Interfaces.UseCases.Competency;
 using Pdc.Infrastructure.Exceptions;
 
 namespace Pdc.Application.UseCases;

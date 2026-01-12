@@ -4,8 +4,9 @@ using Pdc.Application.Mappings;
 using Pdc.Application.Services.UserService;
 using Pdc.Application.UseCases;
 using Pdc.Domain.Interfaces.Repositories;
-using Pdc.Domain.UseCases.Competency;
-using Pdc.Domain.UseCases.ProgramOfStudy;
+using Pdc.Domain.Interfaces.UseCases.Competency;
+using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
+using Pdc.Domain.Interfaces.UseCases.User;
 using Pdc.Infrastructure.Repositories;
 using System.Reflection;
 
@@ -17,7 +18,6 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         // ProgramOfStudy
-        services.AddScoped<IProgramOfStudyRepository, ProgramOfStudyRespository>();
         services.AddScoped<ICreateProgramOfStudyUseCase, CreateProgramOfStudy>();
         services.AddScoped<IDeleteProgramOfStudyUseCase, DeleteProgramOfStudy>();
         services.AddScoped<IGetProgramOfStudiesUseCase, GetProgramOfStudies>();
@@ -29,6 +29,9 @@ public static class DependencyInjection
         services.AddScoped<IGetCompetenciesByProgramOfStudyUseCase, GetCompetenciesByProgramOfStudy>();
         services.AddScoped<IUpdateDraftV1CompetencyUseCase, UpdateDraftV1Competency>();
         services.AddScoped<IDeleteCompetencyUseCase, DeleteCompetency>();
+        //User
+        services.AddScoped<IGetUsersUseCase, GetUsers>();
+        services.AddScoped<ISetUserRolesUseCase, SetUserRoles>();
 
         // Auth
         services.AddScoped<IUserService, UserService>();

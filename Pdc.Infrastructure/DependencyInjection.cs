@@ -38,6 +38,7 @@ public static class DependencyInjection
 
         // Register Repositories
         services.AddScoped<IProgramOfStudyRepository, ProgramOfStudyRespository>();
+        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICompetencyRepository, CompetencyRepository>();
         services.AddAutoMapper((serviceProvider, automapper) =>
         {

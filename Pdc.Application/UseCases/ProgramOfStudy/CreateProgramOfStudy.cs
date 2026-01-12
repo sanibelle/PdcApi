@@ -4,8 +4,8 @@ using FluentValidation.Results;
 using Pdc.Application.DTOS;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 using Pdc.Domain.Models.CourseFramework;
-using Pdc.Domain.UseCases.ProgramOfStudy;
 
 namespace Pdc.Application.UseCases;
 

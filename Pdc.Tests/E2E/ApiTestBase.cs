@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Pdc.Infrastructure.Identity;
 using TestDataSeeder;
@@ -20,7 +21,7 @@ public class ApiTestBase
     {
         _Client = _lazyFactory.Value.CreateClient();
         await _lazyDataSeeding.Value;
-        SwitchUserRole(Roles.Admin);
+        SwitchUserRequestingByRole(Roles.Admin);
     }
 
     [OneTimeTearDown]
@@ -48,26 +49,33 @@ public class ApiTestBase
     }
 
     /// <summary>
-    /// Switch the user role for the current test class by modifying HTTP headers
+    /// Switch the user for the current test class by modifying HTTP headers with the role
     /// </summary>
     /// <param name="role">The role to switch to</param>
-    protected void SwitchUserRole(string role)
+    protected void SwitchUserRequestingByRole(string? role)
+    {
+        switch (role)
+        {
+            case Roles.Admin:
+                SwitchUserRequesting(DataSeeder.Admin);
+                break;
+            case null:
+                SwitchUserRequesting(DataSeeder.SimpleUser);
+                break;
+            default:
+                throw new ArgumentException($"Invalid role: {role}");
+        }
+    }
+
+    // Switch the user role for the current test class by modifying HTTP headers
+    /// </summary>
+    /// <param name="role">The role to switch to</param>
+    protected void SwitchUserRequesting(IdentityUser<Guid> user)
     {
         if (_Client.DefaultRequestHeaders.Contains("Test-User"))
         {
             _Client.DefaultRequestHeaders.Remove("Test-User");
         }
-
-        switch (role)
-        {
-            case Roles.Admin:
-                _Client.DefaultRequestHeaders.Add("Test-User", DataSeeder.Admin.UserName);
-                break;
-            case Roles.User:
-                _Client.DefaultRequestHeaders.Add("Test-User", DataSeeder.User.UserName);
-                break;
-            default:
-                throw new ArgumentException($"Invalid role: {role}");
-        }
+        _Client.DefaultRequestHeaders.Add("Test-User", user.UserName);
     }
 }

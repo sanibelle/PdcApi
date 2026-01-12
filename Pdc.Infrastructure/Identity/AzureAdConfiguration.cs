@@ -134,20 +134,21 @@ public static class AzureAdConfiguration
                 Email = email,
                 EmailConfirmed = true
             };
-            string role = await GetDefaultRole(userManager);
             await HandleIdentityResultAsync(() => userManager.CreateAsync(user), "Failed to create user");
-            await HandleIdentityResultAsync(() => userManager.AddToRoleAsync(user, role), "Failed to add user to role");
+            if (await NoAdminInUserRoles(userManager))
+            {
+                await HandleIdentityResultAsync(() => userManager.AddToRoleAsync(user, Roles.Admin), "Failed to add user to role");
+            }
             await HandleIdentityResultAsync(() => userManager.AddClaimAsync(user, new Claim(ClaimTypes.Name, fullName)), "Failed to add claim");
             await HandleIdentityResultAsync(() => userManager.AddLoginAsync(user, new UserLoginInfo("AzureAD", objectId, user.UserName)), "Failed to add login");
         }
         await signInManager.SignInAsync(user, isPersistent: true);
     }
 
-    private static async Task<string> GetDefaultRole(UserManager<IdentityUserEntity> userManager)
+    private static async Task<bool> NoAdminInUserRoles(UserManager<IdentityUserEntity> userManager)
     {
         var users = await userManager.GetUsersInRoleAsync(Roles.Admin);
-        var role = users.Count == 0 ? Roles.Admin : Roles.User;
-        return role;
+        return !users.Any();
     }
 
     private static string GetEmailFromClaims(ClaimsPrincipal principal)

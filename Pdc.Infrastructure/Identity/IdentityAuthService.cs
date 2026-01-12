@@ -53,7 +53,7 @@ public class IdentityAuthService : IAuthService
         {
             Id = identityUser.Id,
             Email = identityUser.Email,
-            DisplayName =  claim.Value
+            UserName =  claim.Value
         };
     }
 

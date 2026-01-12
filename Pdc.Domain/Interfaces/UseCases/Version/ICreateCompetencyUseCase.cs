@@ -1,4 +1,4 @@
-﻿namespace Pdc.Domain.UseCases.Version;
+﻿namespace Pdc.Domain.Interfaces.UseCases.Version;
 using Pdc.Domain.Models.Versioning;
 
 public interface IApproveVersion

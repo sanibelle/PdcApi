@@ -6,4 +6,5 @@ public static class Roles
     public const string StudyProgram = "StudyProgram";
     public const string Competency = "Competency";
     public const string User = "User";
+    public const string Access = "Access";
 }

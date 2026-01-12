@@ -1,4 +1,4 @@
-﻿namespace Pdc.Domain.UseCases.ProgramOfStudy;
+﻿namespace Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 
 public interface IDeleteProgramOfStudyUseCase
 {

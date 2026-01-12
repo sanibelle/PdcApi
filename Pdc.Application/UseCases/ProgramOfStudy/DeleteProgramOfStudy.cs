@@ -1,6 +1,6 @@
 ﻿using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
-using Pdc.Domain.UseCases.ProgramOfStudy;
+using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 
 namespace Pdc.Application.UseCases;
 

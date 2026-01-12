@@ -4,11 +4,11 @@ namespace TestDataSeeder.Builders.DTOS;
 
 public class UserDTOBuilder
 {
-    private string _displayName = $"TEstUser{Guid.NewGuid().ToString().Substring(0, 8)}";
+    private string _userName = $"TEstUser{Guid.NewGuid().ToString().Substring(0, 8)}";
 
-    public UserDTOBuilder WithDisplayName(string value)
+    public UserDTOBuilder WithUserName(string value)
     {
-        _displayName = value;
+        _userName = value;
         return this;
     }
 
@@ -16,7 +16,7 @@ public class UserDTOBuilder
     {
         return new UserDTO
         {
-            DisplayName = _displayName
+            UserName = _userName
         };
     }
 
