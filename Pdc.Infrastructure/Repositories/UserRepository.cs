@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.Identity;
@@ -86,53 +87,11 @@ public class UserRepository(AppDbContext context, UserManager<IdentityUserEntity
         return user;
     }
 
-    //public async Task<ProgramOfStudy> Add(ProgramOfStudy programOfStudy)
-    //{
-    //    EntityEntry<ProgramOfStudyEntity> entity = await _context.ProgramOfStudies.AddAsync(_mapper.Map<ProgramOfStudyEntity>(programOfStudy));
-    //    await _context.SaveChangesAsync();
-    //    return _mapper.Map<ProgramOfStudy>(entity.Entity);
-    //}
-
-    //public async Task<ProgramOfStudy> Update(ProgramOfStudy programOfStudy)
-    //{
-    //    ProgramOfStudyEntity entity = await FindEntityByCode(programOfStudy.Code);
-    //    _mapper.Map(programOfStudy, entity);
-    //    EntityEntry<ProgramOfStudyEntity> updatedEntity = _context.ProgramOfStudies.Update(entity);
-    //    await _context.SaveChangesAsync();
-    //    return _mapper.Map<ProgramOfStudy>(updatedEntity.Entity);
-    //}
-
-    //public async Task Delete(string code)
-    //{
-    //    ProgramOfStudyEntity entity = await FindEntityByCode(code);
-    //    _context.ProgramOfStudies.Remove(entity);
-    //    await _context.SaveChangesAsync();
-    //}
-
-    //public async Task<ProgramOfStudy> FindByCode(string code)
-    //{
-    //    ProgramOfStudyEntity entity = await FindEntityByCode(code);
-    //    return _mapper.Map<ProgramOfStudy>(entity);
-    //}
-
-    //private async Task<ProgramOfStudyEntity> FindEntityByCode(string code)
-    //{
-    //    ProgramOfStudyEntity? program = await _context.ProgramOfStudies
-    //        .Include(p => p.GeneralUnits)
-    //        .Include(p => p.ComplementaryUnits)
-    //        .Include(p => p.SpecificUnits)
-    //        .Include(p => p.OptionalUnits)
-    //        .SingleOrDefaultAsync(x => x.Code == code);
-    //    if (program == null)
-    //    {
-    //        throw new EntityNotFoundException(nameof(ProgramOfStudy), code);
-    //    }
-    //    return program;
-    //}
-
-    //public async Task<bool> ExistsByCode(string code)
-    //{
-    //    return await _context.ProgramOfStudies
-    //        .AnyAsync(x => x.Code == code);
-    //}
+    public async Task<IList<string>> GetAllRoles()
+    {
+        return await _context.Roles
+            .Select(r => r.Name)
+            .Cast<string>()
+            .ToListAsync();
+    }
 }

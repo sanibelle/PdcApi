@@ -9,4 +9,5 @@ public interface IUserRepository
     Task AddUserRoles(Guid userId, IList<string> roles);
     Task RemoveUserRoles(Guid userId, IList<string> rolesToRemove);
     Task<IList<string>> FindUserRolesByUserId(Guid userId);
+    Task<IList<string>> GetAllRoles();
 }

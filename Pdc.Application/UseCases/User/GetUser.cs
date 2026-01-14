@@ -2,27 +2,26 @@
 using Pdc.Application.DTOS.Common;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
-using Pdc.Domain.Interfaces.UseCases.User;
 using Pdc.Domain.Models.Security;
-using Pdc.Infrastructure.Identity;
+using Pdc.Infrastructure.Exceptions;
 
 namespace Pdc.Application.UseCases;
 
-public class GetUser : IGetUserUseCase
+public class GetUser(IUserRepository userRepository, IMapper mapper) : IGetUserUseCase
 {
-    private readonly IUserRepository _userRepository;
-    private readonly IAuthService _authService;
-    private readonly IMapper _mapper;
-
-    public GetUser(IUserRepository userRepository, IMapper mapper)
-    {
-        _userRepository = userRepository;
-        _mapper = mapper;
-    }
+    private readonly IUserRepository _userRepository = userRepository;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<UserDTO> Execute(Guid userId)
     {
-        User user = await _userRepository.FindUserById(userId);
-        return _mapper.Map<UserDTO>(user);
+        try
+        {
+            User user = await _userRepository.FindUserById(userId);
+            return _mapper.Map<UserDTO>(user);
+        }
+        catch (EntityNotFoundException)
+        {
+            throw new NotFoundException();
+        }
     }
 }
