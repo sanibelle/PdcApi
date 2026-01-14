@@ -10,6 +10,7 @@ namespace Pdc.E2ETests;
 public class UserApiTests : ApiTestBase
 {
     private IdentityRole<Guid> _competencyRole = null!;
+    private IdentityRole<Guid> _userRole = null!;
     private IdentityRole<Guid> _adminRole = null!;
 
     [OneTimeSetUp]
@@ -19,6 +20,8 @@ public class UserApiTests : ApiTestBase
             ?? throw new InvalidOperationException($"Role '{Roles.Competency}' not found in existing roles.");
         _adminRole = DataSeeder.ExistingRoles.Find(x => x.Name == Roles.Admin)
             ?? throw new InvalidOperationException($"Role '{Roles.Admin}' not found in existing roles.");
+        _userRole = DataSeeder.ExistingRoles.Find(x => x.Name == Roles.User)
+            ?? throw new InvalidOperationException($"Role '{Roles.User}' not found in existing roles.");
     }
 
     [Test]
@@ -72,16 +75,16 @@ public class UserApiTests : ApiTestBase
         var user = users.FirstOrDefault(x => x.Id == DataSeeder.UserForRoleTest.Id);
         Assert.That(user, Is.Not.Null);
         Assert.That(user.Id, Is.EqualTo(DataSeeder.UserForRoleTest.Id));
-        Assert.That(user.Roles.Any(x => x == _competencyRole.Name), Is.False);
+        Assert.That(user.Roles.Any(x => x == _userRole.Name), Is.False);
 
-        // Act - Add competency role to the user
+        // Act - Add user role to the user
         var roles = user.Roles.ToList();
-        roles.Add(_competencyRole.Name!);
+        roles.Add(_userRole.Name!);
 
         response = await _Client.PutAsJsonAsync($"/api/user/{DataSeeder.UserForRoleTest.Id}/roles", roles);
         user = await response.Content.ReadFromJsonAsync<User>();
         Assert.That(user, Is.Not.Null);
-        Assert.That(user.Roles.Any(x => x == _competencyRole.Name), Is.True);
+        Assert.That(user.Roles.Any(x => x == _userRole.Name), Is.True);
 
         // Act - Add admin role to the user
         roles.Add(_adminRole.Name);
@@ -90,7 +93,7 @@ public class UserApiTests : ApiTestBase
         
         // Assert - User should have both roles
         Assert.That(user, Is.Not.Null);
-        Assert.That(user.Roles.Any(x => x == _competencyRole.Name), Is.True);
+        Assert.That(user.Roles.Any(x => x == _userRole.Name), Is.True);
         Assert.That(user.Roles.Any(x => x == _adminRole.Name), Is.True);
     }
 

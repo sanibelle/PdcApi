@@ -43,7 +43,7 @@ public class UserController : ControllerBase
 
     [Authorize(Roles = Roles.Access)]
     [HttpGet("{userId}")]
-    public async Task<ActionResult<UserDTO>> SetRoles(Guid userId)
+    public async Task<ActionResult<UserDTO>> SetRoles(Guid userId)  
     {
         User currentUser = _userControllerService.GetUserFromHttpContext();
         return Ok(await _getUserUseCase.Execute(userId));
@@ -57,19 +57,4 @@ public class UserController : ControllerBase
         return Ok(await _setUserRolesUseCase.Execute(userId, roles, currentUser));
     }
 
-    //[Authorize(Roles = Roles.StudyProgram)]
-    //[HttpPut("{code}")]
-    //public async Task<IActionResult> Update(string code, [FromBody] ProgramOfStudyDTO programOfStudyDTO)
-    //{
-    //    var program = await _updateUseCase.Execute(code, programOfStudyDTO);
-    //    return Ok(program);
-    //}
-
-    //[Authorize(Roles = Roles.StudyProgram)]
-    //[HttpDelete("{code}")]
-    //public async Task<IActionResult> Delete(string code)
-    //{
-    //    await _deleteProgramOfStudyUseCase.Execute(code);
-    //    return NoContent();
-    //}
 }
