@@ -6,8 +6,8 @@ public interface IUserRepository
 {
     Task<List<User>> GetUsersWithRoles();
     Task<User> FindUserById(Guid userId);
-    Task AddUserRoles(Guid userId, IList<string> roles);
-    Task RemoveUserRoles(Guid userId, IList<string> rolesToRemove);
+    Task<User> SetUserRoles(Guid userId, IList<string> rolesToAdd, IList<string> rolesToRemove);
     Task<IList<string>> FindUserRolesByUserId(Guid userId);
     Task<IList<string>> GetAllRoles();
+    bool IsAdminRoleInArray(IList<string> roles);
 }

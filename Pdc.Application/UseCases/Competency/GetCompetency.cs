@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using Pdc.Application.DTOS;
-using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Interfaces.UseCases.Competency;
 using Pdc.Domain.Models.MinisterialSpecification;
-using Pdc.Infrastructure.Exceptions;
 
 namespace Pdc.Application.UseCases;
 
@@ -21,14 +19,7 @@ public class GetCompetency : IGetCompetencyUseCase
 
     public async Task<CompetencyDTO> Execute(string programOfStudyCode, string competencyCode)
     {
-        try
-        {
             MinisterialCompetency competency = await _competencyRepository.FindByCode(competencyCode);
             return _mapper.Map<CompetencyDTO>(competency);
-        }
-        catch (EntityNotFoundException)
-        {
-            throw new NotFoundException();
-        }
     }
 }

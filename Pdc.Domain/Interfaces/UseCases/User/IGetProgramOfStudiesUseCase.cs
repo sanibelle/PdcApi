@@ -1,4 +1,4 @@
-﻿using Pdc.Application.DTOS.Common;
+﻿using Pdc.Domain.DTOS.Common;
 
 namespace Pdc.Domain.Interfaces.UseCases.User;
 public interface IGetUsersUseCase

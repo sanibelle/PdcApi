@@ -47,9 +47,9 @@ public class ProgramOfStudyTest
         _programOfStudyRepositoryMock.Setup(repo => repo.Delete(It.IsAny<string>())).Returns(Task.CompletedTask);
         _programOfStudyRepositoryMock.Setup(repo => repo.Update(It.IsAny<ProgramOfStudy>())).ReturnsAsync(program);
         _programOfStudyRepositoryMock.Setup(repo => repo.GetAll()).ReturnsAsync(new List<ProgramOfStudy> { throwsNotFoundProgram, program });
-        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsNotIn(program.Code, throwsNotFoundProgram.Code))).ThrowsAsync(new EntityNotFoundException(nameof(ProgramOfStudy), "12345"));
+        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.IsNotIn(program.Code, throwsNotFoundProgram.Code))).ThrowsAsync(new NotFoundException(nameof(ProgramOfStudy), "12345"));
         _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(c => c == program.Code))).ReturnsAsync(program);
-        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(c => c == throwsNotFoundProgram.Code))).Throws(new EntityNotFoundException(nameof(ProgramOfStudy), throwsNotFoundProgram.Code));
+        _programOfStudyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(c => c == throwsNotFoundProgram.Code))).Throws(new NotFoundException(nameof(ProgramOfStudy), throwsNotFoundProgram.Code));
         _programOfStudyRepositoryMock.Setup(repo => repo.ExistsByCode(It.Is<string>(c => c == throwsNotFoundProgram.Code))).ReturnsAsync(true);
     }
 

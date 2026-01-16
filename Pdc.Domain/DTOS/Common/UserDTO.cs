@@ -1,4 +1,4 @@
-﻿namespace Pdc.Application.DTOS.Common;
+﻿namespace Pdc.Domain.DTOS.Common;
 
 public class UserDTO
 {

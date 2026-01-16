@@ -15,14 +15,6 @@ public class DeleteProgramOfStudy : IDeleteProgramOfStudyUseCase
 
     public async Task Execute(string code)
     {
-        try
-        {
-            await _programOfStudyRepository.FindByCode(code);
-        }
-        catch
-        {
-            throw new NotFoundException();
-        }
         await _programOfStudyRepository.Delete(code);
     }
 }

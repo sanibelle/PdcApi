@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using Pdc.Application.DTOS.Common;
+using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.Security;
-using Pdc.Infrastructure.Exceptions;
-using Pdc.Infrastructure.Identity;
 
 namespace Pdc.Application.UseCases;
 
@@ -25,27 +23,19 @@ public class SetUserRoles : ISetUserRolesUseCase
         IList<string> currentRoles = await GetUserRoles(userId);
         PreventAdminFromDemotingSelf(userId, targetRoles, currentUser, currentRoles);
 
-        List<string> rolesToAdd = targetRoles.Where(x => !currentRoles.Any(r => r == x)).ToList();
-        List<string> rolesToRemove = currentRoles.Where(x => !targetRoles.Any(r => r == x)).ToList();
+        List<string> rolesToAdd = targetRoles.Except(currentRoles).ToList();
+        List<string> rolesToRemove = currentRoles.Except(targetRoles).ToList();
 
-        if (rolesToAdd.Any())
-        {
-            await _userRepository.AddUserRoles(userId, rolesToAdd);
-        }
-        if (rolesToRemove.Any())
-        {
-            await _userRepository.RemoveUserRoles(userId, rolesToRemove);
-        }
-
-        User user = await _userRepository.FindUserById(userId);
+        User user = await _userRepository.SetUserRoles(userId, rolesToAdd, rolesToRemove);
         return _mapper.Map<UserDTO>(user);
     }
 
-    private void PreventAdminFromDemotingSelf(Guid userId, string[] targetRoles, User currentUser, IList<string> currentRoles)
+    private async void PreventAdminFromDemotingSelf(Guid userId, IList<string> targetRoles, User currentUser, IList<string> currentRoles)
     {
+        ;
         if (currentUser.Id == userId &&
-                    currentRoles.Contains(Roles.Admin) &&
-                    !targetRoles.Contains(Roles.Admin))
+                    _userRepository.IsAdminRoleInArray(currentRoles) &&
+                    !_userRepository.IsAdminRoleInArray(targetRoles))
         {
             throw new ForbiddenException("You cannot remove your own admin role.");
         }
@@ -53,15 +43,7 @@ public class SetUserRoles : ISetUserRolesUseCase
 
     private async Task<IList<string>> GetUserRoles(Guid userId)
     {
-        try
-        {
-            return await _userRepository.FindUserRolesByUserId(userId);
-        }
-        catch (EntityNotFoundException ex)
-        {
-            throw new NotFoundException(ex.Message);
-        }
-
+        return await _userRepository.FindUserRolesByUserId(userId);
     }
 
     private async Task IsTargetRolesExists(string[] targetRoles)

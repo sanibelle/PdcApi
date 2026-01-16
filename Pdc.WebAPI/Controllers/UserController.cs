@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pdc.Application.DTOS;
-using Pdc.Application.DTOS.Common;
 using Pdc.Application.UseCases;
+using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Interfaces.UseCases.Competency;
 using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 using Pdc.Domain.Interfaces.UseCases.User;
@@ -33,7 +33,7 @@ public class UserController : ControllerBase
         _userControllerService = userControllerService;
     }
 
-    [Authorize(Roles = Roles.Access)]
+    [Authorize(Roles = Roles.User)]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
     {
@@ -41,7 +41,8 @@ public class UserController : ControllerBase
         return Ok(users);
     }
 
-    [Authorize(Roles = Roles.Access)]
+    // only the admin can set the roles of other users
+    [Authorize(Roles = Roles.Admin)]
     [HttpGet("{userId}")]
     public async Task<ActionResult<UserDTO>> SetRoles(Guid userId)  
     {
@@ -49,9 +50,9 @@ public class UserController : ControllerBase
         return Ok(await _getUserUseCase.Execute(userId));
     }
 
-    [Authorize(Roles = Roles.Access)]
+    [Authorize(Roles = Roles.User)]
     [HttpPut("{userId}/roles")]
-    public async Task<ActionResult<UserDTO>> SetRoles(Guid userId, [FromBody] string[] roles)
+    public async Task<ActionResult<UserDTO>> GetRoles(Guid userId, [FromBody] string[] roles)
     {
         User currentUser = _userControllerService.GetUserFromHttpContext();
         return Ok(await _setUserRolesUseCase.Execute(userId, roles, currentUser));

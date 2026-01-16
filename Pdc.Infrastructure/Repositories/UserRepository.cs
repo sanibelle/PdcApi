@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Exceptions;
+using Pdc.Infrastructure.Identity;
 
 namespace Pdc.Infrastructure.Repositories;
 
@@ -37,6 +39,7 @@ public class UserRepository(AppDbContext context, UserManager<IdentityUserEntity
             User user = _mapper.Map<User>(x.User);
             user.Roles = x.Roles
                 .Select(r => r.Name)
+                .Where(x => x != null)
                 .Cast<string>()
                 .ToList();
             return user;
@@ -45,22 +48,32 @@ public class UserRepository(AppDbContext context, UserManager<IdentityUserEntity
         return users;
     }
 
-    public async Task AddUserRoles(Guid userId, IList<string> roles)
+    public async Task<User> SetUserRoles(Guid userId, IList<string> rolesToAdd, IList<string> rolesToRemove)
     {
         IdentityUserEntity user = await FindUserEntityByIdAndThrowIfNull(userId);
-        foreach (var role in roles)
-        { 
-            await _userManager.AddToRoleAsync(user, role);
-        }
-    }
-
-    public async Task RemoveUserRoles(Guid userId, IList<string> roles)
-    {
-        IdentityUserEntity user = await FindUserEntityByIdAndThrowIfNull(userId);
-        foreach (var role in roles)
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        try
         {
-            await _userManager.RemoveFromRoleAsync(user, role);
+            foreach (var role in rolesToAdd)
+            {
+                IdentityResult addResult = await _userManager.AddToRoleAsync(user, role);
+                if (!addResult.Succeeded)
+                    throw new Exception("Failed to add role");
+            }
+            foreach (var role in rolesToRemove)
+            {
+                IdentityResult removeResult = await _userManager.RemoveFromRoleAsync(user, role);
+                if (!removeResult.Succeeded)
+                    throw new Exception("Failed to remove role");
+            }
+            await transaction.CommitAsync();
         }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
+        return await FindUserById(userId);
     }
 
     public async Task<User> FindUserById(Guid userId)
@@ -83,7 +96,7 @@ public class UserRepository(AppDbContext context, UserManager<IdentityUserEntity
         var user = await _context.Users
             .FirstOrDefaultAsync(x => x.Id == userId);
         if (user == null)
-            throw new EntityNotFoundException(nameof(User), userId);
+            throw new NotFoundException(nameof(User), userId);
         return user;
     }
 
@@ -91,7 +104,13 @@ public class UserRepository(AppDbContext context, UserManager<IdentityUserEntity
     {
         return await _context.Roles
             .Select(r => r.Name)
+            .Where(x => x != null)
             .Cast<string>()
             .ToListAsync();
+    }
+
+    public bool IsAdminRoleInArray(IList<string> roles)
+    {
+        return roles.Contains(Roles.Admin);
     }
 }

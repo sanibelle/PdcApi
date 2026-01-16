@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Pdc.Application.DTOS.Common;
 using Pdc.Application.Services.UserService;
+using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Models.Security;
 
 namespace Pdc.WebAPI.Controllers

@@ -1,4 +1,6 @@
-﻿namespace Pdc.Application.DTOS.Common;
+﻿using Pdc.Domain.DTOS.Common;
+
+namespace Pdc.Application.DTOS.Common;
 
 /// <summary>
 /// Used for CompetencyElements and Performance criterias.

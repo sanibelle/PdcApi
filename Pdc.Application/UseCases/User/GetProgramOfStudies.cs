@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using Pdc.Application.DTOS;
-using Pdc.Application.DTOS.Common;
+using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Interfaces.UseCases.User;
 

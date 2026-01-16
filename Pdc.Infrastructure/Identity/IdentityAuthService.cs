@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.Security;
 using Pdc.Infrastructure.Entities.Identity;
@@ -33,7 +34,7 @@ public class IdentityAuthService : IAuthService
         ClaimsPrincipal? user = _httpContextAccessor.HttpContext?.User;
         if (user == null || !user.Identity?.IsAuthenticated == true)
         {
-            throw new EntityNotFoundException(nameof(IdentityUserEntity), "current user not found");
+            throw new NotFoundException(nameof(IdentityUserEntity), "current user not found");
         }
 
 
@@ -41,7 +42,7 @@ public class IdentityAuthService : IAuthService
             ?? throw new ClaimNotFoundException(ClaimTypes.NameIdentifier);
 
         IdentityUserEntity? identityUser = await _userManager.FindByIdAsync(userId)
-            ?? throw new EntityNotFoundException(nameof(IdentityUserEntity), "userId not found");
+            ?? throw new NotFoundException(nameof(IdentityUserEntity), "userId not found");
 
         IList<Claim> claims = await _userManager.GetClaimsAsync(identityUser)
             ?? throw new ClaimNotFoundException("ClaimsList");
@@ -81,7 +82,7 @@ public class IdentityAuthService : IAuthService
 
     public async Task AssignRoleAsync(string userId, string role)
     {
-        var identityUser = await _userManager.FindByIdAsync(userId) ?? throw new EntityNotFoundException(nameof(IdentityUserEntity), userId);
+        var identityUser = await _userManager.FindByIdAsync(userId) ?? throw new NotFoundException(nameof(IdentityUserEntity), userId);
         var result = await _userManager.AddToRoleAsync(identityUser, role);
     }
 }

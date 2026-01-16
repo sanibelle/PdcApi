@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
+using Pdc.Domain.DTOS.Common;
 
 namespace Pdc.Application.Validators;
 
