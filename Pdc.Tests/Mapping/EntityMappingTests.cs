@@ -132,7 +132,7 @@ internal class EntityMappingTests
         var user = _mapper.Map<User>(_user);
 
         Assert.That(user.Email == _user.Email);
-        // TODO Assert.That(user.DisplayName == _identityUserEntity.Name);
+        Assert.That(user.UserName == _user.UserName);
         Assert.That(user.Id == _user.Id);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Infrastructure.Data;
@@ -65,7 +66,7 @@ public class ProgramOfStudyRespository : IProgramOfStudyRepository
             .SingleOrDefaultAsync(x => x.Code == code);
         if (program == null)
         {
-            throw new EntityNotFoundException(nameof(ProgramOfStudy), code);
+            throw new NotFoundException(nameof(ProgramOfStudy), code);
         }
         return program;
     }

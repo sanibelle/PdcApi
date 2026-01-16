@@ -12,7 +12,6 @@ public class UserService : IUserService
         _authService = authService;
     }
 
-    //TODO valider l'utilité
     public async Task<User> GetCurrentUserInfoAsync() => await _authService.GetCurrentUserAsync();
 
     public async Task<bool> CanAccessAdminSectionAsync() => await _authService.IsInRoleAsync("Administrator");

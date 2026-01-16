@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Pdc.Application.DTOS.Common;
 using Pdc.Application.Services.UserService;
+using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Models.Security;
 
 namespace Pdc.WebAPI.Controllers
@@ -41,7 +41,7 @@ namespace Pdc.WebAPI.Controllers
             // Load trusted redirect URIs and default from configuration
             var allowed = (_configuration["Cors:AllowedOrigins"] ?? "")
                                       .Split(',', StringSplitOptions.RemoveEmptyEntries);
-            var redirectUri = _configuration["DefaultRedirectUri"]
+            var redirectUri = _configuration["DefaultRedirectUriAfterLogin"]
                                      ?? throw new InvalidOperationException("No default redirect URI configured.");
 
             if (uri is not null
@@ -62,8 +62,10 @@ namespace Pdc.WebAPI.Controllers
             // Pour l'instant, ça crée de la confusion au dev, mais  aussi au pirate alors je crois qu'on va appeler ça un "feature"
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-            // TODO redirect sur la page d'acceuil de mon app.
-            return Redirect("/");
+
+            var redirectUri = _configuration["DefaultRedirectUriAfterLogout"]
+                         ?? throw new InvalidOperationException("No default redirect URI configured.");
+            return Redirect(redirectUri);
         }
 
         [Authorize]

@@ -13,7 +13,7 @@ internal class Role : ISeeder<List<IdentityRole<Guid>>>
 
     public async Task<List<IdentityRole<Guid>>> SeedAsync()
     {
-        var roles = new List<IdentityRole<Guid>>(); // Declare and initialize the 'roles' variable  
+        var roles = new List<IdentityRole<Guid>>();
 
         foreach (var property in typeof(Roles).GetFields())
         {
@@ -23,10 +23,10 @@ internal class Role : ISeeder<List<IdentityRole<Guid>>>
                 throw new Exception("Failed to get the constant value of a role");
             }
 
-            var role = new IdentityRole<Guid>(name); // Create a new role  
-            roles.Add(role); // Add the role to the list  
-            await _roleManager.CreateAsync(role); // Create the role using the role manager  
+            var role = new IdentityRole<Guid>(name); 
+            roles.Add(role);
+            await _roleManager.CreateAsync(role);
         }
-        return roles; // Return the list of roles  
+        return roles;
     }
 }

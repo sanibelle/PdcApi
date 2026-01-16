@@ -17,7 +17,6 @@ public class ExceptionHandlingMiddleware
     {
         try
         {
-            //TODO ajouter la gestion des erreurs de connexion à microsoft ailleurs qu'ici pour passer un 401
             await _next(context);
         }
         catch (Exception ex)
@@ -56,6 +55,8 @@ public class ExceptionHandlingMiddleware
             FluentValidation.ValidationException => StatusCodes.Status422UnprocessableEntity,
             NotFoundException => StatusCodes.Status404NotFound,
             DuplicateException => StatusCodes.Status409Conflict,
+            AuthException => StatusCodes.Status401Unauthorized,
+            ForbiddenException => StatusCodes.Status403Forbidden, // Add this line
             _ => StatusCodes.Status500InternalServerError
         };
     }

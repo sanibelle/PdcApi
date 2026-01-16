@@ -6,8 +6,11 @@ using Pdc.Application.DTOS.Common;
 using Pdc.Application.Mappings;
 using Pdc.Application.UseCases;
 using Pdc.Application.Validators;
+using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Enums;
+using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Interfaces.UseCases.Competency;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
@@ -186,7 +189,7 @@ public class MinisterialCompetencyTest
         // Setup Competency Repository mock
         _competencyRepositoryMock.Setup(repo => repo.Add(It.IsAny<ProgramOfStudy>(), It.IsAny<MinisterialCompetency>())).ReturnsAsync(_competency2);
         _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _competency1.Code))).ReturnsAsync(_competency1);
-        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x != _competency1.Code))).Throws(new EntityNotFoundException(nameof(CompetencyEntity), _competency2.Code));
+        _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x != _competency1.Code))).Throws(new NotFoundException(nameof(CompetencyEntity), _competency2.Code));
         _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _competencyToUpdateV1Draft.Code))).ReturnsAsync(_competencyToUpdateV1Draft);
         _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _competencyToUpdateV1NotDraft.Code))).ReturnsAsync(_competencyToUpdateV1NotDraft);
         _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.Is<string>(x => x == _competencyToUpdateV2Draft.Code))).ReturnsAsync(_competencyToUpdateV2Draft);
@@ -196,7 +199,7 @@ public class MinisterialCompetencyTest
         //    _competencyRepositoryMock.Setup(repo => repo.FindByCode(program1.Code, competency1.Code)).ReturnsAsync(competency1);
         //    _competencyRepositoryMock.Setup(repo => repo.FindByCode(program2.Code, competency2.Code)).ReturnsAsync(competency2);
         //    _competencyRepositoryMock.Setup(repo => repo.FindByCode(It.IsAny<string>(), It.IsIn(codeOfAFakeCompetency)))
-        //        .Throws(new EntityNotFoundException(nameof(MinisterialCompetency), codeOfAFakeCompetency));
+        //        .Throws(new NotFoundException(nameof(MinisterialCompetency), codeOfAFakeCompetency));
 
 
 
@@ -522,7 +525,7 @@ public class MinisterialCompetencyTest
     //public void GetCompetency_WithInvalidCode_ShouldThrowException()
     //{
     //    // Act & Assert
-    //    Assert.ThrowsAsync<EntityNotFoundException>(async () =>
+    //    Assert.ThrowsAsync<NotFoundException>(async () =>
     //        await _getCompetencyUseCase.Execute(program1.Code, codeOfAFakeCompetency));
     //}
 

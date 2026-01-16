@@ -1,5 +1,4 @@
-﻿// TODO $$$$ Payer fluent assertion
-using FluentAssertions;
+﻿using FluentAssertions;
 using Pdc.Application.DTOS;
 using Pdc.Domain.Models.Common;
 using System.Net.Http.Json;

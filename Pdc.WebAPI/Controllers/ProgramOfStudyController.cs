@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pdc.Application.DTOS;
 using Pdc.Application.UseCases;
+using Pdc.Domain.Interfaces.UseCases.Competency;
+using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 using Pdc.Domain.Models.Security;
 using Pdc.Infrastructure.Identity;
 using Pdc.WebAPI.Services;
@@ -22,7 +24,6 @@ public class ProgramOfStudyController : ControllerBase
     private readonly IGetProgramOfStudyUseCase _getUseCase;
     private readonly IGetCompetencyUseCase _getCompetencyUseCase;
     private readonly IGetCompetenciesByProgramOfStudyUseCase _getCompetenciesByProgramOfStudyUseCase;
-    private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly UserControllerService _userControllerService;
 
     public ProgramOfStudyController(ICreateProgramOfStudyUseCase createUseCase,
@@ -35,8 +36,7 @@ public class ProgramOfStudyController : ControllerBase
                                     IUpdateDraftV1CompetencyUseCase updateDraftV1CompetencyUseCase,
                                     IGetCompetenciesByProgramOfStudyUseCase getCompetenciesByProgramOfStudyUseCase,
                                     IGetCompetencyUseCase getCompetencyUseCase,
-                                    UserControllerService userControllerService,
-                                    IHttpContextAccessor httpContextAccessor)
+                                    UserControllerService userControllerService)
     {
         _createUseCase = createUseCase;
         _deleteProgramOfStudyUseCase = deleteProgramOfStudyUseCase;
@@ -49,7 +49,6 @@ public class ProgramOfStudyController : ControllerBase
         _getCompetencyUseCase = getCompetencyUseCase;
         _getCompetenciesByProgramOfStudyUseCase = getCompetenciesByProgramOfStudyUseCase;
         _userControllerService = userControllerService;
-        _httpContextAccessor = httpContextAccessor;
     }
 
     #region ProgramOfStudy
@@ -99,7 +98,7 @@ public class ProgramOfStudyController : ControllerBase
     [HttpPost("{programOfStudyCode}/competency")]
     public async Task<ActionResult<CompetencyDTO>> AddCompetency(string programOfStudyCode, [FromBody] CompetencyDTO createCompetencyDTO)
     {
-        User user = _userControllerService.GetUserFromHttpContext(_httpContextAccessor);
+        User user = _userControllerService.GetUserFromHttpContext();
         CompetencyDTO competency = await _createCompetencyUseCase.Execute(programOfStudyCode, createCompetencyDTO, user);
 
         return CreatedAtAction(
@@ -116,7 +115,6 @@ public class ProgramOfStudyController : ControllerBase
         return Ok(competency);
     }
 
-    //TODO test me
     [Authorize(Roles = Roles.Competency)]
     [HttpGet("{programOfStudyCode}/competency")]
     public async Task<ActionResult<IList<CompetencyDTO>>> GetCompetencies(string programOfStudyCode)
@@ -129,7 +127,7 @@ public class ProgramOfStudyController : ControllerBase
     [HttpPut("{programOfStudyCode}/competency/{competencyCode}")]
     public async Task<ActionResult<CompetencyDTO>> UpdateCompetency(string programOfStudyCode, string competencyCode, [FromBody] CompetencyDTO updateCompetencyDTO)
     {
-        User user = _userControllerService.GetUserFromHttpContext(_httpContextAccessor);
+        User user = _userControllerService.GetUserFromHttpContext();
         if (updateCompetencyDTO.VersionNumber == 1 && updateCompetencyDTO.IsDraft)
         {
             CompetencyDTO competency = await _updateDraftV1CompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO, user);

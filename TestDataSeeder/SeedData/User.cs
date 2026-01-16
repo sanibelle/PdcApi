@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Pdc.Infrastructure.Entities.Identity;
 
 namespace TestDataSeeder.SeedData;
@@ -11,7 +12,7 @@ internal class User
         _userManager = userManager;
     }
 
-    public async Task<IdentityUserEntity> SeedAsync(string role)
+    public async Task<IdentityUserEntity> SeedAsync(string? role = null)
     {
         var user = new IdentityUserEntity
         {
@@ -20,13 +21,15 @@ internal class User
             EmailConfirmed = true
         };
 
-        var result = await _userManager.CreateAsync(user);
-        var roleResult = await _userManager.AddToRoleAsync(user, role);
-
-        if (!result.Succeeded || !roleResult.Succeeded)
+        IdentityResult result = await _userManager.CreateAsync(user);
+        if (!string.IsNullOrEmpty(role))
         {
-            throw new Exception($"Failed to create user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            var roleResult = await _userManager.AddToRoleAsync(user, role);
+            if (!result.Succeeded || !roleResult.Succeeded)
+            {
+                throw new Exception($"Failed to create user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+            }
         }
-        return user;
+        return await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == user.UserName);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
-using Pdc.Application.DTOS.Common;
 using Pdc.Domain;
+using Pdc.Domain.DTOS.Common;
 
 namespace Pdc.Application.Validators;
 

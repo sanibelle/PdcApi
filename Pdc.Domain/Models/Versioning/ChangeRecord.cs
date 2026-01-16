@@ -28,11 +28,11 @@ public class ChangeRecord
     /// <summary>
     /// Who created the version
     /// </summary>
-    public User? CreatedBy { get; set; } // TODO faire un useCase pour valider la version.
+    public User? CreatedBy { get; set; }
     /// <summary>
     /// Who validated the version (changed IsDraft to false)
     /// </summary>
-    public User? ValidatedBy { get; set; } // TODO faire un useCase pour valider la version.
+    public User? ValidatedBy { get; set; }
     /// <summary>
     /// When the version changed IsDraft to false
     /// </summary>

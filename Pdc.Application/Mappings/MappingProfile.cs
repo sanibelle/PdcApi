@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
+using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
@@ -31,7 +32,7 @@ public class MappingProfile : Profile
         CreateMap<ComplementaryInformationDTO, ComplementaryInformation>()
         .ForMember(dest => dest.CreatedBy, opt =>
         {
-            opt.Condition(src => !string.IsNullOrEmpty(src.CreatedBy?.DisplayName)); // Only map if source has CreatedBy
+            opt.Condition(src => !string.IsNullOrEmpty(src.CreatedBy?.UserName)); // Only map if source has CreatedBy
             opt.MapFrom(src => src.CreatedBy);
         })
         .ForMember(dest => dest.WrittenOnVersion, opt => opt.Ignore())

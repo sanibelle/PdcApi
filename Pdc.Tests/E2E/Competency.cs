@@ -3,6 +3,7 @@ using FluentAssertions;
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
 using Pdc.Application.Validators;
+using Pdc.Domain.DTOS.Common;
 using System.Net;
 using System.Net.Http.Json;
 using TestDataSeeder;

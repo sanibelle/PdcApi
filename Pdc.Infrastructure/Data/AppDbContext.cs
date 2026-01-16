@@ -30,28 +30,13 @@ public class AppDbContext : IdentityDbContext<IdentityUserEntity, IdentityRole<G
     public DbSet<ContentElementEntity> ContentElements { get; set; }
     public DbSet<CourseFrameworkEntity> CourseFrameworks { get; set; }
     public DbSet<ChangeDetailEntity> ChangeDetails { get; set; }
-    //TODO voir si c'est toujours utile quand je vais faire la migration ultime
-    //public DbSet<IdentityUserEntity> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
-        // Changeable sera directement intégré dans les classes qui l'utilisent
+        // C'est ce qui permet de mapper Changeables dans sa propre table.
         modelBuilder.Entity<ChangeableEntity>().ToTable("Changeables").UseTptMappingStrategy();
-
-        // TODO valider si utile.
-        modelBuilder.Entity<CompetencyElementEntity>().ToTable("CompetencyElements").HasBaseType<ChangeableEntity>();
-        modelBuilder.Entity<CourseFrameworkCompetencyEntity>().ToTable("CourseFrameworkCompetencies");
-
-        // If you need additional configuration for abstract classes or TPH inheritance
-        //modelBuilder.Entity<ContentElement>()
-        //    .HasDiscriminator<string>("ContentElementType")
-        //    .HasValue<CourseFrameworkContentElement>(nameof(CourseFrameworkContentElement));
-
-        //modelBuilder.Entity<ContentSpecification>()
-        //    .HasDiscriminator<string>("ContentSpecificationType")
-        //    .HasValue<CourseFrameworkContentSpecification>(nameof(CourseFrameworkContentSpecification));
 
         modelBuilder.Entity<IdentityUserLogin<Guid>>(b =>
         {

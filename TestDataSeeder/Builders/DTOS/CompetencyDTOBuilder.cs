@@ -1,5 +1,6 @@
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
+using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Models.Common;
 
 namespace TestDataSeeder.Builders.DTOS;

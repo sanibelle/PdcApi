@@ -3,11 +3,13 @@ using System.Security.Claims;
 
 namespace Pdc.WebAPI.Services;
 
-public class UserControllerService
+public class UserControllerService(IHttpContextAccessor httpContextAccessor)
 {
-    public User GetUserFromHttpContext(IHttpContextAccessor httpContextAccessor)
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+
+    public User GetUserFromHttpContext()
     {
-        ClaimsPrincipal? user = httpContextAccessor.HttpContext?.User;
+        ClaimsPrincipal? user = _httpContextAccessor.HttpContext?.User;
         if (user == null || !user.Identity?.IsAuthenticated == true)
         {
             throw new UnauthorizedAccessException("Could not find the user in the context");
@@ -22,7 +24,7 @@ public class UserControllerService
         {
             Id = Guid.Parse(userId),
             // TODO Email = user.FindFirstValue(ClaimTypes.Email) ?? "",
-            DisplayName = user.FindFirstValue(ClaimTypes.Name) ?? ""
+            UserName = user.FindFirstValue(ClaimTypes.Name) ?? ""
         };
     }
 }

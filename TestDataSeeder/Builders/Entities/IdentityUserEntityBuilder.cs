@@ -6,7 +6,7 @@ public class IdentityUserEntityBuilder
 {
     private Guid _id = Guid.NewGuid();
     private string _userName = $"user_{Guid.NewGuid().ToString().Substring(0, 8)}";
-    private string _normalizedUserName = null;
+    private string _normalizedUserName = "";
     private string _email = $"user_{Guid.NewGuid().ToString().Substring(0, 8)}@example.com";
     private string _normalizedEmail = "";
     private bool _emailConfirmed = true;

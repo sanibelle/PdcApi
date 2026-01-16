@@ -7,6 +7,7 @@ public class UserBuilder
     private Guid _id = Guid.NewGuid();
     private string _displayName = $"TestUser{new DateTime()}";
     private string _email = $"Email{new DateTime()}";
+    private string[] _roles = [];
 
     public UserBuilder() { }
 
@@ -28,13 +29,20 @@ public class UserBuilder
         return this;
     }
 
+    public UserBuilder WithRoles(string[] roles)
+    {
+        _roles = roles;
+        return this;
+    }
+
     public User Build()
     {
         return new User
         {
             Id = _id,
-            DisplayName = _displayName,
-            Email = _email
+            UserName = _displayName,
+            Email = _email,
+            Roles = _roles
         };
     }
 }

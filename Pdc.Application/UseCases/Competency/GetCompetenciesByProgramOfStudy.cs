@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Pdc.Application.DTOS;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Interfaces.UseCases.Competency;
 using Pdc.Domain.Models.MinisterialSpecification;
 
 namespace Pdc.Application.UseCases;
