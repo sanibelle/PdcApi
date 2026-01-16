@@ -2,14 +2,14 @@
 
 public class NotFoundException : Exception
 {
-    public string TargetName { get; }
-    public object Id { get; }
+    public string TargetName { get; } = "";
+    public string Id { get; } = "";
     public NotFoundException(string message) : base(message) { }
-    public NotFoundException(string entityName, object id)
-            : base($"{entityName} with id {id} was not found.")
+    public NotFoundException(string targetName, object id)
+            : base($"{targetName} with id {id} was not found.")
     {
-        TargetName = entityName;
-        Id = id;
+        TargetName = targetName;
+        Id = id?.ToString() ?? "";
     }
 
 }
