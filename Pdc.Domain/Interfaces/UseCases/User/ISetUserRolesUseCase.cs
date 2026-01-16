@@ -1,7 +1,8 @@
 ﻿using Pdc.Domain.DTOS.Common;
-using Pdc.Domain.Models.Security;
+
+namespace Pdc.Domain.Interfaces.UseCases.User;
 
 public interface ISetUserRolesUseCase
 {
-    Task<UserDTO> Execute(Guid userId, string[] roles, User currentUser);
+    Task<UserDTO> Execute(Guid userId, string[] roles, Models.Security.User currentUser);
 }

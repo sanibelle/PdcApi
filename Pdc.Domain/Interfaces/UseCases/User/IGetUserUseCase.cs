@@ -1,5 +1,6 @@
 ﻿using Pdc.Domain.DTOS.Common;
-using Pdc.Domain.Models.Security;
+
+namespace Pdc.Domain.Interfaces.UseCases.User;
 
 public interface IGetUserUseCase
 {
