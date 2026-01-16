@@ -30,9 +30,8 @@ public class SetUserRoles : ISetUserRolesUseCase
         return _mapper.Map<UserDTO>(user);
     }
 
-    private async void PreventAdminFromDemotingSelf(Guid userId, IList<string> targetRoles, User currentUser, IList<string> currentRoles)
+    private void PreventAdminFromDemotingSelf(Guid userId, IList<string> targetRoles, User currentUser, IList<string> currentRoles)
     {
-        ;
         if (currentUser.Id == userId &&
                     _userRepository.IsAdminRoleInArray(currentRoles) &&
                     !_userRepository.IsAdminRoleInArray(targetRoles))
