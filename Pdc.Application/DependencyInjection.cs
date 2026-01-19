@@ -6,6 +6,7 @@ using Pdc.Application.UseCases;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Interfaces.UseCases.Competency;
 using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
+using Pdc.Domain.Interfaces.UseCases.Role;
 using Pdc.Domain.Interfaces.UseCases.User;
 using Pdc.Infrastructure.Repositories;
 using System.Reflection;
@@ -33,6 +34,8 @@ public static class DependencyInjection
         services.AddScoped<IGetUsersUseCase, GetUsers>();
         services.AddScoped<ISetUserRolesUseCase, SetUserRoles>();
         services.AddScoped<IGetUserUseCase, GetUser>();
+        //Role
+        services.AddScoped<IGetRolesUseCase, GetRoles>();
 
         // Auth
         services.AddScoped<IUserService, UserService>();

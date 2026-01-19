@@ -10,5 +10,32 @@ export const useUserClient = () => {
     return user;
   };
 
-  return { fetchUser };
+  const fetchUsers = async (): Promise<User[]> => {
+    const api = useApi();
+    const users = await api.Get<User[]>('/user');
+    if (users === null) {
+      throw new Error('Users not found or not authenticated');
+    }
+    return users;
+  };
+
+  const fetchRoles = async (): Promise<string[]> => {
+    const api = useApi();
+    const roles = await api.Get<string[]>('/role');
+    if (roles === null) {
+      throw new Error('Users not found or not authenticated');
+    }
+    return roles;
+  };
+
+  const updateUserRoles = async (userId: string, roles: string[]): Promise<User> => {
+    const api = useApi();
+    const updatedRoles = await api.Put<User, string[]>(`/user/${userId}/roles`, roles);
+    if (updatedRoles === null) {
+      throw new Error('Failed to update user roles');
+    }
+    return updatedRoles;
+  };
+
+  return { fetchUser, fetchUsers, fetchRoles, updateUserRoles };
 };

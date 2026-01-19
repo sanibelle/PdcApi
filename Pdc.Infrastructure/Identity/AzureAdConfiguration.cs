@@ -92,6 +92,7 @@ public static class AzureAdConfiguration
                 },
                 OnRemoteFailure = context =>
                 {
+                    //TODO log better failure messages for debug like expired secret.
                     System.Diagnostics.Debug.WriteLine($"Remote failure: {context.Failure?.Message}");
                     return Task.CompletedTask;
                 }
