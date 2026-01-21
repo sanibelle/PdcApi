@@ -10,15 +10,15 @@ defineI18nRoute({
 
 const { fetchUsers, fetchRoles, updateUserRoles } = useUserClient();
 const users = ref<User[]>();
-const selectedRoles = ref<{ name: string, selected: boolean }[]>([]);
-const roles = ref<string[]>();
+const roles = ref<{ name: string, selected: boolean }[]>([]);
+const rolesFilter = ref<string>('');
 const selectedUser = ref<User | null>(null);
 
 onMounted(async () => {
   try {
     users.value = await fetchUsers();
-    roles.value = await fetchRoles();
-
+    const fetchedRoles = await fetchRoles();
+    roles.value = fetchedRoles.map(role => ({ name: role, selected: false }));
   } catch (e) {
     console.error(e);
     alert("ERREUR")
@@ -31,29 +31,58 @@ const manageUser = (user: User) => {
 };
 
 const setSelectedRolesOfUser = (user: User) => {
-  selectedRoles.value = roles.value?.map(x => ({ name: x, selected: user.roles.includes(x) })) as { name: string, selected: boolean }[];
+  roles.value = roles.value?.map(x => ({ name: x.name, selected: user.roles.includes(x.name) }));
 };
 
 const isRoleAdded = (role: string, isRoleSelected: boolean): boolean => {
-  return !!!selectedUser.value?.roles.includes(role) && isRoleSelected;
+  if (!selectedUser.value) return false;
+  return !selectedUser.value.roles.includes(role) && isRoleSelected;
 };
 
 const isRoleRemoved = (role: string, isRoleSelected: boolean): boolean => {
-  return !!selectedUser.value?.roles.includes(role) && !isRoleSelected;
+  if (!selectedUser.value) return false;
+  return selectedUser.value?.roles.includes(role) && !isRoleSelected;
 };
 
 const updatedRoles = async () => {
   if (!selectedUser.value) return;
   try {
-    const updatedUser = await updateUserRoles(selectedUser.value.id, selectedRoles.value.filter(x => x.selected).map(x => x.name));
+    const updatedUser = await updateUserRoles(selectedUser.value.id, roles.value?.filter(x => x.selected).map(x => x.name) || []);
     users.value = users.value!.map(x => x.id === updatedUser.id ? updatedUser : x);
     selectedUser.value = null;
-    selectedRoles.value = [];
+    roles.value = roles.value?.map(x => ({ name: x.name, selected: false }));
   } catch (e) {
     // TODO manage that
     console.error(e);
     alert("Erreur lors de la mise à jour des rôles");
   }
+};
+
+const handleRoleRowClick = (role: string) => {
+  const roleEntry = roles.value?.find(x => x.name === role);
+  if (roleEntry) {
+    roleEntry.selected = !roleEntry.selected;
+  }
+};
+
+const roleClasses = (role: { name: string, selected: boolean }) => {
+  let classes = '';
+  if (selectedUser.value) {
+    classes = 'item-editable ';
+  }
+  if (isRoleAdded(role.name, role.selected)) {
+    classes += 'role-added ';
+  }
+  else if (isRoleRemoved(role.name, role.selected)) {
+    classes += 'role-removed ';
+  }
+  else if (role.selected) {
+    classes += 'role-active';
+  }
+  else if (!role.name.toLowerCase().includes(rolesFilter.value.toLowerCase())) {
+    return 'role-hidden';
+  }
+  return classes;
 };
 
 </script>
@@ -67,38 +96,36 @@ const updatedRoles = async () => {
     <section class="admin-board">
       <div class="users-panel">
         <div class="panel-header">
-          <h2 class="panel-title">Utilisateurs</h2>
+          <h2 class="panel-title">{{ t('users') }}</h2>
         </div>
         <div class="panel-content">
-          <div v-if="!selectedUser" v-for="user in users" :key="user.id" class="user-item" @click="manageUser(user)"
-            @mouseenter="setSelectedRolesOfUser(user)" @mouseleave="selectedRoles = []">
+          <div v-if="!selectedUser" v-for="user in users" :key="user.id" class="item" @click="manageUser(user)"
+            @mouseenter="setSelectedRolesOfUser(user)"
+            @mouseleave="roles = roles.map(x => ({ name: x.name, selected: false }))">
             {{ user.userName }}
           </div>
-          <div v-else class="user-item flex justify-between items-center" @click="selectedUser = null">
+          <div v-else class="item flex justify-between items-center">
             <span>
               {{ selectedUser.userName }}
             </span>
-            <CommonAtomsAButton @click="selectedUser = null">X</CommonAtomsAButton>
-            <CommonAtomsAButton @click="updatedRoles">OK</CommonAtomsAButton>
+            <CommonAtomsAButton class="ok-button" @click="updatedRoles">OK</CommonAtomsAButton>
+            <CommonAtomsAButton class="cancel-button" @click="selectedUser = null">X</CommonAtomsAButton>
           </div>
         </div>
       </div>
 
       <div class="roles-panel">
         <div class="panel-header">
-          <h2 class="panel-title">Rôles</h2>
+          <h2 class="panel-title">{{ t('roles') }}</h2>
+          <FormATextInput name="rolesFilter" placeholder="🔍" v-model.lazy="rolesFilter" />
         </div>
         <div class="panel-content">
-          <div v-for="(role, index) in roles" :key="role" class="role-item" :class="{
-            'role-item-editable':
-              selectedUser
-          }" @click="selectedRoles[index] && (selectedRoles[index].selected = !selectedRoles[index].selected)">
-            <span
-              :class="{ 'role-active': selectedRoles.some(x => x.name === role && x.selected), 'role-added': isRoleAdded(role, !!selectedRoles[index]?.selected), 'role-removed': isRoleRemoved(role, !!selectedRoles[index]?.selected) }">
-              {{ role }}
+          <div v-for="role in roles" :key="role.name" :class="`${roleClasses(role)} item`"
+            @click="handleRoleRowClick(role.name)">
+            <span :class="roleClasses(role)">
+              {{ role.name }}
             </span>
-            <FormACheckboxInput v-if="selectedUser && selectedRoles[index]" name="role"
-              v-model="selectedRoles[index].selected" />
+            <FormACheckboxInput v-if="selectedUser" name="role" v-model="role.selected" />
           </div>
         </div>
       </div>
@@ -111,12 +138,22 @@ const updatedRoles = async () => {
     "title": "Gestion des utilisateurs",
     "loading": "Chargement...",
     "userNotFound": "Utilisateur non trouvé",
-    "action": "Actions"
+    "action": "Actions",
+    "users": "Utilisateurs",
+    "roles": "Rôles"
   }
 }</i18n>
 
 <style scoped>
-.role-item-editable {
+:deep(.ok-button) {
+  @apply bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md;
+}
+
+:deep(.cancel-button) {
+  @apply bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-md;
+}
+
+.item-editable {
   @apply cursor-pointer;
 }
 
@@ -133,15 +170,19 @@ const updatedRoles = async () => {
 }
 
 .users-panel {
-  @apply bg-white rounded-lg shadow-md overflow-hidden;
+  @apply bg-white rounded-lg shadow-md;
 }
 
 .roles-panel {
-  @apply bg-white rounded-lg shadow-md overflow-hidden;
+  @apply bg-white rounded-lg shadow-md;
 }
 
 .panel-header {
-  @apply bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4;
+  @apply bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 flex items-center justify-between;
+
+  h2 {
+    @apply text-white text-lg font-semibold h-10;
+  }
 }
 
 .panel-title {
@@ -152,12 +193,13 @@ const updatedRoles = async () => {
   @apply p-6 space-y-3;
 }
 
-.user-item {
+.item {
   @apply px-4 py-3 bg-gray-50 rounded-md border border-gray-200 hover:bg-gray-100 transition-colors cursor-pointer;
 }
 
-.role-item {
-  @apply px-4 py-3 bg-gray-50 rounded-md border border-gray-200 hover:bg-gray-100 transition-colors flex justify-between items-center;
+.item {
+  @apply px-4 py-3 bg-gray-50 rounded-md border border-gray-200 hover:bg-gray-100 flex justify-between items-center;
+  transition: height 0.7s ease, padding 0.7s ease, margin 0.7s ease, border-width 0.7s ease, opacity 0.7s ease;
 }
 
 .role-active {
@@ -170,5 +212,10 @@ const updatedRoles = async () => {
 
 .role-removed {
   @apply font-bold text-red-600;
+}
+
+.role-hidden {
+  @apply h-0 p-0 m-0 border-0 overflow-hidden opacity-0;
+  margin-top: 0 !important;
 }
 </style>

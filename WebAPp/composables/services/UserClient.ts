@@ -21,10 +21,11 @@ export const useUserClient = () => {
 
   const fetchRoles = async (): Promise<string[]> => {
     const api = useApi();
-    const roles = await api.Get<string[]>('/role');
+    let roles = await api.Get<string[]>('/role');
     if (roles === null) {
       throw new Error('Users not found or not authenticated');
     }
+    roles = roles.sort((a, b) => a.localeCompare(b));
     return roles;
   };
 
