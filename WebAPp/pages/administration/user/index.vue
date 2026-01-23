@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const { t } = useI18n();
-const route = useRoute();
 
 defineI18nRoute({
   paths: {
@@ -99,11 +98,13 @@ const roleClasses = (role: { name: string, selected: boolean }) => {
           <h2 class="panel-title">{{ t('users') }}</h2>
         </div>
         <div class="panel-content">
-          <div v-if="!selectedUser" v-for="user in users" :key="user.id" class="item" @click="manageUser(user)"
-            @mouseenter="setSelectedRolesOfUser(user)"
-            @mouseleave="roles = roles.map(x => ({ name: x.name, selected: false }))">
-            {{ user.userName }}
-          </div>
+          <template v-if="!selectedUser">
+            <div v-for="user in users" :key="user.id" class="item" @click="manageUser(user)"
+              @mouseenter="setSelectedRolesOfUser(user)"
+              @mouseleave="roles = roles.map(x => ({ name: x.name, selected: false }))">
+              {{ user.userName }}
+            </div>
+          </template>
           <div v-else class="item flex justify-between items-center">
             <span>
               {{ selectedUser.userName }}
