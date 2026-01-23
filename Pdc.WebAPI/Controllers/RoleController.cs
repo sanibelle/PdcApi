@@ -2,15 +2,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pdc.Domain.Interfaces.UseCases.Role;
 using Pdc.Infrastructure.Identity;
-using Pdc.WebAPI.Services;
 
 namespace Pdc.WebAPI.Controllers;
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]
 public class RoleController(
-                        IGetRolesUseCase getRolesUseCase,
-                        UserControllerService userControllerService) : ControllerBase
+                        IGetRolesUseCase getRolesUseCase) : ControllerBase
 {
     private readonly IGetRolesUseCase _getRolesUseCase = getRolesUseCase;
 
