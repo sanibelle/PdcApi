@@ -4,7 +4,7 @@ const route = useRoute();
 
 defineI18nRoute({
   paths: {
-    fr: `/administration/programme/[programCode]`,
+    fr: `/gestion/utilisateurs`,
   },
 });
 
@@ -45,10 +45,10 @@ const isRoleRemoved = (role: string, isRoleSelected: boolean): boolean => {
 };
 
 const updatedRoles = async () => {
-  if (!selectedUser.value) return;
+  if (!selectedUser.value || !users.value) return;
   try {
     const updatedUser = await updateUserRoles(selectedUser.value.id, roles.value?.filter(x => x.selected).map(x => x.name) || []);
-    users.value = users.value!.map(x => x.id === updatedUser.id ? updatedUser : x);
+    users.value = users.value.map(x => x.id === updatedUser.id ? updatedUser : x);
     selectedUser.value = null;
     roles.value = roles.value?.map(x => ({ name: x.name, selected: false }));
   } catch (e) {
@@ -191,10 +191,6 @@ const roleClasses = (role: { name: string, selected: boolean }) => {
 
 .panel-content {
   @apply p-6 space-y-3;
-}
-
-.item {
-  @apply px-4 py-3 bg-gray-50 rounded-md border border-gray-200 hover:bg-gray-100 transition-colors cursor-pointer;
 }
 
 .item {

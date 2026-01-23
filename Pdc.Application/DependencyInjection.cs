@@ -3,12 +3,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Pdc.Application.Mappings;
 using Pdc.Application.Services.UserService;
 using Pdc.Application.UseCases;
-using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Interfaces.UseCases.Competency;
 using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 using Pdc.Domain.Interfaces.UseCases.Role;
 using Pdc.Domain.Interfaces.UseCases.User;
-using Pdc.Infrastructure.Repositories;
 using System.Reflection;
 
 namespace Pdc.Application;
