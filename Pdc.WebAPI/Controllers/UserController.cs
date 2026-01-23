@@ -1,10 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Pdc.Application.DTOS;
-using Pdc.Application.UseCases;
 using Pdc.Domain.DTOS.Common;
-using Pdc.Domain.Interfaces.UseCases.Competency;
-using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 using Pdc.Domain.Interfaces.UseCases.User;
 using Pdc.Domain.Models.Security;
 using Pdc.Infrastructure.Identity;
@@ -50,7 +46,7 @@ public class UserController : ControllerBase
         return Ok(await _getUserUseCase.Execute(userId));
     }
 
-    [Authorize(Roles = Roles.User)]
+    [Authorize(Roles = Roles.Admin)]
     [HttpPut("{userId}/roles")]
     public async Task<ActionResult<UserDTO>> GetRoles(Guid userId, [FromBody] string[] roles)
     {

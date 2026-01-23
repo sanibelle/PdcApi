@@ -1,6 +1,7 @@
 export interface Options {
   noRedirectOnLogin?: boolean;
   silentSubmissionError?: boolean;
+  followRedirect?: boolean;
 }
 
 interface InternalOptions<T = any> extends Options {
@@ -22,6 +23,10 @@ export class ApiClient {
     }
   };
 
+  private NavigateToRedirect = async (url: string) => {
+    await navigateTo(url, { external: true });
+  };
+
   private async SendRequest<T>(url: string, options: InternalOptions): Promise<T | null> {
     const response = await $fetch<T>(this.baseURL + url, {
       method: options.method as any,
@@ -33,11 +38,17 @@ export class ApiClient {
         Accept: 'application/json',
       },
       onResponse: async ({ response }) => {
-        // A redirect should only happend for a login request in our api.
+        // Handle redirect responses
         if (response.status >= 300 && response.status < 400) {
           const location = response.headers.get('location');
           if (location) {
-            await this.NavigateToLoginPage(location, options);
+            if (options.followRedirect) {
+              // For logout or other scenarios where we follow the redirect directly
+              await this.NavigateToRedirect(location);
+            } else {
+              // For login scenarios, append the current URI
+              await this.NavigateToLoginPage(location, options);
+            }
           }
         }
       },
