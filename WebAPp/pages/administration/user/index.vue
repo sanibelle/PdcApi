@@ -11,6 +11,7 @@ const { fetchUsers, fetchRoles, updateUserRoles } = useUserClient();
 const users = ref<User[]>();
 const roles = ref<{ name: string, selected: boolean }[]>([]);
 const rolesFilter = ref<string>('');
+const usersFilter = ref<string>('');
 const selectedUser = ref<User | null>(null);
 
 onMounted(async () => {
@@ -64,6 +65,14 @@ const handleRoleRowClick = (role: string) => {
   }
 };
 
+const userClasses = (user: User) => {
+  let classes = '';
+  if (!user.userName.toLowerCase().includes(usersFilter.value.toLowerCase())) {
+    return 'hidden';
+  }
+  return classes;
+};
+
 const roleClasses = (role: { name: string, selected: boolean }) => {
   let classes = '';
   if (selectedUser.value) {
@@ -73,13 +82,13 @@ const roleClasses = (role: { name: string, selected: boolean }) => {
     classes += 'role-added ';
   }
   else if (isRoleRemoved(role.name, role.selected)) {
-    classes += 'role-removed ';
+    classes += 'role-removed';
   }
   else if (role.selected) {
     classes += 'role-active';
   }
   else if (!role.name.toLowerCase().includes(rolesFilter.value.toLowerCase())) {
-    return 'role-hidden';
+    return 'hidden';
   }
   return classes;
 };
@@ -96,11 +105,12 @@ const roleClasses = (role: { name: string, selected: boolean }) => {
       <div class="users-panel">
         <div class="panel-header">
           <h2 class="panel-title">{{ t('users') }}</h2>
+          <FormATextInput name="usersFilter" placeholder="🔍" v-model.lazy="usersFilter" :disabled="!!selectedUser" />
         </div>
         <div class="panel-content">
           <template v-if="!selectedUser">
-            <div v-for="user in users" :key="user.id" class="item" @click="manageUser(user)"
-              @mouseenter="setSelectedRolesOfUser(user)"
+            <div v-for="(user, index) in users" :data-testid="`user-${index}`" :key="user.id"
+              :class="`${userClasses(user)} item`" @click="manageUser(user)" @mouseenter="setSelectedRolesOfUser(user)"
               @mouseleave="roles = roles.map(x => ({ name: x.name, selected: false }))">
               {{ user.userName }}
             </div>
@@ -120,13 +130,14 @@ const roleClasses = (role: { name: string, selected: boolean }) => {
           <h2 class="panel-title">{{ t('roles') }}</h2>
           <FormATextInput name="rolesFilter" placeholder="🔍" v-model.lazy="rolesFilter" />
         </div>
-        <div class="panel-content">
-          <div v-for="role in roles" :key="role.name" :class="`${roleClasses(role)} item`"
-            @click="handleRoleRowClick(role.name)">
-            <span :class="roleClasses(role)">
+        <div class="panel-content" data-testid="roles-container">
+          <div v-for="(role, index) in roles" :data-testid="`role-${index}`" :key="role.name"
+            :class="`${roleClasses(role)} item`" @click="handleRoleRowClick(role.name)">
+            <span>
               {{ role.name }}
             </span>
-            <FormACheckboxInput v-if="selectedUser" name="role" v-model="role.selected" />
+            <FormACheckboxInput v-if="selectedUser" :data-testid="`role-checkbox-${index}`" name="role"
+              v-model="role.selected" />
           </div>
         </div>
       </div>
@@ -211,7 +222,7 @@ const roleClasses = (role: { name: string, selected: boolean }) => {
   @apply font-bold text-red-600;
 }
 
-.role-hidden {
+.hidden {
   @apply h-0 p-0 m-0 border-0 overflow-hidden opacity-0;
   margin-top: 0 !important;
 }
