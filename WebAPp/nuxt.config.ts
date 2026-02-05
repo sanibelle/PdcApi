@@ -65,7 +65,7 @@ export default defineNuxtConfig({
     },
   },
   imports: {
-    dirs: ['composables/**', 'shared/types/**'],
+    dirs: ['../shared/types/**', '../app/composables/**' ],
   },
   future: {
     compatibilityVersion: 4,
