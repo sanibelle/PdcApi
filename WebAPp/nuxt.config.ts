@@ -35,7 +35,6 @@ export default defineNuxtConfig({
   plugins: ['~/plugins/opentelemetry'],
   i18n: {
     bundle: {
-      optimizeTranslationDirective: false,
       runtimeOnly: false // Ensure macros are processed
     },
     strategy: 'prefix_except_default',
