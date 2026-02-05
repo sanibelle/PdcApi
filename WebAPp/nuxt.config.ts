@@ -30,7 +30,6 @@ export default defineNuxtConfig({
   },
   typescript: {
     strict: true,
-    typeCheck: true,
   },
   plugins: ['~/plugins/opentelemetry'],
   i18n: {
@@ -66,8 +65,5 @@ export default defineNuxtConfig({
   },
   imports: {
     dirs: ['../shared/types/**', '../app/composables/**' ],
-  },
-  future: {
-    compatibilityVersion: 4,
   },
 });
