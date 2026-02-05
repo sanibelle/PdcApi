@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { t } = useI18n();
+const localePath = useLocalePath();
 const route = useRoute();
 const programCode = route.params.programCode as string;
 
@@ -58,7 +59,7 @@ const upsertCompetencyModal = useModal();
         <td>{{ competency.code }}</td>
         <td>{{ competency.statementOfCompetency }}</td>
         <td>
-          <NuxtLink :to="$localePath(`/administration/programOfStudy/${programCode}/competency/${competency.code}`)">
+          <NuxtLink :to="localePath(`/administration/programOfStudy/${programCode}/competency/${competency.code}`)">
             CLIKCMEEEEEEEEEE GOOOOOOOOOOOO</NuxtLink>
         </td>
       </tr>
