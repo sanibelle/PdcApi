@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { t } = useI18n();
+const localePath = useLocalePath();
 const route = useRoute();
 const programCode = route.params.programCode as string;
 
@@ -31,6 +32,7 @@ const handleSubmitted = async () => {
 };
 
 const upsertCompetencyModal = useModal();
+
 </script>
 
 <template>
@@ -58,8 +60,9 @@ const upsertCompetencyModal = useModal();
         <td>{{ competency.code }}</td>
         <td>{{ competency.statementOfCompetency }}</td>
         <td>
-          <NuxtLink :to="$localePath(`/administration/programOfStudy/${programCode}/competency/${competency.code}`)">
-            CLIKCMEEEEEEEEEE GOOOOOOOOOOOO</NuxtLink>
+          <NuxtLink :to="localePath({ name: 'administration-programOfStudy-programCode-competency-competencyCode', params: { programCode: programCode, competencyCode: competency.code } })">
+            CLIKCMEEEEEEEEEE GOOOOOOOOOOOO
+          </NuxtLink>
         </td>
       </tr>
     </tbody>

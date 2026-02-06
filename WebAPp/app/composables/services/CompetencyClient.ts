@@ -1,5 +1,4 @@
 import { useApi } from './ApiClient';
-import type { Competency } from '~/shared/types/ministerial/Competency';
 
 export const useCompetencyClient = () => {
   const api = useApi();

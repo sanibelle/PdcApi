@@ -4,7 +4,7 @@ const { t } = useI18n();
 
 defineI18nRoute({
   paths: {
-    fr: '/gestion',
+    fr: '/administration',
   },
 });
 const localePath = useLocalePath();
@@ -15,10 +15,10 @@ const localePath = useLocalePath();
   <div>
     <h1>{{ t('title') }}</h1>
     <div>
-      <NuxtLink :to="localePath('/administration/programOfStudy')">{{ t('studyProgram') }}</NuxtLink>
+      <NuxtLink :to="localePath('administration-programOfStudy')">{{ t('studyProgram') }}</NuxtLink>
     </div>
     <div>
-      <NuxtLink :to="localePath('/administration/user')">{{ t('user') }}</NuxtLink>
+      <NuxtLink :to="localePath('administration-user')">{{ t('user') }}</NuxtLink>
     </div>
   </div>
 </template>

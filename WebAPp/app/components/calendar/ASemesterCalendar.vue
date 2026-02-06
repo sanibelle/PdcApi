@@ -4,6 +4,8 @@ import { Calendar, type EventDropArg, type EventInput } from '@fullcalendar/core
 import multiMonthPlugin from '@fullcalendar/multimonth';
 import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
+import { SemesterEnum } from '#shared/types/enum/SemesterEnum';
+
 
 const { duration, semester, year } = defineProps<{
   duration: number;
@@ -49,7 +51,7 @@ new Date(year, month, 1);
 
 onMounted(() => {
   if (calendarEl.value) {
-    const calendar = new Calendar(calendarEl.value, {
+    const calendar = new Calendar(calendarEl.value as HTMLElement, {
       plugins: [multiMonthPlugin, interactionPlugin],
       editable: true,
       initialView: 'multiMonthFourMonth',

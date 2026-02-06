@@ -6,7 +6,7 @@ const competencyCode = route.params.competencyCode as string;
 
 defineI18nRoute({
   paths: {
-    fr: `/administration/programme/[programCode]/competency/[competencyCode]`,
+    fr: `/administration/programme/[programCode]/competence/[competencyCode]`,
   },
 });
 
