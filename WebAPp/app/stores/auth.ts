@@ -17,8 +17,8 @@ export const useAuthStore = defineStore(
     };
 
     const logout = async () => {
-      //TODO
-      await useApi().Get('/auth/logout');
+      user.value = null;
+      await useApi().Get('/auth/logout', { followRedirect: true });
     };
 
     return {

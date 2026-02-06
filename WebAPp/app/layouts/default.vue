@@ -11,7 +11,7 @@ const authStore = useAuthStore();
       <ClientOnly>
         <div>
           <div v-if="authStore.isAuthenticated">
-            Bonjour, {{ authStore.user?.name }}!
+            Bonjour, {{ authStore.user?.userName }}!
             <button @click="authStore.logout">Logout</button>
           </div>
           <div v-else>

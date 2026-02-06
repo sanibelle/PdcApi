@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-useI18n();
+const { t } = useI18n();
 
 defineI18nRoute({
   paths: {
@@ -9,15 +9,24 @@ defineI18nRoute({
 });
 const localePath = useLocalePath();
 
-// TODO remove me. This is used for deubugging routes
-onMounted(() => {
-  const router = useRouter();
-  const routes = router.getRoutes();
-  console.log('All routes:', routes.map(r => ({ name: r.name, path: r.path })));
-});
-const upsertProgramOfStudyModal = useModal();
 </script>
 
 <template>
-    <NuxtLink :to="localePath('administration-programOfStudy')">GOOOOO</NuxtLink>
+  <div>
+    <h1>{{ t('title') }}</h1>
+    <div>
+      <NuxtLink :to="localePath('administration-programOfStudy')">{{ t('studyProgram') }}</NuxtLink>
+    </div>
+    <div>
+      <NuxtLink :to="localePath('administration-user')">{{ t('user') }}</NuxtLink>
+    </div>
+  </div>
 </template>
+
+<i18n lang="json">{
+  "fr": {
+    "title": "Gestion",
+    "studyProgram": "Programmes d'études",
+    "user": "Utilisateurs"
+  }
+}</i18n>
