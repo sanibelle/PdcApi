@@ -1,4 +1,4 @@
-import type { Property } from './Property.ts';
+import type { Property } from './Property.js';
 
 export interface Item {
   id: string;

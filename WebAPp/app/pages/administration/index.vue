@@ -4,7 +4,7 @@ useI18n();
 
 defineI18nRoute({
   paths: {
-    fr: '/gestion',
+    fr: '/administration',
   },
 });
 const localePath = useLocalePath();
@@ -19,5 +19,5 @@ const upsertProgramOfStudyModal = useModal();
 </script>
 
 <template>
-    <NuxtLink :to="localePath('/administration/programOfStudy')">GOOOOO</NuxtLink>
+    <NuxtLink :to="localePath('administration-programOfStudy')">GOOOOO</NuxtLink>
 </template>

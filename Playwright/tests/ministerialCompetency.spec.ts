@@ -4,7 +4,7 @@ test.describe("ministerial competency", () => {
   test("Creating a full valid ministerial competency", async ({
     adminPage,
   }) => {
-    await adminPage.goto("/administration/programOfStudy");
+    await adminPage.goto("/administration/programmes");
     await adminPage.waitForLoadState("networkidle");
 
     await adminPage
@@ -51,7 +51,7 @@ test.describe("ministerial competency", () => {
   test("Creating a valid detailed ministerial competency", async ({
     adminPage,
   }) => {
-    await adminPage.goto("/administration/programOfStudy/Seededprogram/competency/code1");
+    await adminPage.goto("/administration/programme/Seededprogram/competence/code1");
     await adminPage.waitForLoadState("networkidle");
 
     // creation
@@ -108,7 +108,7 @@ test.describe("ministerial competency", () => {
     }
 
     // reload page to verify persistence
-    await adminPage.goto("/administration/programOfStudy/Seededprogram/competency/code1");
+    await adminPage.goto("/administration/programme/Seededprogram/competence/code1");
     for (let parentIndex = 1; parentIndex <= 3; parentIndex++) {
       // realisation contexts complementary information
       await expect(await adminPage.getByText(`realisation context ${parentIndex}`)).toBeTruthy();
@@ -127,7 +127,7 @@ test.describe("ministerial competency", () => {
     adminPage,
   }) => {
     
-    await adminPage.goto("/administration/programOfStudy/Seededprogram/competency/code1");
+    await adminPage.goto("/administration/programme/Seededprogram/competence/code1");
     await adminPage.waitForLoadState("networkidle");
 
     // realisation contexts

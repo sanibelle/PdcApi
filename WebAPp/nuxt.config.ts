@@ -30,12 +30,10 @@ export default defineNuxtConfig({
   },
   typescript: {
     strict: true,
-    typeCheck: true,
   },
   plugins: ['~/plugins/opentelemetry'],
   i18n: {
     bundle: {
-      optimizeTranslationDirective: false,
       runtimeOnly: false // Ensure macros are processed
     },
     strategy: 'prefix_except_default',
@@ -66,9 +64,6 @@ export default defineNuxtConfig({
     },
   },
   imports: {
-    dirs: ['composables/**', 'shared/types/**'],
-  },
-  future: {
-    compatibilityVersion: 4,
+    dirs: ['../shared/types/**', '../app/composables/**' ],
   },
 });

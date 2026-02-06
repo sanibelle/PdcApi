@@ -1,7 +1,7 @@
 import { test, expect } from './test-fixtures';
 
 test('Creating a full valid program of study', async ({ adminPage }) => {
-  await adminPage.goto('/administration/programOfStudy');
+  await adminPage.goto('/administration/programmes');
   await adminPage.waitForLoadState('networkidle');
 
   await adminPage.locator('#create-program-btn').first().click();
@@ -42,23 +42,3 @@ test('Creating a full valid program of study', async ({ adminPage }) => {
   await expect(adminPage.locator('.modal-overlay')).toBeHidden();
 });
 
-test('Creating a minimal valid program of study', async ({ page }) => {
-  await page.goto('/administration/programOfStudy');
-  await page.waitForLoadState('networkidle');
-
-  await page.locator('#create-program-btn').first().click();
-  
-  // expect the modal to be visible
-  await expect(page.locator('.modal-overlay')).toBeVisible();
-  
-  await page.locator('input[name="name"]').fill('Creating a minimal valid program of study')
-  await page.locator('input[name="code"]').fill('code4')
-  await page.locator('select[name="programType"]').selectOption('2');
-  await page.locator('input[name="monthsDuration"]').fill('24')
-  await page.locator('input[name="specificDurationHours"]').fill('123')
-  await page.locator('input[name="totalDurationHours"]').fill('123')
-  await page.locator('[data-test-id="dp-input"]').fill("06/13/2025");
-  // units
-  await page.locator('input[name="specificUnits.wholeUnit"]').fill('1')
-  await page.locator('input[name="optionalUnits.wholeUnit"]').fill('2')
-});

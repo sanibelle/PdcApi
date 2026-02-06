@@ -3,9 +3,11 @@
 const { t } = useI18n();
 defineI18nRoute({
   paths: {
-    fr: `/gestion/programmes`,
+    fr: `/administration/programmes`,
   },
 });
+
+const localePath = useLocalePath();
 
 const { fetchPrograms } = useProgramOfStudyClient();
 const programsOfStudy = ref<ProgramOfStudy[]>([]);
@@ -44,7 +46,11 @@ const upsertProgramOfStudyModal = useModal();
       <tr v-for="program in programsOfStudy" :key="program.code" class="flex-center">
         <td>{{ program.code }}</td>
         <td>{{ program.name }}</td>
-        <td>    <NuxtLink :to="$localePath(`/administration/programOfStudy/${program.code}`)">CLIKCMEEEEEEEEEE GOOOOOOOOOOOO</NuxtLink></td>
+        <td>          
+          <NuxtLink :to="localePath({ name: 'administration-programOfStudy-programCode', params: { programCode: program.code } })">
+            CLIKCMEEEEEEEEEE GOOOOOOOOOOOO
+          </NuxtLink>
+        </td>
       </tr>
     </tbody>
   </table>

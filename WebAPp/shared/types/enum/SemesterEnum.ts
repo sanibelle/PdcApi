@@ -1,4 +1,6 @@
-export enum SemesterEnum {
+enum SemesterEnum {
     Fall = "Fall",
     Winter = "Winter",
 }
+
+export { SemesterEnum }
