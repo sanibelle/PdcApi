@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Identity;
@@ -16,7 +17,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(
        this IServiceCollection services,
-       IConfiguration configuration)
+       IConfiguration configuration,
+       IHostEnvironment environment)
     {
         string? connectionString = configuration.GetConnectionString("DefaultConnection");
         if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("mode=memory"))
@@ -31,9 +33,13 @@ public static class DependencyInjection
         else if (!string.IsNullOrEmpty(connectionString))
         {
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(
+
+                options.UseNpgsql(
                     connectionString,
-                    b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
+                    b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName))
+                    .ConfigureWarnings(warnings =>
+                        warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
+                );
         }
 
         // Register Repositories

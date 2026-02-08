@@ -2,10 +2,12 @@
 // Program.cs
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
 using Pdc.Application;
 using Pdc.Infrastructure;
+using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Identity;
-using Pdc.Infrastructure.Identity.TestAuthentication;
 using Pdc.WebAPI.Middlewares;
 using Pdc.WebAPI.Services;
 using System.Text.Json;
@@ -26,12 +28,25 @@ public class Program
         builder.Services.AddApplication();
 
         // Add Infrastructure Layer
-        builder.Services.AddInfrastructure(builder.Configuration);
+        builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
 
-        // Add Swagger/OpenAPI
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
         Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
+        if (builder.Environment.IsProduction())
+        {
+            builder.Services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
+        }
+        else
+        {
+            // Add Swagger/OpenAPI
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+        }
+
 
 #if TEST
         builder.Services.AddScoped<DataSeeder>();
@@ -61,22 +76,42 @@ public class Program
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
+        if (builder.Environment.IsProduction()) // because of ngnix
+        {
+            app.UseForwardedHeaders();
+        }
+        else if (app.Environment.IsDevelopment()) // Configure the HTTP request pipeline.
         {
             builder.Logging.AddDebug();
             builder.Logging.AddConsole();
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.UseHttpsRedirection();
         }
 
         app.UseCors("DefaultPolicy");
         app.UseExceptionHandling();
-        app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();
-#if TEST
+
+#if TEST //adds the /init route
         app.UseMapSeederDataRoute();
+#else // Migration applied automatically on startup. Not needed for in memory db.
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+            try
+            {
+                var context = services.GetRequiredService<AppDbContext>();
+                context.Database.Migrate();
+                Console.WriteLine("Database migration completed successfully.");
+            }
+            catch (Exception ex)
+            {
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, "An error occurred while migrating the database.");
+            }
+        }
 #endif
         app.MapControllers();
         app.MapHealthChecks("/api/health");
@@ -97,9 +132,3 @@ public class Program
         app.Run();
     }
 }
-
-
-
-
-
-// WIP en train d'ajouter des roles
