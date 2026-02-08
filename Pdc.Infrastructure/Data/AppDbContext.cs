@@ -33,7 +33,7 @@ public class AppDbContext : IdentityDbContext<IdentityUserEntity, IdentityRole<G
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        OnModelCreating(modelBuilder); // used for IdentityDbContext configuration
+        base.OnModelCreating(modelBuilder); // used for IdentityDbContext configuration
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 

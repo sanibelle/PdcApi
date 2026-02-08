@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Pdc.Application;
 using Pdc.Infrastructure;
-using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Identity;
 using Pdc.WebAPI.Middlewares;
 using Pdc.WebAPI.Services;
 using System.Text.Json;
 #if TEST
 using TestDataSeeder;
+using Pdc.Infrastructure.Identity.TestAuthentication;
 #endif
 
 public class Program
@@ -27,8 +27,8 @@ public class Program
         // Add Application Layer
         builder.Services.AddApplication();
 
-        // Add Infrastructure Layer
-        builder.Services.AddInfrastructure(builder.Configuration, builder.Environment);
+        // Add Infrastructure Lay
+        builder.Services.AddInfrastructure(builder.Configuration);
 
         Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
         if (builder.Environment.IsProduction())
@@ -36,7 +36,7 @@ public class Program
             builder.Services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-                options.KnownNetworks.Clear();
+                options.KnownIPNetworks.Clear();
                 options.KnownProxies.Clear();
             });
         }

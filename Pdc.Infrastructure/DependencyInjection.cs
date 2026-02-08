@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Identity;
@@ -17,8 +16,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(
        this IServiceCollection services,
-       IConfiguration configuration,
-       IHostEnvironment environment)
+       IConfiguration configuration)
     {
         string? connectionString = configuration.GetConnectionString("DefaultConnection");
         if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("mode=memory"))
@@ -37,8 +35,6 @@ public static class DependencyInjection
                 options.UseNpgsql(
                     connectionString,
                     b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName))
-                    .ConfigureWarnings(warnings =>
-                        warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
                 );
         }
 
