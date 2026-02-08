@@ -13,6 +13,8 @@ using System.Text.Json;
 #if TEST
 using TestDataSeeder;
 using Pdc.Infrastructure.Identity.TestAuthentication;
+#else
+using Pdc.Infrastructure.Data;
 #endif
 
 public class Program
