@@ -1,0 +1,66 @@
+name: Deploy Frontend to VPS
+
+on:
+  push:
+    branches:
+      - main 
+      - MigrateToProstgreAndUpdatedBackEnd
+    paths:
+      - 'WebAPp/**'
+      - 'Playwright/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+         node-version: lts/*
+
+      - name: Install dependencies in Playwright
+        uses: borales/actions-yarn@v4
+        with:
+            cmd: install
+            dir: Playwright
+      
+      - name: Install dependencies
+        working-directory: ./WebAPp
+        run: yarn
+      
+      - name: Build Nuxt app
+        working-directory: ./WebAPp
+        run: yarn build
+    
+      - name: Stop front-end
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -e
+            sudo systemctl stop front-end || true  # Ignore error if service is not running
+      
+      - name: Deploy to VPS
+        uses: appleboy/scp-action@1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "WebAPp/.output/*"
+          target: "/var/www/front-end/"
+          strip_components: 2  # Removes WebAPp/.output/ from path
+          rm: true  # Remove old files first
+      
+      - name: Restart front-end service
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo systemctl start front-end
+            sudo systemctl status front-end
