@@ -17,19 +17,17 @@ jobs:
         with:
          node-version: lts/*
 
-      - name: Install dependencies in Playwright
+      - name: Install dependencies
         uses: borales/actions-yarn@v4
         with:
             cmd: install
-            dir: Playwright
+            dir: ./WebAPp
       
       - name: Install dependencies
-        working-directory: ./WebAPp
-        run: yarn
-      
-      - name: Build Nuxt app
-        working-directory: ./WebAPp
-        run: yarn build
+        uses: borales/actions-yarn@v4
+        with:
+            cmd: build
+            dir: ./WebAPp
     
       - name: Stop front-end
         uses: appleboy/ssh-action@v1
