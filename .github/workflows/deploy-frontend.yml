@@ -39,7 +39,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             set -e
-            sudo systemctl stop front-end || true  # Ignore error if service is not running
+            systemctl stop front-end
       
       - name: Deploy to VPS
         uses: appleboy/scp-action@v1
@@ -58,5 +58,5 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo systemctl start front-end
-            sudo systemctl status front-end
+            systemctl start front-end
+            systemctl status front-end
