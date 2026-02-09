@@ -1,0 +1,62 @@
+name: Deploy Frontend to VPS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "WebAPp/**"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+          dir: ./WebAPp
+
+      - name: Install dependencies
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: build
+          dir: ./WebAPp
+
+      - name: Stop front-end
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -e
+            systemctl stop front-end
+
+      - name: Deploy to VPS
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "WebAPp/.output/*"
+          target: "/var/www/front-end/"
+          strip_components: 2 # Removes WebAPp/.output/ from path
+          overwrite: true
+
+      - name: Restart front-end service
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            systemctl start front-end
+            systemctl status front-end

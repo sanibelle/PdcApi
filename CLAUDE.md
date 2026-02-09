@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Architecture
 
-This is a .NET 9 Web API project using Clean Architecture with the following structure:
+This is a .NET 10 Web API project using Clean Architecture with the following structure:
 
 - **Pdc.Domain**: Core domain models and entities
 - **Pdc.Application**: Use cases, DTOs, mappings (AutoMapper), and validation (FluentValidation)

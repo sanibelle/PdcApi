@@ -24,7 +24,7 @@ namespace Pdc.Infrastructure.Migrations
             foreach (var role in roles)
             {
                 migrationBuilder.InsertData(
-                    table: "Roles",
+                    table: "AspNetRoles",
                     columns: new[] { "Id", "Name", "NormalizedName", "ConcurrencyStamp" },
                     values: new object[] { Guid.NewGuid(), role, ToUpper(role), Guid.NewGuid().ToString() }
                 );
@@ -37,7 +37,7 @@ namespace Pdc.Infrastructure.Migrations
             foreach (var role in roles)
             {
                 migrationBuilder.DeleteData(
-                    table: "Roles",
+                    table: "AspNetRoles",
                     keyColumn: "Name",
                     keyValues: new object[] { role }
                 );

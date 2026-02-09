@@ -4,6 +4,7 @@ using Pdc.Domain;
 using Pdc.Infrastructure.Entities.Versioning;
 
 namespace Pdc.Infrastructure.Data.Configurations;
+
 public class ComplementaryInformationConfiguration : IEntityTypeConfiguration<ComplementaryInformationEntity>
 {
     public void Configure(EntityTypeBuilder<ComplementaryInformationEntity> builder)
@@ -12,7 +13,7 @@ public class ComplementaryInformationConfiguration : IEntityTypeConfiguration<Co
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
         builder.Property(x => x.CreatedOn)
-            .HasDefaultValueSql("SYSUTCDATETIME()")
+            .HasDefaultValueSql("now()")
             .ValueGeneratedOnAdd()
             .IsRequired();
 

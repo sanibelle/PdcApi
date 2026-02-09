@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pdc.Infrastructure.Entities.CourseFramework;
 
 namespace Pdc.Infrastructure.Data.Configurations;
+
 public class CourseFrameworkConfiguration : IEntityTypeConfiguration<CourseFrameworkEntity>
 {
     public void Configure(EntityTypeBuilder<CourseFrameworkEntity> builder)
@@ -14,11 +15,11 @@ public class CourseFrameworkConfiguration : IEntityTypeConfiguration<CourseFrame
             .IsRequired();
 
         builder.Property(x => x.Semester)
-            .HasColumnType("tinyint")
+            .HasColumnType("smallint")
             .IsRequired();
 
         builder.Property(x => x.Hours)
-            .HasColumnType("tinyint")
+            .HasColumnType("smallint")
             .IsRequired();
 
         builder.Property(x => x.FinalCourseObjective)
@@ -43,13 +44,13 @@ public class CourseFrameworkConfiguration : IEntityTypeConfiguration<CourseFrame
         builder.OwnsOne(x => x.Weighting, w =>
         {
             w.Property(p => p.LaboratoryHours)
-                .HasColumnType("tinyint")
+                .HasColumnType("smallint")
                 .IsRequired();
             w.Property(p => p.PersonnalWorkHours)
-                .HasColumnType("tinyint")
+                .HasColumnType("smallint")
                 .IsRequired();
             w.Property(p => p.TheoryHours)
-                .HasColumnType("tinyint")
+                .HasColumnType("smallint")
                 .IsRequired();
         });
 

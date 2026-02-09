@@ -31,9 +31,11 @@ public static class DependencyInjection
         else if (!string.IsNullOrEmpty(connectionString))
         {
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(
+
+                options.UseNpgsql(
                     connectionString,
-                    b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
+                    b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName))
+                );
         }
 
         // Register Repositories

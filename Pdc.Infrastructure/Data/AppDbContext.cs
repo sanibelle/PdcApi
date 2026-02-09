@@ -33,6 +33,8 @@ public class AppDbContext : IdentityDbContext<IdentityUserEntity, IdentityRole<G
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder); // used for IdentityDbContext configuration
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
         // C'est ce qui permet de mapper Changeables dans sa propre table.

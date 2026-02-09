@@ -15,7 +15,7 @@ public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEn
             .HasMaxLength(5000);
 
         builder.Property(x => x.CreatedOn)
-            .HasDefaultValueSql("SYSUTCDATETIME()")
+            .HasDefaultValueSql("now()")
             .IsRequired();
 
         builder.Property(x => x.VersionNumber)

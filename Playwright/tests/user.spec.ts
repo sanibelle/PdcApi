@@ -4,7 +4,7 @@ test.describe("Roles", () => {
   test("Filtering an added role should not filter it", async ({
     adminPage,
   }) => {
-    await adminPage.goto("/administration/user");
+    await adminPage.goto("/administration/utilisateurs");
     await adminPage.waitForLoadState("networkidle");
 
     const roleFilter = await adminPage.locator("input[name=rolesFilter]");
