@@ -3,7 +3,7 @@ const { t } = useI18n();
 
 defineI18nRoute({
   paths: {
-    fr: `/gestion/utilisateurs`,
+    fr: `/administration/utilisateurs`,
   },
 });
 

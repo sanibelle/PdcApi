@@ -5,7 +5,6 @@ on:
     branches: [main, MigrateToProstgreAndUpdatedBackEnd]
     paths:
       - 'WebAPp/**'
-      - 'Playwright/**'
 
 jobs:
   deploy:
@@ -51,7 +50,6 @@ jobs:
           source: "WebAPp/.output/*"
           target: "/var/www/front-end/"
           strip_components: 2  # Removes WebAPp/.output/ from path
-          rm: true  # Remove old files first
       
       - name: Restart front-end service
         uses: appleboy/ssh-action@v1
