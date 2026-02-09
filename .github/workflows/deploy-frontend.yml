@@ -2,9 +2,7 @@ name: Deploy Frontend to VPS
 
 on:
   push:
-    branches:
-      - main 
-      - MigrateToProstgreAndUpdatedBackEnd
+    branches: [main, MigrateToProstgreAndUpdatedBackEnd]
     paths:
       - 'WebAPp/**'
       - 'Playwright/**'
@@ -45,7 +43,7 @@ jobs:
             sudo systemctl stop front-end || true  # Ignore error if service is not running
       
       - name: Deploy to VPS
-        uses: appleboy/scp-action@1
+        uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
