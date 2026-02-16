@@ -1,0 +1,61 @@
+name: Deploy Backend to VPS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "Pdc.WebAPI/**"
+      - "Pdc.Application/**"
+      - "Pdc.Domain/**"
+      - "Pdc.Infrastructure/**"
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: "10.0.x"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Publish in Release mode
+        run: dotnet publish Pdc.WebAPI/Pdc.WebAPI.csproj -c Release -o ./publish
+
+      - name: Stop back-end
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -e
+            systemctl stop back-end
+
+      - name: Deploy to VPS
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "publish/*"
+          target: "/var/www/back-end/"
+          strip_components: 1 # Removes publish/ from path
+          overwrite: true
+
+      - name: Restart front-end service
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -e
+            systemctl start back-end
+            systemctl status back-end
