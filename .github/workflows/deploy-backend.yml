@@ -36,7 +36,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             set -e
-            systemctl stop back-end
+            systemctl stop api
 
       - name: Deploy to VPS
         uses: appleboy/scp-action@v1
@@ -57,5 +57,5 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             set -e
-            systemctl start back-end
-            systemctl status back-end
+            systemctl start api
+            systemctl status api
