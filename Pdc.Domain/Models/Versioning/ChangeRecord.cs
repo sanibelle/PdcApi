@@ -44,7 +44,7 @@ public class ChangeRecord
     public ChangeRecord(User createdBy)
     {
         VersionNumber = 1;
-        CreatedOn = DateTime.Now;
+        CreatedOn = DateTime.UtcNow;
         IsDraft = true;
         CreatedBy = createdBy;
     }

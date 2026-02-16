@@ -32,6 +32,6 @@ public class ComplementaryInformation  // Informations supplémentaires comme de
     public ComplementaryInformation()
     {
         Id = Guid.NewGuid();
-        CreatedOn = DateTime.Now;
+        CreatedOn = DateTime.UtcNow;
     }
 }

@@ -13,7 +13,7 @@ public class ProgramOfStudyBuilder
     private int _monthsDuration = 36;
     private int _specificDurationHours = 2010;
     private int _totalDurationHours = 5730;
-    private DateOnly _publishedOn = DateOnly.FromDateTime(DateTime.Now);
+    private DateOnly _publishedOn = DateOnly.FromDateTime(DateTime.UtcNow);
     private List<MinisterialCompetency> _competencies = new List<MinisterialCompetency>();
     private Units _specificUnits = new Units(10);
     private Units _optionalUnits = new Units(5);
