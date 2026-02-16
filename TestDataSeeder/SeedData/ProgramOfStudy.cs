@@ -24,7 +24,7 @@ internal class ProgramOfStudy : ISeeder<ProgramOfStudyEntity>
             .WithMonthsDuration(24)
             .WithSpecificDurationHours(1800)
             .WithTotalDurationHours(4500)
-            .WithPublishedOn(DateOnly.FromDateTime(DateTime.Now))
+            .WithPublishedOn(DateOnly.FromDateTime(DateTime.UtcNow))
             .WithCompetencies(new List<CompetencyEntity>())
             .WithOptionalUnits(new Units(10, 1, 2))
             .WithSpecificUnits(new Units(60))

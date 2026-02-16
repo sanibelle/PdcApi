@@ -87,7 +87,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
             .WithMonthsDuration(35)
             .WithSpecificDurationHours(53)
             .WithTotalDurationHours(35)
-            .WithPublishedOn(DateOnly.FromDateTime(DateTime.Now))
+            .WithPublishedOn(DateOnly.FromDateTime(DateTime.UtcNow))
             .WithOptionalUnits(new Units(16, 2, 3))
             .WithSpecificUnits(new Units(26, 2, 3))
             .Build();

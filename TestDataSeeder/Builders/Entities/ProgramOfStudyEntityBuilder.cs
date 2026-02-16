@@ -17,7 +17,7 @@ public class ProgramOfStudyEntityBuilder
     private int _monthsDuration = 36;
     private int _specificDurationHours = 2010;
     private int _totalDurationHours = 5730;
-    private DateOnly _publishedOn = DateOnly.FromDateTime(DateTime.Now);
+    private DateOnly _publishedOn = DateOnly.FromDateTime(DateTime.UtcNow);
     private IList<CompetencyEntity> _competencies = new List<CompetencyEntity>();
 
     public ProgramOfStudyEntityBuilder WithCode(string code)

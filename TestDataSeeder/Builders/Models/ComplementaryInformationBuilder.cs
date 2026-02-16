@@ -7,7 +7,7 @@ public class ComplementaryInformationBuilder
 {
     private Guid _id = Guid.NewGuid();
     private string _text = "Test DATA";
-    private DateTime _modifiedOn = DateTime.Now;
+    private DateTime _modifiedOn = DateTime.UtcNow;
     private ChangeRecord? _writtenOnVersion;
     private User _createdBy = new UserBuilder().Build();
 
@@ -44,7 +44,7 @@ public class ComplementaryInformationBuilder
             ModifiedOn = _modifiedOn,
             WrittenOnVersion = _writtenOnVersion,
             CreatedBy = _createdBy,
-            CreatedOn = DateTime.Now
+            CreatedOn = DateTime.UtcNow
         };
     }
 
