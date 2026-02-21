@@ -37,15 +37,14 @@ const props = defineProps({
       </div>
     </div>
   </div>
-
+``
   <div class="panel main">
     <div class="panel-header">
       <div class="col col-left">{{ t('competencyElements') }}</div>
       <div class="col col-right">{{ t('performanceCriteria') }}</div>
     </div>
 
-    <template v-for="(competencyElement, index) in competency.competencyElements.sort((a, b) => +a.position - +b.position)
-      :key="competencyElement.id">
+    <template v-for="(competencyElement, index) in competency.competencyElements.sort((a, b) => +a.position - +b.position)" :key="competencyElement.id">
       <div class="panel-row">
         <div class="col col-left">
           <CommonTemplateAComplementaryInformations
