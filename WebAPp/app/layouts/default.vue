@@ -20,12 +20,29 @@ const authStore = useAuthStore();
         </div>
       </ClientOnly>
     </header>
+    <div class="wrapper">
 
-    <!-- Main content slot -->
-    <div class="wrapper flex-grow">
-      <slot />
+      <!-- Main content slot -->
+      <div>
+        <slot />
+      </div>
+      <CommonTemplateTheComplementaryInformationsContainer />
     </div>
 
     <footer class="bg-gray-900 text-white py-8">POC semaines plan de cours</footer>
   </div>
 </template>
+
+<style lang="scss" scoped>
+.wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 24px;
+}
+
+.wrapper > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+</style>

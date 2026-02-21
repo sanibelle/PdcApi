@@ -3,5 +3,6 @@ export type ComplementaryInformation = {
   text: string;
   writtenOnVersion?: number;
   // TODO fix the DTO or the type for createdBy
-  createdBy?: string;
+  createdBy?: User;
+  createdOn?: string;
 };

@@ -41,6 +41,19 @@ const { value, errorMessage, handleBlur, setValue, handleChange } = useField<str
     validateOnValueUpdate: false,
   });
 
+// Computed bridge: maps between string-based <select> and typed model
+const selectModel = computed({
+  get: () => model.value ?? '',
+  set: (val: string) => {
+    if (val === '') {
+      model.value = null;
+    } else {
+      const num = Number(val);
+      model.value = isNaN(num) ? val : num;
+    }
+  }
+});
+
 // Watch parent → field
 watch(
   () => model.value,
@@ -54,8 +67,6 @@ watch(
 
 const onChange = async (event: Event): Promise<void> => {
   handleChange(event, !!errorMessage.value);
-  const target = event.target as HTMLSelectElement;
-  model.value = target.value === '' ? null : target.value;
 };
 
 watch(
@@ -68,12 +79,12 @@ watch(
 
 <template>
   <div class="select-wrapper" :class="{ 'is-disabled': disabled }">
-    <select v-bind="attrs" :name="name" v-model="model" :disabled="disabled" class="base-select"
+    <select v-bind="attrs" :name="name" v-model="selectModel" :disabled="disabled" class="base-select"
       :class="{ error: errorMessage }" @change="onChange" @blur="handleBlur">
       <option v-if="placeholder" value="" disabled>
         {{ placeholder }}
       </option>
-      <option v-for="({ value, label }, index) in options" :key="`${value}-option-${index}`" :value="value">
+      <option v-for="({ value, label }, index) in options" :key="`${value}-option-${index}`" :value="value ?? ''">
         {{ label }}
       </option>
     </select>
