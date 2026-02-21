@@ -24,7 +24,6 @@ const handleSubmitted = (c: Competency) => {
   editMode.value = false;
 };
 
-const upsertCompetencyModal = useModal();
 </script>
 
 <template>
@@ -42,7 +41,7 @@ const upsertCompetencyModal = useModal();
     </template>
     <template v-else-if="competency">
       <CommonTemplateADetailedCompetency :competency="competency" />
-      <CommonAtomsAButton @click="editMode = true" data-test-id="edit-button">
+      <CommonAtomsAButton @click="editMode = true" data-testid="edit-button">
         {{ t('editButton') }}
       </CommonAtomsAButton>
     </template>
