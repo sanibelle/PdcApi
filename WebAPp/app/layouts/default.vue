@@ -39,7 +39,6 @@ const authStore = useAuthStore();
   align-items: flex-start;
   gap: 24px;
   padding: 24px;
-  margin: auto;
 }
 
 .wrapper > div:first-child {

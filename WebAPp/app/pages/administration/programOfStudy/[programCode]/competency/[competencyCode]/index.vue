@@ -42,7 +42,7 @@ const upsertCompetencyModal = useModal();
     </template>
     <template v-else-if="competency">
       <CommonTemplateADetailedCompetency :competency="competency" />
-      <CommonAtomsAButton @click="editMode = true">
+      <CommonAtomsAButton @click="editMode = true" data-test-id="edit-button">
         {{ t('editButton') }}
       </CommonAtomsAButton>
     </template>

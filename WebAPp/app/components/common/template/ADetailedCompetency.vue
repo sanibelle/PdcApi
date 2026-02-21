@@ -7,16 +7,6 @@ const props = defineProps({
     required: true,
   }
 });
-
-const activeComment = ref<string | null>(null);
-
-function toggleComment(id: string) {
-  activeComment.value = activeComment.value === id ? null : id;
-}
-
-function closeComment() {
-  activeComment.value = null;
-}
 </script>
 
 <template>
@@ -54,7 +44,7 @@ function closeComment() {
       <div class="col col-right">{{ t('performanceCriteria') }}</div>
     </div>
 
-    <template v-for="(competencyElement, index) in competency.competencyElements.sort(x => +x.position)"
+    <template v-for="(competencyElement, index) in competency.competencyElements.sort((a, b) => +a.position - +b.position)
       :key="competencyElement.id">
       <div class="panel-row">
         <div class="col col-left">
@@ -168,120 +158,11 @@ function closeComment() {
   }
 }
 
-/* Criterion items */
 .criterion {
   padding: 6px 10px;
   font-size: 13px;
   color: #333;
   position: relative;
   cursor: default;
-
-  &.has-comment {
-    background: #fff9c4;
-    border-left: 2px solid #f5c242;
-    cursor: pointer;
-    transition: background 0.15s ease;
-
-    &:hover {
-      background: #fff3a0;
-    }
-  }
-}
-
-/* Small yellow triangle indicator */
-.comment-indicator {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 0;
-  height: 0;
-  border-top: 10px solid #f5c242;
-  border-left: 10px solid transparent;
-}
-
-/* Word-style comment bubble */
-.comment-bubble {
-  position: absolute;
-  right: -220px;
-  top: 0;
-  width: 200px;
-  background: #fff;
-  border: 1px solid #d0d0d0;
-  border-left: 3px solid #f5c242;
-  padding: 8px 10px;
-  font-size: 11.5px;
-  color: #555;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  line-height: 1.4;
-  z-index: 10;
-  cursor: default;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: -10px;
-    top: 10px;
-    width: 0;
-    height: 0;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
-    border-right: 8px solid #d0d0d0;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    left: -7px;
-    top: 10px;
-    width: 0;
-    height: 0;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
-    border-right: 8px solid #fff;
-  }
-}
-
-.comment-author {
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 2px;
-}
-
-.comment-date {
-  font-size: 10px;
-  color: #999;
-  margin-bottom: 4px;
-}
-
-.comment-text {
-  color: #555;
-}
-
-.comment-close {
-  position: absolute;
-  top: 4px;
-  right: 6px;
-  background: none;
-  border: none;
-  font-size: 14px;
-  color: #999;
-  cursor: pointer;
-  line-height: 1;
-
-  &:hover {
-    color: #333;
-  }
-}
-
-/* Transition */
-.comment-fade-enter-active,
-.comment-fade-leave-active {
-  transition: opacity 0.15s ease, transform 0.15s ease;
-}
-
-.comment-fade-enter-from,
-.comment-fade-leave-to {
-  opacity: 0;
-  transform: translateX(-4px);
 }
 </style>

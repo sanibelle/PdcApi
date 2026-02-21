@@ -29,8 +29,8 @@ const scrollToComment = () => {
         <div class="comment-entry" v-for="complementaryInformation of props.complementaryInformations"
           :key="complementaryInformation.id">
           <div class="comment-author">{{ complementaryInformation.createdBy?.userName || t('unknownUser') }}</div>
-          <div class="comment-date">¨{{ complementaryInformation.createdOn }}</div>
-          <div class="comment-text">{{ complementaryInformation.text }}</div>
+          <div class="comment-date">{{ complementaryInformation.createdOn}}</div>
+          <div class="comment-text">{{ complementaryInformation.text}}</div>
         </div>
       </div>
     </Teleport>

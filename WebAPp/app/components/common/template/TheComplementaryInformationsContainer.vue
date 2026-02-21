@@ -3,13 +3,6 @@
 const { t } = useI18n();
 const commentPanel = ref<HTMLDivElement | null>(null);
 
-const hasChildren = computed(() => {
-  if (!commentPanel.value) return false;
-  // Le header est toujours là, donc on vérifie s'il y a plus d'un enfant
-  return commentPanel.value.childElementCount > 1;
-});
-
-// Re-check quand le DOM change (teleport adds/removes)
 const observer = ref<MutationObserver | null>(null);
 const childCount = ref(0);
 
@@ -42,7 +35,7 @@ const isVisible = computed(() => childCount.value > 1);
   }
 }</i18n>
 
-<style lang="scss">
+<style lang="scss" scoped>
   #comments-panel {
     max-width: 280px;
     background: #fafafa;
