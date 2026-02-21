@@ -15,7 +15,7 @@ test('Creating a full valid program of study', async ({ adminPage }) => {
   await adminPage.locator('input[name="monthsDuration"]').fill('24')
   await adminPage.locator('input[name="specificDurationHours"]').fill('123')
   await adminPage.locator('input[name="totalDurationHours"]').fill('123')
-  await adminPage.getByTestId('dp-input').fill("06/13/2025");
+  await adminPage.locator('[data-test-id="dp-input"]').fill("06/13/2025");
   // units
   await adminPage.locator('input[name="specificUnits.wholeUnit"]').fill('1')
   await adminPage.locator('select[name="specificUnits.numerator"]').selectOption('1');

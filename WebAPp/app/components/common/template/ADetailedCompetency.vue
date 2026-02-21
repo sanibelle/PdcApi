@@ -37,7 +37,6 @@ const props = defineProps({
       </div>
     </div>
   </div>
-``
   <div class="panel main">
     <div class="panel-header">
       <div class="col col-left">{{ t('competencyElements') }}</div>
