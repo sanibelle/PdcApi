@@ -12,35 +12,45 @@ defineI18nRoute({
 
 const { fetchCompetencyByCode } = useCompetencyClient();
 const competency = ref<Competency>();
+const editMode = ref(false);
 
 onMounted(async () => {
   competency.value = await fetchCompetencyByCode(programCode, competencyCode);
 });
 
 // TODO la modale est toujours utile??
-const handleSubmitted = (competency: Competency) => {
-  upsertCompetencyModal.close()
+const handleSubmitted = (c: Competency) => {
+  competency.value = c;
+  editMode.value = false;
 };
 
-const upsertCompetencyModal = useModal();
 </script>
 
 <template>
-  <h1>
-    {{ t('title') }}
-  </h1>
-  <CommonAVersion v-if="competency?.versionNumber" :version-number="competency?.versionNumber"
-    :is-draft="competency?.isDraft" />
-  <section v-if="competency">
-    <FormTemplatesDetailedCompetency @submitted="handleSubmitted" :competency="competency"
-      :program-code="programCode" />
-  </section>
-
+  <div class="wrapper">
+    <h1>
+      {{ t('title') }}
+    </h1>
+    <CommonAVersion v-if="competency?.versionNumber" :version-number="competency?.versionNumber"
+      :is-draft="competency?.isDraft" />
+    <template v-if="editMode">
+      <section v-if="competency">
+        <FormTemplatesDetailedCompetency @submitted="handleSubmitted" :competency="competency"
+          :program-code="programCode" />
+      </section>
+    </template>
+    <template v-else-if="competency">
+      <CommonTemplateADetailedCompetency :competency="competency" />
+      <CommonAtomsAButton @click="editMode = true" data-testid="edit-button">
+        {{ t('editButton') }}
+      </CommonAtomsAButton>
+    </template>
+  </div>
 </template>
 
 <i18n lang="json">{
   "fr": {
-    "title": "Gestion des compétences ministérielles",
+    "title": "Compétences ministérielles",
     "createButton": "Ajouter une compétence",
     "backToList": "Retour à la liste",
     "loading": "Chargement...",
@@ -52,46 +62,16 @@ const upsertCompetencyModal = useModal();
     "programType.DEC": "Technique",
     "programType.AEC": "Attestation d'études collégiales",
     "programType.PREU": "Préuniversitaire",
-    "noCompetenciesYet": "Aucune compétence ajoutée pour ce programme."
+    "noCompetenciesYet": "Aucune compétence ajoutée pour ce programme.",
+    "editButton": "Modifier la compétence"
   }
 }</i18n>
 
 <style scoped>
-.back-link {
-  color: #3b82f6;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.back-link:hover {
-  text-decoration: underline;
-}
-
-.loading,
-.error {
-  padding: 1rem;
-  text-align: center;
-  font-size: 1.1rem;
-}
-
-.error {
-  color: #ef4444;
-}
-
-.program-details {
-  background: #f8fafc;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-top: 1rem;
-}
-
-.detail-item {
-  margin-bottom: 0.75rem;
-  font-size: 1rem;
-}
-
-.detail-item strong {
-  color: #374151;
-  margin-right: 0.5rem;
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  max-width: 900px;
 }
 </style>

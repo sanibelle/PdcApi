@@ -53,6 +53,7 @@ test.describe("ministerial competency", () => {
   }) => {
     await adminPage.goto("/administration/programme/Seededprogram/competence/code1");
     await adminPage.waitForLoadState("networkidle");
+    await adminPage.getByTestId("edit-button").first().click();
 
     // creation
     for (let parentIndex = 0; parentIndex < 3; parentIndex++) {
@@ -129,7 +130,8 @@ test.describe("ministerial competency", () => {
     
     await adminPage.goto("/administration/programme/Seededprogram/competence/code1");
     await adminPage.waitForLoadState("networkidle");
-
+    await adminPage.getByTestId("edit-button").first().click();
+    
     // realisation contexts
     await adminPage.getByTestId('delete-realisation-context-button-1').click();
     await adminPage.getByTestId('delete-complementary-information-competency.realisationContexts[0]-1').click();

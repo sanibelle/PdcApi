@@ -55,7 +55,7 @@ const options: SelectOption[] = [
 
 const denominatorOption: SelectOption[] = options.filter((x) => x.value !== 1);
 
-const numeratorOption = computed(() =>
+const numeratorOptions = computed(() =>
   options.filter((x) => {
     if (unit.value?.denominator && typeof x.value === 'number') {
       return x.value < unit.value.denominator;
@@ -75,7 +75,7 @@ const numeratorOption = computed(() =>
         :required="props.required" :integer="true" :rules="validationRules" v-model="unit.wholeUnit" />
       <FormMoleculesASelectField :name="`${name}.numerator`" :label="t('numerator')"
         :disabled="props.disabled" :required="numeratorAndDenominatorRules.length > 0"
-        :rules="numeratorAndDenominatorRules" :options="numeratorOption" v-model="unit.numerator" />
+        :rules="numeratorAndDenominatorRules" :options="numeratorOptions" v-model="unit.numerator" />
       <FormMoleculesASelectField :name="`${name}.denominator`" :label="t('denominator')"
         :required="numeratorAndDenominatorRules.length > 0" :disabled="props.disabled"
         :rules="numeratorAndDenominatorRules" :options="denominatorOption" v-model="unit.denominator" />
