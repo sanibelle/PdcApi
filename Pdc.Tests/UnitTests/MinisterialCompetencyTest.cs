@@ -178,7 +178,7 @@ public class MinisterialCompetencyTest
         _competencyValidator = new CompetencyValidation();
 
         //    // Initialize competency use cases
-        _createCompetencyUseCase = new CreateCompetency(_competencyRepositoryMock.Object, _programOfStudyRepositoryMock.Object, _mapper, _competencyValidator);
+        _createCompetencyUseCase = new AddCompetency(_competencyRepositoryMock.Object, _programOfStudyRepositoryMock.Object, _mapper, _competencyValidator);
         _updateDraftV1CompetencyUseCase = new UpdateDraftV1Competency(_competencyRepositoryMock.Object, _mapper, _competencyValidator);
         //    _deleteCompetencyUseCase = new DeleteCompetency(_competencyRepositoryMock.Object);
         //    _getAllCompetencyUseCase = new GetAllCompetency(_competencyRepositoryMock.Object, _mapper);

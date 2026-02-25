@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
-using Pdc.Infrastructure.Identity;
+using Pdc.Domain.Models.Security;
 using TestDataSeeder;
 
 namespace Pdc.E2ETests;

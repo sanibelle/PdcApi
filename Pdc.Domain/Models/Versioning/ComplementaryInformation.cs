@@ -1,8 +1,9 @@
-﻿using Pdc.Domain.Models.Security;
+﻿using Pdc.Domain.Interfaces.Propagables;
+using Pdc.Domain.Models.Security;
 
 namespace Pdc.Domain.Models.Versioning;
 
-public class ComplementaryInformation  // Informations supplémentaires comme des notes. Utilisé comme 4ieme colonne des éléments de contenu
+public class ComplementaryInformation : IVersionPropagable, ICreatedByPropagable// Informations supplémentaires comme des notes. Utilisé comme 4ieme colonne des éléments de contenu
 {
     public Guid? Id { get; set; }
     /// <summary>

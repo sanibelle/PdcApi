@@ -9,13 +9,13 @@ using Pdc.Domain.Models.CourseFramework;
 
 namespace Pdc.Application.UseCases;
 
-public class CreateProgramOfStudy : ICreateProgramOfStudyUseCase
+public class AddProgramOfStudy : ICreateProgramOfStudyUseCase
 {
     private readonly IValidator<ProgramOfStudyDTO> _validator;
     private readonly IProgramOfStudyRepository _programOfStudyRepository;
     private readonly IMapper _mapper;
 
-    public CreateProgramOfStudy(IProgramOfStudyRepository programOfStudyRepository, IMapper mapper, IValidator<ProgramOfStudyDTO> validator)
+    public AddProgramOfStudy(IProgramOfStudyRepository programOfStudyRepository, IMapper mapper, IValidator<ProgramOfStudyDTO> validator)
     {
         _programOfStudyRepository = programOfStudyRepository;
         _mapper = mapper;

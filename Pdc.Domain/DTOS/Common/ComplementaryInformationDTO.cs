@@ -3,7 +3,7 @@
 public class ComplementaryInformationDTO
 {
     public Guid? Id { get; set; }
-    public UserDTO? ModifiedBy { get; set; }
+    public UserDTO? ModifiedBy { get; set; }//TODO mapper le nom du user direct sans avoir le id et tout le tralala.
     /// <summary>
     /// Version à laquelle l'information a été ajoutée
     /// </summary>

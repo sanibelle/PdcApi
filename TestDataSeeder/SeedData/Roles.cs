@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Pdc.Infrastructure.Identity;
+using Pdc.Domain.Models.Security;
 
 namespace TestDataSeeder.SeedData;
 
@@ -23,7 +23,7 @@ internal class Role : ISeeder<List<IdentityRole<Guid>>>
                 throw new Exception("Failed to get the constant value of a role");
             }
 
-            var role = new IdentityRole<Guid>(name); 
+            var role = new IdentityRole<Guid>(name);
             roles.Add(role);
             await _roleManager.CreateAsync(role);
         }

@@ -14,7 +14,7 @@ public class CompetencyConfiguration : IEntityTypeConfiguration<CompetencyEntity
             .HasMaxLength(1500);
 
         builder.HasMany(x => x.CompetencyElements)
-            .WithOne()
+            .WithOne(x => x.Competency)
             .HasForeignKey("CompetencyId");
     }
 }

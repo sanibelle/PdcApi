@@ -1,8 +1,9 @@
-﻿using Pdc.Domain.Models.Security;
+﻿using Pdc.Domain.Interfaces.Propagables;
+using Pdc.Domain.Models.Security;
 
 namespace Pdc.Domain.Models.Versioning;
 
-public abstract class AChangeable
+public abstract class AChangeable : IVersionPropagable, ICreatedByPropagable
 {
     public required Guid? Id { get; set; }
     public required string Value { get; set; }

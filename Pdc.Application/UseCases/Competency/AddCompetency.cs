@@ -12,14 +12,14 @@ using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Application.UseCases;
 
-public class CreateCompetency : ICreateCompetencyUseCase
+public class AddCompetency : ICreateCompetencyUseCase
 {
     private readonly IValidator<CompetencyDTO> _validator;
     private readonly ICompetencyRepository _competencyRepository;
     private readonly IProgramOfStudyRepository _programOfStudyRepository;
     private readonly IMapper _mapper;
 
-    public CreateCompetency(ICompetencyRepository competencyRepository,
+    public AddCompetency(ICompetencyRepository competencyRepository,
                             IProgramOfStudyRepository programOfStudyRepository,
                             IMapper mapper,
                             IValidator<CompetencyDTO> validator)

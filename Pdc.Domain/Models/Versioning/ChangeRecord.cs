@@ -1,11 +1,12 @@
-﻿using Pdc.Domain.Models.Security;
+﻿using Pdc.Domain.Interfaces.Propagables;
+using Pdc.Domain.Models.Security;
 
 namespace Pdc.Domain.Models.Versioning;
 
 /// <summary>
 /// Nommé ainsi pour les confilts de noms avec System.Version
 /// </summary>
-public class ChangeRecord
+public class ChangeRecord : ICreatedByPropagable
 {
     public int VersionNumber { get; set; }
     private IEnumerable<ComplementaryInformation> _complementaryInformations { get; set; } = new List<ComplementaryInformation>();
