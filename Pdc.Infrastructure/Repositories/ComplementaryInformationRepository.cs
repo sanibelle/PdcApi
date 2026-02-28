@@ -13,25 +13,30 @@ namespace Pdc.Infrastructure.Repositories;
 public class ComplementaryInformationRepository : IComplementaryInformationRepository
 {
     private readonly AppDbContext _context;
+    private readonly IVersionRepository _versionRepository;
     private readonly IMapper _mapper;
 
-    public ComplementaryInformationRepository(AppDbContext context, IMapper mapper)
+    public ComplementaryInformationRepository(AppDbContext context, IVersionRepository versionRepository, IMapper mapper)
     {
         _context = context;
+        _versionRepository = versionRepository;
         _mapper = mapper;
     }
 
-    public async Task<ComplementaryInformation> Add(ComplementaryInformation complementaryInformation, Guid changeableId)
+    public async Task<ComplementaryInformation> Add(ComplementaryInformation complementaryInformation, Guid versionId)
     {
-        EntityEntry<ComplementaryInformationEntity> entity = await _context.ComplementaryInformations.AddAsync(_mapper.Map<ComplementaryInformationEntity>(complementaryInformation));
+        var toAdd = _mapper.Map<ComplementaryInformationEntity>(complementaryInformation);
+        toAdd.WrittenOnVersion = await _context.ChangeRecords.SingleOrDefaultAsync(x => x.Id == versionId);
+        EntityEntry<ComplementaryInformationEntity> entity = await _context.ComplementaryInformations.AddAsync(toAdd);
         await _context.SaveChangesAsync();
         return _mapper.Map<ComplementaryInformation>(entity.Entity);
     }
 
-    public async Task<ComplementaryInformation> Update(ComplementaryInformation complementaryInformation)
+    public async Task<ComplementaryInformation> Update(ComplementaryInformation complementaryInformation, Guid versionId)
     {
         ComplementaryInformationEntity entity = await FindEntityById(complementaryInformation.Id);
         _mapper.Map(complementaryInformation, entity);
+        entity.WrittenOnVersion = await _context.ChangeRecords.SingleOrDefaultAsync(x => x.Id == versionId);
         EntityEntry<ComplementaryInformationEntity> updatedEntity = _context.ComplementaryInformations.Update(entity);
         await _context.SaveChangesAsync();
         return _mapper.Map<ComplementaryInformation>(updatedEntity.Entity);
@@ -44,16 +49,6 @@ public class ComplementaryInformationRepository : IComplementaryInformationRepos
         await _context.SaveChangesAsync();
     }
 
-    private async Task<ComplementaryInformationEntity> FindEntityById(Guid? id)
-    {
-        var complementaryInformationEntity = await _context.ComplementaryInformations
-            .SingleOrDefaultAsync(x => x.Id == id);
-        if (complementaryInformationEntity == null || id == null)
-        {
-            throw new NotFoundException(nameof(ChangeableEntity), id == null ? "id is null" : id);
-        }
-        return complementaryInformationEntity;
-    }
 
     public async Task<bool> ChangeableExists(Guid changeableId)
     {
@@ -62,7 +57,7 @@ public class ComplementaryInformationRepository : IComplementaryInformationRepos
             .AnyAsync();
     }
 
-    public async Task<ChangeRecord> GetVersionByChangeableId(Guid changeableId)
+    public async Task<Guid> GetVersionByChangeableId(Guid changeableId)
     {
         ChangeableEntity? changeable = await _context.Changeables
             .SingleOrDefaultAsync(x => x.Id == changeableId);
@@ -73,11 +68,12 @@ public class ComplementaryInformationRepository : IComplementaryInformationRepos
         }
         ChangeRecordEntity? version = changeable.Accept(new CurrentVersionVisitor());
 
-        if (changeable == null)
+        if (version?.Id == null)
         {
             throw new NotFoundException(nameof(ChangeRecordEntity));
         }
-        return _mapper.Map<ChangeRecord>(version);
+
+        return await _versionRepository.FindParentByVersionId(version.Id.Value);
     }
 
     public async Task<Guid> FindCreatedById(Guid complementaryInformationId)
@@ -92,5 +88,21 @@ public class ComplementaryInformationRepository : IComplementaryInformationRepos
             throw new NotFoundException(nameof(ChangeRecordEntity) + "CreatedBy Id not found, value is null", complementaryInformationId);
         }
         return id.Value;
+    }
+
+    public async Task<ComplementaryInformation> FindById(Guid complementaryInformationId)
+    {
+        return _mapper.Map<ComplementaryInformation>(await FindEntityById(complementaryInformationId));
+    }
+
+    private async Task<ComplementaryInformationEntity> FindEntityById(Guid? id)
+    {
+        var complementaryInformationEntity = await _context.ComplementaryInformations
+            .SingleOrDefaultAsync(x => x.Id == id);
+        if (complementaryInformationEntity == null || id == null)
+        {
+            throw new NotFoundException(nameof(ChangeableEntity), id == null ? "id is null" : id);
+        }
+        return complementaryInformationEntity;
     }
 }

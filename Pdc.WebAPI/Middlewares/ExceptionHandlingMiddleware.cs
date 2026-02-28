@@ -55,6 +55,7 @@ public class ExceptionHandlingMiddleware
             FluentValidation.ValidationException => StatusCodes.Status422UnprocessableEntity,
             NotFoundException => StatusCodes.Status404NotFound,
             DuplicateException => StatusCodes.Status409Conflict,
+            MissingVersionException => StatusCodes.Status400BadRequest,
             AuthException => StatusCodes.Status401Unauthorized,
             ForbiddenException => StatusCodes.Status403Forbidden, // Add this line
             _ => StatusCodes.Status500InternalServerError

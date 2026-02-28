@@ -22,21 +22,61 @@ public class ComplementaryInformation : ApiTestBase
             .WithText("This is the test text")
             .Build();
 
-        // Act - Create the competencyiojklm
-        var createResponse = await _Client.PostAsJsonAsync($"/api/changeable/{competencyElement.Id}/changeable", complementaryInformationDTO);
+        // Act - Creation
+        var createResponse = await _Client.PostAsJsonAsync($"/api/changeable/{competencyElement.Id}/complementaryInformation", complementaryInformationDTO);
         createResponse.EnsureSuccessStatusCode();
         var createdComplementaryInformation = await createResponse.Content.ReadFromJsonAsync<ComplementaryInformationDTO>();
         createdComplementaryInformation.Should().NotBeNull();
-        createdComplementaryInformation.Should().BeEquivalentTo(complementaryInformationDTO);
+        createdComplementaryInformation.Should().BeEquivalentTo(complementaryInformationDTO, options =>
+           options
+           .Excluding(x => x.Id)
+           .Excluding(x => x.WrittenOnVersion)
+           .Excluding(x => x.CreatedOn)
+           .Excluding(x => x.CreatedBy));
+
         createdComplementaryInformation.CreatedOn.Should().NotBeNull();
         createdComplementaryInformation.ModifiedOn.Should().BeNull();
         createdComplementaryInformation.CreatedBy.Should().NotBeNull();
+        createdComplementaryInformation.Id.Should().NotBeNull();
+        createdComplementaryInformation.WrittenOnVersion.Should().NotBeNull();
     }
 
 
     [Test]
     public async Task GivenComplementaryInformation_WhenUpdatingComplementaryInformation_ThenShouldReturnCreatedComplementaryInformation()
     {
+        CompetencyElementEntity competencyElement = DataSeeder.CompetencyEntity.CompetencyElements.First();
+        Assert.That(competencyElement != null, "there should be at least one competency element seeded");
+        ComplementaryInformationDTO complementaryInformationDTO = new ComplementaryInformationDTOBuilder()
+            .WithText("This is the test text")
+            .Build();
+
+        var createResponse = await _Client.PostAsJsonAsync($"/api/changeable/{competencyElement.Id}/complementaryInformation", complementaryInformationDTO);
+        createResponse.EnsureSuccessStatusCode();
+        var createdComplementaryInformation = await createResponse.Content.ReadFromJsonAsync<ComplementaryInformationDTO>();
+        createdComplementaryInformation.Should().NotBeNull();
+
+        complementaryInformationDTO.Text = "This is the updated test text";
+        var updateResponse = await _Client.PutAsJsonAsync($"/api/complementaryInformation/{createdComplementaryInformation.Id}", complementaryInformationDTO);
+
+        // Act - Update
+        updateResponse.EnsureSuccessStatusCode();
+        var updatedComplementaryInformation = await updateResponse.Content.ReadFromJsonAsync<ComplementaryInformationDTO>();
+
+        updatedComplementaryInformation.Should().NotBeNull();
+        updatedComplementaryInformation.Should().BeEquivalentTo(complementaryInformationDTO, options =>
+           options
+           .Excluding(x => x.Id)
+           .Excluding(x => x.WrittenOnVersion)
+           .Excluding(x => x.CreatedOn)
+           .Excluding(x => x.ModifiedOn)
+           .Excluding(x => x.CreatedBy));
+
+        updatedComplementaryInformation.CreatedOn.Should().NotBeNull();
+        updatedComplementaryInformation.ModifiedOn.Should().NotBeNull();
+        updatedComplementaryInformation.CreatedBy.Should().NotBeNull();
+        updatedComplementaryInformation.Id.Should().NotBeNull();
+        updatedComplementaryInformation.WrittenOnVersion.Should().NotBeNull();
     }
 
     [Test]
@@ -81,6 +121,11 @@ public class ComplementaryInformation : ApiTestBase
 
     [Test]
     public async Task GivenComplementaryInformation_WhenDeletingComplementaryInformationNotAsAuthor_ThenShouldFail()
+    {
+    }
+
+    [Test]
+    public async Task GivenComplementaryInformation_WhenUpdatingWithNewVersion_ThenShouldUpdateTheVersion()
     {
     }
 

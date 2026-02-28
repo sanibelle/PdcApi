@@ -3,7 +3,7 @@ using Pdc.Domain.Models.Security;
 
 namespace Pdc.Domain.Models.Versioning;
 
-public class ComplementaryInformation : IVersionPropagable, ICreatedByPropagable// Informations supplémentaires comme des notes. Utilisé comme 4ieme colonne des éléments de contenu
+public class ComplementaryInformation : IVersionPropagable, ICreatedByPropagable, ICreatedOnPropagable
 {
     public Guid? Id { get; set; }
     /// <summary>
@@ -11,7 +11,7 @@ public class ComplementaryInformation : IVersionPropagable, ICreatedByPropagable
     /// </summary>
     public ChangeRecord? WrittenOnVersion { get; set; }
     public DateTime? ModifiedOn { get; set; }
-    public required DateTime CreatedOn { get; set; }
+    public DateTime CreatedOn { get; set; }
     public required string Text { get; set; }
     public required User CreatedBy { get; set; }
     public void SetVersionOnUntracked(ChangeRecord version)
@@ -27,6 +27,15 @@ public class ComplementaryInformation : IVersionPropagable, ICreatedByPropagable
         if (CreatedBy == null)
         {
             CreatedBy = user;
+        }
+    }
+
+    public void SetCreatedOnOnUntracked()
+    {
+        if (CreatedOn == default)
+        {
+            CreatedOn = DateTime.UtcNow;
+            ModifiedOn = null;
         }
     }
 

@@ -16,5 +16,10 @@ public class CompetencyConfiguration : IEntityTypeConfiguration<CompetencyEntity
         builder.HasMany(x => x.CompetencyElements)
             .WithOne(x => x.Competency)
             .HasForeignKey("CompetencyId");
+
+        builder.HasOne(x => x.Units)
+            .WithMany()
+            .HasForeignKey(x => x.UnitsId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

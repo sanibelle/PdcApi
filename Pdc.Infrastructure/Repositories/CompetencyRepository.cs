@@ -1,6 +1,7 @@
 using AutoMapper;
 using AutoMapper.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
@@ -9,8 +10,6 @@ using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Infrastructure.Entities.Versioning;
-using Pdc.Infrastructure.Exceptions;
-using Pdc.Domain.Exceptions;
 
 namespace Pdc.Infrastructure.Repositories;
 
@@ -137,7 +136,7 @@ public class CompetencyRepository : ICompetencyRepository
     {
         CompetencyEntity? competency = await _context.Competencies
             .AsSplitQuery()
-            .AsNoTracking()
+            .AsNoTrackingWithIdentityResolution()
             .Include(c => c.RealisationContexts)
                 .ThenInclude(rc => rc.ComplementaryInformations)
                     .ThenInclude(cr => cr.WrittenOnVersion)
@@ -155,7 +154,6 @@ public class CompetencyRepository : ICompetencyRepository
             .Include(c => c.CurrentVersion)
                 .ThenInclude(v => v.CreatedBy)
             .SingleOrDefaultAsync(x => x.Code == competencyCode);
-
         if (competency == null)
         {
             throw new NotFoundException(nameof(MinisterialCompetency), competencyCode);

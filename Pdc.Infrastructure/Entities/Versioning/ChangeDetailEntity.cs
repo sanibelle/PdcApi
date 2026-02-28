@@ -5,8 +5,8 @@ namespace Pdc.Infrastructure.Entities.Versioning;
 public class ChangeDetailEntity
 {
     public Guid? Id { get; set; }
-    public required ChangeRecordEntity ChangeRecord { get; set; }
-    public required ChangeableEntity Changeable { get; set; }
+    public virtual ChangeRecordEntity? ChangeRecord { get; set; }
+    public virtual ChangeableEntity? Changeable { get; set; }
     public required ChangeType ChangeType { get; set; }
     /// <summary>
     /// Holds the old value of the property when updated or deleted.

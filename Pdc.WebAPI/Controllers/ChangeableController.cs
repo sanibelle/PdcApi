@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Interfaces.UseCases.Version;
+using Pdc.Domain.Models.Security;
+using Pdc.WebAPI.Services;
 
 namespace Pdc.WebAPI.Controllers;
 
@@ -10,17 +12,22 @@ namespace Pdc.WebAPI.Controllers;
 [Route("api/[controller]")]
 public class ChangeableController(
                         IAddComplementaryInformationUseCase addComplementartInformationUseCase,
-                        IDeleteComplementaryInformationUseCase deleteComplementartInformationUseCase,
-                        IUpdateComplementaryInformationUseCase updateComplementartInformationUseCase) : ControllerBase
+                        UserControllerService userControllerService) : ControllerBase
 {
     private readonly IAddComplementaryInformationUseCase _addComplementartInformationUseCase = addComplementartInformationUseCase;
-    private readonly IDeleteComplementaryInformationUseCase _deleteComplementartInformationUseCase = deleteComplementartInformationUseCase;
-    private readonly IUpdateComplementaryInformationUseCase _updateComplementartInformationUseCase = updateComplementartInformationUseCase;
+    private readonly UserControllerService _userControllerService = userControllerService;
+
 
     [Authorize]
-    [HttpPost]
-    public async Task<ActionResult<ComplementaryInformationDTO>> Add(ComplementaryInformationDTO complementaryInformation)
+    [HttpPost("{changeableId}/complementaryInformation")]
+    public async Task<ActionResult<ComplementaryInformationDTO>> Add(Guid changeableId, [FromBody] ComplementaryInformationDTO complementaryInformationDTO)
     {
-        return Ok();
+        User user = _userControllerService.GetUserFromHttpContext();
+        ComplementaryInformationDTO createdComplementaryInformation = await _addComplementartInformationUseCase.Execute(complementaryInformationDTO, changeableId, user);
+        return CreatedAtAction(
+            nameof(ComplementaryInformation.Get),
+            controllerName: "ComplementaryInformation",
+            new { id = createdComplementaryInformation.Id },
+            createdComplementaryInformation);
     }
 }

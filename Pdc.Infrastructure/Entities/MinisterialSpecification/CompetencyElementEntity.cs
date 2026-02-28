@@ -5,7 +5,7 @@ namespace Pdc.Infrastructure.Entities.MinisterialSpecification;
 
 public class CompetencyElementEntity : ChangeableEntity
 {
-    public ICollection<PerformanceCriteriaEntity> PerformanceCriterias { get; set; } = new List<PerformanceCriteriaEntity>();
+    public virtual ICollection<PerformanceCriteriaEntity> PerformanceCriterias { get; set; } = new List<PerformanceCriteriaEntity>();
     public required int Position { get; set; }
     public virtual CompetencyEntity? Competency { get; set; }
 

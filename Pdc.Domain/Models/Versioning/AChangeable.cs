@@ -3,7 +3,7 @@ using Pdc.Domain.Models.Security;
 
 namespace Pdc.Domain.Models.Versioning;
 
-public abstract class AChangeable : IVersionPropagable, ICreatedByPropagable
+public abstract class AChangeable : IVersionPropagable, ICreatedByPropagable, ICreatedOnPropagable
 {
     public required Guid? Id { get; set; }
     public required string Value { get; set; }
@@ -18,5 +18,10 @@ public abstract class AChangeable : IVersionPropagable, ICreatedByPropagable
     public virtual void SetCreatedByOnUntracked(User user)
     {
         ComplementaryInformations.ForEach(x => x.SetCreatedByOnUntracked(user));
+    }
+
+    public virtual void SetCreatedOnOnUntracked()
+    {
+        ComplementaryInformations.ForEach(x => x.SetCreatedOnOnUntracked());
     }
 }

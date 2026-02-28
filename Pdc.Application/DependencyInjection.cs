@@ -7,9 +7,11 @@ using Pdc.Domain.Interfaces.UseCases.Competency;
 using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 using Pdc.Domain.Interfaces.UseCases.Role;
 using Pdc.Domain.Interfaces.UseCases.User;
+using Pdc.Domain.Interfaces.UseCases.Version;
 using System.Reflection;
 
 namespace Pdc.Application;
+
 public static class DependencyInjection
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
@@ -34,10 +36,13 @@ public static class DependencyInjection
         services.AddScoped<IGetUserUseCase, GetUser>();
         //Role
         services.AddScoped<IGetRolesUseCase, GetRoles>();
-
         // Auth
         services.AddScoped<IUserService, UserService>();
-
+        // ComplementaryInformation
+        services.AddScoped<IGetComplementaryInformationUseCase, GetComplementaryInformation>();
+        services.AddScoped<IUpdateComplementaryInformationUseCase, UpdateComplementaryInformation>();
+        services.AddScoped<IDeleteComplementaryInformationUseCase, DeleteComplementaryInformation>();
+        services.AddScoped<IAddComplementaryInformationUseCase, AddComplementaryInformation>();
 
         services.AddAutoMapper(typeof(MappingProfile));
 

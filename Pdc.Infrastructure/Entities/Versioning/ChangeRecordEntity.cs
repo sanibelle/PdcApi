@@ -8,11 +8,11 @@ namespace Pdc.Infrastructure.Entities.Versioning;
 public class ChangeRecordEntity
 {
     public Guid? Id { get; set; }
-    public IEnumerable<ComplementaryInformationEntity> ComplementaryInformations { get; set; } = new List<ComplementaryInformationEntity>();
-    public IEnumerable<ChangeDetailEntity> ChangeDetails { get; set; } = new List<ChangeDetailEntity>();
+    public virtual ICollection<ComplementaryInformationEntity>? ComplementaryInformations { get; set; }
+    public virtual ICollection<ChangeDetailEntity>? ChangeDetails { get; set; }
     public DateTime CreatedOn { get; set; }
     public Guid CreatedById { get; set; }
-    public required IdentityUserEntity CreatedBy { get; set; }
+    public virtual IdentityUserEntity? CreatedBy { get; set; }
     /// <summary>
     /// Premet d'avoir plusieurs copies d'une version. Un seul est actif à la fois.
     /// </summary>
@@ -22,15 +22,17 @@ public class ChangeRecordEntity
     /// <summary>
     /// The version before
     /// </summary>
-    public ChangeRecordEntity? ParentVersion { get; set; } = null;
+    public virtual ChangeRecordEntity? ParentVersion { get; set; } = null;
     /// <summary>
     /// The version with the changes
     /// </summary>
-    public ChangeRecordEntity? NextVersion { get; set; } = null;
+    public virtual ChangeRecordEntity? NextVersion { get; set; } = null;
     public Guid? ValidatedById { get; set; }
 
-    public IdentityUserEntity? ValidatedBy { get; set; }
+    public virtual IdentityUserEntity? ValidatedBy { get; set; }
     public DateTime? ValidatedOn { get; set; }
+    public Guid? NextVersionId { get; set; }
+    public Guid? ParentVersionId { get; set; }
 
     public ChangeRecordEntity()
     {

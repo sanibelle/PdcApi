@@ -27,4 +27,10 @@ public class MinisterialCompetency : Competency
         base.SetVersionOnUntracked(version);
         CompetencyElements.ForEach(x => x.SetVersionOnUntracked(version));
     }
+
+    public override void SetCreatedOnOnUntracked()
+    {
+        base.SetCreatedOnOnUntracked();
+        CompetencyElements.ForEach(x => x.SetCreatedOnOnUntracked());
+    }
 }

@@ -7,7 +7,8 @@ public interface IComplementaryInformationRepository
     Task<ComplementaryInformation> Add(ComplementaryInformation complementaryInformation, Guid changeableId);
     Task<Guid> FindCreatedById(Guid icomplementaryInformationId);
     Task Delete(Guid id);
-    Task<ComplementaryInformation> Update(ComplementaryInformation complementaryInformation);
+    Task<ComplementaryInformation> Update(ComplementaryInformation complementaryInformation, Guid changeableId);
     Task<bool> ChangeableExists(Guid id);
-    Task<ChangeRecord> GetVersionByChangeableId(Guid changeableId);
+    Task<Guid> GetVersionByChangeableId(Guid changeableId);
+    Task<ComplementaryInformation> FindById(Guid id);
 }

@@ -6,6 +6,6 @@ namespace Pdc.Infrastructure.Entities.MinisterialSpecification;
 public class PerformanceCriteriaEntity : ChangeableEntity
 {
     public required int Position { get; set; }
-    public CompetencyElementEntity? CompetencyElement { get; set; }
+    public virtual CompetencyElementEntity? CompetencyElement { get; set; }
     public override T Accept<T>(IChangeableVisitor<T> visitor) => visitor.Visit(this);
 }

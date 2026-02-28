@@ -61,10 +61,8 @@ public class ComplementaryInformationEntityBuilder
             ModifiedOn = _modifiedOn,
             WrittenOnVersion = _writtenOnVersion,
             CreatedBy = _createdBy,
-            CreatedOn = _createdOn
+            CreatedOn = _createdOn,
         };
     }
 
 }
-
-/// WIP builder d'entites (pas fini de les ajouter, ne pas oublier le name space)

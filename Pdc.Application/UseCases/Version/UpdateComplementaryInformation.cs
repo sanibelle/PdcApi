@@ -12,35 +12,36 @@ namespace Pdc.Application.UseCases;
 public class UpdateComplementaryInformation : IUpdateComplementaryInformationUseCase
 {
     private readonly IComplementaryInformationRepository _complementaryInformationRepository;
+    private readonly IVersionRepository _versionRepository;
     private readonly IMapper _mapper;
     private readonly IValidator<ComplementaryInformationDTO> _validator;
 
-    public UpdateComplementaryInformation(IComplementaryInformationRepository complementaryInformationRepository, IValidator<ComplementaryInformationDTO> validator, IMapper mapper)
+    public UpdateComplementaryInformation(IComplementaryInformationRepository complementaryInformationRepository, IVersionRepository versionRepository, IValidator<ComplementaryInformationDTO> validator, IMapper mapper)
     {
         _complementaryInformationRepository = complementaryInformationRepository;
+        _versionRepository=versionRepository;
         _validator=validator;
         _mapper = mapper;
     }
 
-    public async Task<ComplementaryInformationDTO> Execute(ComplementaryInformationDTO complementaryInformationDTO, User currentUser)
+    public async Task<ComplementaryInformationDTO> Execute(ComplementaryInformationDTO complementaryInformationDTO, User currentUser, Guid complementaryInformationId)
     {
         ValidationResult validationResult = await _validator.ValidateAsync(complementaryInformationDTO);
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
         }
-        if (!complementaryInformationDTO.Id.HasValue)
-        {
-            throw new InvalidDataException("missing id to update DTO");
-        }
-        Guid userId = await _complementaryInformationRepository.FindCreatedById(complementaryInformationDTO.Id.Value);
+        Guid userId = await _complementaryInformationRepository.FindCreatedById(complementaryInformationId);
         if (currentUser.Id != userId && !currentUser.IsAdmin)
         {
             throw new UnauthorizedAccessException();
         }
+        ComplementaryInformation existingComplementaryInformation = await _complementaryInformationRepository.FindById(complementaryInformationId);
+        Guid versionId = await _versionRepository.FindParentByVersionId(existingComplementaryInformation.WrittenOnVersion!.Id!.Value);
         ComplementaryInformation complementaryInformation = _mapper.Map<ComplementaryInformation>(complementaryInformationDTO);
+        complementaryInformation.Id = complementaryInformationId;
         complementaryInformation.ModifiedOn = DateTime.UtcNow;
-        ComplementaryInformation savedComplementaryInformation = await _complementaryInformationRepository.Update(complementaryInformation);
+        ComplementaryInformation savedComplementaryInformation = await _complementaryInformationRepository.Update(complementaryInformation, versionId);
         return _mapper.Map<ComplementaryInformationDTO>(savedComplementaryInformation);
     }
 }

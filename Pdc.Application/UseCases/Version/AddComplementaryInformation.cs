@@ -2,6 +2,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 using Pdc.Domain.DTOS.Common;
+using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Interfaces.UseCases.Version;
 using Pdc.Domain.Models.Security;
@@ -31,13 +32,13 @@ public class AddComplementaryInformation : IAddComplementaryInformationUseCase
         }
         if (!await _complementaryInformationRepository.ChangeableExists(changeableId))
         {
-            throw new ArgumentException($"Changeable with id {changeableId} does not exist.");
+            throw new NotFoundException(nameof(AChangeable), changeableId);
         }
         ComplementaryInformation complementaryInformation = _mapper.Map<ComplementaryInformation>(complementaryInformationDTO);
-        complementaryInformation.CreatedOn = DateTime.Now;
+        complementaryInformation.SetCreatedOnOnUntracked();
         complementaryInformation.SetCreatedByOnUntracked(currentUser);
-        complementaryInformation.SetVersionOnUntracked(await _complementaryInformationRepository.GetVersionByChangeableId(changeableId));
-        ComplementaryInformation savedComplementaryInformation = await _complementaryInformationRepository.Add(complementaryInformation, changeableId);
+        Guid versionId = await _complementaryInformationRepository.GetVersionByChangeableId(changeableId);
+        ComplementaryInformation savedComplementaryInformation = await _complementaryInformationRepository.Add(complementaryInformation, versionId);
         return _mapper.Map<ComplementaryInformationDTO>(savedComplementaryInformation);
     }
 }

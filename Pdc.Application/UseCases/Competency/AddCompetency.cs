@@ -42,6 +42,7 @@ public class AddCompetency : ICreateCompetencyUseCase
         MinisterialCompetency competency = _mapper.Map<MinisterialCompetency>(createCompetencyDto);
         competency.SetVersionOnUntracked(new ChangeRecord(currentUser));
         competency.SetCreatedByOnUntracked(currentUser);
+        competency.SetCreatedOnOnUntracked();
         MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, competency);
 
         return _mapper.Map<CompetencyDTO>(savedCompetency);

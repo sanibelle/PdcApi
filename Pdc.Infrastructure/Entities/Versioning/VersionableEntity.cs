@@ -2,5 +2,5 @@
 
 public abstract class VersionableEntity
 {
-    public virtual required ChangeRecordEntity CurrentVersion { get; set; }
+    public virtual ChangeRecordEntity? CurrentVersion { get; set; }
 }

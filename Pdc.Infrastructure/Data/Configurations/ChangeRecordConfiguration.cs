@@ -24,11 +24,13 @@ public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEn
         //Not really one to many, but ef needs that
         builder.HasOne(x => x.ParentVersion)
             .WithMany()
+            .HasForeignKey(x => x.ParentVersionId)
             .HasForeignKey("ParentVersionId");
 
         //Not really one to many, but ef needs that
         builder.HasOne(x => x.NextVersion)
             .WithMany()
+            .HasForeignKey(x => x.NextVersionId)
             .HasForeignKey("NextVersionId");
 
         builder.HasOne(x => x.ValidatedBy)

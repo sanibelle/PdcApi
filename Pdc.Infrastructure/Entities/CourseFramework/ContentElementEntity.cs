@@ -7,7 +7,7 @@ namespace Pdc.Infrastructure.Entities.CourseFramework;
 public class ContentElementEntity : ChangeableEntity
 {
     public TeachedLevelType TeachedLevel { get; set; }
-    public required CourseFrameworkPerformanceCriteriaEntity CourseFrameworkPerformanceCriteria { get; set; }
+    public virtual CourseFrameworkPerformanceCriteriaEntity? CourseFrameworkPerformanceCriteria { get; set; }
     public bool IsAssedElement { get; set; } = false;
     public override T Accept<T>(IChangeableVisitor<T> visitor) => visitor.Visit(this);
 }
