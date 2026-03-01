@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Pdc.Domain.Exceptions;
+using Pdc.Domain.Models.Security;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Exceptions;

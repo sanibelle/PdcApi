@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pdc.Application.DTOS;
-using Pdc.Application.UseCases;
 using Pdc.Domain.Interfaces.UseCases.Competency;
 using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 using Pdc.Domain.Models.Security;
-using Pdc.Infrastructure.Identity;
 using Pdc.WebAPI.Services;
 
 namespace Pdc.WebAPI.Controllers;
+
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]

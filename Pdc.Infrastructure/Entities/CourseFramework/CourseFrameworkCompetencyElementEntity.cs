@@ -9,8 +9,8 @@ namespace Pdc.Infrastructure.Entities.CourseFramework;
 public class CourseFrameworkCompetencyElementEntity
 {
     public Guid? Id { get; set; }
-    public required CompetencyElementEntity CompetencyElement { get; set; }
-    public required CourseFrameworkEntity CourseFramework { get; set; }
+    public virtual CompetencyElementEntity? CompetencyElement { get; set; }
+    public virtual CourseFrameworkEntity? CourseFramework { get; set; }
     public required int Hours { get; set; }
     public bool IsTerminalyEvaluated
     {

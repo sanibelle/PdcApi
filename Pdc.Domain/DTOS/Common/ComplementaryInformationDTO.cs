@@ -3,7 +3,6 @@
 public class ComplementaryInformationDTO
 {
     public Guid? Id { get; set; }
-    public UserDTO? ModifiedBy { get; set; }
     /// <summary>
     /// Version à laquelle l'information a été ajoutée
     /// </summary>

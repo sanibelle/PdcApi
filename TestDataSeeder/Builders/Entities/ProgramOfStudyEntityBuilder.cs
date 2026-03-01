@@ -1,5 +1,4 @@
 using Pdc.Domain.Enums;
-using Pdc.Domain.Models.Common;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 
@@ -8,10 +7,10 @@ namespace TestDataSeeder.Builders.Entities;
 public class ProgramOfStudyEntityBuilder
 {
     private string _code = "420.B0";
-    private Units? _specificUnits = new Units(26, 2, 3);
-    private Units? _optionalUnits = new Units(16, 2, 3);
-    private Units _generalUnits = new Units(16, 2, 3);
-    private Units _complementaryUnits = new Units(4);
+    private UnitsEntity? _specificUnits = new UnitsEntityBuilder().WithWholeUnit(26).WithNumerator(2).WithDenominator(3).Build();
+    private UnitsEntity? _optionalUnits = new UnitsEntityBuilder().WithWholeUnit(16).WithNumerator(2).WithDenominator(3).Build();
+    private UnitsEntity _generalUnits = new UnitsEntityBuilder().WithWholeUnit(16).WithNumerator(2).WithDenominator(3).Build();
+    private UnitsEntity _complementaryUnits = new UnitsEntityBuilder().WithWholeUnit(4).Build();
     private string _name = "Techniques de l'informatique";
     private ProgramType _programType = ProgramType.DEC;
     private int _monthsDuration = 36;
@@ -26,25 +25,25 @@ public class ProgramOfStudyEntityBuilder
         return this;
     }
 
-    public ProgramOfStudyEntityBuilder WithSpecificUnits(Units specificUnits)
+    public ProgramOfStudyEntityBuilder WithSpecificUnits(UnitsEntity specificUnits)
     {
         _specificUnits = specificUnits;
         return this;
     }
 
-    public ProgramOfStudyEntityBuilder WithOptionalUnits(Units optionalUnits)
+    public ProgramOfStudyEntityBuilder WithOptionalUnits(UnitsEntity optionalUnits)
     {
         _optionalUnits = optionalUnits;
         return this;
     }
 
-    public ProgramOfStudyEntityBuilder WithGeneralUnits(Units generalUnits)
+    public ProgramOfStudyEntityBuilder WithGeneralUnits(UnitsEntity generalUnits)
     {
         _generalUnits = generalUnits;
         return this;
     }
 
-    public ProgramOfStudyEntityBuilder WithComplementaryUnits(Units complementaryUnits)
+    public ProgramOfStudyEntityBuilder WithComplementaryUnits(UnitsEntity complementaryUnits)
     {
         _complementaryUnits = complementaryUnits;
         return this;

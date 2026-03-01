@@ -1,13 +1,14 @@
 ﻿using Pdc.Domain.Models.Common;
+using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Infrastructure.Entities.Versioning;
 
 namespace Pdc.Infrastructure.Entities.CourseFramework;
 
 public class CourseFrameworkEntity : VersionableEntity
 {
-    public IEnumerable<CourseFrameworkCompetencyEntity> CourseFrameworkCompetencies { get; set; } = new List<CourseFrameworkCompetencyEntity>();
-    public IEnumerable<CourseFrameworkPerformanceCriteriaEntity> CourseFrameworkPerformanceCriterias { get; set; } = new List<CourseFrameworkPerformanceCriteriaEntity>();
-    public IEnumerable<CourseFrameworkEntity> Prerequisites { get; set; } = new List<CourseFrameworkEntity>();
+    public virtual ICollection<CourseFrameworkCompetencyEntity>? CourseFrameworkCompetencies { get; set; }
+    public virtual ICollection<CourseFrameworkPerformanceCriteriaEntity>? CourseFrameworkPerformanceCriterias { get; set; }
+    public virtual ICollection<CourseFrameworkEntity>? Prerequisites { get; set; }
     /// <summary>
     /// Éléments évalués. Peut être un : 
     /// <list type="bullet">
@@ -29,7 +30,7 @@ public class CourseFrameworkEntity : VersionableEntity
     ///    </item>
     ///</list>
     /// </summary>
-    public IEnumerable<ChangeableEntity> AssedElements { get; set; } = new List<ChangeableEntity>();
+    public virtual ICollection<ChangeableEntity>? AssedElements { get; set; }
     public required string Name { get; set; }
     public required string CourseCode { get; set; }
     public required Weighting Weighting { get; set; }
@@ -38,7 +39,7 @@ public class CourseFrameworkEntity : VersionableEntity
     /// Durée du cours en heures
     /// </summary>
     public required int Hours { get; set; }
-    public required Units Units { get; set; }
+    public virtual UnitsEntity? Units { get; set; }
     public required string FinalCourseObjective { get; set; }
     public required string CourseCharacteristics { get; set; }
     /// <summary>

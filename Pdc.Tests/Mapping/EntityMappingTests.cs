@@ -55,6 +55,7 @@ internal class EntityMappingTests
         var user = new User() { Id = Guid.NewGuid() };
         _ministerialCompetency.SetVersionOnUntracked(new ChangeRecord(user));
         _ministerialCompetency.SetCreatedByOnUntracked(user);
+        _ministerialCompetency.SetCreatedOnOnUntracked();
         // Initialize mapper
         _mapper = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()).CreateMapper();
     }

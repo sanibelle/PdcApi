@@ -23,7 +23,8 @@ public static class DependencyInjection
         {
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseInMemoryDatabase("TestDataBase")
+                options.UseLazyLoadingProxies()
+                    .UseInMemoryDatabase("TestDataBase")
                     .ConfigureWarnings(w => w.Ignore(InMemoryEventId.TransactionIgnoredWarning)) // used to prevent break on BeginTransaction calls
                     .EnableSensitiveDataLogging();
             });
@@ -31,8 +32,8 @@ public static class DependencyInjection
         else if (!string.IsNullOrEmpty(connectionString))
         {
             services.AddDbContext<AppDbContext>(options =>
-
-                options.UseNpgsql(
+                options.UseLazyLoadingProxies()
+                .UseNpgsql(
                     connectionString,
                     b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName))
                 );
@@ -42,6 +43,9 @@ public static class DependencyInjection
         services.AddScoped<IProgramOfStudyRepository, ProgramOfStudyRespository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICompetencyRepository, CompetencyRepository>();
+        services.AddScoped<IComplementaryInformationRepository, ComplementaryInformationRepository>();
+        services.AddScoped<IVersionRepository, VersionRepository>();
+
         services.AddAutoMapper((serviceProvider, automapper) =>
         {
             automapper.AddCollectionMappers();

@@ -1,15 +1,17 @@
-﻿using Pdc.Domain.Models.Common;
+﻿using Pdc.Domain.Interfaces.Propagables;
+using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.MinisterialSpecification;
 
-public class Competency
+public class Competency : IVersionPropagable, ICreatedByPropagable, ICreatedOnPropagable
 {
     /// <summary>
     /// Code unique de la compétence. Ex 00SU
     /// </summary>
     public string Code { get; set; } = "";
+    public Guid? UnitsID { get; set; } = null;
     public Units? Units { get; set; } = null;
     public string ProgramOfStudyCode { get; set; } = "";
     public bool IsMandatory { get; set; }
@@ -30,5 +32,10 @@ public class Competency
     public virtual void SetCreatedByOnUntracked(User user)
     {
         RealisationContexts.ForEach(x => x.SetCreatedByOnUntracked(user));
+    }
+
+    public virtual void SetCreatedOnOnUntracked()
+    {
+        RealisationContexts.ForEach(x => x.SetCreatedOnOnUntracked());
     }
 }

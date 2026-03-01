@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Pdc.Domain.Models.Common;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
@@ -15,7 +14,7 @@ public class AppDbContext : IdentityDbContext<IdentityUserEntity, IdentityRole<G
     {
     }
 
-    public DbSet<Units> Units { get; set; }
+    public DbSet<UnitsEntity> Units { get; set; }
     public DbSet<ProgramOfStudyEntity> ProgramOfStudies { get; set; }
     public DbSet<CompetencyEntity> Competencies { get; set; }
     public DbSet<CompetencyElementEntity> CompetencyElements { get; set; }

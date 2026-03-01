@@ -1,5 +1,4 @@
 ﻿using Pdc.Domain.Enums;
-using Pdc.Domain.Models.Common;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
@@ -26,8 +25,8 @@ internal class ProgramOfStudy : ISeeder<ProgramOfStudyEntity>
             .WithTotalDurationHours(4500)
             .WithPublishedOn(DateOnly.FromDateTime(DateTime.UtcNow))
             .WithCompetencies(new List<CompetencyEntity>())
-            .WithOptionalUnits(new Units(10, 1, 2))
-            .WithSpecificUnits(new Units(60))
+            .WithOptionalUnits(new UnitsEntity() { WholeUnit = 10, Numerator = 1, Denominator = 2 })
+            .WithSpecificUnits(new UnitsEntity() { WholeUnit = 10 })
             .Build();
         await _context.ProgramOfStudies.AddAsync(programOfStudyEntity);
         await _context.SaveChangesAsync();

@@ -6,20 +6,13 @@ using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.CourseFramework;
-using Pdc.Infrastructure.Exceptions;
 
 namespace Pdc.Infrastructure.Repositories;
 
-public class ProgramOfStudyRespository : IProgramOfStudyRepository
+public class ProgramOfStudyRespository(AppDbContext context, IMapper mapper) : IProgramOfStudyRepository
 {
-    private readonly AppDbContext _context;
-    private readonly IMapper _mapper;
-
-    public ProgramOfStudyRespository(AppDbContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
+    private readonly AppDbContext _context = context;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<List<ProgramOfStudy>> GetAll()
     {

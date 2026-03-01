@@ -10,8 +10,10 @@ public class ComplementaryInformationConfiguration : IEntityTypeConfiguration<Co
     public void Configure(EntityTypeBuilder<ComplementaryInformationEntity> builder)
     {
         builder.HasKey(x => x.Id);
+
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
+
         builder.Property(x => x.CreatedOn)
             .HasDefaultValueSql("now()")
             .ValueGeneratedOnAdd()
@@ -26,5 +28,11 @@ public class ComplementaryInformationConfiguration : IEntityTypeConfiguration<Co
             .HasForeignKey(c => c.CreatedById)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
+
+        // builder.HasOne(x => x.Changeable)
+        //     .WithMany()
+        //     .HasForeignKey(c => c.WrittenOnVersionId)
+        //     .OnDelete(DeleteBehavior.Restrict)
+        //     .IsRequired();
     }
 }

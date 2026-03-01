@@ -1,4 +1,4 @@
-﻿namespace Pdc.Infrastructure.Identity;
+﻿namespace Pdc.Domain.Models.Security;
 
 public static class Roles
 {

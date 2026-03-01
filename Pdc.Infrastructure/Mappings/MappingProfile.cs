@@ -17,9 +17,20 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         // common
+
         CreateMap<Competency, CompetencyEntity>()
             .EqualityComparison((x, y) => x.Code == y.Code)
-            .ReverseMap();
+            .PreserveReferences()
+            .ReverseMap()
+            .ForMember(dest => dest.Units,
+                opt => opt.MapFrom((src, dest, member, ctx) =>
+                    src.Units == null ? null : ctx.Mapper.Map<Units>(src.Units))); ;
+
+        CreateMap<Units, UnitsEntity>()
+            .EqualityComparison((dto, entity) => dto.Id == entity.Id)
+            .PreserveReferences()
+            .ReverseMap()
+            .PreserveReferences();
 
         CreateMap<AChangeable, ChangeableEntity>()
             .PreserveReferences()
@@ -38,10 +49,14 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CreatedById,
                opt => opt.MapFrom(src => src.CreatedBy != null ? src.CreatedBy.Id : null))
             .ForMember(dest => dest.CreatedBy,
-                opt => opt.Ignore()) // will not track and only use the id to prevent ef core trying to create an new user.
+                opt => opt.Ignore()) // will not track and only use the id to prevent ef core trying to create a new user.
             .PreserveReferences()
             .ReverseMap()
-            .PreserveReferences();
+            .PreserveReferences()
+            .ForMember(dest => dest.CreatedBy,  // explicitly map back
+                opt => opt.MapFrom(src => src.CreatedBy))
+            .ForMember(dest => dest.WrittenOnVersion,
+               opt => opt.MapFrom(src => src.WrittenOnVersion));
 
         CreateMap<ContentElement, ContentElementEntity>()
             .PreserveReferences()
@@ -61,12 +76,20 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CreatedById,
                opt => opt.MapFrom(src => src.CreatedBy != null ? src.CreatedBy.Id : null))
             .ForMember(dest => dest.CreatedBy,
-                opt => opt.Ignore()) // will not track and only use the id to prevent ef core trying to create an new user.
+                opt => opt.Ignore()) // will not track and only use the id to prevent ef core trying to create a new user.
             .ForMember(dest => dest.ValidatedById,
                opt => opt.MapFrom(src => src.ValidatedBy != null ? src.ValidatedBy.Id : null))
             .ForMember(dest => dest.ValidatedBy,// will not track and only use the id to prevent ef core trying to create an new user.
                 opt => opt.Ignore())
             .ReverseMap()
+            .ForMember(dest => dest.CreatedBy,  // explicitly map back
+                opt => opt.MapFrom(src => src.CreatedBy))
+            .ForMember(dest => dest.ValidatedBy,  // explicitly map back
+                opt => opt.MapFrom(src => src.ValidatedBy))
+            .ForMember(dest => dest.ParentVersion,  // explicitly map back
+                opt => opt.MapFrom(src => src.ParentVersion == null ? null : src.ParentVersion))
+            .ForMember(dest => dest.NextVersion,  // explicitly map back
+                opt => opt.MapFrom(src => src.NextVersion == null ? null : src.NextVersion))
             .PreserveReferences();
 
         // security
@@ -85,9 +108,13 @@ public class MappingProfile : Profile
 
         CreateMap<MinisterialCompetency, CompetencyEntity>()
             .EqualityComparison((x, y) => x.Code == y.Code)
-            .PreserveReferences() // used for the ChangeRecordEntity references
-            .ReverseMap()
-            .PreserveReferences(); // used for the ChangeRecordEntity references;
+            .PreserveReferences();
+
+        // Do not remove, the usage of explicit mapping instead of using reverseMap is to prevent the creation of the empty Units object when the Units property is null.
+        CreateMap<CompetencyEntity, MinisterialCompetency>()
+            .ForMember(dest => dest.Units,
+                opt => opt.MapFrom((src, dest, member, ctx) =>
+                    src.Units == null ? null : ctx.Mapper.Map<Units>(src.Units)));
 
         CreateMap<MinisterialCompetencyElement, CompetencyElementEntity>()
             .PreserveReferences() // used for the ChangeRecordEntity references

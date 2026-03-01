@@ -44,6 +44,7 @@ public class UpdateDraftV1Competency : IUpdateDraftV1CompetencyUseCase
         // On prend la version actuelle et on l'assigne à tous les objets qui ont une version.
         competencyToUpdate.SetVersionOnUntracked(competencyToUpdate.CurrentVersion!);
         competencyToUpdate.SetCreatedByOnUntracked(currentUser);
+        competencyToUpdate.SetCreatedOnOnUntracked();
         MinisterialCompetency updatedProgramOfStudy = await _competencyRepository.Update(competencyToUpdate);
         return _mapper.Map<CompetencyDTO>(updatedProgramOfStudy);
 

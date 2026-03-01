@@ -11,4 +11,12 @@ public class User
     {
         UserName = string.Empty;
     }
+
+    public bool IsAdmin
+    {
+        get
+        {
+            return Roles.Any(x => x == Domain.Models.Security.Roles.Admin);
+        }
+    }
 }

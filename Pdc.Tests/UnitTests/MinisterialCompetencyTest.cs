@@ -5,6 +5,7 @@ using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
 using Pdc.Application.Mappings;
 using Pdc.Application.UseCases;
+using Pdc.Application.UseCases.Competency;
 using Pdc.Application.Validators;
 using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Enums;
@@ -17,7 +18,6 @@ using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
-using Pdc.Infrastructure.Exceptions;
 using TestDataSeeder.Builders.DTOS;
 using TestDataSeeder.Builders.Models;
 
@@ -178,7 +178,7 @@ public class MinisterialCompetencyTest
         _competencyValidator = new CompetencyValidation();
 
         //    // Initialize competency use cases
-        _createCompetencyUseCase = new CreateCompetency(_competencyRepositoryMock.Object, _programOfStudyRepositoryMock.Object, _mapper, _competencyValidator);
+        _createCompetencyUseCase = new AddCompetency(_competencyRepositoryMock.Object, _programOfStudyRepositoryMock.Object, _mapper, _competencyValidator);
         _updateDraftV1CompetencyUseCase = new UpdateDraftV1Competency(_competencyRepositoryMock.Object, _mapper, _competencyValidator);
         //    _deleteCompetencyUseCase = new DeleteCompetency(_competencyRepositoryMock.Object);
         //    _getAllCompetencyUseCase = new GetAllCompetency(_competencyRepositoryMock.Object, _mapper);

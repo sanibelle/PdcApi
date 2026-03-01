@@ -1,11 +1,12 @@
-﻿using Pdc.Domain.Models.Security;
+﻿using Pdc.Domain.Interfaces.Propagables;
+using Pdc.Domain.Models.Security;
 
 namespace Pdc.Domain.Models.Versioning;
 
 /// <summary>
 /// Nommé ainsi pour les confilts de noms avec System.Version
 /// </summary>
-public class ChangeRecord
+public class ChangeRecord : ICreatedByPropagable, ICreatedOnPropagable
 {
     public int VersionNumber { get; set; }
     private IEnumerable<ComplementaryInformation> _complementaryInformations { get; set; } = new List<ComplementaryInformation>();
@@ -39,15 +40,23 @@ public class ChangeRecord
     public DateTime? ValidatedOn { get; set; }
 
     /// <summary>
+    /// UsedByAutomapper
+    /// </summary>
+    public ChangeRecord()
+    {
+    }
+
+    /// <summary>
     /// Creates a default version with the version number statring at 1
     /// </summary>
     public ChangeRecord(User createdBy)
     {
-        VersionNumber = 1;
         CreatedOn = DateTime.UtcNow;
         IsDraft = true;
         CreatedBy = createdBy;
+        VersionNumber = 1;
     }
+
 
     public void SetCreatedByOnUntracked(User user)
     {
@@ -55,5 +64,10 @@ public class ChangeRecord
         {
             CreatedBy = user;
         }
+    }
+
+    public void SetCreatedOnOnUntracked()
+    {
+        CreatedOn = DateTime.UtcNow;
     }
 }
