@@ -7,22 +7,14 @@ using Pdc.Domain.Interfaces.UseCases.Version;
 using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 
-namespace Pdc.Application.UseCases;
+namespace Pdc.Application.UseCases.Version;
 
-public class UpdateComplementaryInformation : IUpdateComplementaryInformationUseCase
+public class UpdateComplementaryInformation(IComplementaryInformationRepository complementaryInformationRepository, IVersionRepository versionRepository, IValidator<ComplementaryInformationDTO> validator, IMapper mapper) : IUpdateComplementaryInformationUseCase
 {
-    private readonly IComplementaryInformationRepository _complementaryInformationRepository;
-    private readonly IVersionRepository _versionRepository;
-    private readonly IMapper _mapper;
-    private readonly IValidator<ComplementaryInformationDTO> _validator;
-
-    public UpdateComplementaryInformation(IComplementaryInformationRepository complementaryInformationRepository, IVersionRepository versionRepository, IValidator<ComplementaryInformationDTO> validator, IMapper mapper)
-    {
-        _complementaryInformationRepository = complementaryInformationRepository;
-        _versionRepository=versionRepository;
-        _validator=validator;
-        _mapper = mapper;
-    }
+    private readonly IComplementaryInformationRepository _complementaryInformationRepository = complementaryInformationRepository;
+    private readonly IVersionRepository _versionRepository = versionRepository;
+    private readonly IMapper _mapper = mapper;
+    private readonly IValidator<ComplementaryInformationDTO> _validator = validator;
 
     public async Task<ComplementaryInformationDTO> Execute(ComplementaryInformationDTO complementaryInformationDTO, User currentUser, Guid complementaryInformationId)
     {
@@ -31,8 +23,8 @@ public class UpdateComplementaryInformation : IUpdateComplementaryInformationUse
         {
             throw new ValidationException(validationResult.Errors);
         }
-        Guid userId = await _complementaryInformationRepository.FindCreatedById(complementaryInformationId);
-        if (currentUser.Id != userId && !currentUser.IsAdmin)
+        Guid authorId = await _complementaryInformationRepository.FindCreatedById(complementaryInformationId);
+        if (currentUser.Id != authorId && !currentUser.IsAdmin)
         {
             throw new UnauthorizedAccessException();
         }

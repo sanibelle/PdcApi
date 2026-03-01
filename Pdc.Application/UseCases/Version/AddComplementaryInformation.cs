@@ -8,20 +8,13 @@ using Pdc.Domain.Interfaces.UseCases.Version;
 using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 
-namespace Pdc.Application.UseCases;
+namespace Pdc.Application.UseCases.Version;
 
-public class AddComplementaryInformation : IAddComplementaryInformationUseCase
+public class AddComplementaryInformation(IComplementaryInformationRepository complementaryInformationRepository, IValidator<ComplementaryInformationDTO> validator, IMapper mapper) : IAddComplementaryInformationUseCase
 {
-    private readonly IComplementaryInformationRepository _complementaryInformationRepository;
-    private readonly IMapper _mapper;
-    private readonly IValidator<ComplementaryInformationDTO> _validator;
-
-    public AddComplementaryInformation(IComplementaryInformationRepository complementaryInformationRepository, IValidator<ComplementaryInformationDTO> validator, IMapper mapper)
-    {
-        _complementaryInformationRepository = complementaryInformationRepository;
-        _validator=validator;
-        _mapper = mapper;
-    }
+    private readonly IComplementaryInformationRepository _complementaryInformationRepository = complementaryInformationRepository;
+    private readonly IMapper _mapper = mapper;
+    private readonly IValidator<ComplementaryInformationDTO> _validator = validator;
 
     public async Task<ComplementaryInformationDTO> Execute(ComplementaryInformationDTO complementaryInformationDTO, Guid changeableId, User currentUser)
     {

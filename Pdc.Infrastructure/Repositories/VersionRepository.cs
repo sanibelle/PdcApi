@@ -7,17 +7,10 @@ using Pdc.Infrastructure.Entities.Versioning;
 
 namespace Pdc.Infrastructure.Repositories;
 
-public class VersionRepository : IVersionRepository
+public class VersionRepository(AppDbContext context, IMapper mapper) : IVersionRepository
 {
-    private readonly AppDbContext _context;
-    private readonly IMapper _mapper;
-
-    public VersionRepository(AppDbContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
-
+    private readonly AppDbContext _context = context;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<Guid> FindCreatedById(Guid complementaryInformationId)
     {

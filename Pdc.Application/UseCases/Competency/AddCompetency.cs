@@ -10,25 +10,17 @@ using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 
-namespace Pdc.Application.UseCases;
+namespace Pdc.Application.UseCases.Competency;
 
-public class AddCompetency : ICreateCompetencyUseCase
+public class AddCompetency(ICompetencyRepository competencyRepository,
+                        IProgramOfStudyRepository programOfStudyRepository,
+                        IMapper mapper,
+                        IValidator<CompetencyDTO> validator) : ICreateCompetencyUseCase
 {
-    private readonly IValidator<CompetencyDTO> _validator;
-    private readonly ICompetencyRepository _competencyRepository;
-    private readonly IProgramOfStudyRepository _programOfStudyRepository;
-    private readonly IMapper _mapper;
-
-    public AddCompetency(ICompetencyRepository competencyRepository,
-                            IProgramOfStudyRepository programOfStudyRepository,
-                            IMapper mapper,
-                            IValidator<CompetencyDTO> validator)
-    {
-        _competencyRepository = competencyRepository;
-        _programOfStudyRepository = programOfStudyRepository;
-        _mapper = mapper;
-        _validator = validator;
-    }
+    private readonly IValidator<CompetencyDTO> _validator = validator;
+    private readonly ICompetencyRepository _competencyRepository = competencyRepository;
+    private readonly IProgramOfStudyRepository _programOfStudyRepository = programOfStudyRepository;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<CompetencyDTO> Execute(string programOfStudyCode, CompetencyDTO createCompetencyDto, User currentUser)
     {

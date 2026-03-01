@@ -16,18 +16,12 @@ public class ComplementaryInformation : IVersionPropagable, ICreatedByPropagable
     public required User CreatedBy { get; set; }
     public void SetVersionOnUntracked(ChangeRecord version)
     {
-        if (WrittenOnVersion == null)
-        {
-            WrittenOnVersion = version;
-        }
+        WrittenOnVersion ??= version;
     }
 
     public void SetCreatedByOnUntracked(User user)
     {
-        if (CreatedBy == null)
-        {
-            CreatedBy = user;
-        }
+        CreatedBy ??= user;
     }
 
     public void SetCreatedOnOnUntracked()

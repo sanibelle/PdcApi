@@ -2,16 +2,10 @@
 
 namespace Pdc.WebAPI.Middlewares;
 
-public class ExceptionHandlingMiddleware
+public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
 {
-    private readonly RequestDelegate _next;
-    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
-
-    public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
-    {
-        _next = next;
-        _logger = logger;
-    }
+    private readonly RequestDelegate _next = next;
+    private readonly ILogger<ExceptionHandlingMiddleware> _logger = logger;
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -57,7 +51,8 @@ public class ExceptionHandlingMiddleware
             DuplicateException => StatusCodes.Status409Conflict,
             MissingVersionException => StatusCodes.Status400BadRequest,
             AuthException => StatusCodes.Status401Unauthorized,
-            ForbiddenException => StatusCodes.Status403Forbidden, // Add this line
+            UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+            ForbiddenException => StatusCodes.Status403Forbidden,
             _ => StatusCodes.Status500InternalServerError
         };
     }

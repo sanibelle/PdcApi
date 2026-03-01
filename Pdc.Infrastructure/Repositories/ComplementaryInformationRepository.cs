@@ -10,18 +10,11 @@ using Pdc.Infrastructure.Entities.Visitors;
 
 namespace Pdc.Infrastructure.Repositories;
 
-public class ComplementaryInformationRepository : IComplementaryInformationRepository
+public class ComplementaryInformationRepository(AppDbContext context, IVersionRepository versionRepository, IMapper mapper) : IComplementaryInformationRepository
 {
-    private readonly AppDbContext _context;
-    private readonly IVersionRepository _versionRepository;
-    private readonly IMapper _mapper;
-
-    public ComplementaryInformationRepository(AppDbContext context, IVersionRepository versionRepository, IMapper mapper)
-    {
-        _context = context;
-        _versionRepository = versionRepository;
-        _mapper = mapper;
-    }
+    private readonly AppDbContext _context = context;
+    private readonly IVersionRepository _versionRepository = versionRepository;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<ComplementaryInformation> Add(ComplementaryInformation complementaryInformation, Guid versionId)
     {
@@ -60,20 +53,12 @@ public class ComplementaryInformationRepository : IComplementaryInformationRepos
     public async Task<Guid> GetVersionByChangeableId(Guid changeableId)
     {
         ChangeableEntity? changeable = await _context.Changeables
-            .SingleOrDefaultAsync(x => x.Id == changeableId);
-
-        if (changeable == null)
-        {
-            throw new NotFoundException(nameof(ChangeableEntity), changeableId);
-        }
+            .SingleOrDefaultAsync(x => x.Id == changeableId) ?? throw new NotFoundException(nameof(ChangeableEntity), changeableId);
         ChangeRecordEntity? version = changeable.Accept(new CurrentVersionVisitor());
 
-        if (version?.Id == null)
-        {
-            throw new NotFoundException(nameof(ChangeRecordEntity));
-        }
-
-        return await _versionRepository.FindParentByVersionId(version.Id.Value);
+        return version?.Id == null
+            ? throw new NotFoundException(nameof(ChangeRecordEntity))
+            : await _versionRepository.FindParentByVersionId(version.Id.Value);
     }
 
     public async Task<Guid> FindCreatedById(Guid complementaryInformationId)

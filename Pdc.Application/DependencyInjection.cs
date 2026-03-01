@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Pdc.Application.Mappings;
 using Pdc.Application.Services.UserService;
 using Pdc.Application.UseCases;
+using Pdc.Application.UseCases.Competency;
+using Pdc.Application.UseCases.Version;
 using Pdc.Domain.Interfaces.UseCases.Competency;
 using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 using Pdc.Domain.Interfaces.UseCases.Role;

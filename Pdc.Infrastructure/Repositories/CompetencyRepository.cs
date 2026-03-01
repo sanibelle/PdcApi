@@ -13,16 +13,10 @@ using Pdc.Infrastructure.Entities.Versioning;
 
 namespace Pdc.Infrastructure.Repositories;
 
-public class CompetencyRepository : ICompetencyRepository
+public class CompetencyRepository(AppDbContext context, IMapper mapper) : ICompetencyRepository
 {
-    private readonly AppDbContext _context;
-    private readonly IMapper _mapper;
-
-    public CompetencyRepository(AppDbContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
+    private readonly AppDbContext _context = context;
+    private readonly IMapper _mapper = mapper;
 
     public async Task<List<MinisterialCompetency>> GetAll()
     {
@@ -80,14 +74,11 @@ public class CompetencyRepository : ICompetencyRepository
                 .ThenInclude(ce => ce.PerformanceCriterias)
                     .ThenInclude(pc => pc.ComplementaryInformations)
             .Include(c => c.ProgramOfStudy)
-            .SingleOrDefaultAsync(x => x.Code == competency.Code);
-        if (existingCompetency == null)
-        {
-            throw new NotFoundException(nameof(MinisterialCompetency), competency.Code);
-        }
-        (List<ChangeableEntity> realisationContextToDelete, List<ComplementaryInformationEntity> realisationContextComplementaryInformationsToDelete) = RepoUtils.FindMissingAChangeableAndComplementaryInformationsForDeletion(competency.RealisationContexts.Cast<AChangeable>().ToList(), existingCompetency.RealisationContexts.Cast<ChangeableEntity>().ToList());
-        (List<ChangeableEntity> competencyElementsToDelete, List<ComplementaryInformationEntity> competencyElementsComplementaryInformationsToDelete) = RepoUtils.FindMissingAChangeableAndComplementaryInformationsForDeletion(competency.CompetencyElements.Cast<AChangeable>().ToList(), existingCompetency.CompetencyElements.Cast<ChangeableEntity>().ToList());
-        (List<ChangeableEntity> performanceCriteriasToDelete, List<ComplementaryInformationEntity> performanceCriteriasComplementaryInformationsToDelete) = RepoUtils.FindMissingAChangeableAndComplementaryInformationsForDeletion(competency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<AChangeable>().ToList(), existingCompetency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<ChangeableEntity>().ToList());
+            .SingleOrDefaultAsync(x => x.Code == competency.Code) ?? throw new NotFoundException(nameof(MinisterialCompetency), competency.Code);
+
+        (List<ChangeableEntity> realisationContextToDelete, List<ComplementaryInformationEntity> realisationContextComplementaryInformationsToDelete) = RepoUtils.FindMissingAChangeableAndComplementaryInformationsForDeletion([.. competency.RealisationContexts.Cast<AChangeable>()], [.. existingCompetency.RealisationContexts.Cast<ChangeableEntity>()]);
+        (List<ChangeableEntity> competencyElementsToDelete, List<ComplementaryInformationEntity> competencyElementsComplementaryInformationsToDelete) = RepoUtils.FindMissingAChangeableAndComplementaryInformationsForDeletion([.. competency.CompetencyElements.Cast<AChangeable>()], [.. existingCompetency.CompetencyElements.Cast<ChangeableEntity>()]);
+        (List<ChangeableEntity> performanceCriteriasToDelete, List<ComplementaryInformationEntity> performanceCriteriasComplementaryInformationsToDelete) = RepoUtils.FindMissingAChangeableAndComplementaryInformationsForDeletion([.. competency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<AChangeable>()], [.. existingCompetency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<ChangeableEntity>()]);
 
         _context.ComplementaryInformations.AttachRange(realisationContextComplementaryInformationsToDelete);
         _context.ComplementaryInformations.RemoveRange(realisationContextComplementaryInformationsToDelete);
@@ -110,11 +101,10 @@ public class CompetencyRepository : ICompetencyRepository
 
     public async Task Delete(string programOfStudyCode, string competencyCode)
     {
-        CompetencyEntity? entity = await _context.Competencies.SingleOrDefaultAsync(x => x.Code == competencyCode && x.ProgramOfStudy.Code == programOfStudyCode);
-        if (entity == null)
-        {
-            throw new NotFoundException(nameof(MinisterialCompetency), competencyCode);
-        }
+        CompetencyEntity? entity = await _context.Competencies
+            .Include(x => x.ProgramOfStudy)
+            .SingleOrDefaultAsync(x => x.Code == competencyCode && x.ProgramOfStudy!.Code == programOfStudyCode)  ??  throw new NotFoundException(nameof(MinisterialCompetency), competencyCode);
+
         _context.Competencies.Remove(entity);
         await _context.SaveChangesAsync();
     }
@@ -128,7 +118,8 @@ public class CompetencyRepository : ICompetencyRepository
     public async Task<bool> ExistsEntityByCode(string programOfStudyCode, string competencyCode)
     {
         return await _context.Competencies
-            .Where(x => x.Code == competencyCode && x.ProgramOfStudy.Code == programOfStudyCode)
+            .Include(x => x.ProgramOfStudy)
+            .Where(x => x.Code == competencyCode && x.ProgramOfStudy!.Code == programOfStudyCode)
             .AnyAsync();
     }
 
@@ -152,26 +143,16 @@ public class CompetencyRepository : ICompetencyRepository
                             .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.ProgramOfStudy)
             .Include(c => c.CurrentVersion)
-                .ThenInclude(v => v.CreatedBy)
+                .ThenInclude(v => v!.CreatedBy)
             .SingleOrDefaultAsync(x => x.Code == competencyCode);
-        if (competency == null)
-        {
-            throw new NotFoundException(nameof(MinisterialCompetency), competencyCode);
-        }
-
-        return competency;
+        return competency ?? throw new NotFoundException(nameof(MinisterialCompetency), competencyCode);
     }
 
     private async Task<ProgramOfStudyEntity> FindProgramOfStudy(string code)
     {
         ProgramOfStudyEntity? program = await _context.ProgramOfStudies
             .SingleOrDefaultAsync(x => x.Code == code);
-        if (program == null)
-
-        {
-            throw new NotFoundException(nameof(ProgramOfStudy), code);
-        }
-        return program;
+        return program ?? throw new NotFoundException(nameof(ProgramOfStudy), code);
     }
 
     public async Task<List<MinisterialCompetency>> GetByProgramOfStudy(string programOfStudyCode)
@@ -179,8 +160,8 @@ public class CompetencyRepository : ICompetencyRepository
         List<CompetencyEntity> comps = await _context.Competencies
             .AsNoTracking()
             .Include(c => c.CurrentVersion)
-                .ThenInclude(v => v.CreatedBy)
-            .Where(c => c.ProgramOfStudy.Code == programOfStudyCode)
+                .ThenInclude(v => v!.CreatedBy)
+            .Where(c => c.ProgramOfStudy != null && c.ProgramOfStudy.Code == programOfStudyCode)
             .ToListAsync();
         return _mapper.Map<List<MinisterialCompetency>>(comps);
     }

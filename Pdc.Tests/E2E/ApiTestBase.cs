@@ -24,6 +24,12 @@ public class ApiTestBase
         SwitchUserRequestingByRole(Roles.Admin);
     }
 
+    [SetUp]
+    public void SetClientUser()
+    {
+        SwitchUserRequestingByRole(Roles.Admin);
+    }
+
     [OneTimeTearDown]
     public void OneTimeTearDown()
     {

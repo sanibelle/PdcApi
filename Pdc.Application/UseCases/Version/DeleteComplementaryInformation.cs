@@ -2,16 +2,11 @@
 using Pdc.Domain.Interfaces.UseCases.Version;
 using Pdc.Domain.Models.Security;
 
-namespace Pdc.Application.UseCases;
+namespace Pdc.Application.UseCases.Version;
 
-public class DeleteComplementaryInformation : IDeleteComplementaryInformationUseCase
+public class DeleteComplementaryInformation(IComplementaryInformationRepository complementaryInformationRepository) : IDeleteComplementaryInformationUseCase
 {
-    private readonly IComplementaryInformationRepository _complementaryInformationRepository;
-
-    public DeleteComplementaryInformation(IComplementaryInformationRepository complementaryInformationRepository)
-    {
-        _complementaryInformationRepository = complementaryInformationRepository;
-    }
+    private readonly IComplementaryInformationRepository _complementaryInformationRepository = complementaryInformationRepository;
 
     public async Task Execute(Guid id, User currentUser)
     {

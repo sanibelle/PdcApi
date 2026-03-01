@@ -5,6 +5,7 @@ using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
 using Pdc.Application.Mappings;
 using Pdc.Application.UseCases;
+using Pdc.Application.UseCases.Competency;
 using Pdc.Application.Validators;
 using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Enums;
@@ -17,7 +18,6 @@ using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
-using Pdc.Infrastructure.Exceptions;
 using TestDataSeeder.Builders.DTOS;
 using TestDataSeeder.Builders.Models;
 
