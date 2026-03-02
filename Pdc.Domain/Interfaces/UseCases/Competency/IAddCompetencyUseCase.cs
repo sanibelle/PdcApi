@@ -2,7 +2,7 @@
 using Pdc.Application.DTOS;
 using Pdc.Domain.Models.Security;
 
-public interface ICreateCompetencyUseCase
+public interface IAddCompetencyUseCase
 {
     Task<CompetencyDTO> Execute(string programOfStudyCode, CompetencyDTO programOfStudy, User currentUser);
 }

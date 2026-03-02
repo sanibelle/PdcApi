@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using Pdc.Infrastructure.Identity;
+using Pdc.Domain.Models.Security;
 using System.Globalization;
 
 #nullable disable

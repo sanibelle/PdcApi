@@ -8,8 +8,8 @@ namespace Pdc.Infrastructure.Entities.CourseFramework;
 public class CourseFrameworkCompetencyEntity
 {
     public Guid? Id { get; set; }
-    public required CompetencyEntity Competency { get; set; }
-    public required CourseFrameworkEntity CourseFramework { get; set; }
+    public virtual CompetencyEntity? Competency { get; set; }
+    public virtual CourseFrameworkEntity? CourseFramework { get; set; }
     public required int Hours { get; set; }
     /// <summary>
     /// Requise si la compétence est étalée sur plusieurs cours

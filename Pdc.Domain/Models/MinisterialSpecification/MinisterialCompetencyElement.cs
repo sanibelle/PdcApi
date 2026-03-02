@@ -19,4 +19,10 @@ public class MinisterialCompetencyElement : CompetencyElement
         base.SetCreatedByOnUntracked(user);
         PerformanceCriterias.ForEach(x => x.SetCreatedByOnUntracked(user));
     }
+
+    public override void SetCreatedOnOnUntracked()
+    {
+        base.SetCreatedOnOnUntracked();
+        PerformanceCriterias.ForEach(x => x.SetCreatedOnOnUntracked());
+    }
 }

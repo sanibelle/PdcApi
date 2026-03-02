@@ -11,4 +11,12 @@ public class User
     {
         UserName = string.Empty;
     }
+
+    public bool IsAdmin
+    {
+        get
+        {
+            return Roles.Contains(Security.Roles.Admin);
+        }
+    }
 }

@@ -4,10 +4,10 @@ using Pdc.Infrastructure.Entities.Identity;
 
 namespace TestDataSeeder.SeedData;
 
-internal class User
+internal class SeededUser
 {
     private readonly UserManager<IdentityUserEntity> _userManager;
-    public User(UserManager<IdentityUserEntity> userManager)
+    public SeededUser(UserManager<IdentityUserEntity> userManager)
     {
         _userManager = userManager;
     }

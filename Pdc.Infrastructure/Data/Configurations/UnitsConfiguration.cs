@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pdc.Domain.Models.Common;
+using Pdc.Infrastructure.Entities.MinisterialSpecification;
 namespace Pdc.Infrastructure.Data.Configurations;
 
-public class UnitsConfiguration : IEntityTypeConfiguration<Units>
+public class UnitsConfiguration : IEntityTypeConfiguration<UnitsEntity>
 {
-    public void Configure(EntityTypeBuilder<Units> builder)
+    public void Configure(EntityTypeBuilder<UnitsEntity> builder)
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)

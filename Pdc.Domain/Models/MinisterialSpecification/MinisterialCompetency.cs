@@ -1,4 +1,5 @@
-﻿using Pdc.Domain.Models.Security;
+﻿using Pdc.Domain.Models.Common;
+using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.MinisterialSpecification;
@@ -26,5 +27,11 @@ public class MinisterialCompetency : Competency
     {
         base.SetVersionOnUntracked(version);
         CompetencyElements.ForEach(x => x.SetVersionOnUntracked(version));
+    }
+
+    public override void SetCreatedOnOnUntracked()
+    {
+        base.SetCreatedOnOnUntracked();
+        CompetencyElements.ForEach(x => x.SetCreatedOnOnUntracked());
     }
 }

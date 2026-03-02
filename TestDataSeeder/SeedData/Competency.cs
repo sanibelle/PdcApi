@@ -1,5 +1,4 @@
-﻿using Pdc.Domain.Models.Common;
-using Pdc.Infrastructure.Data;
+﻿using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using TestDataSeeder.Builders.Entities;
@@ -40,7 +39,7 @@ internal class Competency : ISeeder<CompetencyEntity>
 
         _competencyEntity = new CompetencyEntityBuilder()
             .WithCode("SEE.DED")
-            .WithUnits(new Units(10))
+            .WithUnits(new UnitsEntity() { WholeUnit = 10 })
             .WithIsMandatory(false)
             .WithIsOptional(true)
             .WithStatementOfCompetency("Test Statement")

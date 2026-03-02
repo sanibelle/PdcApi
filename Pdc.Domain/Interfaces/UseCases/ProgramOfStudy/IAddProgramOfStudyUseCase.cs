@@ -2,7 +2,7 @@
 
 namespace Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 
-public interface ICreateProgramOfStudyUseCase
+public interface IAddProgramOfStudyUseCase
 {
     Task<ProgramOfStudyDTO> Execute(ProgramOfStudyDTO programOfStudy);
 }

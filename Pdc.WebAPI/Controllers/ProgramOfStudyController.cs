@@ -1,21 +1,20 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pdc.Application.DTOS;
-using Pdc.Application.UseCases;
 using Pdc.Domain.Interfaces.UseCases.Competency;
 using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 using Pdc.Domain.Models.Security;
-using Pdc.Infrastructure.Identity;
 using Pdc.WebAPI.Services;
 
 namespace Pdc.WebAPI.Controllers;
+
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]
 public class ProgramOfStudyController : ControllerBase
 {
-    private readonly ICreateProgramOfStudyUseCase _createUseCase;
-    private readonly ICreateCompetencyUseCase _createCompetencyUseCase;
+    private readonly IAddProgramOfStudyUseCase _createUseCase;
+    private readonly IAddCompetencyUseCase _createCompetencyUseCase;
     private readonly IDeleteCompetencyUseCase _deleteCompetencyUseCase;
     private readonly IDeleteProgramOfStudyUseCase _deleteProgramOfStudyUseCase;
     private readonly IGetProgramOfStudiesUseCase _getProgramOfStudiesUseCase;
@@ -26,12 +25,12 @@ public class ProgramOfStudyController : ControllerBase
     private readonly IGetCompetenciesByProgramOfStudyUseCase _getCompetenciesByProgramOfStudyUseCase;
     private readonly UserControllerService _userControllerService;
 
-    public ProgramOfStudyController(ICreateProgramOfStudyUseCase createUseCase,
+    public ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
                                     IDeleteProgramOfStudyUseCase deleteProgramOfStudyUseCase,
                                     IGetProgramOfStudyUseCase getProgramOfStudyUseCase,
                                     IGetProgramOfStudiesUseCase getProgramOfStudiesUseCase,
                                     IUpdateProgramOfStudyUseCase updateUseCase,
-                                    ICreateCompetencyUseCase createCompetencyUseCase,
+                                    IAddCompetencyUseCase createCompetencyUseCase,
                                     IDeleteCompetencyUseCase deleteCompetencyUseCase,
                                     IUpdateDraftV1CompetencyUseCase updateDraftV1CompetencyUseCase,
                                     IGetCompetenciesByProgramOfStudyUseCase getCompetenciesByProgramOfStudyUseCase,

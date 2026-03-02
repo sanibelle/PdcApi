@@ -13,18 +13,11 @@ namespace Pdc.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController(IUserService userService, IConfiguration configuration, IMapper mapper) : ControllerBase
     {
-        private readonly IUserService _userService;
-        private readonly IConfiguration _configuration;
-        private readonly IMapper _mapper;
-
-        public AuthController(IUserService userService, IConfiguration configuration, IMapper mapper)
-        {
-            _userService = userService;
-            _configuration = configuration;
-            _mapper = mapper;
-        }
+        private readonly IUserService _userService = userService;
+        private readonly IConfiguration _configuration = configuration;
+        private readonly IMapper _mapper = mapper;
 
         [HttpGet("signin-oidc")]
         [ApiExplorerSettings(IgnoreApi = true)] // Hide from Swagger

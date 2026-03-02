@@ -1,16 +1,11 @@
 ﻿using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Interfaces.UseCases.Competency;
 
-namespace Pdc.Application.UseCases;
+namespace Pdc.Application.UseCases.Competency;
 
-public class DeleteCompetency : IDeleteCompetencyUseCase
+public class DeleteCompetency(ICompetencyRepository competencyRepository) : IDeleteCompetencyUseCase
 {
-    private readonly ICompetencyRepository _competencyRepository;
-
-    public DeleteCompetency(ICompetencyRepository competencyRepository)
-    {
-        _competencyRepository = competencyRepository;
-    }
+    private readonly ICompetencyRepository _competencyRepository = competencyRepository;
 
     public async Task Execute(string programOfStudyCode, string competencyCode)
     {

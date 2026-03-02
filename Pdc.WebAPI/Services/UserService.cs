@@ -14,17 +14,12 @@ public class UserControllerService(IHttpContextAccessor httpContextAccessor)
         {
             throw new UnauthorizedAccessException("Could not find the user in the context");
         }
-        string? userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId is null)
-        {
-            throw new UnauthorizedAccessException("Could not find userId in the context");
-        }
-
+        string? userId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new UnauthorizedAccessException("Could not find userId in the context");
         return new User
         {
             Id = Guid.Parse(userId),
-            // TODO Email = user.FindFirstValue(ClaimTypes.Email) ?? "",
-            UserName = user.FindFirstValue(ClaimTypes.Name) ?? ""
+            UserName = user.FindFirstValue(ClaimTypes.Name) ?? "",
+            Roles = [.. user.FindAll(ClaimTypes.Role).Select(c => c.Value)]
         };
     }
 }

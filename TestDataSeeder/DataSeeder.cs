@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Pdc.Domain.Models.Security;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
-using Pdc.Infrastructure.Identity;
 using TestDataSeeder.SeedData;
 
 namespace TestDataSeeder;
@@ -43,9 +43,9 @@ public class DataSeeder : IDataSeeder
     {
         await _context.Database.EnsureCreatedAsync();
         ExistingRoles = await new Role(_roleManager).SeedAsync();
-        Admin = await new User(_userManager).SeedAsync(Roles.Admin);
-        SimpleUser = await new User(_userManager).SeedAsync();
-        UserForRoleTest = await new User(_userManager).SeedAsync();
+        Admin = await new SeededUser(_userManager).SeedAsync(Roles.Admin);
+        SimpleUser = await new SeededUser(_userManager).SeedAsync();
+        UserForRoleTest = await new SeededUser(_userManager).SeedAsync();
 
         ProgramOfStudyEntity = await new ProgramOfStudy(_context).SeedAsync();
         CompetencyEntity =  await new Competency(ProgramOfStudyEntity, _context).SeedAsync();

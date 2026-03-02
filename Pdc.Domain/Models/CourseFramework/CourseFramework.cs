@@ -4,7 +4,7 @@ using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.CourseFramework;
 
-public class CourseFramework : Versionable
+public class CourseFramework
 {
     public IEnumerable<MinisterialCompetency> Competencies { get; set; } = new List<MinisterialCompetency>();
     public IEnumerable<CourseFrameworkCompetencyElement> CourseFrameworkPerformanceCriterias { get; set; } = new List<CourseFrameworkCompetencyElement>();

@@ -1,4 +1,3 @@
-using Pdc.Domain.Models.Common;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Infrastructure.Entities.Versioning;
@@ -8,7 +7,7 @@ namespace TestDataSeeder.Builders.Entities;
 public class CompetencyEntityBuilder
 {
     private string _code = "00SU";
-    private Units? _units = new Units(3);
+    private UnitsEntity? _units = new UnitsEntityBuilder().WithWholeUnit(3).Build();
     private ProgramOfStudyEntity? _programOfStudy;
     private bool _isMandatory = true;
     private bool _isOptional = false;
@@ -23,7 +22,7 @@ public class CompetencyEntityBuilder
         return this;
     }
 
-    public CompetencyEntityBuilder WithUnits(Units units)
+    public CompetencyEntityBuilder WithUnits(UnitsEntity units)
     {
         _units = units;
         return this;

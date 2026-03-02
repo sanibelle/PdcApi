@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Pdc.Domain.Models.Security;
-using Pdc.Infrastructure.Identity;
 using System.Net.Http.Json;
 using TestDataSeeder;
 
@@ -48,9 +47,9 @@ public class UserApiTests : ApiTestBase
         // Act - Add the role to the user
         var roles = user.Roles.ToList();
         roles.Add(_competencyRole.Name!);
-        
+
         response = await _Client.PutAsJsonAsync($"/api/user/{DataSeeder.UserForRoleTest.Id}/roles", roles);
-        
+
         // Assert - User should now have the competency role
         user = await response.Content.ReadFromJsonAsync<User>();
         Assert.That(user, Is.Not.Null);
@@ -59,7 +58,7 @@ public class UserApiTests : ApiTestBase
         // Act - Remove the role
         roles.Remove(_competencyRole.Name!);
         response = await _Client.PutAsJsonAsync($"/api/user/{DataSeeder.UserForRoleTest.Id}/roles", roles);
-        
+
         // Assert - User should no longer have the competency role
         user = await response.Content.ReadFromJsonAsync<User>();
         Assert.That(user, Is.Not.Null);
@@ -90,7 +89,7 @@ public class UserApiTests : ApiTestBase
         roles.Add(_adminRole.Name);
         response = await _Client.PutAsJsonAsync($"/api/user/{DataSeeder.UserForRoleTest.Id}/roles", roles);
         user = await response.Content.ReadFromJsonAsync<User>();
-        
+
         // Assert - User should have both roles
         Assert.That(user, Is.Not.Null);
         Assert.That(user.Roles.Any(x => x == _userRole.Name), Is.True);

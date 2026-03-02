@@ -235,44 +235,46 @@ public class CompetencyApiTests : ApiTestBase
         return competencyDTO;
     }
 
-    private void AssertCompetencyBasedOnResponse(CompetencyDTO competencyDTO, CompetencyDTO competencyToCompare)
+    private void AssertCompetencyBasedOnResponse(CompetencyDTO originalCompetency, CompetencyDTO competencyToCompare)
     {
-        competencyToCompare.Should().BeEquivalentTo(competencyDTO, options =>
+        competencyToCompare.Should().BeEquivalentTo(originalCompetency, options =>
                     options
                     .Excluding(x => x.IsDraft)
                     .Excluding(x => x.VersionNumber)
                     .Excluding(x => x.VersionId)
+                    .Excluding(x => x.Units)
                     .Excluding(x => x.CompetencyElements)
                     .Excluding(x => x.RealisationContexts));
 
         Assert.That(competencyToCompare.VersionNumber == 1);
         Assert.That(competencyToCompare.IsDraft, Is.True);
         Assert.That(competencyToCompare.VersionId, Is.TypeOf<Guid>());
+        Assert.That(competencyToCompare.Units.Id, Is.TypeOf<Guid>());
 
         foreach (var r in competencyToCompare.RealisationContexts)
         {
             Assert.That(r.Id.HasValue && r.Id.Value != Guid.Empty, "guid is not empty");
-            var realisationContext = competencyDTO.RealisationContexts.FirstOrDefault(x => x.Value == r.Value);
+            var realisationContext = originalCompetency.RealisationContexts.FirstOrDefault(x => x.Value == r.Value);
             r.Should().BeEquivalentTo(realisationContext, options =>
                 options
                 .Excluding(x => x.ComplementaryInformations)
                 .Excluding(x => x.Id));
 
-            AssertComplementaryInformation(r?.ComplementaryInformations?.FirstOrDefault(), realisationContext?.ComplementaryInformations?.FirstOrDefault());
+            AssertComplementaryInformation(realisationContext?.ComplementaryInformations?.FirstOrDefault(), r?.ComplementaryInformations?.FirstOrDefault());
         }
 
         // NOTE le foreach a un seul element
         foreach (var c in competencyToCompare.CompetencyElements)
         {
             Assert.That(c.Id.HasValue && c.Id.Value != Guid.Empty, "guid is not empty");
-            var competencyElement = competencyDTO.CompetencyElements.FirstOrDefault(x => x.Value == c.Value);
+            var competencyElement = originalCompetency.CompetencyElements.FirstOrDefault(x => x.Value == c.Value);
             c.Should().BeEquivalentTo(competencyElement, options =>
                 options
                 .Excluding(x => x.Id)
                 .Excluding(x => x.PerformanceCriterias)
                 .Excluding(x => x.ComplementaryInformations));
 
-            AssertComplementaryInformation(c?.ComplementaryInformations?.FirstOrDefault(), competencyElement?.ComplementaryInformations?.FirstOrDefault());
+            AssertComplementaryInformation(competencyElement?.ComplementaryInformations?.FirstOrDefault(), c?.ComplementaryInformations?.FirstOrDefault());
 
             foreach (var p in c?.PerformanceCriterias ?? [])
             {
@@ -283,7 +285,7 @@ public class CompetencyApiTests : ApiTestBase
                     .Excluding(x => x.Id)
                     .Excluding(x => x.ComplementaryInformations));
 
-                AssertComplementaryInformation(p?.ComplementaryInformations?.FirstOrDefault(), performanceCriteria?.ComplementaryInformations?.FirstOrDefault());
+                AssertComplementaryInformation(performanceCriteria?.ComplementaryInformations?.FirstOrDefault(), p?.ComplementaryInformations?.FirstOrDefault());
             }
         }
     }
@@ -294,14 +296,18 @@ public class CompetencyApiTests : ApiTestBase
         if (originalComplementaryInformation == null && complementaryInformation == null) return;
         using (Assert.EnterMultipleScope())
         {
-            Assert.That(originalComplementaryInformation?.Id != null && originalComplementaryInformation?.Id != Guid.Empty, $"guid is not empty");
-            Assert.That(originalComplementaryInformation?.WrittenOnVersion != null, $"version is not found");
-            originalComplementaryInformation?.WrittenOnVersion.Should().Be(1, "new or update version is always 1");
+            Assert.That(complementaryInformation?.Id != null && complementaryInformation?.Id != Guid.Empty, $"guid is not empty");
+            Assert.That(complementaryInformation?.WrittenOnVersion != null, $"version is not found");
+            complementaryInformation?.WrittenOnVersion.Should().Be(1, "new or update version is always 1");
         }
-        originalComplementaryInformation.Should().BeEquivalentTo(complementaryInformation, options =>
+
+        complementaryInformation.Should().BeEquivalentTo(originalComplementaryInformation, options =>
            options
            .Excluding(x => x.Id)
            .Excluding(x => x.WrittenOnVersion)
-           .Excluding(x => x.CreatedBy));
+           .Excluding(x => x.CreatedBy)
+           .Excluding(x => x.CreatedOn));
+        complementaryInformation.CreatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(30), "CreatedOn should be set to current time");
+        complementaryInformation.CreatedBy.Id.Should().NotBeNull();
     }
 }

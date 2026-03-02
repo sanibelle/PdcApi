@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Pdc.Application.DTOS;
-using Pdc.Domain.Models.Common;
 using System.Net.Http.Json;
 using TestDataSeeder;
 using TestDataSeeder.Builders.DTOS;
@@ -80,23 +79,31 @@ public class ProgramOfStudyApiTests : ApiTestBase
         // Arrange
         ProgramOfStudyDTO newProgram = new ProgramOfStudyDTOBuilder().Build();
 
-        ProgramOfStudyDTO updatedProgramData = new ProgramOfStudyDTOBuilder()
-            .WithCode("421.B5")
-            .WithName("Techniques de l'informatique 2.0")
-            .WithProgramType(Pdc.Domain.Enums.ProgramType.AEC)
-            .WithMonthsDuration(35)
-            .WithSpecificDurationHours(53)
-            .WithTotalDurationHours(35)
-            .WithPublishedOn(DateOnly.FromDateTime(DateTime.UtcNow))
-            .WithOptionalUnits(new Units(16, 2, 3))
-            .WithSpecificUnits(new Units(26, 2, 3))
-            .Build();
 
         // Act - Create the program
         var createResponse = await _Client.PostAsJsonAsync("/api/programofstudy", newProgram);
         createResponse.EnsureSuccessStatusCode();
         var createdProgram = await createResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
+        var optionalUnits = createdProgram.OptionalUnits;
+        optionalUnits.Denominator = 2;
+        optionalUnits.Numerator = 1;
+        optionalUnits.WholeUnit = 26;
+
+
+        ProgramOfStudyDTO updatedProgramData = new ProgramOfStudyDTOBuilder()
+            .WithCode("421.B5")
+            .WithName("Techniques de l'informatique 2.0")
+            .WithProgramType(Domain.Enums.ProgramType.AEC)
+            .WithMonthsDuration(35)
+            .WithSpecificDurationHours(53)
+            .WithTotalDurationHours(35)
+            .WithPublishedOn(createdProgram.PublishedOn)
+            .WithOptionalUnits(optionalUnits)
+            .WithSpecificUnits(createdProgram.SpecificUnits)
+            .WithGeneralUnits(createdProgram.GeneralUnits)
+            .WithComplementaryUnits(createdProgram.ComplementaryUnits)
+            .Build();
         // Act - Update the program
         updatedProgramData.Code = createdProgram!.Code;
         var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{updatedProgramData.Code}", updatedProgramData);
