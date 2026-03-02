@@ -9,7 +9,7 @@ using Pdc.Infrastructure.Entities.CourseFramework;
 
 namespace Pdc.Infrastructure.Repositories;
 
-public class ProgramOfStudyRespository(AppDbContext context, IMapper mapper) : IProgramOfStudyRepository
+public class ProgramOfStudyRepository(AppDbContext context, IMapper mapper) : IProgramOfStudyRepository
 {
     private readonly AppDbContext _context = context;
     private readonly IMapper _mapper = mapper;

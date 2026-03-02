@@ -10,7 +10,7 @@ public class CompetencyEntity : VersionableEntity
     /// </summary>
     public required string Code { get; set; }
     public virtual UnitsEntity? Units { get; set; }
-    public virtual Guid? UnitsId { get; set; }
+    public Guid? UnitsId { get; set; }
     public virtual ProgramOfStudyEntity? ProgramOfStudy { get; set; }
     public bool IsMandatory { get; set; } // true
     public bool IsOptional { get; set; } // true

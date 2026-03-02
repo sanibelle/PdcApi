@@ -19,7 +19,7 @@ public class ComplementaryInformationRepository(AppDbContext context, IVersionRe
     public async Task<ComplementaryInformation> Add(ComplementaryInformation complementaryInformation, Guid versionId)
     {
         var toAdd = _mapper.Map<ComplementaryInformationEntity>(complementaryInformation);
-        toAdd.WrittenOnVersion = await _context.ChangeRecords.SingleOrDefaultAsync(x => x.Id == versionId);
+        toAdd.WrittenOnVersion = await _context.ChangeRecords.SingleOrDefaultAsync(x => x.Id == versionId) ?? throw new NotFoundException(nameof(ChangeRecord), versionId);
         EntityEntry<ComplementaryInformationEntity> entity = await _context.ComplementaryInformations.AddAsync(toAdd);
         await _context.SaveChangesAsync();
         return _mapper.Map<ComplementaryInformation>(entity.Entity);
@@ -29,7 +29,7 @@ public class ComplementaryInformationRepository(AppDbContext context, IVersionRe
     {
         ComplementaryInformationEntity entity = await FindEntityById(complementaryInformation.Id);
         _mapper.Map(complementaryInformation, entity);
-        entity.WrittenOnVersion = await _context.ChangeRecords.SingleOrDefaultAsync(x => x.Id == versionId);
+        entity.WrittenOnVersion = await _context.ChangeRecords.SingleOrDefaultAsync(x => x.Id == versionId) ?? throw new NotFoundException(nameof(ChangeRecord), versionId);
         EntityEntry<ComplementaryInformationEntity> updatedEntity = _context.ComplementaryInformations.Update(entity);
         await _context.SaveChangesAsync();
         return _mapper.Map<ComplementaryInformation>(updatedEntity.Entity);
@@ -61,7 +61,7 @@ public class ComplementaryInformationRepository(AppDbContext context, IVersionRe
             : await _versionRepository.FindParentByVersionId(version.Id.Value);
     }
 
-    public async Task<Guid> FindCreatedById(Guid complementaryInformationId)
+    public async Task<Guid> FindCreatedByByComplementaryInformationId(Guid complementaryInformationId)
     {
         Guid? id = await _context.ComplementaryInformations
             .Where(x => x.Id == complementaryInformationId)
@@ -70,7 +70,7 @@ public class ComplementaryInformationRepository(AppDbContext context, IVersionRe
 
         if (!id.HasValue)
         {
-            throw new NotFoundException(nameof(ChangeRecordEntity) + "CreatedBy Id not found, value is null", complementaryInformationId);
+            throw new NotFoundException(nameof(ComplementaryInformationEntity) + "CreatedBy Id not found, value is null", complementaryInformationId);
         }
         return id.Value;
     }
@@ -86,7 +86,7 @@ public class ComplementaryInformationRepository(AppDbContext context, IVersionRe
             .SingleOrDefaultAsync(x => x.Id == id);
         if (complementaryInformationEntity == null || id == null)
         {
-            throw new NotFoundException(nameof(ChangeableEntity), id == null ? "id is null" : id);
+            throw new NotFoundException(nameof(ComplementaryInformationEntity), id == null ? "id is null" : id);
         }
         return complementaryInformationEntity;
     }

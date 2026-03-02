@@ -85,10 +85,10 @@ public class ProgramOfStudyApiTests : ApiTestBase
         createResponse.EnsureSuccessStatusCode();
         var createdProgram = await createResponse.Content.ReadFromJsonAsync<ProgramOfStudyDTO>();
 
-        var optionnalUnits = createdProgram.OptionalUnits;
-        optionnalUnits.Denominator = 2;
-        optionnalUnits.Numerator = 1;
-        optionnalUnits.WholeUnit = 26;
+        var optionalUnits = createdProgram.OptionalUnits;
+        optionalUnits.Denominator = 2;
+        optionalUnits.Numerator = 1;
+        optionalUnits.WholeUnit = 26;
 
 
         ProgramOfStudyDTO updatedProgramData = new ProgramOfStudyDTOBuilder()
@@ -99,7 +99,7 @@ public class ProgramOfStudyApiTests : ApiTestBase
             .WithSpecificDurationHours(53)
             .WithTotalDurationHours(35)
             .WithPublishedOn(createdProgram.PublishedOn)
-            .WithOptionalUnits(optionnalUnits)
+            .WithOptionalUnits(optionalUnits)
             .WithSpecificUnits(createdProgram.SpecificUnits)
             .WithGeneralUnits(createdProgram.GeneralUnits)
             .WithComplementaryUnits(createdProgram.ComplementaryUnits)

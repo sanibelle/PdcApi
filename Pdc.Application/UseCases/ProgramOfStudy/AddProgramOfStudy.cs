@@ -9,7 +9,7 @@ using Pdc.Domain.Models.CourseFramework;
 
 namespace Pdc.Application.UseCases;
 
-public class AddProgramOfStudy : ICreateProgramOfStudyUseCase
+public class AddProgramOfStudy : IAddProgramOfStudyUseCase
 {
     private readonly IValidator<ProgramOfStudyDTO> _validator;
     private readonly IProgramOfStudyRepository _programOfStudyRepository;

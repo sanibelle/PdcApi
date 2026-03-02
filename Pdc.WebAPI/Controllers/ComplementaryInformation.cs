@@ -11,39 +11,36 @@ namespace Pdc.WebAPI.Controllers;
 [Authorize]
 [Route("api/[controller]")]
 public class ComplementaryInformation(
-                        IDeleteComplementaryInformationUseCase deleteComplementartInformationUseCase,
-                        IUpdateComplementaryInformationUseCase updateComplementartInformationUseCase,
-                        IGetComplementaryInformationUseCase getComplementartInformationUseCase,
+                        IDeleteComplementaryInformationUseCase deleteComplementaryInformationUseCase,
+                        IUpdateComplementaryInformationUseCase updateComplementaryInformationUseCase,
+                        IGetComplementaryInformationUseCase getComplementaryInformationUseCase,
                         UserControllerService userControllerService) : ControllerBase
 {
-    private readonly IDeleteComplementaryInformationUseCase _deleteComplementartInformationUseCase = deleteComplementartInformationUseCase;
-    private readonly IUpdateComplementaryInformationUseCase _updateComplementartInformationUseCase = updateComplementartInformationUseCase;
-    private readonly IGetComplementaryInformationUseCase _getComplementartInformationUseCase = getComplementartInformationUseCase;
+    private readonly IDeleteComplementaryInformationUseCase _deleteComplementaryInformationUseCase = deleteComplementaryInformationUseCase;
+    private readonly IUpdateComplementaryInformationUseCase _updateComplementaryInformationUseCase = updateComplementaryInformationUseCase;
+    private readonly IGetComplementaryInformationUseCase _getComplementaryInformationUseCase = getComplementaryInformationUseCase;
     private readonly UserControllerService _userControllerService = userControllerService;
 
 
-    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<ComplementaryInformationDTO>> Get(Guid id)
     {
-        return await _getComplementartInformationUseCase.Execute(id);
+        return Ok(await _getComplementaryInformationUseCase.Execute(id));
     }
 
-    [Authorize]
     [HttpDelete("{id}")]
-    public async Task<ActionResult<ComplementaryInformationDTO>> Delete(Guid id)
+    public async Task<ActionResult> Delete(Guid id)
     {
         User user = _userControllerService.GetUserFromHttpContext();
-        await _deleteComplementartInformationUseCase.Execute(id, user);
+        await _deleteComplementaryInformationUseCase.Execute(id, user);
         return NoContent();
     }
 
-    [Authorize]
     [HttpPut("{id}")]
     public async Task<ActionResult<ComplementaryInformationDTO>> Update(Guid id, [FromBody] ComplementaryInformationDTO complementaryInformationDTO)
     {
         User user = _userControllerService.GetUserFromHttpContext();
-        ComplementaryInformationDTO updatedComplementaryInformation = await _updateComplementartInformationUseCase.Execute(complementaryInformationDTO, user, id);
+        ComplementaryInformationDTO updatedComplementaryInformation = await _updateComplementaryInformationUseCase.Execute(complementaryInformationDTO, user, id);
         return Ok(updatedComplementaryInformation);
     }
 

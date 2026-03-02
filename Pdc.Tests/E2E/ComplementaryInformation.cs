@@ -16,7 +16,7 @@ public class ComplementaryInformation : ApiTestBase
     public async Task GivenComplementaryInformation_WhenCreatingComplementaryInformation_ThenShouldReturnCreatedComplementaryInformation()
     {
         CompetencyElementEntity competencyElement = DataSeeder.CompetencyEntity.CompetencyElements.First();
-        Assert.That(competencyElement != null, "there should be at least one competency element seeded");
+        competencyElement.Should().NotBeNull("there should be at least one competency element seeded");
         ComplementaryInformationDTO complementaryInformationDTO = new ComplementaryInformationDTOBuilder()
             .WithText("This is the test text")
             .Build();
@@ -33,7 +33,7 @@ public class ComplementaryInformation : ApiTestBase
     public async Task GivenComplementaryInformation_WhenUpdatingComplementaryInformation_ThenShouldReturnCreatedComplementaryInformation()
     {
         CompetencyElementEntity competencyElement = DataSeeder.CompetencyEntity.CompetencyElements.First();
-        Assert.That(competencyElement != null, "there should be at least one competency element seeded");
+        competencyElement.Should().NotBeNull("there should be at least one competency element seeded");
         ComplementaryInformationDTO complementaryInformationDTO = new ComplementaryInformationDTOBuilder()
             .WithText("This is the test text")
             .Build();
@@ -69,7 +69,7 @@ public class ComplementaryInformation : ApiTestBase
     public async Task GivenComplementaryInformation_WhenUpdatingComplementaryInformationAsAdmin_ThenShouldSucceed()
     {
         CompetencyElementEntity competencyElement = DataSeeder.CompetencyEntity.CompetencyElements.First();
-        Assert.That(competencyElement != null, "there should be at least one competency element seeded");
+        competencyElement.Should().NotBeNull("there should be at least one competency element seeded");
         ComplementaryInformationDTO complementaryInformationDTO = new ComplementaryInformationDTOBuilder()
             .WithText("This is the test text of the simple user")
             .Build();
@@ -94,7 +94,7 @@ public class ComplementaryInformation : ApiTestBase
     public async Task GivenComplementaryInformation_WhenUpdatingComplementaryInformationAsAuthor_ThenShouldSucceed()
     {
         CompetencyElementEntity competencyElement = DataSeeder.CompetencyEntity.CompetencyElements.First();
-        Assert.That(competencyElement != null, "there should be at least one competency element seeded");
+        competencyElement.Should().NotBeNull("there should be at least one competency element seeded");
         ComplementaryInformationDTO complementaryInformationDTO = new ComplementaryInformationDTOBuilder()
             .WithText("This is the test text of the simple user")
             .Build();
@@ -106,7 +106,7 @@ public class ComplementaryInformation : ApiTestBase
         createdComplementaryInformation.Should().NotBeNull();
 
 
-        // Act - Update with admin rights
+        // Act - Update as the original author
         complementaryInformationDTO.Text = "This is the updated test text of the creation user";
         var updateResponse = await _Client.PutAsJsonAsync($"/api/complementaryInformation/{createdComplementaryInformation.Id}", complementaryInformationDTO);
         updateResponse.EnsureSuccessStatusCode();
@@ -118,7 +118,7 @@ public class ComplementaryInformation : ApiTestBase
     public async Task GivenComplementaryInformation_WhenUpdatingComplementaryInformationNotAsAuthor_ThenShouldFail()
     {
         CompetencyElementEntity competencyElement = DataSeeder.CompetencyEntity.CompetencyElements.First();
-        Assert.That(competencyElement != null, "there should be at least one competency element seeded");
+        competencyElement.Should().NotBeNull("there should be at least one competency element seeded");
         ComplementaryInformationDTO complementaryInformationDTO = new ComplementaryInformationDTOBuilder()
             .WithText("This is the test text of the simple user")
             .Build();
@@ -141,7 +141,7 @@ public class ComplementaryInformation : ApiTestBase
     public async Task GivenComplementaryInformation_WhenDeletingComplementaryInformation_ThenShouldDeleteComplementaryInformation()
     {
         CompetencyElementEntity competencyElement = DataSeeder.CompetencyEntity.CompetencyElements.First();
-        Assert.That(competencyElement != null, "there should be at least one competency element seeded");
+        competencyElement.Should().NotBeNull("there should be at least one competency element seeded");
         ComplementaryInformationDTO complementaryInformationDTO = new ComplementaryInformationDTOBuilder()
             .WithText("This is the test text of the simple user")
             .Build();
@@ -152,8 +152,7 @@ public class ComplementaryInformation : ApiTestBase
         createdComplementaryInformation.Should().NotBeNull();
 
 
-        // Act - Update with another user
-        complementaryInformationDTO.Text = "This is the updated test text of the creation user";
+        // Act - Delete with the same user
         var deleteResponse = await _Client.DeleteAsync($"/api/complementaryInformation/{createdComplementaryInformation.Id}");
         deleteResponse.EnsureSuccessStatusCode();
     }
@@ -176,7 +175,7 @@ public class ComplementaryInformation : ApiTestBase
 
         SwitchUserRequesting(DataSeeder.SimpleUser);
         CompetencyElementEntity competencyElement = DataSeeder.CompetencyEntity.CompetencyElements.First();
-        Assert.That(competencyElement != null, "there should be at least one competency element seeded");
+        competencyElement.Should().NotBeNull("there should be at least one competency element seeded");
         ComplementaryInformationDTO complementaryInformationDTO = new ComplementaryInformationDTOBuilder()
             .WithText("This is the test text of the simple user")
             .Build();
@@ -203,7 +202,7 @@ public class ComplementaryInformation : ApiTestBase
         SwitchUserRequesting(DataSeeder.SimpleUser);
 
         CompetencyElementEntity competencyElement = DataSeeder.CompetencyEntity.CompetencyElements.First();
-        Assert.That(competencyElement != null, "there should be at least one competency element seeded");
+        competencyElement.Should().NotBeNull("there should be at least one competency element seeded");
         ComplementaryInformationDTO complementaryInformationDTO = new ComplementaryInformationDTOBuilder()
             .WithText("This is the test text of the simple user")
             .Build();
@@ -227,7 +226,7 @@ public class ComplementaryInformation : ApiTestBase
     public async Task GivenComplementaryInformation_WhenDeletingComplementaryInformationNotAsAuthor_ThenShouldFail()
     {
         CompetencyElementEntity competencyElement = DataSeeder.CompetencyEntity.CompetencyElements.First();
-        Assert.That(competencyElement != null, "there should be at least one competency element seeded");
+        competencyElement.Should().NotBeNull("there should be at least one competency element seeded");
         ComplementaryInformationDTO complementaryInformationDTO = new ComplementaryInformationDTOBuilder()
             .WithText("This is the test text of the simple user")
             .Build();
@@ -247,7 +246,7 @@ public class ComplementaryInformation : ApiTestBase
     }
 
     [Test]
-    [Ignore("TODO when the versinning will be implemented, complete this test.")]
+    [Ignore("TODO when the versionning will be implemented, complete this test.")]
     public async Task GivenComplementaryInformation_WhenUpdatingWithNewVersion_ThenShouldUpdateTheVersion()
     {
     }

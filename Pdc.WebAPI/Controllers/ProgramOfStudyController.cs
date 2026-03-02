@@ -13,8 +13,8 @@ namespace Pdc.WebAPI.Controllers;
 [Route("api/[controller]")]
 public class ProgramOfStudyController : ControllerBase
 {
-    private readonly ICreateProgramOfStudyUseCase _createUseCase;
-    private readonly ICreateCompetencyUseCase _createCompetencyUseCase;
+    private readonly IAddProgramOfStudyUseCase _createUseCase;
+    private readonly IAddCompetencyUseCase _createCompetencyUseCase;
     private readonly IDeleteCompetencyUseCase _deleteCompetencyUseCase;
     private readonly IDeleteProgramOfStudyUseCase _deleteProgramOfStudyUseCase;
     private readonly IGetProgramOfStudiesUseCase _getProgramOfStudiesUseCase;
@@ -25,12 +25,12 @@ public class ProgramOfStudyController : ControllerBase
     private readonly IGetCompetenciesByProgramOfStudyUseCase _getCompetenciesByProgramOfStudyUseCase;
     private readonly UserControllerService _userControllerService;
 
-    public ProgramOfStudyController(ICreateProgramOfStudyUseCase createUseCase,
+    public ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
                                     IDeleteProgramOfStudyUseCase deleteProgramOfStudyUseCase,
                                     IGetProgramOfStudyUseCase getProgramOfStudyUseCase,
                                     IGetProgramOfStudiesUseCase getProgramOfStudiesUseCase,
                                     IUpdateProgramOfStudyUseCase updateUseCase,
-                                    ICreateCompetencyUseCase createCompetencyUseCase,
+                                    IAddCompetencyUseCase createCompetencyUseCase,
                                     IDeleteCompetencyUseCase deleteCompetencyUseCase,
                                     IUpdateDraftV1CompetencyUseCase updateDraftV1CompetencyUseCase,
                                     IGetCompetenciesByProgramOfStudyUseCase getCompetenciesByProgramOfStudyUseCase,

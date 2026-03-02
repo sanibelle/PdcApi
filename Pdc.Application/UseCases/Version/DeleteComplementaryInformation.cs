@@ -10,7 +10,7 @@ public class DeleteComplementaryInformation(IComplementaryInformationRepository 
 
     public async Task Execute(Guid id, User currentUser)
     {
-        Guid userId = await _complementaryInformationRepository.FindCreatedById(id);
+        Guid userId = await _complementaryInformationRepository.FindCreatedByByComplementaryInformationId(id);
         if (currentUser.Id != userId && !currentUser.IsAdmin)
         {
             throw new UnauthorizedAccessException();

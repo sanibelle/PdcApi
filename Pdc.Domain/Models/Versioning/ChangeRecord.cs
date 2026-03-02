@@ -60,14 +60,14 @@ public class ChangeRecord : ICreatedByPropagable, ICreatedOnPropagable
 
     public void SetCreatedByOnUntracked(User user)
     {
-        if (CreatedBy == null)
-        {
-            CreatedBy = user;
-        }
+        CreatedBy ??= user;
     }
 
     public void SetCreatedOnOnUntracked()
     {
-        CreatedOn = DateTime.UtcNow;
+        if (CreatedOn == default)
+        {
+            CreatedOn = DateTime.UtcNow;
+        }
     }
 }

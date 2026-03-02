@@ -16,7 +16,7 @@ public class User
     {
         get
         {
-            return Roles.Any(x => x == Domain.Models.Security.Roles.Admin);
+            return Roles.Contains(Security.Roles.Admin);
         }
     }
 }

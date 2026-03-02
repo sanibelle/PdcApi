@@ -19,7 +19,7 @@ namespace Pdc.Tests.UnitTests;
 public class ProgramOfStudyTest
 {
     Mock<IProgramOfStudyRepository> _programOfStudyRepositoryMock;
-    ICreateProgramOfStudyUseCase _createProgramOfStudyUseCase;
+    IAddProgramOfStudyUseCase _createProgramOfStudyUseCase;
     IDeleteProgramOfStudyUseCase _deleteProgramOfStudyUseCase;
     IGetProgramOfStudiesUseCase _getAllProgramOfStudyUseCase;
     IUpdateProgramOfStudyUseCase _updateProgramOfStudyUseCase;

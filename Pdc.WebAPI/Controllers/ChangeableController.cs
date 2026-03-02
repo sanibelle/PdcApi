@@ -11,19 +11,18 @@ namespace Pdc.WebAPI.Controllers;
 [Authorize]
 [Route("api/[controller]")]
 public class ChangeableController(
-                        IAddComplementaryInformationUseCase addComplementartInformationUseCase,
+                        IAddComplementaryInformationUseCase addComplementaryInformationUseCase,
                         UserControllerService userControllerService) : ControllerBase
 {
-    private readonly IAddComplementaryInformationUseCase _addComplementartInformationUseCase = addComplementartInformationUseCase;
+    private readonly IAddComplementaryInformationUseCase _addComplementaryInformationUseCase = addComplementaryInformationUseCase;
     private readonly UserControllerService _userControllerService = userControllerService;
 
 
-    [Authorize]
     [HttpPost("{changeableId}/complementaryInformation")]
     public async Task<ActionResult<ComplementaryInformationDTO>> Add(Guid changeableId, [FromBody] ComplementaryInformationDTO complementaryInformationDTO)
     {
         User user = _userControllerService.GetUserFromHttpContext();
-        ComplementaryInformationDTO createdComplementaryInformation = await _addComplementartInformationUseCase.Execute(complementaryInformationDTO, changeableId, user);
+        ComplementaryInformationDTO createdComplementaryInformation = await _addComplementaryInformationUseCase.Execute(complementaryInformationDTO, changeableId, user);
         return CreatedAtAction(
             nameof(ComplementaryInformation.Get),
             controllerName: "ComplementaryInformation",

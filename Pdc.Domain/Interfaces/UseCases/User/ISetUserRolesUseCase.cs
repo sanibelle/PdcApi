@@ -4,5 +4,5 @@ namespace Pdc.Domain.Interfaces.UseCases.User;
 
 public interface ISetUserRolesUseCase
 {
-    Task<UserDTO> Execute(Guid userId, string[] roles, Models.Security.User currentUser);
+    Task<UserDTO> Execute(Guid userId, string[] roles, UserModel currentUser);
 }

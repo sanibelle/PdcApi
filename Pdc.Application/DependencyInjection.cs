@@ -21,13 +21,13 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         // ProgramOfStudy
-        services.AddScoped<ICreateProgramOfStudyUseCase, AddProgramOfStudy>();
+        services.AddScoped<IAddProgramOfStudyUseCase, AddProgramOfStudy>();
         services.AddScoped<IDeleteProgramOfStudyUseCase, DeleteProgramOfStudy>();
         services.AddScoped<IGetProgramOfStudiesUseCase, GetProgramOfStudies>();
         services.AddScoped<IUpdateProgramOfStudyUseCase, UpdateProgramOfStudy>();
         services.AddScoped<IGetProgramOfStudyUseCase, GetProgramOfStudy>();
         //Competency
-        services.AddScoped<ICreateCompetencyUseCase, AddCompetency>();
+        services.AddScoped<IAddCompetencyUseCase, AddCompetency>();
         services.AddScoped<IGetCompetencyUseCase, GetCompetency>();
         services.AddScoped<IGetCompetenciesByProgramOfStudyUseCase, GetCompetenciesByProgramOfStudy>();
         services.AddScoped<IUpdateDraftV1CompetencyUseCase, UpdateDraftV1Competency>();

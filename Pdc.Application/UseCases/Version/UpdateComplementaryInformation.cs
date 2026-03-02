@@ -23,16 +23,23 @@ public class UpdateComplementaryInformation(IComplementaryInformationRepository 
         {
             throw new ValidationException(validationResult.Errors);
         }
-        Guid authorId = await _complementaryInformationRepository.FindCreatedById(complementaryInformationId);
+        Guid authorId = await _complementaryInformationRepository.FindCreatedByByComplementaryInformationId(complementaryInformationId);
         if (currentUser.Id != authorId && !currentUser.IsAdmin)
         {
             throw new UnauthorizedAccessException();
         }
         ComplementaryInformation existingComplementaryInformation = await _complementaryInformationRepository.FindById(complementaryInformationId);
+        if (existingComplementaryInformation.WrittenOnVersion?.Id == null)
+        {
+            throw new InvalidOperationException("WrittenOnVersion is not set on the existing entity.");
+        }
         Guid versionId = await _versionRepository.FindParentByVersionId(existingComplementaryInformation.WrittenOnVersion!.Id!.Value);
         ComplementaryInformation complementaryInformation = _mapper.Map<ComplementaryInformation>(complementaryInformationDTO);
         complementaryInformation.Id = complementaryInformationId;
         complementaryInformation.ModifiedOn = DateTime.UtcNow;
+        // To prevent altering existing CreatedOn and CreatedBy values, we set them to the existing values before updating
+        complementaryInformation.CreatedOn = existingComplementaryInformation.CreatedOn;
+        complementaryInformation.CreatedBy = existingComplementaryInformation.CreatedBy;
         ComplementaryInformation savedComplementaryInformation = await _complementaryInformationRepository.Update(complementaryInformation, versionId);
         return _mapper.Map<ComplementaryInformationDTO>(savedComplementaryInformation);
     }

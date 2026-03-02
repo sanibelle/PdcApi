@@ -30,7 +30,7 @@ public class MinisterialCompetencyTest
     Mock<ICompetencyRepository> _competencyRepositoryMock;
 
     //// Competency use cases
-    ICreateCompetencyUseCase _createCompetencyUseCase;
+    IAddCompetencyUseCase _createCompetencyUseCase;
     IUpdateDraftV1CompetencyUseCase _updateDraftV1CompetencyUseCase;
     // TODO tester la methode GET
     //IGetCompetencyUseCase _getCompetencyUseCase;

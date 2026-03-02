@@ -1,4 +1,5 @@
-﻿using Pdc.Domain.Models.Security;
+﻿using Pdc.Domain.Models.Common;
+using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.MinisterialSpecification;

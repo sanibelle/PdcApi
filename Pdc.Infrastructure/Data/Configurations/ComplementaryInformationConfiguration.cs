@@ -28,11 +28,5 @@ public class ComplementaryInformationConfiguration : IEntityTypeConfiguration<Co
             .HasForeignKey(c => c.CreatedById)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-
-        // builder.HasOne(x => x.Changeable)
-        //     .WithMany()
-        //     .HasForeignKey(c => c.WrittenOnVersionId)
-        //     .OnDelete(DeleteBehavior.Restrict)
-        //     .IsRequired();
     }
 }

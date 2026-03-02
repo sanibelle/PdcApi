@@ -15,7 +15,7 @@ namespace Pdc.Application.UseCases.Competency;
 public class AddCompetency(ICompetencyRepository competencyRepository,
                         IProgramOfStudyRepository programOfStudyRepository,
                         IMapper mapper,
-                        IValidator<CompetencyDTO> validator) : ICreateCompetencyUseCase
+                        IValidator<CompetencyDTO> validator) : IAddCompetencyUseCase
 {
     private readonly IValidator<CompetencyDTO> _validator = validator;
     private readonly ICompetencyRepository _competencyRepository = competencyRepository;

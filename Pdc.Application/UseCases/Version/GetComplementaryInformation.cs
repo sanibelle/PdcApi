@@ -4,7 +4,7 @@ using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Interfaces.UseCases.Version;
 using Pdc.Domain.Models.Versioning;
 
-namespace Pdc.Application.UseCases;
+namespace Pdc.Application.UseCases.Version;
 
 public class GetComplementaryInformation : IGetComplementaryInformationUseCase
 {

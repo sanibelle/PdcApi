@@ -24,7 +24,7 @@ public class MappingProfile : Profile
             .ReverseMap()
             .ForMember(dest => dest.Units,
                 opt => opt.MapFrom((src, dest, member, ctx) =>
-                    src.Units == null ? null : ctx.Mapper.Map<Units>(src.Units))); ;
+                    src.Units == null ? null : ctx.Mapper.Map<Units>(src.Units)));
 
         CreateMap<Units, UnitsEntity>()
             .EqualityComparison((dto, entity) => dto.Id == entity.Id)

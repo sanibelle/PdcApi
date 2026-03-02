@@ -103,7 +103,8 @@ public class CompetencyRepository(AppDbContext context, IMapper mapper) : ICompe
     {
         CompetencyEntity? entity = await _context.Competencies
             .Include(x => x.ProgramOfStudy)
-            .SingleOrDefaultAsync(x => x.Code == competencyCode && x.ProgramOfStudy!.Code == programOfStudyCode)  ??  throw new NotFoundException(nameof(MinisterialCompetency), competencyCode);
+            .SingleOrDefaultAsync(x => x.Code == competencyCode && x.ProgramOfStudy != null && x.ProgramOfStudy.Code == programOfStudyCode)
+            ?? throw new NotFoundException(nameof(MinisterialCompetency), competencyCode);
 
         _context.Competencies.Remove(entity);
         await _context.SaveChangesAsync();
@@ -119,7 +120,7 @@ public class CompetencyRepository(AppDbContext context, IMapper mapper) : ICompe
     {
         return await _context.Competencies
             .Include(x => x.ProgramOfStudy)
-            .Where(x => x.Code == competencyCode && x.ProgramOfStudy!.Code == programOfStudyCode)
+            .Where(x => x.Code == competencyCode && x.ProgramOfStudy != null && x.ProgramOfStudy.Code == programOfStudyCode)
             .AnyAsync();
     }
 
