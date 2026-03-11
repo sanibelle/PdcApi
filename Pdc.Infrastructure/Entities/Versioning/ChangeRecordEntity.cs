@@ -11,7 +11,7 @@ public class ChangeRecordEntity
     public virtual ICollection<ComplementaryInformationEntity>? ComplementaryInformations { get; set; }
     public virtual ICollection<ChangeDetailEntity>? ChangeDetails { get; set; }
     public DateTime CreatedOn { get; set; }
-    public Guid CreatedById { get; set; }
+    public Guid? CreatedById { get; set; }
     public virtual IdentityUserEntity? CreatedBy { get; set; }
     /// <summary>
     /// Premet d'avoir plusieurs copies d'une version. Un seul est actif à la fois.

@@ -40,6 +40,7 @@ public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEn
         builder.HasOne(x => x.CreatedBy)
             .WithMany()
             .HasForeignKey(c => c.CreatedById)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
     }
 }

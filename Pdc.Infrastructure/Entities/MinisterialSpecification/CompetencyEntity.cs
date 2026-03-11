@@ -12,9 +12,10 @@ public class CompetencyEntity : VersionableEntity
     public virtual UnitsEntity? Units { get; set; }
     public Guid? UnitsId { get; set; }
     public virtual ProgramOfStudyEntity? ProgramOfStudy { get; set; }
-    public bool IsMandatory { get; set; } // true
-    public bool IsOptional { get; set; } // true
-    public string StatementOfCompetency { get; set; } = ""; // Effectuer le déploiement de serveurs intranet
+    public string? ProgramOfStudyCode { get; set; }
+    public bool IsMandatory { get; set; }
+    public bool IsOptional { get; set; }
+    public string StatementOfCompetency { get; set; } = "";
     public virtual ICollection<RealisationContextEntity> RealisationContexts { get; set; } = new List<RealisationContextEntity>();
     public virtual ICollection<CompetencyElementEntity> CompetencyElements { get; set; } = new List<CompetencyElementEntity>();
 }

@@ -30,7 +30,7 @@ const props = defineProps({
       <div class="col col-right">
         <div v-for="context in competency.realisationContexts" :key="context.id" class="criterion">
           <CommonTemplateAComplementaryInformations
-          :complementary-informations="context.complementaryInformations">
+          v-model="context.complementaryInformations">
           {{ context.value }}
         </CommonTemplateAComplementaryInformations>
         </div>
@@ -47,7 +47,7 @@ const props = defineProps({
       <div class="panel-row">
         <div class="col col-left">
           <CommonTemplateAComplementaryInformations
-          :complementary-informations="competencyElement.complementaryInformations">
+          v-model="competencyElement.complementaryInformations">
           {{ index + 1 }}. {{ competencyElement.value }}
         </CommonTemplateAComplementaryInformations>
       </div>
@@ -55,7 +55,7 @@ const props = defineProps({
           <div v-for="performanceCriteria in competencyElement.performanceCriterias" :key="performanceCriteria.id"
             class="criterion">
             <CommonTemplateAComplementaryInformations
-              :complementary-informations="performanceCriteria.complementaryInformations">
+              v-model="performanceCriteria.complementaryInformations">
               {{ performanceCriteria.value }}
             </CommonTemplateAComplementaryInformations>
           </div>

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.Versioning;
 
@@ -11,6 +13,13 @@ public class VersionRepository(AppDbContext context, IMapper mapper) : IVersionR
 {
     private readonly AppDbContext _context = context;
     private readonly IMapper _mapper = mapper;
+
+    public async Task<ChangeRecord> AddVersion(ChangeRecord version)
+    {
+        ChangeRecordEntity versionEntity = _mapper.Map<ChangeRecordEntity>(version);
+        EntityEntry<ChangeRecordEntity> entity = await _context.ChangeRecords.AddAsync(versionEntity);
+        return _mapper.Map<ChangeRecord>(entity.Entity);
+    }
 
     public async Task<Guid> FindCreatedById(Guid complementaryInformationId)
     {

@@ -13,12 +13,12 @@ internal static class RepoUtils
                 .Select(y => y.Id).Contains(x.Id))
             .ToList();
 
+        // Gets all the complementary informations to delete that are not handeled by the cascade delete.
+        // i.e. I deleted the complementaryInformation of a realisation context but the realisation context is still present
         List<ComplementaryInformationEntity> complementaryInformationsToRemove = listToCompare.SelectMany(x => x.ComplementaryInformations)
             .Where(x => !listWithMissing.SelectMany(x => x.ComplementaryInformations).Any(y => y.Id == x.Id))
             .ToList();
 
-        // Not needed, cascade delete should do the trick.
-        // complementaryInformationsToRemove.AddRange(changeableToDelete.SelectMany(x => x.ComplementaryInformations).ToList());
         return (changeableToDelete, complementaryInformationsToRemove);
     }
 }

@@ -4,11 +4,11 @@ using Pdc.Infrastructure.Entities.Versioning;
 
 namespace TestDataSeeder.Builders.Entities;
 
-public class CompetencyEntityBuilder
+public class CompetencyEntityBuilder(ProgramOfStudyEntity programOfStudy)
 {
     private string _code = "00SU";
     private UnitsEntity? _units = new UnitsEntityBuilder().WithWholeUnit(3).Build();
-    private ProgramOfStudyEntity? _programOfStudy;
+    private ProgramOfStudyEntity _programOfStudy = programOfStudy;
     private bool _isMandatory = true;
     private bool _isOptional = false;
     private string _statementOfCompetency = "Effectuer le déploiement de serveurs intranet";
@@ -88,7 +88,7 @@ public class CompetencyEntityBuilder
         {
             Code = _code,
             Units = _units,
-            ProgramOfStudy = _programOfStudy ??  new ProgramOfStudyEntityBuilder().Build(),
+            ProgramOfStudy = _programOfStudy,
             IsMandatory = _isMandatory,
             IsOptional = _isOptional,
             StatementOfCompetency = _statementOfCompetency,

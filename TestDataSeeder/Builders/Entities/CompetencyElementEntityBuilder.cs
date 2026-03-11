@@ -5,11 +5,12 @@ namespace TestDataSeeder.Builders.Entities;
 
 public class CompetencyElementEntityBuilder
 {
-    private Guid _id = Guid.NewGuid();
+    private Guid? _id;
     private List<PerformanceCriteriaEntity> _performanceCriterias = new List<PerformanceCriteriaEntity>();
     private List<ComplementaryInformationEntity> _complementaryInformations = new List<ComplementaryInformationEntity>();
     private int _position = 0;
     private string _value = string.Empty;
+    private CompetencyEntity _competency;
 
     public CompetencyElementEntityBuilder() { }
 
@@ -54,6 +55,12 @@ public class CompetencyElementEntityBuilder
         return this;
     }
 
+    public CompetencyElementEntityBuilder WithCompetency(CompetencyEntity competency)
+    {
+        _competency = competency;
+        return this;
+    }
+
     public CompetencyElementEntity Build()
     {
         return new CompetencyElementEntity
@@ -62,10 +69,10 @@ public class CompetencyElementEntityBuilder
             Id = _id,
             Position = _position,
             Value = _value,
-            PerformanceCriterias = _performanceCriterias
+            PerformanceCriterias = _performanceCriterias,
+            Competency = _competency
         };
     }
 
 }
 
-/// WIP builder d'entites (pas fini de les ajouter, ne pas oublier le name space)

@@ -3,17 +3,15 @@ using Pdc.Infrastructure.Entities.Versioning;
 
 namespace TestDataSeeder.Builders.Entities;
 
-public class ComplementaryInformationEntityBuilder
+public class ComplementaryInformationEntityBuilder(ChangeableEntity changeable)
 {
     private Guid _id = Guid.NewGuid();
     private string _text = $"This is a test text value {Random.Shared.Next(0, 1000)}";
-    private ChangeableEntity _changeable;
+    private ChangeableEntity? _changeable;
     private DateTime _modifiedOn = new DateTime(2025, 04, 07);
-    private ChangeRecordEntity _writtenOnVersion;
-    private IdentityUserEntity _createdBy;
+    private ChangeRecordEntity? _writtenOnVersion;
+    private IdentityUserEntity? _createdBy;
     private DateTime _createdOn = new DateTime(2024, 04, 12);
-
-    public ComplementaryInformationEntityBuilder() { }
 
     public ComplementaryInformationEntityBuilder WithId(Guid id)
     {
@@ -24,12 +22,6 @@ public class ComplementaryInformationEntityBuilder
     public ComplementaryInformationEntityBuilder WithText(string text)
     {
         _text = text;
-        return this;
-    }
-
-    public ComplementaryInformationEntityBuilder WithChangeable(ChangeableEntity changeable)
-    {
-        _changeable = changeable;
         return this;
     }
 
@@ -56,7 +48,7 @@ public class ComplementaryInformationEntityBuilder
         return new ComplementaryInformationEntity
         {
             Id = _id,
-            Changeable = _changeable,
+            Changeable = changeable,
             Text = _text,
             ModifiedOn = _modifiedOn,
             WrittenOnVersion = _writtenOnVersion,

@@ -14,5 +14,10 @@ public class ChangeableConfiguration : IEntityTypeConfiguration<ChangeableEntity
 
         builder.Property(x => x.Value)
             .HasMaxLength(Constants.MaxChangeableLength);
+
+        builder.HasMany(x => x.ComplementaryInformations)
+            .WithOne(x => x.Changeable)
+            .OnDelete(DeleteBehavior.Cascade)
+            .IsRequired();
     }
 }

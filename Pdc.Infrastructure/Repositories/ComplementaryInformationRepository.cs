@@ -16,9 +16,10 @@ public class ComplementaryInformationRepository(AppDbContext context, IVersionRe
     private readonly IVersionRepository _versionRepository = versionRepository;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<ComplementaryInformation> Add(ComplementaryInformation complementaryInformation, Guid versionId)
+    public async Task<ComplementaryInformation> Add(ComplementaryInformation complementaryInformation, Guid versionId, Guid ChangeableId)
     {
         var toAdd = _mapper.Map<ComplementaryInformationEntity>(complementaryInformation);
+        toAdd.Changeable = await _context.Changeables.SingleOrDefaultAsync(x => x.Id == ChangeableId) ?? throw new NotFoundException(nameof(ChangeableEntity), ChangeableId);
         toAdd.WrittenOnVersion = await _context.ChangeRecords.SingleOrDefaultAsync(x => x.Id == versionId) ?? throw new NotFoundException(nameof(ChangeRecord), versionId);
         EntityEntry<ComplementaryInformationEntity> entity = await _context.ComplementaryInformations.AddAsync(toAdd);
         await _context.SaveChangesAsync();
@@ -90,4 +91,5 @@ public class ComplementaryInformationRepository(AppDbContext context, IVersionRe
         }
         return complementaryInformationEntity;
     }
+
 }

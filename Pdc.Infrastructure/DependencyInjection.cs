@@ -33,6 +33,7 @@ public static class DependencyInjection
         {
             services.AddDbContext<AppDbContext>(options =>
                 options.UseLazyLoadingProxies()
+                .EnableDetailedErrors()
                 .UseNpgsql(
                     connectionString,
                     b => b.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName))
