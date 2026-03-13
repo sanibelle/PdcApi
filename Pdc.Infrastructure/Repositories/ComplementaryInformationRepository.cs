@@ -64,16 +64,16 @@ public class ComplementaryInformationRepository(AppDbContext context, IVersionRe
 
     public async Task<Guid> FindCreatedByByComplementaryInformationId(Guid complementaryInformationId)
     {
-        Guid? id = await _context.ComplementaryInformations
+        Guid id = await _context.ComplementaryInformations
             .Where(x => x.Id == complementaryInformationId)
             .Select(x => x.CreatedById)
             .SingleOrDefaultAsync();
 
-        if (!id.HasValue)
+        if (Guid.Empty == id) // when complementaryInformation is not found, it retunrs a default Guid.
         {
             throw new NotFoundException(nameof(ComplementaryInformationEntity) + "CreatedBy Id not found, value is null", complementaryInformationId);
         }
-        return id.Value;
+        return id;
     }
 
     public async Task<ComplementaryInformation> FindById(Guid complementaryInformationId)
