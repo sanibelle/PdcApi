@@ -15,6 +15,6 @@ public class ComplementaryInformationEntity
     public DateTime? ModifiedOn { get; set; }
     public DateTime CreatedOn { get; set; }
     public virtual IdentityUserEntity? CreatedBy { get; set; }
-    public Guid? CreatedById { get; set; }
+    public Guid CreatedById { get; set; }
     public required string Text { get; set; }
 }

@@ -64,7 +64,7 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         }
         catch
         {
-            transaction.Rollback();
+            await transaction.RollbackAsync();
             throw;
         }
     }
@@ -155,7 +155,7 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         }
         catch
         {
-            transaction.Rollback();
+            await transaction.RollbackAsync();
             _logger.LogError($"Failed to updated the competency with code {competency.Code}");
             throw;
         }
@@ -182,7 +182,7 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         _logger.Log(LogLevel.Information, $"Updating competency element with id {ce.Id}");
         CompetencyElementEntity ceToUpdate = await _context.CompetencyElements
             .Include(ce => ce.ComplementaryInformations)
-            .SingleOrDefaultAsync(x => x.Id == ce.Id) ?? throw new NotFoundException(nameof(CompetencyElementEntity), ce.Id);
+            .SingleOrDefaultAsync(x => x.Id == ce.Id) ?? throw new NotFoundException(nameof(CompetencyElementEntity), ce.Id!);
 
         _mapper.Map(ce, ceToUpdate);
         EntityEntry<CompetencyElementEntity> updatedCompetencyElementEntity = _context.CompetencyElements.Update(ceToUpdate);
@@ -197,7 +197,7 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         _logger.Log(LogLevel.Information, $"Updating realisation context with id {rc.Id}");
         RealisationContextEntity rcToUpdate = await _context.RealisationContexts
             .Include(rc => rc.ComplementaryInformations)
-            .SingleOrDefaultAsync(x => x.Id == rc.Id) ?? throw new NotFoundException(nameof(RealisationContextEntity), rc.Id);
+            .SingleOrDefaultAsync(x => x.Id == rc.Id) ?? throw new NotFoundException(nameof(RealisationContextEntity), rc.Id!);
 
         _mapper.Map(rc, rcToUpdate);
         EntityEntry<RealisationContextEntity> updatedRealisationContextEntity = _context.RealisationContexts.Update(rcToUpdate);
@@ -211,7 +211,7 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         _logger.Log(LogLevel.Information, $"Updating performance criteria with id {pc.Id}");
         PerformanceCriteriaEntity pcToUpdate = await _context.PerformanceCriterias
             .Include(pc => pc.ComplementaryInformations)
-            .SingleOrDefaultAsync(x => x.Id == pc.Id) ?? throw new NotFoundException(nameof(PerformanceCriteriaEntity), pc.Id);
+            .SingleOrDefaultAsync(x => x.Id == pc.Id) ?? throw new NotFoundException(nameof(PerformanceCriteriaEntity), pc.Id!);
 
         _mapper.Map(pc, pcToUpdate);
         EntityEntry<PerformanceCriteriaEntity> updatedPerformanceCriteriaEntity = _context.PerformanceCriterias.Update(pcToUpdate);
@@ -294,16 +294,16 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
             .AsSplitQuery()
             .AsNoTrackingWithIdentityResolution()
             .Include(c => c.RealisationContexts)
-                .ThenInclude(rc => rc.ComplementaryInformations)
+                .ThenInclude(rc => rc.ComplementaryInformations!)
                     .ThenInclude(cr => cr.WrittenOnVersion)
                         .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.CompetencyElements)
-                .ThenInclude(ce => ce.ComplementaryInformations)
+                .ThenInclude(ce => ce.ComplementaryInformations!)
                     .ThenInclude(cr => cr.WrittenOnVersion)
                         .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.CompetencyElements)
                 .ThenInclude(ce => ce.PerformanceCriterias)
-                    .ThenInclude(pc => pc.ComplementaryInformations)
+                    .ThenInclude(pc => pc.ComplementaryInformations!)
                         .ThenInclude(cr => cr.WrittenOnVersion)
                             .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.ProgramOfStudy)

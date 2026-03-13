@@ -18,6 +18,7 @@ public class VersionRepository(AppDbContext context, IMapper mapper) : IVersionR
     {
         ChangeRecordEntity versionEntity = _mapper.Map<ChangeRecordEntity>(version);
         EntityEntry<ChangeRecordEntity> entity = await _context.ChangeRecords.AddAsync(versionEntity);
+        await _context.SaveChangesAsync();
         return _mapper.Map<ChangeRecord>(entity.Entity);
     }
 
