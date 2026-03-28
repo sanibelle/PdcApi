@@ -58,6 +58,7 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
                 }
             }
             _logger.LogInformation($"Before commit transaction with code {addedCompetencyEntity.Entity.Code} to database for program of study {program.Code}");
+            await _context.SaveChangesAsync();
             await transaction.CommitAsync();
             _logger.LogInformation($"Transaction success with code {addedCompetencyEntity.Entity.Code} ");
             return _mapper.Map<MinisterialCompetency>(competencyEntity);

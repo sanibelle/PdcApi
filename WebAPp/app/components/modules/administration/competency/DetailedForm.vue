@@ -186,6 +186,7 @@
                 />
               </FormCommonAComplementaryInformations>
               <div
+                data-testid="add-realisation-context"
                 @click="addRealisationContextRow"
                 :preventDefault="true"
               >
@@ -257,9 +258,12 @@
           <!-- add new row for competency element -->
           <CommonMoleculesARow>
             <template #col-left>
-              <div @click.prevent="addCompetencyElementRow">
+              <div
+                @click.prevent="addCompetencyElementRow"
+                :data-testid="`add-competency-element`"
+              >
                 <FormATextInput
-                  :name="`add-performance-criteria-input`"
+                  :name="`add-competency-element-input`"
                   v-model="addElementPlaceholderRef"
                 />
               </div>
