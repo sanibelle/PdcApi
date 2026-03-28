@@ -2,9 +2,9 @@
 
 <template>
   <div class="top-header">
-    <span class="left">
+    <div class="left">
       <slot name="left" />
-    </span>
+    </div>
     <div class="right">
       <slot name="right" />
     </div>

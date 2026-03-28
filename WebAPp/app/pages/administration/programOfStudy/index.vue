@@ -1,27 +1,26 @@
 <script setup lang="ts">
+  const { t } = useI18n();
+  defineI18nRoute({
+    paths: {
+      fr: `/administration/programmes`,
+    },
+  });
 
-const { t } = useI18n();
-defineI18nRoute({
-  paths: {
-    fr: `/administration/programmes`,
-  },
-});
+  const localePath = useLocalePath();
 
-const localePath = useLocalePath();
+  const { fetchPrograms } = useProgramOfStudyClient();
+  const programsOfStudy = ref<ProgramOfStudy[]>([]);
 
-const { fetchPrograms } = useProgramOfStudyClient();
-const programsOfStudy = ref<ProgramOfStudy[]>([]);
+  onMounted(async () => {
+    programsOfStudy.value = await fetchPrograms();
+  });
 
-onMounted(async () => {
-  programsOfStudy.value = await fetchPrograms();
-});
+  const handleSubmitted = (programOfStudy: ProgramOfStudy) => {
+    programsOfStudy.value.unshift(programOfStudy);
+    upsertProgramOfStudyModal.close();
+  };
 
-const handleSubmitted = (programOfStudy: ProgramOfStudy) => {
-  programsOfStudy.value.unshift(programOfStudy);
-  upsertProgramOfStudyModal.close()
-};
-
-const upsertProgramOfStudyModal = useModal();
+  const upsertProgramOfStudyModal = useModal();
 </script>
 
 <template>
@@ -30,7 +29,12 @@ const upsertProgramOfStudyModal = useModal();
   </h1>
   <section>
     <div class="flex-center">
-      <CommonAtomsAButton @click="upsertProgramOfStudyModal.open()" id="create-program-btn">{{ t('createButton') }}</CommonAtomsAButton>
+      <CommonAtomsAButton
+        @click="upsertProgramOfStudyModal.open()"
+        id="create-program-btn"
+      >
+        {{ t('createButton') }}
+      </CommonAtomsAButton>
     </div>
   </section>
   <div v-if="programsOfStudy.length === 0">{{ t('noProgramsYet') }}</div>
@@ -43,24 +47,31 @@ const upsertProgramOfStudyModal = useModal();
       </tr>
     </thead>
     <tbody>
-      <tr v-for="program in programsOfStudy" :key="program.code" class="flex-center">
+      <tr
+        v-for="program in programsOfStudy"
+        :key="program.code"
+        class="flex-center"
+      >
         <td>{{ program.code }}</td>
         <td>{{ program.name }}</td>
-        <td>          
-          <NuxtLink :to="localePath({ name: 'administration-programOfStudy-programCode', params: { programCode: program.code } })">
-            CLIKCMEEEEEEEEEE GOOOOOOOOOOOO
-          </NuxtLink>
+        <td>
+          <NuxtLink :to="localePath({ name: 'administration-programOfStudy-programCode', params: { programCode: program.code } })">CLIKCMEEEEEEEEEE GOOOOOOOOOOOO</NuxtLink>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <CommonTemplateAModal v-model="upsertProgramOfStudyModal.isOpen.value" :title="t('title')" :hide-footer="true">
-    <ModulesAdministrationProgramOfStudyForm @submitted="handleSubmitted" :program="null" :isEdit="false" />
+  <CommonTemplateAModal
+    v-model="upsertProgramOfStudyModal.isOpen.value"
+    :title="t('title')"
+    :hide-footer="true"
+  >
+    <ModulesAdministrationProgramOfStudyForm @submitted="handleSubmitted" />
   </CommonTemplateAModal>
 </template>
 
-<i18n lang="json">{
+<i18n lang="json">
+{
   "fr": {
     "title": "Programmes d'études",
     "noProgramsYet": "Aucun programme d'études disponible pour le moment.",
@@ -69,12 +80,13 @@ const upsertProgramOfStudyModal = useModal();
     "name": "Nom",
     "action": "Actions"
   }
-}</i18n>
+}
+</i18n>
 
 <style scoped>
-.flex-center {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-}
+  .flex-center {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
 </style>

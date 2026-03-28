@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import TheCompetencyHeader from './components/TheCompetencyHeader.vue';
-
   const { t } = useI18n();
 
   const props = defineProps({
@@ -48,7 +46,7 @@
     </template>
     <template #content>
       <template
-        v-for="(competencyElement, index) in competency.competencyElements.sort((a, b) => +a.position - +b.position)"
+        v-for="(competencyElement, index) in competency.competencyElements.toSorted((a, b) => +a.position - +b.position)"
         :key="competencyElement.id"
       >
         <CommonMoleculesARow>

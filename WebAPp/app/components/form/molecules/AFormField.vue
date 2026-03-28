@@ -92,7 +92,10 @@
       v-model="model as any"
       @update:error-message="error = $event"
     />
-    <div v-if="slots.default">
+    <div
+      v-if="slots.default"
+      class="slots"
+    >
       <slot></slot>
     </div>
     <FormAtomsAHint
@@ -108,6 +111,6 @@
     display: flex;
   }
   .slots {
-    margin-left: 0.5rem;
+    margin-left: 0.15rem;
   }
 </style>

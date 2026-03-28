@@ -36,6 +36,7 @@
   const { updateCompetency } = useCompetencyClient();
 
   const onSubmit = handleSubmit(async () => {
+    codeExistingErrorMessage.value = '';
     try {
       emit('submitted', await updateCompetency(props.programCode, competency.value as Competency));
     } catch (e) {
@@ -185,7 +186,7 @@
                 />
               </FormCommonAComplementaryInformations>
               <div
-                @click.prevent="addRealisationContextRow"
+                @click="addRealisationContextRow"
                 :preventDefault="true"
               >
                 <FormATextInput
