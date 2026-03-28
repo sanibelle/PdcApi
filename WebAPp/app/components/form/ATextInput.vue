@@ -41,6 +41,10 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  focusOnMount: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const validationRules = computed(() => {
@@ -72,5 +76,7 @@ const model = defineModel<string | number | undefined>({
 
 <template>
   <FormMoleculesAFormField :name="name" :label="label" type="text" :placeholder="placeholder" :disabled="disabled"
-    :required="required" :rules="validationRules" :hint="hint" v-model="model" :error-message="errorMessage" />
+    :required="required" :rules="validationRules" :hint="hint" v-model="model" :error-message="errorMessage" :focus-on-mount="focusOnMount" >
+    <slot />
+  </FormMoleculesAFormField>
 </template>

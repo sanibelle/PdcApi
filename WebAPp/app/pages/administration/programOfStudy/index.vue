@@ -55,9 +55,9 @@ const upsertProgramOfStudyModal = useModal();
     </tbody>
   </table>
 
-  <CommonAModal v-model="upsertProgramOfStudyModal.isOpen.value" :title="t('title')" :hide-footer="true">
-    <FormTemplatesProgramOfStudy @submitted="handleSubmitted" :program="null" :isEdit="false" />
-  </CommonAModal>
+  <CommonTemplateAModal v-model="upsertProgramOfStudyModal.isOpen.value" :title="t('title')" :hide-footer="true">
+    <ModulesAdministrationProgramOfStudyForm @submitted="handleSubmitted" :program="null" :isEdit="false" />
+  </CommonTemplateAModal>
 </template>
 
 <i18n lang="json">{

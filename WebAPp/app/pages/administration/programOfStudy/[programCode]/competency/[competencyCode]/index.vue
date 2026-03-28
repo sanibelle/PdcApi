@@ -31,20 +31,20 @@ const handleSubmitted = (c: Competency) => {
     <h1>
       {{ t('title') }}
     </h1>
-    <CommonAVersion v-if="competency?.versionNumber" :version-number="competency?.versionNumber"
+    <CommonOrganismAVersion v-if="competency?.versionNumber" :version-number="competency?.versionNumber"
       :is-draft="competency?.isDraft" />
-    <template v-if="editMode">
-      <section v-if="competency">
-        <FormTemplatesDetailedCompetency @submitted="handleSubmitted" :competency="competency"
+    <section v-if="competency">
+      <template v-if="editMode">
+        <ModulesAdministrationCompetencyDetailedForm @submitted="handleSubmitted" :competency="competency"
           :program-code="programCode" />
-      </section>
-    </template>
-    <template v-else-if="competency">
-      <CommonTemplateADetailedCompetency :competency="competency" />
-      <CommonAtomsAButton @click="editMode = true" data-testid="edit-button">
-        {{ t('editButton') }}
-      </CommonAtomsAButton>
-    </template>
+      </template>
+      <template v-else>
+        <ModulesAdministrationCompetencyDetailed :competency="competency" />
+        <CommonAtomsAButton @click="editMode = true" data-testid="edit-button">
+          {{ t('editButton') }}
+        </CommonAtomsAButton>
+      </template>
+    </section>
   </div>
 </template>
 

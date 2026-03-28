@@ -21,7 +21,11 @@ const props = defineProps({
   rules: {
     type: [String, Object],
     default: '',
-  }
+  },
+  focusOnMount: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(['update:errorMessage']);
@@ -65,7 +69,7 @@ watch(
 </script>
 
 <template>
-  <input :name="name" :value="value" :type="type" :placeholder="placeholder" :disabled="disabled" class="base-input"
+  <input v-focus="focusOnMount" :name="name" :value="value" :type="type" :placeholder="placeholder" :disabled="disabled" class="base-input"
     :class="{ error: errorMessage }" @input="onChange" @blur="onBlur" />
 </template>
 
