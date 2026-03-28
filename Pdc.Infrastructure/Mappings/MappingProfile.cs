@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.EquivalencyExpression;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
@@ -19,7 +18,6 @@ public class MappingProfile : Profile
         // common
 
         CreateMap<Competency, CompetencyEntity>()
-            .EqualityComparison((x, y) => x.Code == y.Code)
             .ForMember(x => x.RealisationContexts, opt => opt.Ignore())
             .ForMember(x => x.CompetencyElements, opt => opt.Ignore())
             .PreserveReferences()
@@ -31,28 +29,24 @@ public class MappingProfile : Profile
                     src.Units == null ? null : ctx.Mapper.Map<Units>(src.Units)));
 
         CreateMap<Units, UnitsEntity>()
-            .EqualityComparison((dto, entity) => dto.Id == entity.Id)
             .PreserveReferences()
             .ReverseMap()
             .PreserveReferences();
 
         CreateMap<AChangeable, ChangeableEntity>()
             .PreserveReferences()
-            .EqualityComparison((dto, entity) => dto.Id == entity.Id)
             .ReverseMap()
             .PreserveReferences();
 
         CreateMap<PerformanceCriteria, PerformanceCriteriaEntity>()
             .PreserveReferences()
             .ForMember(x => x.ComplementaryInformations, opt => opt.Ignore())
-            .EqualityComparison((dto, entity) => dto.Id == entity.Id)
             .ReverseMap()
             .ForMember(dest => dest.ComplementaryInformations,  // explicitly map back
                 opt => opt.MapFrom(src => src.ComplementaryInformations))
             .PreserveReferences();
 
         CreateMap<ComplementaryInformation, ComplementaryInformationEntity>()
-            .EqualityComparison((dto, entity) => dto.Id == entity.Id)
             .ForMember(dest => dest.CreatedById,
                opt => opt.MapFrom(src => src.CreatedBy != null ? src.CreatedBy.Id : null))
             .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
@@ -70,7 +64,6 @@ public class MappingProfile : Profile
         CreateMap<ContentElement, ContentElementEntity>()
             .PreserveReferences()
             .ForMember(x => x.ComplementaryInformations, opt => opt.Ignore())
-            .EqualityComparison((dto, entity) => dto.Id == entity.Id)
             .ReverseMap()
             .ForMember(dest => dest.ComplementaryInformations,  // explicitly map back
                 opt => opt.MapFrom(src => src.ComplementaryInformations))
@@ -79,7 +72,6 @@ public class MappingProfile : Profile
         CreateMap<RealisationContext, RealisationContextEntity>()
             .PreserveReferences()
             .ForMember(x => x.ComplementaryInformations, opt => opt.Ignore())
-            .EqualityComparison((dto, entity) => dto.Id == entity.Id)
             .ReverseMap()
             .ForMember(dest => dest.ComplementaryInformations,  // explicitly map back
                 opt => opt.MapFrom(src => src.ComplementaryInformations))
@@ -87,7 +79,6 @@ public class MappingProfile : Profile
 
         CreateMap<ChangeRecord, ChangeRecordEntity>()
             .PreserveReferences()
-            .EqualityComparison((dto, entity) => dto.Id == entity.Id)
             .ForMember(dest => dest.CreatedById,
                opt => opt.MapFrom(src => src.CreatedBy != null ? src.CreatedBy.Id : null))
             .ForMember(dest => dest.CreatedBy,
@@ -111,14 +102,12 @@ public class MappingProfile : Profile
 
         // security
         CreateMap<User, IdentityUserEntity>()
-            .EqualityComparison((dto, entity) => dto.Id == entity.Id)
             .PreserveReferences() // used for the versions references
             .ReverseMap()
             .PreserveReferences();
 
         // Ministerial
         CreateMap<ProgramOfStudy, ProgramOfStudyEntity>()
-            .EqualityComparison((x, y) => x.Code == y.Code)
             .ForMember(x => x.Competencies, opt => opt.Ignore())
             .ReverseMap()
             .ForMember(dest => dest.Competencies, opt => opt.MapFrom(src => src.Competencies));
@@ -127,7 +116,6 @@ public class MappingProfile : Profile
             .ForMember(x => x.RealisationContexts, opt => opt.Ignore())
             .ForMember(x => x.CompetencyElements, opt => opt.Ignore())
             .ForMember(x => x.CurrentVersion, opt => opt.Ignore())
-            .EqualityComparison((x, y) => x.Code == y.Code)
             .PreserveReferences();
 
         // Do not remove, the usage of explicit mapping instead of using reverseMap is to prevent the creation of the empty Units object when the Units property is null.
@@ -142,7 +130,6 @@ public class MappingProfile : Profile
             .PreserveReferences() // used for the ChangeRecordEntity references
             .ForMember(x => x.ComplementaryInformations, opt => opt.Ignore())
             .ForMember(x => x.PerformanceCriterias, opt => opt.Ignore())
-            .EqualityComparison((dto, entity) => dto.Id == entity.Id)
             .ReverseMap()
             .ForMember(dest => dest.PerformanceCriterias,  // explicitly map back
                 opt => opt.MapFrom(src => src.PerformanceCriterias))
@@ -156,13 +143,11 @@ public class MappingProfile : Profile
             .ReverseMap();
 
         CreateMap<CourseFrameworkCompetencyElement, CourseFrameworkCompetencyElementEntity>()
-            .EqualityComparison((dto, entity) => dto.Id == entity.Id)
             .PreserveReferences() // used for the versions references
             .ReverseMap()
             .PreserveReferences(); // used for the versions references;
 
         CreateMap<CompetencyElement, CompetencyElementEntity>()
-            .EqualityComparison((dto, entity) => dto.Id == entity.Id)
             .PreserveReferences() // used for the versions references
             .ReverseMap()
             .PreserveReferences(); // used for the versions references;

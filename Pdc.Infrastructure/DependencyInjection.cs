@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using AutoMapper.EquivalencyExpression;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -49,8 +47,6 @@ public static class DependencyInjection
 
         services.AddAutoMapper((serviceProvider, automapper) =>
         {
-            automapper.AddCollectionMappers();
-            automapper.UseEntityFrameworkCoreModel<AppDbContext>(serviceProvider);
         }, typeof(MappingProfile));
         services.AddScoped<IAuthService, IdentityAuthService>();
 

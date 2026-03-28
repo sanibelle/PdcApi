@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Pdc.Application.DTOS;
 using Pdc.Application.Mappings;
@@ -11,7 +12,6 @@ using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
-using Pdc.Infrastructure.Exceptions;
 using TestDataSeeder.Builders.Models;
 
 namespace Pdc.Tests.UnitTests;
@@ -34,7 +34,11 @@ public class ProgramOfStudyTest
     public void Setup()
     {
         _programOfStudyRepositoryMock = new Mock<IProgramOfStudyRepository>();
-        _mapper = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()).CreateMapper();
+        _mapper = new MapperConfiguration(cfg =>
+        {
+            cfg.LicenseKey = Environment.GetEnvironmentVariable("AutoMapper:LicenseKey");
+            cfg.AddProfile<MappingProfile>();
+        }, LoggerFactory.Create(_ => { })).CreateMapper();
         _validator = new ProgramOfStudyValidation();
 
         _createProgramOfStudyUseCase = new AddProgramOfStudy(_programOfStudyRepositoryMock.Object, _mapper, _validator);

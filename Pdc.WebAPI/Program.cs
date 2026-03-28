@@ -27,7 +27,7 @@ public class Program
         builder.Services.AddControllers();
 
         // Add Application Layer
-        builder.Services.AddApplication();
+        builder.Services.AddApplication(builder.Configuration);
 
         // Add Infrastructure Lay
         builder.Services.AddInfrastructure(builder.Configuration);

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
@@ -57,7 +58,11 @@ internal class EntityMappingTests
         _ministerialCompetency.SetCreatedByOnUntracked(user);
         _ministerialCompetency.SetCreatedOnOnUntracked();
         // Initialize mapper
-        _mapper = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()).CreateMapper();
+        _mapper = new MapperConfiguration(cfg =>
+        {
+            cfg.LicenseKey = Environment.GetEnvironmentVariable("AutoMapper:LicenseKey");
+            cfg.AddProfile<MappingProfile>();
+        }, LoggerFactory.Create(_ => { })).CreateMapper();
     }
 
     [Test]
