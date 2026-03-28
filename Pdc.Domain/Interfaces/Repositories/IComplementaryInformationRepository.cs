@@ -4,7 +4,7 @@ namespace Pdc.Domain.Interfaces.Repositories;
 
 public interface IComplementaryInformationRepository
 {
-    Task<ComplementaryInformation> Add(ComplementaryInformation complementaryInformation, Guid changeableId);
+    Task<ComplementaryInformation> Add(ComplementaryInformation complementaryInformation, Guid versionId, Guid ChangeableId);
     Task<Guid> FindCreatedByByComplementaryInformationId(Guid complementaryInformationId);
     Task Delete(Guid id);
     Task<ComplementaryInformation> Update(ComplementaryInformation complementaryInformation, Guid changeableId);

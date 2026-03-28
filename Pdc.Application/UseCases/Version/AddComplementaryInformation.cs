@@ -31,7 +31,7 @@ public class AddComplementaryInformation(IComplementaryInformationRepository com
         complementaryInformation.SetCreatedOnOnUntracked();
         complementaryInformation.SetCreatedByOnUntracked(currentUser);
         Guid versionId = await _complementaryInformationRepository.GetVersionByChangeableId(changeableId);
-        ComplementaryInformation savedComplementaryInformation = await _complementaryInformationRepository.Add(complementaryInformation, versionId);
+        ComplementaryInformation savedComplementaryInformation = await _complementaryInformationRepository.Add(complementaryInformation, versionId, changeableId);
         return _mapper.Map<ComplementaryInformationDTO>(savedComplementaryInformation);
     }
 }

@@ -9,10 +9,12 @@ public class ComplementaryInformationEntity
     /// <summary>
     /// Version à laquelle l'information a été ajoutée
     /// </summary>
+
+    public Guid? WrittenOnVersionId { get; set; }
     public virtual ChangeRecordEntity? WrittenOnVersion { get; set; }
     public DateTime? ModifiedOn { get; set; }
     public DateTime CreatedOn { get; set; }
     public virtual IdentityUserEntity? CreatedBy { get; set; }
-    public Guid? CreatedById { get; set; }
+    public Guid CreatedById { get; set; }
     public required string Text { get; set; }
 }

@@ -9,6 +9,7 @@ public class PerformanceCriteriaEntityBuilder
     private Guid _id = Guid.NewGuid();
     private int _position = 0;
     private string _value = string.Empty;
+    private CompetencyElementEntity _competencyElement;
 
     public PerformanceCriteriaEntityBuilder() { }
 
@@ -42,6 +43,12 @@ public class PerformanceCriteriaEntityBuilder
         return this;
     }
 
+    public PerformanceCriteriaEntityBuilder WithCompetencyElement(CompetencyElementEntity competencyElement)
+    {
+        _competencyElement = competencyElement;
+        return this;
+    }
+
     public PerformanceCriteriaEntity Build()
     {
         return new PerformanceCriteriaEntity
@@ -49,10 +56,9 @@ public class PerformanceCriteriaEntityBuilder
             ComplementaryInformations = _complementaryInformations,
             Id = _id,
             Position = _position,
-            Value = _value
+            Value = _value,
+            CompetencyElement = _competencyElement
         };
     }
 
 }
-
-/// WIP builder d'entites (pas fini de les ajouter, ne pas oublier le name space)

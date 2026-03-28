@@ -31,7 +31,7 @@ public class ProgramOfStudyConfiguration : IEntityTypeConfiguration<ProgramOfStu
         builder
             .HasMany(x => x.Competencies)
             .WithOne(c => c.ProgramOfStudy)
-            .HasForeignKey("ProgramOfStudyCode");
+            .HasForeignKey(x => x.ProgramOfStudyCode);
 
         // Add these new configurations to fix the cascade delete issue
         builder.HasOne(p => p.GeneralUnits)

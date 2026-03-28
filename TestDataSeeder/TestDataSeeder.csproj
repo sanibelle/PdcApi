@@ -6,6 +6,11 @@
     <Nullable>enable</Nullable>
   	<Configurations>Debug;Release;Test</Configurations>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.5" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\Pdc.Application\Pdc.Application.csproj" />

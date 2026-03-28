@@ -11,48 +11,51 @@ internal class Competency : ISeeder<CompetencyEntity>
     public Competency(ProgramOfStudyEntity programOfStudyEntity, AppDbContext context)
     {
         _context  = context;
+
+    }
+
+    public async Task<CompetencyEntity> SeedAsync()
+    {
         var user = _context.Users.First();
         var changeRecord = new ChangeRecordEntityBuilder()
             .Build();
-
-        var realisationContext = new RealisationContextEntityBuilder()
-            .AddComplementaryInformations(new ComplementaryInformationEntityBuilder()
-        .WithChangeRecord(changeRecord)
-                .WithCreatedBy(user)
-                .Build())
-            .Build();
-
-        var performanceCriteria = new PerformanceCriteriaEntityBuilder()
-            .AddComplementaryInformation(new ComplementaryInformationEntityBuilder()
-                .WithCreatedBy(user)
-                .WithChangeRecord(changeRecord)
-                .Build())
-            .Build();
-
-        var competencyElement = new CompetencyElementEntityBuilder()
-            .AddPerformanceCriteria(performanceCriteria)
-            .AddComplementaryInformation(new ComplementaryInformationEntityBuilder()
-                .WithCreatedBy(user)
-                .WithChangeRecord(changeRecord)
-                .Build())
-            .Build();
-
-        _competencyEntity = new CompetencyEntityBuilder()
+        await _context.ChangeRecords.AddAsync(changeRecord);
+        _competencyEntity = new CompetencyEntityBuilder(DataSeeder.ProgramOfStudyEntity)
             .WithCode("SEE.DED")
             .WithUnits(new UnitsEntity() { WholeUnit = 10 })
             .WithIsMandatory(false)
             .WithIsOptional(true)
             .WithStatementOfCompetency("Test Statement")
-            .AddRealisationContexts(realisationContext)
-            .AddCompetencyElements(competencyElement)
             .WithCurrentVersion(changeRecord)
-            .WithProgramOfStudy(programOfStudyEntity)
             .Build();
-    }
-
-    public async Task<CompetencyEntity> SeedAsync()
-    {
         await _context.Competencies.AddAsync(_competencyEntity);
+
+        var realisationContext = new RealisationContextEntityBuilder()
+            .WithCompetency(_competencyEntity)
+            .Build();
+        await _context.RealisationContexts.AddAsync(realisationContext);
+        await _context.ComplementaryInformations.AddAsync(new ComplementaryInformationEntityBuilder(realisationContext)
+                .WithCreatedBy(user)
+                .WithChangeRecord(changeRecord)
+                .Build());
+
+        var competencyElement = new CompetencyElementEntityBuilder()
+            .WithCompetency(_competencyEntity)
+            .Build();
+        await _context.CompetencyElements.AddAsync(competencyElement);
+        await _context.ComplementaryInformations.AddAsync(new ComplementaryInformationEntityBuilder(competencyElement)
+                .WithCreatedBy(user)
+                .WithChangeRecord(changeRecord)
+                .Build());
+
+        var performanceCriteria = new PerformanceCriteriaEntityBuilder()
+            .WithCompetencyElement(competencyElement)
+            .Build();
+        await _context.PerformanceCriterias.AddAsync(performanceCriteria);
+        await _context.ComplementaryInformations.AddAsync(new ComplementaryInformationEntityBuilder(performanceCriteria)
+                .WithCreatedBy(user)
+                .WithChangeRecord(changeRecord)
+                .Build());
         await _context.SaveChangesAsync();
         return _competencyEntity;
     }

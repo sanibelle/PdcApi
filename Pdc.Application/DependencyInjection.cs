@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pdc.Application.Mappings;
 using Pdc.Application.Services.UserService;
@@ -16,7 +17,7 @@ namespace Pdc.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
     {
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
@@ -46,7 +47,11 @@ public static class DependencyInjection
         services.AddScoped<IDeleteComplementaryInformationUseCase, DeleteComplementaryInformation>();
         services.AddScoped<IAddComplementaryInformationUseCase, AddComplementaryInformation>();
 
-        services.AddAutoMapper(typeof(MappingProfile));
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.LicenseKey = configuration["AutoMapper:LicenseKey"];
+            cfg.AddMaps(typeof(MappingProfile));
+        });
 
         return services;
     }

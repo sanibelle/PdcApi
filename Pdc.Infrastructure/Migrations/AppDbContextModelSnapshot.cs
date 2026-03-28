@@ -18,6 +18,9 @@ namespace Pdc.Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "10.0.2")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -182,26 +185,6 @@ namespace Pdc.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Pdc.Domain.Models.Common.Units", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int?>("Denominator")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Numerator")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("WholeUnit")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Units");
-                });
-
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkCompetencyElementEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -255,7 +238,6 @@ namespace Pdc.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CourseFrameworkCourseCode")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("Hours")
@@ -283,7 +265,7 @@ namespace Pdc.Infrastructure.Migrations
                         .HasMaxLength(5000)
                         .HasColumnType("character varying(5000)");
 
-                    b.Property<Guid>("CurrentVersionId")
+                    b.Property<Guid?>("CurrentVersionId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("FinalCourseObjective")
@@ -316,7 +298,7 @@ namespace Pdc.Infrastructure.Migrations
                         .HasMaxLength(5000)
                         .HasColumnType("character varying(5000)");
 
-                    b.Property<Guid>("UnitsId")
+                    b.Property<Guid?>("UnitsId")
                         .HasColumnType("uuid");
 
                     b.HasKey("CourseCode");
@@ -335,7 +317,6 @@ namespace Pdc.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("CourseFrameworkCourseCode")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("IsAssedElement")
@@ -361,10 +342,10 @@ namespace Pdc.Infrastructure.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("ComplementaryUnitsId")
+                    b.Property<Guid?>("ComplementaryUnitsId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("GeneralUnitsId")
+                    b.Property<Guid?>("GeneralUnitsId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("MonthsDuration")
@@ -480,7 +461,7 @@ namespace Pdc.Infrastructure.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("CurrentVersionId")
+                    b.Property<Guid?>("CurrentVersionId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsMandatory")
@@ -490,7 +471,6 @@ namespace Pdc.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("ProgramOfStudyCode")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("StatementOfCompetency")
@@ -510,6 +490,26 @@ namespace Pdc.Infrastructure.Migrations
                     b.HasIndex("UnitsId");
 
                     b.ToTable("Competencies");
+                });
+
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("Denominator")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Numerator")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WholeUnit")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Units");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeDetailEntity", b =>
@@ -632,7 +632,7 @@ namespace Pdc.Infrastructure.Migrations
                         .HasMaxLength(5000)
                         .HasColumnType("character varying(5000)");
 
-                    b.Property<Guid>("WrittenOnVersionId")
+                    b.Property<Guid?>("WrittenOnVersionId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -650,7 +650,7 @@ namespace Pdc.Infrastructure.Migrations
                 {
                     b.HasBaseType("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity");
 
-                    b.Property<Guid>("CourseFrameworkPerformanceCriteriaId")
+                    b.Property<Guid?>("CourseFrameworkPerformanceCriteriaId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsAssedElement")
@@ -699,7 +699,6 @@ namespace Pdc.Infrastructure.Migrations
                     b.HasBaseType("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity");
 
                     b.Property<string>("CompetencyCode")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasIndex("CompetencyCode");
@@ -817,9 +816,7 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CourseFramework")
                         .WithMany("CourseFrameworkCompetencies")
-                        .HasForeignKey("CourseFrameworkCourseCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CourseFrameworkCourseCode");
 
                     b.Navigation("Competency");
 
@@ -830,15 +827,12 @@ namespace Pdc.Infrastructure.Migrations
                 {
                     b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "CurrentVersion")
                         .WithMany()
-                        .HasForeignKey("CurrentVersionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CurrentVersionId");
 
-                    b.HasOne("Pdc.Domain.Models.Common.Units", "Units")
+                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "Units")
                         .WithMany()
                         .HasForeignKey("UnitsId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
                     b.OwnsOne("Pdc.Domain.Models.Common.Weighting", "Weighting", b1 =>
                         {
@@ -874,9 +868,7 @@ namespace Pdc.Infrastructure.Migrations
                 {
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CourseFramework")
                         .WithMany("CourseFrameworkPerformanceCriterias")
-                        .HasForeignKey("CourseFrameworkCourseCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CourseFrameworkCourseCode");
 
                     b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", "PerformanceCriteria")
                         .WithMany()
@@ -891,24 +883,22 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", b =>
                 {
-                    b.HasOne("Pdc.Domain.Models.Common.Units", "ComplementaryUnits")
+                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "ComplementaryUnits")
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "ComplementaryUnitsId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
-                    b.HasOne("Pdc.Domain.Models.Common.Units", "GeneralUnits")
+                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "GeneralUnits")
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "GeneralUnitsId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.ClientCascade);
 
-                    b.HasOne("Pdc.Domain.Models.Common.Units", "OptionalUnits")
+                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "OptionalUnits")
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "OptionalUnitsId")
                         .OnDelete(DeleteBehavior.ClientCascade);
 
-                    b.HasOne("Pdc.Domain.Models.Common.Units", "SpecificUnits")
+                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "SpecificUnits")
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "SpecificUnitsId")
                         .OnDelete(DeleteBehavior.ClientCascade);
@@ -926,19 +916,16 @@ namespace Pdc.Infrastructure.Migrations
                 {
                     b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "CurrentVersion")
                         .WithMany()
-                        .HasForeignKey("CurrentVersionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CurrentVersionId");
 
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "ProgramOfStudy")
                         .WithMany("Competencies")
-                        .HasForeignKey("ProgramOfStudyCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProgramOfStudyCode");
 
-                    b.HasOne("Pdc.Domain.Models.Common.Units", "Units")
+                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "Units")
                         .WithMany()
-                        .HasForeignKey("UnitsId");
+                        .HasForeignKey("UnitsId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("CurrentVersion");
 
@@ -1012,9 +999,7 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "WrittenOnVersion")
                         .WithMany("ComplementaryInformations")
-                        .HasForeignKey("WrittenOnVersionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WrittenOnVersionId");
 
                     b.Navigation("Changeable");
 
@@ -1027,9 +1012,7 @@ namespace Pdc.Infrastructure.Migrations
                 {
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkPerformanceCriteriaEntity", "CourseFrameworkPerformanceCriteria")
                         .WithMany("ContentElements")
-                        .HasForeignKey("CourseFrameworkPerformanceCriteriaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CourseFrameworkPerformanceCriteriaId");
 
                     b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", null)
                         .WithOne()
@@ -1042,7 +1025,7 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", b =>
                 {
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", null)
+                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", "Competency")
                         .WithMany("CompetencyElements")
                         .HasForeignKey("CompetencyId");
 
@@ -1051,11 +1034,13 @@ namespace Pdc.Infrastructure.Migrations
                         .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Competency");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", b =>
                 {
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", null)
+                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", "CompetencyElement")
                         .WithMany("PerformanceCriterias")
                         .HasForeignKey("CompetencyElementId");
 
@@ -1064,15 +1049,15 @@ namespace Pdc.Infrastructure.Migrations
                         .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CompetencyElement");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.RealisationContextEntity", b =>
                 {
                     b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", "Competency")
                         .WithMany("RealisationContexts")
-                        .HasForeignKey("CompetencyCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CompetencyCode");
 
                     b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", null)
                         .WithOne()

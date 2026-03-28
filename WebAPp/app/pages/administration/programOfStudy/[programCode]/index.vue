@@ -67,9 +67,9 @@ const upsertCompetencyModal = useModal();
       </tr>
     </tbody>
   </table>
-  <CommonAModal v-model="upsertCompetencyModal.isOpen.value" :title="t('title')" :hide-footer="true">
-    <FormTemplatesCompetency @submitted="handleSubmitted" :program-code="programCode" />
-  </CommonAModal>
+  <CommonTemplateAModal v-model="upsertCompetencyModal.isOpen.value" :title="t('title')" :hide-footer="true">
+    <ModulesAdministrationCompetencyMinimalForm @submitted="handleSubmitted" :program-code="programCode" />
+  </CommonTemplateAModal>
 </template>
 
 <i18n lang="json">{

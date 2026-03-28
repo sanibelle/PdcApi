@@ -5,7 +5,7 @@ namespace TestDataSeeder.Builders.Entities;
 
 public class ChangeRecordEntityBuilder
 {
-    private Guid _id = Guid.NewGuid();
+    private Guid? _id;
     private List<ChangeDetailEntity> _changeDetails = new List<ChangeDetailEntity>();
     private List<ComplementaryInformationEntity> _complementaryInformations = new List<ComplementaryInformationEntity>();
     private DateTime _createdOn = new DateTime(2025, 04, 07);

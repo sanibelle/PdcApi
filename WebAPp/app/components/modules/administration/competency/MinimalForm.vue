@@ -7,14 +7,12 @@ const { t } = useI18n();
 const emit = defineEmits(['submitted']);
 const codeExistingErrorMessage = ref('');
 
-// Form values
 const competency = reactive<Partial<Competency>>({
   isMandatory: false,
   code: '',
   statementOfCompetency: ''
 });
 
-// Form values
 const { handleSubmit, isSubmitting } = useForm<Competency>({
   validateOnMount: false,
 });

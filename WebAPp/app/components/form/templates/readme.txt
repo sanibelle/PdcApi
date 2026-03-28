@@ -1,0 +1,1 @@
+J'ai pris la décision de mettre les templates dans les modules.

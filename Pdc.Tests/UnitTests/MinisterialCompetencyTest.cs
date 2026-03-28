@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
@@ -171,7 +172,11 @@ public class MinisterialCompetencyTest
         _programOfStudyRepositoryMock = new Mock<IProgramOfStudyRepository>();
 
         // Initialize mapper
-        _mapper = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>()).CreateMapper();
+        _mapper = new MapperConfiguration(cfg =>
+        {
+            cfg.LicenseKey = Environment.GetEnvironmentVariable("AutoMapper:LicenseKey");
+            cfg.AddProfile<MappingProfile>();
+        }, LoggerFactory.Create(_ => { })).CreateMapper();
 
         //    // Initialize validators
         //    _programValidator = new UpsertProgramOfStudyValidation();

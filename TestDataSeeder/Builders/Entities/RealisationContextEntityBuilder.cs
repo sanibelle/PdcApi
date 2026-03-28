@@ -5,7 +5,7 @@ namespace TestDataSeeder.Builders.Entities;
 
 public class RealisationContextEntityBuilder
 {
-    private Guid _id = Guid.NewGuid();
+    private Guid? _id;
     private string _value = "Default value";
     private List<ComplementaryInformationEntity> _complementaryInformations = new List<ComplementaryInformationEntity>();
     private CompetencyEntity? _competency = null;
@@ -31,12 +31,6 @@ public class RealisationContextEntityBuilder
     public RealisationContextEntityBuilder WithComplementaryInformations(List<ComplementaryInformationEntity> complementaryInformations)
     {
         _complementaryInformations = complementaryInformations;
-        return this;
-    }
-
-    public RealisationContextEntityBuilder AddComplementaryInformations(ComplementaryInformationEntity complementaryInformation)
-    {
-        _complementaryInformations.Add(complementaryInformation);
         return this;
     }
 
