@@ -25,6 +25,41 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      - name: Create appsettings.Production.json
+        run: |
+          cat > Pdc.WebAPI/appsettings.Production.json << EOF
+          {
+            "Logging": {
+              "LogLevel": {
+                "Default": "I
+                nformation",
+                "Microsoft.AspNetCore": "Warning"
+              }
+            },
+            "ConnectionStrings": {
+              "DefaultConnection": "${{secrets.DB_CONNECTION_STRING}}",
+            },
+            "AzureAd": {
+              "Instance": "https://login.microsoftonline.com/",
+              "TenantId": "${{ secrets.AZURE_TENANT_ID }}",
+              "ClientId": "${{ secrets.AZURE_CLIENT_ID }}"
+              "ClientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}",
+              "CallbackPath": "${{secrets.AZURE_CALLBACK_PATH}}"
+            },
+            "AuthCookie": {
+              "HoursTimeSpan": ${{secrets.COOKIE_TIME_SPAN}},
+              "IsSliding": true
+            },
+            "DefaultRedirectUriAfterLogin": "${{secrets.REDIRECT_URL_AFTER_LOGIN}}",
+            "DefaultRedirectUriAfterLogout": "${{secrets.REDIRECT_URL_AFTER_LOGOUT}}",
+            "Cors": {
+              "AllowedOrigins": "${{secrets.CORS_ORIGINS}}"
+            },
+            "AutoMapper:": {
+              "LicenseKey":"${{secrets.AUTOMAPPER_LICENCE_KEY}}" }
+          }	
+          EOF
+
       - name: Publish in Release mode
         run: dotnet publish Pdc.WebAPI/Pdc.WebAPI.csproj -c Release -o ./publish
 
