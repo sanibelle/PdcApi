@@ -31,8 +31,7 @@ jobs:
           {
             "Logging": {
               "LogLevel": {
-                "Default": "I
-                nformation",
+                "Default": "Information",
                 "Microsoft.AspNetCore": "Warning"
               }
             },
@@ -42,7 +41,7 @@ jobs:
             "AzureAd": {
               "Instance": "https://login.microsoftonline.com/",
               "TenantId": "${{ secrets.AZURE_TENANT_ID }}",
-              "ClientId": "${{ secrets.AZURE_CLIENT_ID }}"
+              "ClientId": "${{ secrets.AZURE_CLIENT_ID }}",
               "ClientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}",
               "CallbackPath": "${{secrets.AZURE_CALLBACK_PATH}}"
             },
