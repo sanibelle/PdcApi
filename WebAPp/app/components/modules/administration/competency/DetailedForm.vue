@@ -171,7 +171,7 @@
               />
             </template>
             <template #col-right>
-              <FormCommonAComplementaryInformations
+              <CommonTemplateAComplementaryInformations
                 v-for="(_, index) in competency.realisationContexts"
                 :key="index"
                 :index="index"
@@ -184,7 +184,7 @@
                   v-model="competency.realisationContexts[index]!"
                   @deleteRow="removeRealisationContextRow"
                 />
-              </FormCommonAComplementaryInformations>
+              </CommonTemplateAComplementaryInformations>
               <div
                 data-testid="add-realisation-context"
                 @click="addRealisationContextRow"
@@ -215,7 +215,7 @@
             :key="competencyElementIndex"
           >
             <template #col-left>
-              <FormCommonAComplementaryInformations
+              <CommonTemplateAComplementaryInformations
                 :index="competencyElementIndex"
                 v-model="competency.competencyElements[competencyElementIndex]!.complementaryInformations!"
                 :name="`competency.competencyElements[${competencyElementIndex}]`"
@@ -226,10 +226,10 @@
                   v-model="competency.competencyElements[competencyElementIndex]!"
                   @deleteRow="removeCompetencyElementRow"
                 />
-              </FormCommonAComplementaryInformations>
+              </CommonTemplateAComplementaryInformations>
             </template>
             <template #col-right>
-              <FormCommonAComplementaryInformations
+              <CommonTemplateAComplementaryInformations
                 v-for="(_, performanceCriteriaIndex) in competency.competencyElements[competencyElementIndex]!.performanceCriterias"
                 :key="performanceCriteriaIndex"
                 :index="performanceCriteriaIndex"
@@ -243,7 +243,7 @@
                   v-model="competency.competencyElements[competencyElementIndex]!.performanceCriterias[performanceCriteriaIndex]!"
                   @deleteRow="removePerformanceCriteriaRow(competencyElementIndex, performanceCriteriaIndex)"
                 />
-              </FormCommonAComplementaryInformations>
+              </CommonTemplateAComplementaryInformations>
               <div
                 @click.prevent="addPerformanceCriteriaRow(competencyElementIndex)"
                 :data-testid="`add-performance-criteria-${competencyElementIndex}`"
