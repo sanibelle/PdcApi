@@ -5,8 +5,8 @@
 
   const complementaryInformations = defineModel<EditableComplementaryInformation[]>();
   const props = defineProps({
-    canAddComment: {
-      default: false,
+    isViewOnly: {
+      default: true,
       type: Boolean,
     },
     changeableId: {
@@ -134,7 +134,7 @@
       @mouseleave="isHovered = false"
     >
       <span
-        v-if="canAddComment"
+        v-if="!isViewOnly"
         class="add-comment-btn"
         @click="handleShowFormClick"
       ></span>
@@ -181,7 +181,7 @@
               </div>
             </div>
             <!-- // TODO reutiliser le funky close button -->
-            <template v-if="!complementaryInformation.isInEdit">
+            <template v-if="!isViewOnly && !complementaryInformation.isInEdit">
               <button
                 @click="onDeleteClick(complementaryInformation.id)"
                 class="btn-delete"

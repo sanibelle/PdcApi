@@ -25,7 +25,7 @@
         </template>
         <template #col-right>
           <CommonTemplateAComplementaryInformations
-            :can-add-comment="true"
+            :isViewOnly="true"
             v-model="context.complementaryInformations"
             v-for="context in competency.realisationContexts"
             :changeable-id="context.id"
@@ -54,7 +54,7 @@
         <CommonMoleculesARow>
           <template #col-left>
             <CommonTemplateAComplementaryInformations
-              :can-add-comment="true"
+              :isViewOnly="true"
               :changeable-id="competencyElement.id"
               v-model="competencyElement.complementaryInformations"
             >
@@ -68,7 +68,7 @@
               class="criterion"
             >
               <CommonTemplateAComplementaryInformations
-                :can-add-comment="true"
+                :isViewOnly="true"
                 v-model="performanceCriteria.complementaryInformations"
                 :changeable-id="performanceCriteria.id"
               >
