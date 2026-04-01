@@ -1,7 +1,9 @@
 <script setup lang="ts">
+  import type { EditableComplementaryInformation } from '~~/shared/types/common/ComplementaryInformation';
+
   const { t } = useI18n();
 
-  const complementaryInformations = defineModel<ComplementaryInformation[]>();
+  const complementaryInformations = defineModel<EditableComplementaryInformation[]>();
   const props = defineProps({
     canAddComment: {
       default: false,
@@ -31,7 +33,7 @@
     showForm.value = false;
   };
 
-  const { createComplementaryInformation, deleteComplementaryInformation } = useComplementaryInformationClient();
+  const { createComplementaryInformation, deleteComplementaryInformation, updateComplementaryInformation } = useComplementaryInformationClient();
   const comment = ref('');
 
   const onAddClick = async () => {
@@ -44,11 +46,36 @@
           complementaryInformations.value = [newItem];
         }
       } else {
+        // TODO error management with nice modal
         alert(t('errorAddingCommentMissingChangeableId'));
       }
     } catch (error) {
+      // TODO error management with nice modal
       alert(t('errorWhenAddingComplementaryInformation'));
       console.error('Error creating complementary information:', error);
+    }
+    showForm.value = false;
+  };
+
+  const onEditClick = async (complementaryInformation: EditableComplementaryInformation) => {
+    try {
+      if (props.changeableId) {
+        const updatedItem = await updateComplementaryInformation(complementaryInformation);
+        const itemToUpdate = complementaryInformations.value?.find((x) => x.id === updatedItem.id);
+        if (itemToUpdate) {
+          itemToUpdate.text = updatedItem.text;
+          itemToUpdate.writtenOnVersion = updatedItem.writtenOnVersion;
+          complementaryInformation.isInEdit = false;
+        } else {
+          // TODO error management with nice modal
+          alert(t('errorWhenUpdatingComplementaryInformation'));
+        }
+      } else {
+        alert(t('errorWhenUpdatingComplementaryInformation'));
+      }
+    } catch (error) {
+      alert(t('errorWhenUpdatingComplementaryInformation'));
+      console.error('Error updating complementary information:', error);
     }
     showForm.value = false;
   };
@@ -57,18 +84,30 @@
     //TODO ajouter une validation qui demande si on est certain.
     try {
       if (!id) {
+        // TODO error management with nice modal
         alert(t('errorWhenDeletingComplementaryInformation'));
         console.error('Error deleting complementary information: id is undefined');
         return;
       }
-      const newItem = await deleteComplementaryInformation(id);
+      await deleteComplementaryInformation(id);
       if (complementaryInformations.value) {
         complementaryInformations.value = complementaryInformations.value.filter((item) => item.id !== id);
       }
     } catch (error) {
+      // TODO error management with nice modal
       alert(t('errorWhenDeletingComplementaryInformation'));
       console.error('Error deleting complementary information:', error);
     }
+  };
+
+  const showComplementaryInformationEditForm = (complementaryInformation: EditableComplementaryInformation) => {
+    complementaryInformation.isInEdit = true;
+    complementaryInformation.originalText = complementaryInformation.text;
+  };
+
+  const hideComplementaryInformationEditForm = (complementaryInformation: EditableComplementaryInformation) => {
+    complementaryInformation.isInEdit = false;
+    complementaryInformation.text = complementaryInformation.originalText ?? '';
   };
 
   //TODO move that to an utils folder
@@ -137,20 +176,51 @@
           <div class="comment-header">
             <div class="comment-meta">
               <div class="comment-author">{{ truncateText(complementaryInformation.createdBy?.userName, 20) || t('unknownUser') }}</div>
-              <!-- //TODO ajouter un composant Date -->
               <div class="comment-date">
                 <CommonMoleculesADate :date="complementaryInformation.createdOn" />
               </div>
             </div>
             <!-- // TODO reutiliser le funky close button -->
-            <button
-              @click="onDeleteClick(complementaryInformation.id)"
-              class="btn-delete"
-            >
-              ✕
-            </button>
+            <template v-if="!complementaryInformation.isInEdit">
+              <button
+                @click="onDeleteClick(complementaryInformation.id)"
+                class="btn-delete"
+              >
+                ✕
+              </button>
+              <button
+                @click="showComplementaryInformationEditForm(complementaryInformation)"
+                class="btn-edit"
+              >
+                ✎
+              </button>
+            </template>
           </div>
-          <div class="comment-text">{{ complementaryInformation.text }}</div>
+          <FormATextAreaInput
+            v-if="complementaryInformation.isInEdit"
+            v-model="complementaryInformation.text"
+            name="comment-edit"
+            :required="true"
+            :max="1000"
+            class="comment-text"
+          />
+          <div
+            v-else
+            class="comment-text"
+          >
+            {{ complementaryInformation.text }}
+          </div>
+          <div
+            v-if="complementaryInformation.isInEdit"
+            class="flex-between"
+          >
+            <CommonAtomsAButton @click="hideComplementaryInformationEditForm(complementaryInformation)">
+              {{ t('cancel') }}
+            </CommonAtomsAButton>
+            <CommonAtomsAButton @click="onEditClick(complementaryInformation)">
+              {{ t('submit') }}
+            </CommonAtomsAButton>
+          </div>
         </div>
       </div>
     </Teleport>
@@ -325,6 +395,12 @@
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
     transition: margin 0.3s ease;
 
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+
     &.highlight {
       background: #f7b10059;
       box-shadow:
@@ -336,6 +412,9 @@
     .comment-entry {
       padding: 5px 6px;
       &:hover .btn-delete {
+        opacity: 1;
+      }
+      &:hover .btn-edit {
         opacity: 1;
       }
     }
@@ -374,8 +453,22 @@
       transition: opacity 0.15s ease;
       background: none;
       border: none;
-      color: #999;
-      font-size: 0.65rem;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 3px;
+      line-height: 1;
+
+      &:hover {
+        color: #c0392b;
+        background: #fdecea;
+      }
+    }
+
+    .btn-edit {
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      background: none;
+      border: none;
       cursor: pointer;
       padding: 2px 4px;
       border-radius: 3px;

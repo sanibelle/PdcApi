@@ -19,17 +19,17 @@ export const useComplementaryInformationClient = () => {
     await api.Delete(`/complementaryInformation/${id}`);
   };
 
-  const updateComplementaryInformation = async (id: string, complementaryInformation: ComplementaryInformation): Promise<ComplementaryInformation> => {
+  const updateComplementaryInformation = async (complementaryInformation: ComplementaryInformation): Promise<ComplementaryInformation> => {
     const api = useApi();
     const preparedComplementaryInformation: ComplementaryInformation = {
       text: complementaryInformation.text,
     };
-    const updatedComplementaryInformation = await api.Put<ComplementaryInformation>(`/complementaryInformation/${id}`, preparedComplementaryInformation);
+    const updatedComplementaryInformation = await api.Put<ComplementaryInformation>(`/complementaryInformation/${complementaryInformation.id}`, preparedComplementaryInformation);
     if (updatedComplementaryInformation == null) {
       throw new Error('Complementary information not found or not authenticated');
     }
     return updatedComplementaryInformation;
   };
 
-  return { createComplementaryInformation, deleteComplementaryInformation };
+  return { createComplementaryInformation, deleteComplementaryInformation, updateComplementaryInformation };
 };

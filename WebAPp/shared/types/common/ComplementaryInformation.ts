@@ -5,3 +5,8 @@ export type ComplementaryInformation = {
   createdBy?: User;
   createdOn?: string;
 };
+
+export type EditableComplementaryInformation = {
+  isInEdit?: boolean;
+  originalText?: string;
+} & ComplementaryInformation;

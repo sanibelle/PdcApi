@@ -87,6 +87,7 @@
     border-radius: 4px;
     font-size: 14px;
     transition: border-color 0.2s ease;
+    field-sizing: content;
 
     &:focus {
       outline: none;
