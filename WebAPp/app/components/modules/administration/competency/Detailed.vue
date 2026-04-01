@@ -25,11 +25,11 @@
         </template>
         <template #col-right>
           <CommonTemplateAComplementaryInformations
-            :isViewOnly="true"
-            v-model="context.complementaryInformations"
             v-for="context in competency.realisationContexts"
-            :changeable-id="context.id"
             :key="context.id"
+            v-model="context.complementaryInformations"
+            :is-view-only="false"
+            :changeable-id="context.id"
             class="criterion"
           >
             {{ context.value }}
@@ -54,9 +54,9 @@
         <CommonMoleculesARow>
           <template #col-left>
             <CommonTemplateAComplementaryInformations
-              :isViewOnly="true"
-              :changeable-id="competencyElement.id"
               v-model="competencyElement.complementaryInformations"
+              :is-view-only="false"
+              :changeable-id="competencyElement.id"
             >
               {{ index + 1 }}. {{ competencyElement.value }}
             </CommonTemplateAComplementaryInformations>
@@ -68,8 +68,8 @@
               class="criterion"
             >
               <CommonTemplateAComplementaryInformations
-                :isViewOnly="true"
                 v-model="performanceCriteria.complementaryInformations"
+                :is-view-only="false"
                 :changeable-id="performanceCriteria.id"
               >
                 {{ performanceCriteria.value }}

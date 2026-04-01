@@ -12,6 +12,7 @@
     changeableId: {
       type: String,
       required: false,
+      default: undefined,
     },
   });
 
@@ -59,25 +60,20 @@
 
   const onEditClick = async (complementaryInformation: EditableComplementaryInformation) => {
     try {
-      if (props.changeableId) {
-        const updatedItem = await updateComplementaryInformation(complementaryInformation);
-        const itemToUpdate = complementaryInformations.value?.find((x) => x.id === updatedItem.id);
-        if (itemToUpdate) {
-          itemToUpdate.text = updatedItem.text;
-          itemToUpdate.writtenOnVersion = updatedItem.writtenOnVersion;
-          complementaryInformation.isInEdit = false;
-        } else {
-          // TODO error management with nice modal
-          alert(t('errorWhenUpdatingComplementaryInformation'));
-        }
+      const updatedItem = await updateComplementaryInformation(complementaryInformation);
+      const itemToUpdate = complementaryInformations.value?.find((x) => x.id === updatedItem.id);
+      if (itemToUpdate) {
+        itemToUpdate.text = updatedItem.text;
+        itemToUpdate.writtenOnVersion = updatedItem.writtenOnVersion;
+        complementaryInformation.isInEdit = false;
       } else {
+        // TODO error management with nice modal
         alert(t('errorWhenUpdatingComplementaryInformation'));
       }
     } catch (error) {
       alert(t('errorWhenUpdatingComplementaryInformation'));
       console.error('Error updating complementary information:', error);
     }
-    showForm.value = false;
   };
 
   const onDeleteClick = async (id: string | undefined) => {
@@ -141,12 +137,12 @@
       <slot></slot>
       <Transition name="slide-fade">
         <div
-          class="add-comment-form"
           v-if="showForm"
+          class="add-comment-form"
         >
           <FormATextAreaInput
-            :focus-on-mount="true"
             v-model="comment"
+            :focus-on-mount="true"
             name="comment"
             :required="true"
             :max="1000"
@@ -161,17 +157,17 @@
     </div>
     <Teleport to="#comments-panel">
       <div
+        v-if="hasComments"
+        ref="commentRef"
         class="comment"
         :class="{ highlight: isHovered }"
-        v-if="hasComments"
         @mouseenter="isHovered = true"
         @mouseleave="isHovered = false"
-        ref="commentRef"
       >
         <div
-          class="comment-entry"
           v-for="complementaryInformation of complementaryInformations"
           :key="complementaryInformation.id"
+          class="comment-entry"
         >
           <div class="comment-header">
             <div class="comment-meta">
@@ -183,14 +179,14 @@
             <!-- // TODO reutiliser le funky close button -->
             <template v-if="!isViewOnly && !complementaryInformation.isInEdit">
               <button
-                @click="onDeleteClick(complementaryInformation.id)"
                 class="btn-delete"
+                @click="onDeleteClick(complementaryInformation.id)"
               >
                 ✕
               </button>
               <button
-                @click="showComplementaryInformationEditForm(complementaryInformation)"
                 class="btn-edit"
+                @click="showComplementaryInformationEditForm(complementaryInformation)"
               >
                 ✎
               </button>

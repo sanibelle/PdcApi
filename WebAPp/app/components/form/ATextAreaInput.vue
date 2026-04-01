@@ -75,6 +75,7 @@
 
 <template>
   <FormMoleculesAFormField
+    v-model="model"
     :name="name"
     :label="label"
     type="textarea"
@@ -83,7 +84,6 @@
     :required="required"
     :rules="validationRules"
     :hint="hint"
-    v-model="model"
     :error-message="errorMessage"
     :focus-on-mount="focusOnMount"
   >

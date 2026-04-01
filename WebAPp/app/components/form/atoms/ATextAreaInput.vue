@@ -6,10 +6,6 @@
       type: String,
       required: true,
     },
-    type: {
-      type: String,
-      default: 'text',
-    },
     placeholder: {
       type: String,
       default: '',
@@ -69,7 +65,6 @@
     v-focus="focusOnMount"
     :name="name"
     :value="value"
-    :type="type"
     :placeholder="placeholder"
     :disabled="disabled"
     class="base-input"
