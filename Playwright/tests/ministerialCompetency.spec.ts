@@ -191,7 +191,7 @@ test.describe("ministerial competency", () => {
     // first add
     await adminPage.getByText("realisation context 1").locator('.add-comment-btn').click();
     await adminPage.locator('textarea').first().fill('realisationContext1 complementary information 1');
-    await adminPage.locator('.add-comment-actions .submit').click();
+    await adminPage.getByTestId("submit-draft-button").first().click();
     await expect(await adminPage.locator('.comment-text')).toHaveText('realisationContext1 complementary information 1');
     await expect(await adminPage.locator('.comment-author')).toHaveText('TestAdmin');
     await expect(await adminPage.locator('textarea')).not.toBeVisible();
@@ -199,14 +199,14 @@ test.describe("ministerial competency", () => {
     // second information
     await adminPage.getByText("realisation context 1").locator('.add-comment-btn').click();
     await adminPage.locator('textarea').first().fill('second realisationContext1 complementary information 1');
-    await adminPage.locator('.add-comment-actions .submit').click();
+    await adminPage.getByTestId("submit-draft-button").first().click();
     await expect(await adminPage.locator('textarea')).not.toBeVisible();
 
     // updating first information
     await adminPage.getByText("realisationContext1 complementary information 1").first().hover();
     await adminPage.locator(".btn-edit").first().click();
     await adminPage.locator('textarea').first().fill('updated realisationContext1 complementary information 1');
-    await adminPage.locator('.comment-entry .submit').first().click();
+    await adminPage.getByTestId("submit-draft-button").first().click();
     await expect(await adminPage.locator('.comment-text').first()).toHaveText('updated realisationContext1 complementary information 1');
 
     // deleting first information
@@ -218,14 +218,14 @@ test.describe("ministerial competency", () => {
     await adminPage.getByText('competency element 1').hover();
     await adminPage.locator('.competencies .add-comment-btn').first().click();
     await adminPage.locator('textarea').first().fill('competency element 1');
-    await adminPage.locator('.add-comment-actions .submit').click();
+    await adminPage.getByTestId("submit-draft-button").first().click();
     await expect(await adminPage.locator('.comment-text').nth(1)).toHaveText('competency element 1');
     await expect(await adminPage.locator('textarea')).not.toBeVisible();
     await expect(adminPage.locator('.comment-text')).toHaveCount(2);
 
     await adminPage.locator('.competencies .criterion .add-comment-btn').first().click();
     await adminPage.locator('textarea').first().fill('performance criteria 1');
-    await adminPage.locator('.add-comment-actions .submit').click();
+    await adminPage.getByTestId("submit-draft-button").first().click();
     await expect(await adminPage.locator('.comment-text').nth(2)).toHaveText('performance criteria 1');
     await expect(await adminPage.locator('textarea')).not.toBeVisible();
     await expect(adminPage.locator('.comment-text')).toHaveCount(3);
@@ -244,13 +244,13 @@ test.describe("ministerial competency", () => {
 
     // now success
     await adminPage.locator('textarea').first().fill('realisationContext1 complementary information 1');
-    adminPage.getByTestId("submit-draft-button").first().click();
+    await adminPage.getByTestId("submit-draft-button").first().click();
 
     // testing update form now
     await adminPage.getByText("realisationContext1 complementary information 1").first().hover();
     await adminPage.locator(".btn-edit").first().click();
     await adminPage.locator('textarea').first().fill('');
-    adminPage.getByTestId("submit-draft-button").first().click();
+    await adminPage.getByTestId("submit-draft-button").first().click();
     await expect(adminPage.locator('.error-message')).toBeVisible();
   });
 
