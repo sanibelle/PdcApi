@@ -61,8 +61,6 @@ test.describe("ministerial competency", () => {
       // realisation contexts complementary information
       await adminPage.getByTestId('add-realisation-context').click();
       await adminPage.locator(`input[name="competency\\.realisationContexts\\[${parentIndex}\\]\\.value"]`).fill(`realisation context ${parentIndex + 1}`);
-      // TODO fix this await adminPage.getByTestId('add-complementary-information-competency.realisationContexts[0]').click();
-      // TODO fix this await adminPage.locator(`input[name="competency\\.realisationContexts\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.text"]`).fill(`complementary information ${parentIndex + 1} for rc 1`);
 
       // competency elements, performance criteria and complementary information
       await adminPage.getByTestId('add-competency-element').click();
@@ -71,14 +69,6 @@ test.describe("ministerial competency", () => {
         await adminPage.getByTestId(`add-performance-criteria-${parentIndex}`).click();
         await adminPage.locator(`input[name="competency\\.competencyElements\\[${parentIndex}\\]\\.performanceCriterias\\[${pcIndex}\\]\\.value"]`).fill(`performance criteria ${pcIndex + 1} for element ${parentIndex + 1}`);
       }
-
-      // complementary information for first competency element
-      // TODO fix this  await adminPage.getByTestId('add-complementary-information-competency.competencyElements[0]').click();
-      // TODO fix this  await adminPage.locator(`input[name="competency\\.competencyElements\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.text"]`).fill(`complementary information ${parentIndex + 1} for competency element 1`);
-
-      // complementary information for first performance criteria of first competency element
-      // TODO fix this await adminPage.getByTestId('add-complementary-information-competency.competencyElements[0].performanceCriterias[0]').click();
-      // TODO fix this await adminPage.locator(`input[name="competency\\.competencyElements\\[0\\]\\.performanceCriterias\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.text"]`).fill(`complementary information ${parentIndex + 1} for pc 1 for element 1`);
     }
 
     const [response] = await Promise.all([
@@ -112,10 +102,7 @@ test.describe("ministerial competency", () => {
     for (let parentIndex = 1; parentIndex <= 3; parentIndex++) {
       // realisation contexts complementary information
       await expect(await adminPage.getByText(`realisation context ${parentIndex}`)).toBeTruthy();
-      // TODO fix this await expect(await adminPage.getByText(`complementary information ${parentIndex} for rc 1`)).toBeTruthy();
       await expect(await adminPage.getByText(`competency element ${parentIndex}`)).toBeTruthy();
-      // TODO fix this await expect(await adminPage.getByText(`complementary information ${parentIndex} for competency element 1`)).toBeTruthy();
-      // TODO fix this await expect(await adminPage.getByText(`complementary information ${parentIndex} for pc 1 for element 1`)).toBeTruthy();
       
       for (let pcIndex = 1; pcIndex <= 3; pcIndex++) {
         await expect(await adminPage.getByText(`performance criteria ${pcIndex} for element ${parentIndex}`)).toBeTruthy();
@@ -133,26 +120,18 @@ test.describe("ministerial competency", () => {
     
     // realisation contexts
     await adminPage.getByTestId('delete-realisation-context-button-1').click();
-    // TODO fix this await adminPage.getByTestId('delete-complementary-information-competency.realisationContexts[0]-1').click();
 
     // competency elements
     await adminPage.getByTestId('delete-competency-element-button-1').click();
     // performance criterias
     await adminPage.getByTestId('delete-performance-criteria-button-0-1').click();
     await adminPage.getByTestId('delete-performance-criteria-button-1-1').click();
-    // complementary information for competency element
-    // TODO fix this await adminPage.getByTestId('delete-complementary-information-competency.competencyElements[0]-1').click();
-    // complementary information for performance criteria
-    // TODO fix this await adminPage.getByTestId('delete-complementary-information-competency.competencyElements[0].performanceCriterias[0]-1').click();
-
 
     // adding a number 4
     const parentIndex = 2;
     // realisation contexts complementary information
     await adminPage.getByTestId('add-realisation-context').click();
     await adminPage.locator(`input[name="competency\\.realisationContexts\\[${parentIndex}\\]\\.value"]`).fill(`realisation context ${parentIndex + 2}`);
-    // TODO fix this await adminPage.getByTestId('add-complementary-information-competency.realisationContexts[0]').click();
-    // TODO fix this await adminPage.locator(`input[name="competency\\.realisationContexts\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.text"]`).fill(`complementary information ${parentIndex + 2} for rc 1`);
 
     // competency elements, performance criteria and complementary information
     await adminPage.getByTestId('add-competency-element').click();
@@ -162,25 +141,13 @@ test.describe("ministerial competency", () => {
       const displayedPcIndex = pcIndex > 0 ? pcIndex + 2 : pcIndex + 1;
       await adminPage.locator(`input[name="competency\\.competencyElements\\[${parentIndex}\\]\\.performanceCriterias\\[${pcIndex}\\]\\.value"]`).fill(`performance criteria ${displayedPcIndex} for element ${parentIndex + 2}`);
     }
-
-    // complementary information for first competency element
-    // TODO fix this await adminPage.getByTestId('add-complementary-information-competency.competencyElements[0]').click();
-    // TODO fix this await adminPage.locator(`input[name="competency\\.competencyElements\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.text"]`).fill(`complementary information ${parentIndex + 2} for competency element 1`);
-
-    // complementary information for first performance criteria of first competency element
-    // TODO fix this await adminPage.getByTestId('add-complementary-information-competency.competencyElements[0].performanceCriterias[0]').click();
-// TODO fix this     await adminPage.locator(`input[name="competency\\.competencyElements\\[0\\]\\.performanceCriterias\\[0\\]\\.complementaryInformations\\[${parentIndex}\\]\\.text"]`).fill(`complementary information ${parentIndex + 2} for pc 1 for element 1`);
-
     // validation before submit
     for (let parentIndex = 1; parentIndex <= 4; parentIndex++) {
       // skipping number 2
       if (parentIndex === 2) continue;
       // realisation contexts complementary information
       await expect(await adminPage.getByText(`realisation context ${parentIndex}`)).toBeTruthy();
-      // TODO fix this await expect(await adminPage.getByText(`complementary information ${parentIndex} for rc 1`)).toBeTruthy();
       await expect(await adminPage.getByText(`competency element ${parentIndex}`)).toBeTruthy();
-      // TODO fix this await expect(await adminPage.getByText(`complementary information ${parentIndex} for competency element 1`)).toBeTruthy();
-      // TODO fix this await expect(await adminPage.getByText(`complementary information ${parentIndex} for pc 1 for element 1`)).toBeTruthy();
       
       for (let pcIndex = 1; pcIndex <= 4; pcIndex++) {
         if (parentIndex === 2) continue;
@@ -206,10 +173,7 @@ test.describe("ministerial competency", () => {
       if (parentIndex === 2) continue;
       // realisation contexts complementary information
       await expect(await adminPage.getByText(`realisation context ${parentIndex}`)).toBeTruthy();
-      // TODO fix this await expect(await adminPage.getByText(`complementary information ${parentIndex} for rc 1`)).toBeTruthy();
       await expect(await adminPage.getByText(`competency element ${parentIndex}`)).toBeTruthy();
-      // TODO fix this await expect(await adminPage.getByText(`complementary information ${parentIndex} for competency element 1`)).toBeTruthy();
-      // TODO fix this await expect(await adminPage.getByText(`complementary information ${parentIndex} for pc 1 for element 1`)).toBeTruthy();
       
       for (let pcIndex = 1; pcIndex <= 4; pcIndex++) {
         if (parentIndex === 2) continue;
@@ -217,4 +181,78 @@ test.describe("ministerial competency", () => {
       }
     }
   });
+
+  test("CRUD complementary informations", async ({
+    adminPage,
+  }) => {
+    await adminPage.goto("/administration/programme/Seededprogram/competence/code1");
+    await adminPage.waitForLoadState("networkidle");
+
+    // first add
+    await adminPage.getByText("realisation context 1").locator('.add-comment-btn').click();
+    await adminPage.locator('textarea').first().fill('realisationContext1 complementary information 1');
+    await adminPage.locator('.add-comment-actions .submit').click();
+    await expect(await adminPage.locator('.comment-text')).toHaveText('realisationContext1 complementary information 1');
+    await expect(await adminPage.locator('.comment-author')).toHaveText('TestAdmin');
+    await expect(await adminPage.locator('textarea')).not.toBeVisible();
+    
+    // second information
+    await adminPage.getByText("realisation context 1").locator('.add-comment-btn').click();
+    await adminPage.locator('textarea').first().fill('second realisationContext1 complementary information 1');
+    await adminPage.locator('.add-comment-actions .submit').click();
+    await expect(await adminPage.locator('textarea')).not.toBeVisible();
+
+    // updating first information
+    await adminPage.getByText("realisationContext1 complementary information 1").first().hover();
+    await adminPage.locator(".btn-edit").first().click();
+    await adminPage.locator('textarea').first().fill('updated realisationContext1 complementary information 1');
+    await adminPage.locator('.comment-entry .submit').first().click();
+    await expect(await adminPage.locator('.comment-text').first()).toHaveText('updated realisationContext1 complementary information 1');
+
+    // deleting first information
+    await adminPage.getByText("updated realisationContext1 complementary information 1").first().hover();
+    await adminPage.locator('.comment .btn-delete').first().click();
+    await expect(adminPage.locator('.comment-text')).toHaveCount(1);  
+
+    // adding information for competency element and performance criteria
+    await adminPage.getByText('competency element 1').hover();
+    await adminPage.locator('.competencies .add-comment-btn').first().click();
+    await adminPage.locator('textarea').first().fill('competency element 1');
+    await adminPage.locator('.add-comment-actions .submit').click();
+    await expect(await adminPage.locator('.comment-text').nth(1)).toHaveText('competency element 1');
+    await expect(await adminPage.locator('textarea')).not.toBeVisible();
+    await expect(adminPage.locator('.comment-text')).toHaveCount(2);
+
+    await adminPage.locator('.competencies .criterion .add-comment-btn').first().click();
+    await adminPage.locator('textarea').first().fill('performance criteria 1');
+    await adminPage.locator('.add-comment-actions .submit').click();
+    await expect(await adminPage.locator('.comment-text').nth(2)).toHaveText('performance criteria 1');
+    await expect(await adminPage.locator('textarea')).not.toBeVisible();
+    await expect(adminPage.locator('.comment-text')).toHaveCount(3);
+  });
+
+  test("empty complementary information should not submit", async ({
+    adminPage,
+  }) => {
+    await adminPage.goto("/administration/programme/Seededprogram/competence/code1");
+    await adminPage.waitForLoadState("networkidle");
+
+    // first add failing.
+    await adminPage.getByText("realisation context 1").locator('.add-comment-btn').click();
+    adminPage.getByTestId("submit-draft-button").first().click()
+    await expect(adminPage.locator('.error-message')).toBeVisible();
+
+    // now success
+    await adminPage.locator('textarea').first().fill('realisationContext1 complementary information 1');
+    adminPage.getByTestId("submit-draft-button").first().click();
+
+    // testing update form now
+    await adminPage.getByText("realisationContext1 complementary information 1").first().hover();
+    await adminPage.locator(".btn-edit").first().click();
+    await adminPage.locator('textarea').first().fill('');
+    adminPage.getByTestId("submit-draft-button").first().click();
+    await expect(adminPage.locator('.error-message')).toBeVisible();
+  });
+
+
 });

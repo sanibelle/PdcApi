@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { EditableComplementaryInformation } from '~~/shared/types/common/ComplementaryInformation';
+  import type { ComplementaryInformation, EditableComplementaryInformation } from '~~/shared/types/common/ComplementaryInformation';
 
   const { t } = useI18n();
 
@@ -34,10 +34,14 @@
     showForm.value = false;
   };
 
-  const { createComplementaryInformation, deleteComplementaryInformation, updateComplementaryInformation } = useComplementaryInformationClient();
+  const { createComplementaryInformation, deleteComplementaryInformation } = useComplementaryInformationClient();
   const comment = ref('');
 
-  const onAddClick = async () => {
+  const { handleSubmit, isSubmitting } = useForm<ComplementaryInformation>({
+    validateOnMount: false,
+  });
+
+  const onSubmit = handleSubmit(async () => {
     try {
       if (props.changeableId) {
         const newItem = await createComplementaryInformation(props.changeableId, { text: comment.value });
@@ -56,25 +60,7 @@
       console.error('Error creating complementary information:', error);
     }
     showForm.value = false;
-  };
-
-  const onEditClick = async (complementaryInformation: EditableComplementaryInformation) => {
-    try {
-      const updatedItem = await updateComplementaryInformation(complementaryInformation);
-      const itemToUpdate = complementaryInformations.value?.find((x) => x.id === updatedItem.id);
-      if (itemToUpdate) {
-        itemToUpdate.text = updatedItem.text;
-        itemToUpdate.writtenOnVersion = updatedItem.writtenOnVersion;
-        complementaryInformation.isInEdit = false;
-      } else {
-        // TODO error management with nice modal
-        alert(t('errorWhenUpdatingComplementaryInformation'));
-      }
-    } catch (error) {
-      alert(t('errorWhenUpdatingComplementaryInformation'));
-      console.error('Error updating complementary information:', error);
-    }
-  };
+  });
 
   const onDeleteClick = async (id: string | undefined) => {
     //TODO ajouter une validation qui demande si on est certain.
@@ -136,9 +122,10 @@
       ></span>
       <slot></slot>
       <Transition name="slide-fade">
-        <div
+        <form
           v-if="showForm"
           class="add-comment-form"
+          @submit="onSubmit"
         >
           <FormATextAreaInput
             v-model="comment"
@@ -149,10 +136,20 @@
             :placeholder="t('addComment')"
           />
           <div class="add-comment-actions">
-            <CommonAtomsAButton @click="onAddClick">{{ t('submit') }}</CommonAtomsAButton>
-            <CommonAtomsAButton @click="onCancelClick">{{ t('cancel') }}</CommonAtomsAButton>
+            <FormMoleculesASubmitButton
+              :is-submitting="isSubmitting"
+              data-testid="submit-draft-button"
+            >
+              {{ t('submit') }}
+            </FormMoleculesASubmitButton>
+            <CommonAtomsAButton
+              class="cancel"
+              @click="onCancelClick"
+            >
+              {{ t('cancel') }}
+            </CommonAtomsAButton>
           </div>
-        </div>
+        </form>
       </Transition>
     </div>
     <Teleport to="#comments-panel">
@@ -192,30 +189,16 @@
               </button>
             </template>
           </div>
-          <FormATextAreaInput
+          <FormAComplementaryInformation
             v-if="complementaryInformation.isInEdit"
-            v-model="complementaryInformation.text"
-            name="comment-edit"
-            :required="true"
-            :max="1000"
-            class="comment-text"
+            v-model="complementaryInformation!"
+            @cancel="hideComplementaryInformationEditForm(complementaryInformation)"
           />
           <div
             v-else
             class="comment-text"
           >
             {{ complementaryInformation.text }}
-          </div>
-          <div
-            v-if="complementaryInformation.isInEdit"
-            class="flex-between"
-          >
-            <CommonAtomsAButton @click="hideComplementaryInformationEditForm(complementaryInformation)">
-              {{ t('cancel') }}
-            </CommonAtomsAButton>
-            <CommonAtomsAButton @click="onEditClick(complementaryInformation)">
-              {{ t('submit') }}
-            </CommonAtomsAButton>
           </div>
         </div>
       </div>

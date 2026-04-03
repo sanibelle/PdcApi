@@ -1,7 +1,7 @@
 <script setup lang="ts">
   const { t } = useI18n();
 
-  const props = defineProps({
+  defineProps({
     competency: {
       type: Object as PropType<Competency>,
       required: true,
@@ -24,7 +24,7 @@
           {{ competency.statementOfCompetency }}
         </template>
         <template #col-right>
-          <CommonTemplateAComplementaryInformations
+          <CommonTemplateAComplementaryInformationable
             v-for="context in competency.realisationContexts"
             :key="context.id"
             v-model="context.complementaryInformations"
@@ -33,53 +33,55 @@
             class="criterion"
           >
             {{ context.value }}
-          </CommonTemplateAComplementaryInformations>
+          </CommonTemplateAComplementaryInformationable>
         </template>
       </CommonMoleculesARow>
     </template>
   </CommonTemplateAPanel>
   <!-- Competency elements -->
-  <CommonTemplateAPanel>
-    <template #header-col-left>
-      {{ t('competencyElements') }}
-    </template>
-    <template #header-col-right>
-      {{ t('performanceCriteria') }}
-    </template>
-    <template #content>
-      <template
-        v-for="(competencyElement, index) in competency.competencyElements.toSorted((a, b) => +a.position - +b.position)"
-        :key="competencyElement.id"
-      >
-        <CommonMoleculesARow>
-          <template #col-left>
-            <CommonTemplateAComplementaryInformations
-              v-model="competencyElement.complementaryInformations"
-              :is-view-only="false"
-              :changeable-id="competencyElement.id"
-            >
-              {{ index + 1 }}. {{ competencyElement.value }}
-            </CommonTemplateAComplementaryInformations>
-          </template>
-          <template #col-right>
-            <div
-              v-for="performanceCriteria in competencyElement.performanceCriterias"
-              :key="performanceCriteria.id"
-              class="criterion"
-            >
-              <CommonTemplateAComplementaryInformations
-                v-model="performanceCriteria.complementaryInformations"
-                :is-view-only="false"
-                :changeable-id="performanceCriteria.id"
-              >
-                {{ performanceCriteria.value }}
-              </CommonTemplateAComplementaryInformations>
-            </div>
-          </template>
-        </CommonMoleculesARow>
+  <div class="competencies">
+    <CommonTemplateAPanel>
+      <template #header-col-left>
+        {{ t('competencyElements') }}
       </template>
-    </template>
-  </CommonTemplateAPanel>
+      <template #header-col-right>
+        {{ t('performanceCriteria') }}
+      </template>
+      <template #content>
+        <template
+          v-for="(competencyElement, index) in competency.competencyElements.toSorted((a, b) => +a.position - +b.position)"
+          :key="competencyElement.id"
+        >
+          <CommonMoleculesARow>
+            <template #col-left>
+              <CommonTemplateAComplementaryInformationable
+                v-model="competencyElement.complementaryInformations"
+                :is-view-only="false"
+                :changeable-id="competencyElement.id"
+              >
+                {{ index + 1 }}. {{ competencyElement.value }}
+              </CommonTemplateAComplementaryInformationable>
+            </template>
+            <template #col-right>
+              <div
+                v-for="performanceCriteria in competencyElement.performanceCriterias"
+                :key="performanceCriteria.id"
+                class="criterion"
+              >
+                <CommonTemplateAComplementaryInformationable
+                  v-model="performanceCriteria.complementaryInformations"
+                  :is-view-only="false"
+                  :changeable-id="performanceCriteria.id"
+                >
+                  {{ performanceCriteria.value }}
+                </CommonTemplateAComplementaryInformationable>
+              </div>
+            </template>
+          </CommonMoleculesARow>
+        </template>
+      </template>
+    </CommonTemplateAPanel>
+  </div>
 </template>
 
 <i18n lang="json">

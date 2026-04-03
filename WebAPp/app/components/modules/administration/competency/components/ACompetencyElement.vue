@@ -24,18 +24,18 @@
 
 <template>
   <FormATextInput
+    v-model="model.value"
     :name="`competency.competencyElements[${index}].value`"
     :min="3"
     :max="100"
     :required="true"
-    v-model="model.value"
     :focus-on-mount="index === indexToFocus"
   >
     <CommonAtomsAButton
       :data-testid="`delete-competency-element-button-${index}`"
       :aria-label="t('deleteCompetencyElement')"
+      :prevent-default="true"
       @click="() => emit('deleteRow', index)"
-      :preventDefault="true"
     >
       -
     </CommonAtomsAButton>

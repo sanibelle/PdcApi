@@ -115,37 +115,37 @@
 <template>
   <div class="form">
     <form
-      @submit="onSubmit"
-      class="form-container"
       v-if="competency"
+      class="form-container"
+      @submit="onSubmit"
     >
       <CommonOrganismATopRow>
         <template #left>
           <div class="flex">
             <FormACheckboxInput
+              v-model="competency.isMandatory"
               name="isMandatory"
               :label="t('mandatoryCompetency')"
               :required="true"
-              v-model="competency.isMandatory"
             />
             <FormACheckboxInput
+              v-model="isOptionnal"
               name="isOptionnal"
               :label="t('optionnalCompetency')"
               :required="true"
-              v-model="isOptionnal"
             />
           </div>
         </template>
         <template #right>
           <FormATextInput
+            v-model="competency.code"
             name="code"
             :label="t('competencyCode')"
             placeholder="Ex : 00SU"
             :min="3"
             :max="50"
             :required="true"
-            v-model="competency.code"
-            :errorMessage="codeExistingErrorMessage"
+            :error-message="codeExistingErrorMessage"
           />
         </template>
         <template #content>
@@ -164,35 +164,35 @@
           <CommonMoleculesARow>
             <template #col-left>
               <FormATextInput
+                v-model="competency.statementOfCompetency"
                 name="statementOfCompetency"
                 :placeholder="t('statementOfCompetencyPlaceholder')"
                 :required="true"
-                v-model="competency.statementOfCompetency"
               />
             </template>
             <template #col-right>
-              <CommonTemplateAComplementaryInformations
-                v-for="(_, index) in competency.realisationContexts"
+              <CommonTemplateAComplementaryInformationable
+                v-for="(realisationContext, index) in competency.realisationContexts"
                 :key="index"
+                v-model="realisationContext.complementaryInformations!"
                 :index="index"
-                v-model="competency.realisationContexts[index]!.complementaryInformations!"
                 :name="`competency.realisationContexts[${index}]`"
               >
                 <ModulesAdministrationCompetencyComponentsARealisationContext
+                  v-model="realisationContext!"
                   :index="index"
                   :index-to-focus="realisationContextIndexToFocus"
-                  v-model="competency.realisationContexts[index]!"
-                  @deleteRow="removeRealisationContextRow"
+                  @delete-row="removeRealisationContextRow"
                 />
-              </CommonTemplateAComplementaryInformations>
+              </CommonTemplateAComplementaryInformationable>
               <div
                 data-testid="add-realisation-context"
-                @click="addRealisationContextRow"
                 :preventDefault="true"
+                @click="addRealisationContextRow"
               >
                 <FormATextInput
-                  :name="`add-realisation-context-input`"
                   v-model="addElementPlaceholderRef"
+                  :name="`add-realisation-context-input`"
                 />
               </div>
             </template>
@@ -210,47 +210,47 @@
         </template>
         <template #content>
           <CommonMoleculesARow
-            class="row"
-            v-for="(_, competencyElementIndex) in competency.competencyElements"
+            v-for="(competencyElement, competencyElementIndex) in competency.competencyElements"
             :key="competencyElementIndex"
+            class="row"
           >
             <template #col-left>
-              <CommonTemplateAComplementaryInformations
+              <CommonTemplateAComplementaryInformationable
+                v-model="competencyElement.complementaryInformations!"
                 :index="competencyElementIndex"
-                v-model="competency.competencyElements[competencyElementIndex]!.complementaryInformations!"
                 :name="`competency.competencyElements[${competencyElementIndex}]`"
               >
                 <ModulesAdministrationCompetencyComponentsACompetencyElement
+                  v-model="competencyElement!"
                   :index="competencyElementIndex"
                   :index-to-focus="competencyElementIndexToFocus"
-                  v-model="competency.competencyElements[competencyElementIndex]!"
-                  @deleteRow="removeCompetencyElementRow"
+                  @delete-row="removeCompetencyElementRow"
                 />
-              </CommonTemplateAComplementaryInformations>
+              </CommonTemplateAComplementaryInformationable>
             </template>
             <template #col-right>
-              <CommonTemplateAComplementaryInformations
-                v-for="(_, performanceCriteriaIndex) in competency.competencyElements[competencyElementIndex]!.performanceCriterias"
+              <CommonTemplateAComplementaryInformationable
+                v-for="(performanceCriteria, performanceCriteriaIndex) in competencyElement.performanceCriterias"
                 :key="performanceCriteriaIndex"
+                v-model="performanceCriteria.complementaryInformations!"
                 :index="performanceCriteriaIndex"
-                v-model="competency.competencyElements[competencyElementIndex]!.performanceCriterias[performanceCriteriaIndex]!.complementaryInformations!"
                 :name="`competency.competencyElements[${competencyElementIndex}].performanceCriterias[${performanceCriteriaIndex}]`"
               >
                 <ModulesAdministrationCompetencyComponentsAPerformanceCriteria
-                  :competencyElementIndex="competencyElementIndex"
+                  v-model="performanceCriteria!"
+                  :competency-element-index="competencyElementIndex"
                   :index-to-focus="performanceCriteriaIndexToFocus"
-                  :performanceCriteriaIndex="performanceCriteriaIndex"
-                  v-model="competency.competencyElements[competencyElementIndex]!.performanceCriterias[performanceCriteriaIndex]!"
-                  @deleteRow="removePerformanceCriteriaRow(competencyElementIndex, performanceCriteriaIndex)"
+                  :performance-criteria-index="performanceCriteriaIndex"
+                  @delete-row="removePerformanceCriteriaRow(competencyElementIndex, performanceCriteriaIndex)"
                 />
-              </CommonTemplateAComplementaryInformations>
+              </CommonTemplateAComplementaryInformationable>
               <div
-                @click.prevent="addPerformanceCriteriaRow(competencyElementIndex)"
                 :data-testid="`add-performance-criteria-${competencyElementIndex}`"
+                @click.prevent="addPerformanceCriteriaRow(competencyElementIndex)"
               >
                 <FormATextInput
-                  :name="`add-performance-criteria-input`"
                   v-model="addElementPlaceholderRef"
+                  :name="`add-performance-criteria-input`"
                 />
               </div>
             </template>
@@ -259,12 +259,12 @@
           <CommonMoleculesARow>
             <template #col-left>
               <div
-                @click.prevent="addCompetencyElementRow"
                 :data-testid="`add-competency-element`"
+                @click.prevent="addCompetencyElementRow"
               >
                 <FormATextInput
-                  :name="`add-competency-element-input`"
                   v-model="addElementPlaceholderRef"
+                  :name="`add-competency-element-input`"
                 />
               </div>
             </template>
@@ -273,13 +273,13 @@
       </CommonTemplateAPanel>
       <div class="buttons">
         <FormMoleculesASubmitButton
-          :isSubmitting="isSubmitting"
+          :is-submitting="isSubmitting"
           data-testid="submit-draft-button"
         >
           {{ t('applyModification') }}
         </FormMoleculesASubmitButton>
         <FormMoleculesASubmitButton
-          :isSubmitting="isSubmitting"
+          :is-submitting="isSubmitting"
           data-testid="approve-this-version-button"
         >
           {{ t('approveThisVersion') }}
