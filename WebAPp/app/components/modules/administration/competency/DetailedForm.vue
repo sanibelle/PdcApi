@@ -187,7 +187,6 @@
               </CommonTemplateAComplementaryInformationable>
               <div
                 data-testid="add-realisation-context"
-                :preventDefault="true"
                 @click="addRealisationContextRow"
               >
                 <FormATextInput
