@@ -14,9 +14,9 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
     private readonly AppDbContext _context = context;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<ChangeRecord> AddChangeRecord(ChangeRecord version)
+    public async Task<ChangeRecord> AddChangeRecord(ChangeRecord changeRecord)
     {
-        ChangeRecordEntity changeRecordEntity = _mapper.Map<ChangeRecordEntity>(version);
+        ChangeRecordEntity changeRecordEntity = _mapper.Map<ChangeRecordEntity>(changeRecord);
         EntityEntry<ChangeRecordEntity> entity = await _context.ChangeRecords.AddAsync(changeRecordEntity);
         await _context.SaveChangesAsync();
         return _mapper.Map<ChangeRecord>(entity.Entity);
@@ -53,7 +53,7 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
 
         if (current?.Id == null)
         {
-            throw new NotFoundException(nameof(ChangeRecordEntity) + "ParentVersion Id not found, value is null", changeRecordId);
+            throw new NotFoundException(nameof(ChangeRecordEntity) + "ParentChangeRecord Id not found, value is null", changeRecordId);
         }
         return current.Id.Value;
     }

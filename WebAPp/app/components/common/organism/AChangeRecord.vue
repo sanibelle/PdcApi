@@ -2,7 +2,7 @@
   const { t } = useI18n();
 
   defineProps({
-    versionNumber: {
+    changeRecordNumber: {
       type: Number,
       required: true,
     },
@@ -15,19 +15,19 @@
 
 <template>
   <div
-    class="version-badge"
+    class="changeRecord-badge"
     :class="{ draft: isDraft }"
   >
-    <span class="version-text">v{{ versionNumber }}</span>
+    <span class="changeRecord-text">v{{ changeRecordNumber }}</span>
     <div
       v-if="isDraft"
       class="draft-label"
     >
       {{ t('draft') }}
       <br />
-      <template v-if="versionNumber !== 1">{{ t('notv1') }}</template>
+      <template v-if="changeRecordNumber !== 1">{{ t('notv1') }}</template>
       <div
-        class="version-badge"
+        class="changeRecord-badge"
         :class="{ draft: isDraft }"
       ></div>
     </div>
@@ -54,7 +54,7 @@
 </i18n>
 
 <style scoped>
-  .version-badge {
+  .changeRecord-badge {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
@@ -66,12 +66,12 @@
     font-weight: 500;
   }
 
-  .version-badge.draft {
+  .changeRecord-badge.draft {
     background-color: #fed7aa;
     color: #ea580c;
   }
 
-  .version-text {
+  .changeRecord-text {
     font-weight: 600;
   }
 

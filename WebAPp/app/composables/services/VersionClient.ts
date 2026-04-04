@@ -1,10 +1,10 @@
 import { useApi } from './ApiClient';
 
-export const useVersionClient = () => {
+export const useChangeRecordClient = () => {
   const api = useApi();
-  const publishVersion = async (versionId: string): Promise<void> => {
-    await api.Post(`/versions/${versionId}/publish`, {});
+  const publishChangeRecord = async (changeRecordId: string): Promise<void> => {
+    await api.Post(`/changeRecords/${changeRecordId}/publish`, {});
   };
 
-  return { publishVersion };
+  return { publishChangeRecord };
 };

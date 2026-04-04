@@ -25,25 +25,25 @@
     editMode.value = false;
   };
 
-  const { publishVersion } = useVersionClient();
-  const handlePublishVersion = async () => {
+  const { publishChangeRecord } = useChangeRecordClient();
+  const handlePublishChangeRecord = async () => {
     if (!competency.value) return;
 
     try {
       isSubmitting.value = true;
-      await publishVersion(competency.value.versionId!);
+      await publishChangeRecord(competency.value.changeRecordId!);
       competency.value!.isDraft = false;
-      showPublishVersionModal.close();
+      showPublishChangeRecordModal.close();
     } catch (error) {
-      console.error('Error publishing version:', error);
+      console.error('Error publishing changeRecord:', error);
       console.log('oyooo');
-      alert(t('errorWhenPublishingVersion'));
+      alert(t('errorWhenPublishingChangeRecord'));
     } finally {
       isSubmitting.value = false;
     }
   };
 
-  const showPublishVersionModal = useModal();
+  const showPublishChangeRecordModal = useModal();
 </script>
 
 <template>
@@ -51,9 +51,9 @@
     <h1>
       {{ t('title') }}
     </h1>
-    <CommonOrganismAVersion
-      v-if="competency?.versionNumber"
-      :version-number="competency?.versionNumber"
+    <CommonOrganismAChangeRecord
+      v-if="competency?.changeRecordNumber"
+      :change-record-number="competency?.changeRecordNumber"
       :is-draft="competency?.isDraft"
     />
     <section v-if="competency">
@@ -75,22 +75,22 @@
           </CommonAtomsAButton>
           <CommonAtomsAButton
             :is-submitting="isSubmitting"
-            data-testid="approve-this-version-button"
-            @click="showPublishVersionModal.open()"
+            data-testid="approve-this-change-record-button"
+            @click="showPublishChangeRecordModal.open()"
           >
-            {{ t('publishVersion') }}
+            {{ t('publishChangeRecord') }}
           </CommonAtomsAButton>
         </div>
       </template>
     </section>
     <CommonTemplateAModal
-      v-model="showPublishVersionModal.isOpen.value"
+      v-model="showPublishChangeRecordModal.isOpen.value"
       :title="t('modalTitle')"
       :disable-submit-button="isSubmitting"
       :close-on-confirm="false"
-      @confirm="handlePublishVersion"
+      @confirm="handlePublishChangeRecord"
     >
-      <p>{{ t('approveVersionText') }}</p>
+      <p>{{ t('approveChangeRecordText') }}</p>
     </CommonTemplateAModal>
   </div>
 </template>
@@ -98,12 +98,12 @@
 <i18n lang="json">
 {
   "fr": {
-    "publishVersion": "Publier cette version",
-    "approveVersionText": "En publiant cette version, il ne sera plus possible d'ajouter ou de supprimer d'éléments, seule la modification sera possible.",
+    "publishChangeRecord": "Publier cette version",
+    "approveChangeRecordText": "En publiant cette version, il ne sera plus possible d'ajouter ou de supprimer d'éléments, seule la modification sera possible.",
     "modalTitle": "Publier cette version",
     "title": "Compétences ministérielles",
     "editButton": "Modifier la compétence",
-    "errorWhenPublishingVersion": "Une erreur est survenue lors de la publication de la version. Veuillez réessayer."
+    "errorWhenPublishingChangeRecord": "Une erreur est survenue lors de la publication de la version. Veuillez réessayer."
   }
 }
 </i18n>

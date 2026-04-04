@@ -7,6 +7,6 @@ export type Competency = {
   realisationContexts: RealisationContext[];
   competencyElements: CompetencyElement[];
   isDraft: boolean;
-  versionNumber?: number;
-  versionId?: string;
+  changeRecordNumber?: number;
+  changeRecordId?: string;
 };

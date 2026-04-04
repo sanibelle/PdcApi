@@ -1,7 +1,7 @@
 export type ComplementaryInformation = {
   id?: string;
   text: string;
-  writtenOnVersion?: number;
+  changeRecord?: number;
   createdBy?: User;
   createdOn?: string;
 };
