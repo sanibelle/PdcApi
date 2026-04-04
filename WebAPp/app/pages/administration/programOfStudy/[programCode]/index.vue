@@ -92,7 +92,6 @@
     "createButton": "Ajouter une compétence",
     "backToList": "Retour à la liste",
     "loading": "Chargement...",
-    "programNotFound": "Programme non trouvé",
     "code": "Code",
     "statementOfCompetency": "Énoncé de compétence",
     "monthsDuration": "Durée en mois",

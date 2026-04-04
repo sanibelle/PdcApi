@@ -1,33 +1,46 @@
 <script setup lang="ts">
-const { t } = useI18n();
+  const { t } = useI18n();
 
-const props = defineProps({
+  defineProps({
     versionNumber: {
-        type: Number,
-        required: true,
+      type: Number,
+      required: true,
     },
     isDraft: {
-        type: Boolean,
-        default: false,
+      type: Boolean,
+      default: false,
     },
-});
+  });
 </script>
 
 <template>
-    <div class="version-badge" :class="{ 'draft': isDraft }">
-        <span class="version-text">v{{ versionNumber }}</span>
-        <div v-if="isDraft" class="draft-label">{{ t('draft') }}
-            <br>
-            <template v-if="versionNumber !== 1">{{ t('notv1') }}</template>
-            <div class="version-badge" :class="{ 'draft': isDraft }"></div>
-        </div>
-        <span v-else class="draft-label">{{ t('notdraft') }}
-            <br>
-            {{ t('newVersion') }}
-        </span>
+  <div
+    class="version-badge"
+    :class="{ draft: isDraft }"
+  >
+    <span class="version-text">v{{ versionNumber }}</span>
+    <div
+      v-if="isDraft"
+      class="draft-label"
+    >
+      {{ t('draft') }}
+      <br />
+      <template v-if="versionNumber !== 1">{{ t('notv1') }}</template>
+      <div
+        class="version-badge"
+        :class="{ draft: isDraft }"
+      ></div>
     </div>
+    <span
+      v-else
+      class="draft-label"
+    >
+      {{ t('notdraft') }}
+      <br />
+      {{ t('newVersion') }}
+    </span>
+  </div>
 </template>
-
 
 <i18n>
 {
@@ -41,7 +54,7 @@ const props = defineProps({
 </i18n>
 
 <style scoped>
-.version-badge {
+  .version-badge {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
@@ -51,21 +64,21 @@ const props = defineProps({
     color: #374151;
     font-size: 0.875rem;
     font-weight: 500;
-}
+  }
 
-.version-badge.draft {
+  .version-badge.draft {
     background-color: #fed7aa;
     color: #ea580c;
-}
+  }
 
-.version-text {
+  .version-text {
     font-weight: 600;
-}
+  }
 
-.draft-label {
+  .draft-label {
     font-size: 0.6rem;
     text-transform: uppercase;
     font-style: italic;
     letter-spacing: 0.05em;
-}
+  }
 </style>

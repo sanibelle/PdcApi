@@ -29,7 +29,7 @@ export class ApiClient {
 
   private async SendRequest<T>(url: string, options: InternalOptions): Promise<T | null> {
     const response = await $fetch<T>(this.baseURL + url, {
-      method: options.method as any,
+      method: options.method as 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
       body: options.data ? JSON.stringify(options.data) : undefined,
       credentials: 'include',
       redirect: 'manual',
@@ -69,32 +69,19 @@ export class ApiClient {
     return response as T;
   }
 
-  // GET request
   async Get<T>(url: string, options: Options = {}): Promise<T | null> {
     return this.SendRequest<T>(url, { ...options, method: 'GET' });
   }
 
-  async Post<ResponseData, Payload = ResponseData>(
-    url: string,
-    data: Payload,
-    options: Options = {}
-  ): Promise<ResponseData | null> {
+  async Post<ResponseData, Payload = ResponseData>(url: string, data: Payload, options: Options = {}): Promise<ResponseData | null> {
     return this.SendRequest<ResponseData>(url, { ...options, method: 'POST', data });
   }
 
-  async Put<ResponseData, Payload = ResponseData>(
-    url: string,
-    data: Payload,
-    options: Options = {}
-  ): Promise<ResponseData | null> {
+  async Put<ResponseData, Payload = ResponseData>(url: string, data: Payload, options: Options = {}): Promise<ResponseData | null> {
     return this.SendRequest<ResponseData>(url, { ...options, method: 'PUT', data });
   }
 
-  async Patch<ResponseData, Payload = ResponseData>(
-    url: string,
-    data: Payload,
-    options: Options = {}
-  ): Promise<ResponseData | null> {
+  async Patch<ResponseData, Payload = ResponseData>(url: string, data: Payload, options: Options = {}): Promise<ResponseData | null> {
     return this.SendRequest<ResponseData>(url, { ...options, method: 'PATCH', data });
   }
 

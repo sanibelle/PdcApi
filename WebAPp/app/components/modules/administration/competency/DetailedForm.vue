@@ -277,12 +277,6 @@
         >
           {{ t('applyModification') }}
         </FormMoleculesASubmitButton>
-        <FormMoleculesASubmitButton
-          :is-submitting="isSubmitting"
-          data-testid="approve-this-version-button"
-        >
-          {{ t('approveThisVersion') }}
-        </FormMoleculesASubmitButton>
       </div>
     </form>
   </div>
@@ -303,7 +297,6 @@
     "optionnalCompetency": "Compétence optionnelle",
     "mandatoryCompetency": "Compétence obligatoire",
     "applyModification": "Appliquer les modifications",
-    "approveThisVersion": "Approuver cette version (il ne sera plus possible d'ajouter ou de modifier d'éléments sur cette version, seul la modification sera possible)",
     "addRealisationContext": "Ajouter un contexte de réalisation",
     "addCompetencyElement": "Ajouter un élément de compétence",
     "addPerformanceCriteria": "Ajouter un critère de performance",
