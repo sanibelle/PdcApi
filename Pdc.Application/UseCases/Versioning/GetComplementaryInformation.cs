@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Interfaces.Repositories;
-using Pdc.Domain.Interfaces.UseCases.Version;
+using Pdc.Domain.Interfaces.UseCases.ChangeRecord;
 using Pdc.Domain.Models.Versioning;
 
-namespace Pdc.Application.UseCases.Version;
+namespace Pdc.Application.UseCases.Versioning;
 
 public class GetComplementaryInformation : IGetComplementaryInformationUseCase
 {

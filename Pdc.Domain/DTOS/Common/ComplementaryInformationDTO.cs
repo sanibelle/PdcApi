@@ -6,7 +6,7 @@ public class ComplementaryInformationDTO
     /// <summary>
     /// Version à laquelle l'information a été ajoutée
     /// </summary>
-    public int? WrittenOnVersion { get; set; }
+    public int? ChangeRecordNumber { get; set; }
     public DateTime? ModifiedOn { get; set; }
     public DateTime? CreatedOn { get; set; }
     public UserDTO? CreatedBy { get; set; }

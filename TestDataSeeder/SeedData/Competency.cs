@@ -26,7 +26,7 @@ internal class Competency : ISeeder<CompetencyEntity>
             .WithIsMandatory(false)
             .WithIsOptional(true)
             .WithStatementOfCompetency("Test Statement")
-            .WithCurrentVersion(changeRecord)
+            .WithCurrentChangeRecord(changeRecord)
             .Build();
         await _context.Competencies.AddAsync(_competencyEntity);
 

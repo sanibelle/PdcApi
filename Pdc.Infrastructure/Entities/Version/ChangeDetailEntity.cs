@@ -1,6 +1,6 @@
 ﻿using Pdc.Domain.Enums;
 
-namespace Pdc.Infrastructure.Entities.Versioning;
+namespace Pdc.Infrastructure.Entities.Version;
 
 public class ChangeDetailEntity
 {

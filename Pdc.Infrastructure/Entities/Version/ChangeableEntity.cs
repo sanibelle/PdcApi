@@ -1,6 +1,6 @@
 ﻿using Pdc.Infrastructure.Entities.Visitors;
 
-namespace Pdc.Infrastructure.Entities.Versioning;
+namespace Pdc.Infrastructure.Entities.Version;
 
 public abstract class ChangeableEntity
 {

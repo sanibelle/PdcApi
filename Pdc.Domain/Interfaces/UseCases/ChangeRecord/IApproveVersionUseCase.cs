@@ -1,4 +1,4 @@
-﻿namespace Pdc.Domain.Interfaces.UseCases.Version;
+﻿namespace Pdc.Domain.Interfaces.UseCases.ChangeRecord;
 
 using Pdc.Domain.Models.Versioning;
 

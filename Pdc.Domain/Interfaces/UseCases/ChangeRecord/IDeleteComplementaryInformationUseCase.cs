@@ -1,5 +1,5 @@
 ﻿
-namespace Pdc.Domain.Interfaces.UseCases.Version;
+namespace Pdc.Domain.Interfaces.UseCases.ChangeRecord;
 
 public interface IDeleteComplementaryInformationUseCase
 {

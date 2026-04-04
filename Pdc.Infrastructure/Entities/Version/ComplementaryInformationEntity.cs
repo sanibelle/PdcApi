@@ -1,6 +1,6 @@
 ﻿using Pdc.Infrastructure.Entities.Identity;
 
-namespace Pdc.Infrastructure.Entities.Versioning;
+namespace Pdc.Infrastructure.Entities.Version;
 
 public class ComplementaryInformationEntity
 {
@@ -10,8 +10,8 @@ public class ComplementaryInformationEntity
     /// Version à laquelle l'information a été ajoutée
     /// </summary>
 
-    public Guid? WrittenOnVersionId { get; set; }
-    public virtual ChangeRecordEntity? WrittenOnVersion { get; set; }
+    public Guid? ChangeRecordId { get; set; }
+    public virtual ChangeRecordEntity? ChangeRecord { get; set; }
     public DateTime? ModifiedOn { get; set; }
     public DateTime CreatedOn { get; set; }
     public virtual IdentityUserEntity? CreatedBy { get; set; }

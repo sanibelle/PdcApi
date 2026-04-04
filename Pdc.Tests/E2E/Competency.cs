@@ -151,7 +151,7 @@ public class CompetencyApiTests : ApiTestBase
         updatedCompetency.CompetencyElements.Should().HaveCount(1);
         updatedCompetency.CompetencyElements.First().Id.Should().NotBe(deletedId.ToString());
         updatedCompetency.CompetencyElements.First().ComplementaryInformations.First().CreatedBy.Should().NotBe(null);
-        updatedCompetency.VersionId.Should().NotBe(Guid.Empty);
+        updatedCompetency.ChangeRecordId.Should().NotBe(Guid.Empty);
     }
 
     [Test]
@@ -240,15 +240,15 @@ public class CompetencyApiTests : ApiTestBase
         competencyToCompare.Should().BeEquivalentTo(originalCompetency, options =>
                     options
                     .Excluding(x => x.IsDraft)
-                    .Excluding(x => x.VersionNumber)
-                    .Excluding(x => x.VersionId)
+                    .Excluding(x => x.ChangeRecordNumber)
+                    .Excluding(x => x.ChangeRecordId)
                     .Excluding(x => x.Units)
                     .Excluding(x => x.CompetencyElements)
                     .Excluding(x => x.RealisationContexts));
 
-        Assert.That(competencyToCompare.VersionNumber == 1);
+        Assert.That(competencyToCompare.ChangeRecordNumber == 1);
         Assert.That(competencyToCompare.IsDraft, Is.True);
-        Assert.That(competencyToCompare.VersionId, Is.TypeOf<Guid>());
+        Assert.That(competencyToCompare.ChangeRecordId, Is.TypeOf<Guid>());
         Assert.That(competencyToCompare.Units.Id, Is.TypeOf<Guid>());
 
         foreach (var r in competencyToCompare.RealisationContexts)
@@ -297,14 +297,14 @@ public class CompetencyApiTests : ApiTestBase
         using (Assert.EnterMultipleScope())
         {
             Assert.That(complementaryInformation?.Id != null && complementaryInformation?.Id != Guid.Empty, $"guid is not empty");
-            Assert.That(complementaryInformation?.WrittenOnVersion != null, $"version is not found");
-            complementaryInformation?.WrittenOnVersion.Should().Be(1, "new or update version is always 1");
+            Assert.That(complementaryInformation?.ChangeRecordNumber != null, $"changeRecord is not found");
+            complementaryInformation?.ChangeRecordNumber.Should().Be(1, "new or update changeRecord is always 1");
         }
 
         complementaryInformation.Should().BeEquivalentTo(originalComplementaryInformation, options =>
            options
            .Excluding(x => x.Id)
-           .Excluding(x => x.WrittenOnVersion)
+           .Excluding(x => x.ChangeRecordNumber)
            .Excluding(x => x.CreatedBy)
            .Excluding(x => x.CreatedOn));
         complementaryInformation.CreatedOn.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(30), "CreatedOn should be set to current time");

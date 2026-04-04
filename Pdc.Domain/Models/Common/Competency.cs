@@ -1,10 +1,9 @@
 ﻿using Pdc.Domain.Interfaces.Propagables;
 using Pdc.Domain.Models.Security;
-using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.Common;
 
-public class Competency : IVersionPropagable, ICreatedByPropagable, ICreatedOnPropagable
+public class Competency : IChangeRecordPropagable, ICreatedByPropagable, ICreatedOnPropagable
 {
     /// <summary>
     /// Code unique de la compétence. Ex 00SU
@@ -16,16 +15,16 @@ public class Competency : IVersionPropagable, ICreatedByPropagable, ICreatedOnPr
     public bool IsMandatory { get; set; }
     public bool IsOptional { get; set; }
     public string StatementOfCompetency { get; set; } = "";// Effectuer le déploiement de serveurs intranet
-    public ChangeRecord? CurrentVersion { get; set; }
+    public Versioning.ChangeRecord? ChangeRecord { get; set; }
     public List<RealisationContext> RealisationContexts { get; set; } = new List<RealisationContext>(); // Critères de performance liés à l’ensemble de la compétence
 
-    public virtual void SetVersionOnUntracked(ChangeRecord version)
+    public virtual void SetChangeRecordOnUntracked(Versioning.ChangeRecord changeRecord)
     {
-        if (CurrentVersion == null)
+        if (ChangeRecord == null)
         {
-            CurrentVersion = version;
+            ChangeRecord = changeRecord;
         }
-        RealisationContexts.ForEach(x => x.SetVersionOnUntracked(version));
+        RealisationContexts.ForEach(x => x.SetChangeRecordOnUntracked(changeRecord));
     }
 
     public virtual void SetCreatedByOnUntracked(User user)

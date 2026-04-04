@@ -127,7 +127,7 @@ public class ProgramOfStudyController : ControllerBase
     public async Task<ActionResult<CompetencyDTO>> UpdateCompetency(string programOfStudyCode, string competencyCode, [FromBody] CompetencyDTO updateCompetencyDTO)
     {
         User user = _userControllerService.GetUserFromHttpContext();
-        if (updateCompetencyDTO.VersionNumber == 1 && updateCompetencyDTO.IsDraft)
+        if (updateCompetencyDTO.ChangeRecordNumber == 1 && updateCompetencyDTO.IsDraft)
         {
             CompetencyDTO competency = await _updateDraftV1CompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO, user);
 

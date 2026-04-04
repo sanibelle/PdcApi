@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pdc.Domain.Models.Versioning;
-using Pdc.Infrastructure.Entities.Versioning;
+using Pdc.Infrastructure.Entities.Version;
 
 namespace Pdc.Infrastructure.Repositories;
 

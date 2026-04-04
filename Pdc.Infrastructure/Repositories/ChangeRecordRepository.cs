@@ -5,19 +5,19 @@ using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Data;
-using Pdc.Infrastructure.Entities.Versioning;
+using Pdc.Infrastructure.Entities.Version;
 
 namespace Pdc.Infrastructure.Repositories;
 
-public class VersionRepository(AppDbContext context, IMapper mapper) : IVersionRepository
+public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : IChangeRecordRepository
 {
     private readonly AppDbContext _context = context;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<ChangeRecord> AddVersion(ChangeRecord version)
+    public async Task<ChangeRecord> AddChangeRecord(ChangeRecord version)
     {
-        ChangeRecordEntity versionEntity = _mapper.Map<ChangeRecordEntity>(version);
-        EntityEntry<ChangeRecordEntity> entity = await _context.ChangeRecords.AddAsync(versionEntity);
+        ChangeRecordEntity changeRecordEntity = _mapper.Map<ChangeRecordEntity>(version);
+        EntityEntry<ChangeRecordEntity> entity = await _context.ChangeRecords.AddAsync(changeRecordEntity);
         await _context.SaveChangesAsync();
         return _mapper.Map<ChangeRecord>(entity.Entity);
     }
@@ -36,24 +36,24 @@ public class VersionRepository(AppDbContext context, IMapper mapper) : IVersionR
         return id.Value;
     }
 
-    public async Task<Guid> FindParentByVersionId(Guid versionId)
+    public async Task<Guid> FindParentByChangeRecordId(Guid changeRecordId)
     {
         ChangeRecordEntity current = await _context.ChangeRecords
-            .FirstAsync(x => x.Id == versionId);
+            .FirstAsync(x => x.Id == changeRecordId);
 
         if (current?.Id == null)
         {
-            throw new NotFoundException(nameof(ChangeRecordEntity), versionId);
+            throw new NotFoundException(nameof(ChangeRecordEntity), changeRecordId);
         }
-        while (current.ParentVersionId != null)
+        while (current.ChangeRecordId != null)
         {
             current = await _context.ChangeRecords
-                .FirstAsync(x => x.Id == current.ParentVersionId);
+                .FirstAsync(x => x.Id == current.ChangeRecordId);
         }
 
         if (current?.Id == null)
         {
-            throw new NotFoundException(nameof(ChangeRecordEntity) + "ParentVersion Id not found, value is null", versionId);
+            throw new NotFoundException(nameof(ChangeRecordEntity) + "ParentVersion Id not found, value is null", changeRecordId);
         }
         return current.Id.Value;
     }

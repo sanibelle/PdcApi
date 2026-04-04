@@ -1,10 +1,10 @@
 ﻿using Pdc.Domain.Models.Common;
+using Pdc.Infrastructure.Entities.Version;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
-using Pdc.Infrastructure.Entities.Versioning;
 
 namespace Pdc.Infrastructure.Entities.CourseFramework;
 
-public class CourseFrameworkEntity : VersionableEntity
+public class CourseFrameworkEntity : ChangeRecordableEntity
 {
     public virtual ICollection<CourseFrameworkCompetencyEntity>? CourseFrameworkCompetencies { get; set; }
     public virtual ICollection<CourseFrameworkPerformanceCriteriaEntity>? CourseFrameworkPerformanceCriterias { get; set; }

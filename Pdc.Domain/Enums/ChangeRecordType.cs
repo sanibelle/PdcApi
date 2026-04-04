@@ -1,6 +1,6 @@
 ﻿namespace Pdc.Domain.Enums;
 
-public enum VersionType
+public enum ChangeRecordType
 {
     MasterCoursePlan,
     MinisterialSpecification,

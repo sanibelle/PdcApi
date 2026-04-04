@@ -1,8 +1,8 @@
 ﻿using Pdc.Domain.Interfaces.Repositories;
-using Pdc.Domain.Interfaces.UseCases.Version;
+using Pdc.Domain.Interfaces.UseCases.ChangeRecord;
 using Pdc.Domain.Models.Security;
 
-namespace Pdc.Application.UseCases.Version;
+namespace Pdc.Application.UseCases.Versioning;
 
 public class DeleteComplementaryInformation(IComplementaryInformationRepository complementaryInformationRepository) : IDeleteComplementaryInformationUseCase
 {

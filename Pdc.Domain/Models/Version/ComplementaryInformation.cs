@@ -3,20 +3,20 @@ using Pdc.Domain.Models.Security;
 
 namespace Pdc.Domain.Models.Versioning;
 
-public class ComplementaryInformation : IVersionPropagable, ICreatedByPropagable, ICreatedOnPropagable
+public class ComplementaryInformation : IChangeRecordPropagable, ICreatedByPropagable, ICreatedOnPropagable
 {
     public Guid? Id { get; set; }
     /// <summary>
     /// Version à laquelle l'information a été ajoutée
     /// </summary>
-    public ChangeRecord? WrittenOnVersion { get; set; }
+    public ChangeRecord? WrittenOnChangeRecord { get; set; }
     public DateTime? ModifiedOn { get; set; }
     public DateTime CreatedOn { get; set; }
     public required string Text { get; set; }
     public required User CreatedBy { get; set; }
-    public void SetVersionOnUntracked(ChangeRecord version)
+    public void SetChangeRecordOnUntracked(ChangeRecord version)
     {
-        WrittenOnVersion ??= version;
+        WrittenOnChangeRecord ??= version;
     }
 
     public void SetCreatedByOnUntracked(User user)

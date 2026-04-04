@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Pdc.Infrastructure.Entities.Versioning;
+using Pdc.Infrastructure.Entities.Version;
 namespace Pdc.Infrastructure.Data.Configurations;
 
 public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEntity>
@@ -18,19 +18,19 @@ public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEn
             .HasDefaultValueSql("now()")
             .IsRequired();
 
-        builder.Property(x => x.VersionNumber)
+        builder.Property(x => x.ChangeRecordNumber)
             .IsRequired();
 
         //Not really one to many, but ef needs that
-        builder.HasOne(x => x.ParentVersion)
+        builder.HasOne(x => x.ParentChangeRecord)
             .WithMany()
-            .HasForeignKey(x => x.ParentVersionId);
+            .HasForeignKey(x => x.ChangeRecordId);
         ;
 
         //Not really one to many, but ef needs that
-        builder.HasOne(x => x.NextVersion)
+        builder.HasOne(x => x.NextChangeRecord)
             .WithMany()
-            .HasForeignKey(x => x.NextVersionId);
+            .HasForeignKey(x => x.NextChangeRecordId);
 
         builder.HasOne(x => x.ValidatedBy)
             .WithMany()

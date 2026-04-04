@@ -1,5 +1,5 @@
+using Pdc.Infrastructure.Entities.Version;
 using Pdc.Infrastructure.Entities.Identity;
-using Pdc.Infrastructure.Entities.Versioning;
 
 namespace TestDataSeeder.Builders.Entities;
 
@@ -9,7 +9,7 @@ public class ComplementaryInformationEntityBuilder(ChangeableEntity changeable)
     private string _text = $"This is a test text value {Random.Shared.Next(0, 1000)}";
     private ChangeableEntity? _changeable;
     private DateTime _modifiedOn = new DateTime(2025, 04, 07);
-    private ChangeRecordEntity? _writtenOnVersion;
+    private ChangeRecordEntity? _changeRecord;
     private IdentityUserEntity? _createdBy;
     private DateTime _createdOn = new DateTime(2024, 04, 12);
 
@@ -25,9 +25,9 @@ public class ComplementaryInformationEntityBuilder(ChangeableEntity changeable)
         return this;
     }
 
-    public ComplementaryInformationEntityBuilder WithChangeRecord(ChangeRecordEntity writtenOnVersion)
+    public ComplementaryInformationEntityBuilder WithChangeRecord(ChangeRecordEntity changeRecord)
     {
-        _writtenOnVersion = writtenOnVersion;
+        _changeRecord = changeRecord;
         return this;
     }
 
@@ -51,7 +51,7 @@ public class ComplementaryInformationEntityBuilder(ChangeableEntity changeable)
             Changeable = changeable,
             Text = _text,
             ModifiedOn = _modifiedOn,
-            WrittenOnVersion = _writtenOnVersion,
+            ChangeRecord = _changeRecord,
             CreatedBy = _createdBy,
             CreatedOn = _createdOn,
         };

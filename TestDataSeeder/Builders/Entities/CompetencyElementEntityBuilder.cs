@@ -1,5 +1,5 @@
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
-using Pdc.Infrastructure.Entities.Versioning;
+using Pdc.Infrastructure.Entities.Version;
 
 namespace TestDataSeeder.Builders.Entities;
 
