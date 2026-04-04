@@ -13,11 +13,11 @@ using Pdc.Domain.Enums;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Interfaces.UseCases.Competency;
+using Pdc.Domain.Models.Versioning;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
-using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using TestDataSeeder.Builders.DTOS;
 using TestDataSeeder.Builders.Models;
@@ -118,9 +118,9 @@ public class MinisterialCompetencyTest
             .Build();
 
         _competencyToUpdateV1Draft = new MinisterialCompetencyBuilder()
-            .WithCurrentVersion(
+            .WithCurrentChangeREcord(
                 new ChangeRecordBuilder().WithIsDraft(true)
-                .WithVersionNumber(1)
+                .WithChangeRecordNumber(1)
                 .Build())
             .WithCode("v1draft")
             .WithProgramOfStudyCode("POS1234")
@@ -130,9 +130,9 @@ public class MinisterialCompetencyTest
             .Build();
 
         _competencyToUpdateV1NotDraft = new MinisterialCompetencyBuilder()
-            .WithCurrentVersion(
+            .WithCurrentChangeREcord(
                 new ChangeRecordBuilder().WithIsDraft(false)
-                .WithVersionNumber(1)
+                .WithChangeRecordNumber(1)
                 .Build())
             .WithCode("v1!Draft")
             .WithProgramOfStudyCode("POS1234")
@@ -142,9 +142,9 @@ public class MinisterialCompetencyTest
             .Build();
 
         _competencyToUpdateV2Draft = new MinisterialCompetencyBuilder()
-            .WithCurrentVersion(
+            .WithCurrentChangeREcord(
                 new ChangeRecordBuilder().WithIsDraft(true)
-                .WithVersionNumber(2)
+                .WithChangeRecordNumber(2)
                 .Build())
             .WithCode("v2Draft")
             .WithProgramOfStudyCode("POS1234")
@@ -154,9 +154,9 @@ public class MinisterialCompetencyTest
             .Build();
 
         _competencyToUpdateV2NotDraft = new MinisterialCompetencyBuilder()
-            .WithCurrentVersion(
+            .WithCurrentChangeREcord(
                 new ChangeRecordBuilder().WithIsDraft(false)
-                .WithVersionNumber(2)
+                .WithChangeRecordNumber(2)
                 .Build())
             .WithCode("v2!Draft")
             .WithProgramOfStudyCode("POS1234")
@@ -215,7 +215,7 @@ public class MinisterialCompetencyTest
     {
         var complementaryInformation = new ComplementaryInformationDTOBuilder()
             .WithId(_complementaryInformation.Id)
-            .WithVersionNumber(1)
+            .WithChangeRecordNumber(1)
             .Build();
         var realisationContext = new ChangeableDTOBuilder()
             .AddComplementaryInformation(complementaryInformation)
@@ -243,12 +243,12 @@ public class MinisterialCompetencyTest
         // Assert
         Assert.That(result.Code == _competency2.Code, "Code is returned");
         Assert.That(result.RealisationContexts.First().Id == realisationContext.Id, "RealisationContext is returned");
-        Assert.That(result.RealisationContexts.First()?.ComplementaryInformations?.First().WrittenOnVersion == _changeRecord.VersionNumber, "RealisationContext complementary information version number matches");
+        Assert.That(result.RealisationContexts.First()?.ComplementaryInformations?.First().ChangeRecordNumber == _changeRecord.ChangeRecordNumber, "RealisationContext complementary information changeRecord number matches");
         Assert.That(result.CompetencyElements.First().Id == competencyElement.Id, "competencyElement is returned");
         Assert.That(result.CompetencyElements.First().PerformanceCriterias.First().Id == performanceCriteria.Id, "competencyElement is returned");
         Assert.That(result.CompetencyElements.First()?.ComplementaryInformations?.First().Id == complementaryInformation.Id, "ComplementaryInformation is returned");
         Assert.That(result.CompetencyElements.First().ComplementaryInformations.First().ModifiedOn.HasValue, "ComplementaryInformation ModifiedOn is prsent");
-        Assert.That(result.CompetencyElements.First().ComplementaryInformations.First().WrittenOnVersion == _changeRecord.VersionNumber, "ComplementaryInformation version is returned");
+        Assert.That(result.CompetencyElements.First().ComplementaryInformations.First().ChangeRecordNumber == _changeRecord.ChangeRecordNumber, "ComplementaryInformation changeRecord is returned");
     }
 
     [Test]
@@ -319,7 +319,7 @@ public class MinisterialCompetencyTest
     {
         var complementaryInformation = new ComplementaryInformationDTOBuilder()
             .WithId(_complementaryInformation.Id)
-            .WithVersionNumber(1)
+            .WithChangeRecordNumber(1)
             .Build();
         var realisationContext = new ChangeableDTOBuilder()
             .AddComplementaryInformation(complementaryInformation)
@@ -349,7 +349,7 @@ public class MinisterialCompetencyTest
             .WithCode(_competencyToUpdateV1Draft.Code)
             .Build();
         var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user);
-        Assert.That(result.VersionNumber == 1);
+        Assert.That(result.ChangeRecordNumber == 1);
         _competencyRepositoryMock.Verify(repo => repo.Update(It.IsAny<MinisterialCompetency>()), Times.Once);
     }
 
@@ -362,7 +362,7 @@ public class MinisterialCompetencyTest
             .WithCode(_competencyToUpdateV1Draft.Code)
             .Build();
         var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user);
-        Assert.That(result.VersionNumber == 1, "Updating a draft V1 competency should not create a new version");
+        Assert.That(result.ChangeRecordNumber == 1, "Updating a draft V1 competency should not create a new changeRecord");
     }
 
     [Test]
@@ -401,11 +401,11 @@ public class MinisterialCompetencyTest
                 await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user));
     }
 
-    //TODO gestion de la version. Quand on crée un programme, on crée une nouvelle version
+    //TODO gestion de la changeRecord. Quand on crée un programme, on crée une nouvelle changeRecord
     //TODO validate position exists? plus dans le E2E
-    //TODO ajouter des change details à une version
-    //TODO aller chercher une compétence par version
-    // Avoir un concept de brouillon (change pas de version) et de propre (impossible de modifier, on crée une nouvelle version)
+    //TODO ajouter des change details à une changeRecord
+    //TODO aller chercher une compétence par changeRecord
+    // Avoir un concept de brouillon (change pas de changeRecord) et de propre (impossible de modifier, on crée une nouvelle changeRecord)
 
     //[Test]
     //public async Task DeleteProgramOfStudy_ShouldCallRepositoryDelete()

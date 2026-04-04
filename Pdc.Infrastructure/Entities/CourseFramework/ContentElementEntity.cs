@@ -1,5 +1,5 @@
 ﻿using Pdc.Domain.Enums;
-using Pdc.Infrastructure.Entities.Versioning;
+using Pdc.Infrastructure.Entities.Version;
 using Pdc.Infrastructure.Entities.Visitors;
 
 namespace Pdc.Infrastructure.Entities.CourseFramework;

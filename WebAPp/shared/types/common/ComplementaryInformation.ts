@@ -1,8 +1,12 @@
 export type ComplementaryInformation = {
   id?: string;
   text: string;
-  writtenOnVersion?: number;
-  // TODO fix the DTO or the type for createdBy
+  changeRecord?: number;
   createdBy?: User;
   createdOn?: string;
 };
+
+export type EditableComplementaryInformation = {
+  isInEdit?: boolean;
+  originalText?: string;
+} & ComplementaryInformation;

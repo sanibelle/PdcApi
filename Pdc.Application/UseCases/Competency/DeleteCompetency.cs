@@ -12,7 +12,7 @@ public class DeleteCompetency(ICompetencyRepository competencyRepository) : IDel
         var competency = await _competencyRepository.FindByCode(competencyCode);
         if (!competency.IsDraftAndV1OrNull())
         {
-            throw new InvalidOperationException("Cannot delete a non-draft competency with version greater than 1.");
+            throw new InvalidOperationException("Cannot delete a non-draft competency with change record greater than 1.");
         }
         await _competencyRepository.Delete(programOfStudyCode, competencyCode);
     }

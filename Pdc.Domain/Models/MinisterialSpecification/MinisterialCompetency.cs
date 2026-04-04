@@ -1,6 +1,5 @@
 ﻿using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.Security;
-using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.MinisterialSpecification;
 
@@ -10,11 +9,11 @@ public class MinisterialCompetency : Competency
 
     public bool IsDraftAndV1OrNull()
     {
-        if (CurrentVersion == null)
+        if (ChangeRecord == null)
         {
             return true;
         }
-        return CurrentVersion.IsDraft && CurrentVersion.VersionNumber == 1;
+        return ChangeRecord.IsDraft && ChangeRecord.ChangeRecordNumber == 1;
     }
 
     public override void SetCreatedByOnUntracked(User user)
@@ -23,10 +22,10 @@ public class MinisterialCompetency : Competency
         CompetencyElements.ForEach(x => x.SetCreatedByOnUntracked(user));
     }
 
-    public override void SetVersionOnUntracked(ChangeRecord version)
+    public override void SetChangeRecordOnUntracked(Versioning.ChangeRecord changeRecord)
     {
-        base.SetVersionOnUntracked(version);
-        CompetencyElements.ForEach(x => x.SetVersionOnUntracked(version));
+        base.SetChangeRecordOnUntracked(changeRecord);
+        CompetencyElements.ForEach(x => x.SetChangeRecordOnUntracked(changeRecord));
     }
 
     public override void SetCreatedOnOnUntracked()

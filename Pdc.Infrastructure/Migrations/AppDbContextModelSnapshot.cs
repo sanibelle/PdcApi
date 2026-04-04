@@ -17,7 +17,7 @@ namespace Pdc.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.2")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -185,6 +185,140 @@ namespace Pdc.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.ChangeRecord.ChangeDetailEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ChangeRecordId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ChangeType")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("ChangeableId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("OldValue")
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChangeRecordId");
+
+                    b.HasIndex("ChangeableId");
+
+                    b.ToTable("ChangeDetails");
+                });
+
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.ChangeRecord.ChangeRecordEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ChangeRecordId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ChangeRecordNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
+
+                    b.Property<bool>("IsDraft")
+                        .HasColumnType("boolean");
+
+                    b.Property<Guid?>("NextChangeRecordId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ValidatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("ValidatedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChangeRecordId");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("NextChangeRecordId");
+
+                    b.HasIndex("ValidatedById");
+
+                    b.ToTable("ChangeRecords");
+                });
+
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.ChangeRecord.ChangeableEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Changeables", (string)null);
+
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.ChangeRecord.ComplementaryInformationEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ChangeRecordId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ChangeableId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChangeRecordId");
+
+                    b.HasIndex("ChangeableId");
+
+                    b.HasIndex("CreatedById");
+
+                    b.ToTable("ComplementaryInformations");
+                });
+
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkCompetencyElementEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -260,13 +394,13 @@ namespace Pdc.Infrastructure.Migrations
                     b.Property<string>("CourseCode")
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("ChangeRecordId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("CourseCharacteristics")
                         .IsRequired()
                         .HasMaxLength(5000)
                         .HasColumnType("character varying(5000)");
-
-                    b.Property<Guid?>("CurrentVersionId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("FinalCourseObjective")
                         .IsRequired()
@@ -303,7 +437,7 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.HasKey("CourseCode");
 
-                    b.HasIndex("CurrentVersionId");
+                    b.HasIndex("ChangeRecordId");
 
                     b.HasIndex("UnitsId");
 
@@ -461,7 +595,7 @@ namespace Pdc.Infrastructure.Migrations
                     b.Property<string>("Code")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("CurrentVersionId")
+                    b.Property<Guid?>("ChangeRecordId")
                         .HasColumnType("uuid");
 
                     b.Property<bool>("IsMandatory")
@@ -483,7 +617,7 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.HasKey("Code");
 
-                    b.HasIndex("CurrentVersionId");
+                    b.HasIndex("ChangeRecordId");
 
                     b.HasIndex("ProgramOfStudyCode");
 
@@ -512,143 +646,9 @@ namespace Pdc.Infrastructure.Migrations
                     b.ToTable("Units");
                 });
 
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeDetailEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ChangeRecordId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("ChangeType")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("ChangeableId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("OldValue")
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChangeRecordId");
-
-                    b.HasIndex("ChangeableId");
-
-                    b.ToTable("ChangeDetails");
-                });
-
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CreatedById")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
-
-                    b.Property<bool>("IsDraft")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid?>("NextVersionId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ParentVersionId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ValidatedById")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("ValidatedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("VersionNumber")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("NextVersionId");
-
-                    b.HasIndex("ParentVersionId");
-
-                    b.HasIndex("ValidatedById");
-
-                    b.ToTable("ChangeRecords");
-                });
-
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Changeables", (string)null);
-
-                    b.UseTptMappingStrategy();
-                });
-
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ComplementaryInformationEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ChangeableId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CreatedById")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
-
-                    b.Property<Guid?>("WrittenOnVersionId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChangeableId");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("WrittenOnVersionId");
-
-                    b.ToTable("ComplementaryInformations");
-                });
-
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.ContentElementEntity", b =>
                 {
-                    b.HasBaseType("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity");
+                    b.HasBaseType("Pdc.Infrastructure.Entities.ChangeRecord.ChangeableEntity");
 
                     b.Property<Guid?>("CourseFrameworkPerformanceCriteriaId")
                         .HasColumnType("uuid");
@@ -666,7 +666,7 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", b =>
                 {
-                    b.HasBaseType("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity");
+                    b.HasBaseType("Pdc.Infrastructure.Entities.ChangeRecord.ChangeableEntity");
 
                     b.Property<string>("CompetencyId")
                         .HasColumnType("text");
@@ -681,7 +681,7 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", b =>
                 {
-                    b.HasBaseType("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity");
+                    b.HasBaseType("Pdc.Infrastructure.Entities.ChangeRecord.ChangeableEntity");
 
                     b.Property<Guid?>("CompetencyElementId")
                         .HasColumnType("uuid");
@@ -696,7 +696,7 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.RealisationContextEntity", b =>
                 {
-                    b.HasBaseType("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity");
+                    b.HasBaseType("Pdc.Infrastructure.Entities.ChangeRecord.ChangeableEntity");
 
                     b.Property<string>("CompetencyCode")
                         .HasColumnType("text");
@@ -708,7 +708,7 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("ChangeableEntityCourseFrameworkEntity", b =>
                 {
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", null)
+                    b.HasOne("Pdc.Infrastructure.Entities.ChangeRecord.ChangeableEntity", null)
                         .WithMany()
                         .HasForeignKey("AssedElementsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -787,6 +787,80 @@ namespace Pdc.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.ChangeRecord.ChangeDetailEntity", b =>
+                {
+                    b.HasOne("Pdc.Infrastructure.Entities.ChangeRecord.ChangeRecordEntity", "ChangeRecord")
+                        .WithMany("ChangeDetails")
+                        .HasForeignKey("ChangeRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Pdc.Infrastructure.Entities.ChangeRecord.ChangeableEntity", "Changeable")
+                        .WithMany()
+                        .HasForeignKey("ChangeableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ChangeRecord");
+
+                    b.Navigation("Changeable");
+                });
+
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.ChangeRecord.ChangeRecordEntity", b =>
+                {
+                    b.HasOne("Pdc.Infrastructure.Entities.ChangeRecord.ChangeRecordEntity", "ParentChangeRecord")
+                        .WithMany()
+                        .HasForeignKey("ChangeRecordId");
+
+                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Pdc.Infrastructure.Entities.ChangeRecord.ChangeRecordEntity", "NextChangeRecord")
+                        .WithMany()
+                        .HasForeignKey("NextChangeRecordId");
+
+                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "ValidatedBy")
+                        .WithMany()
+                        .HasForeignKey("ValidatedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("NextChangeRecord");
+
+                    b.Navigation("ParentChangeRecord");
+
+                    b.Navigation("ValidatedBy");
+                });
+
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.ChangeRecord.ComplementaryInformationEntity", b =>
+                {
+                    b.HasOne("Pdc.Infrastructure.Entities.ChangeRecord.ChangeRecordEntity", "ChangeRecord")
+                        .WithMany("ComplementaryInformations")
+                        .HasForeignKey("ChangeRecordId");
+
+                    b.HasOne("Pdc.Infrastructure.Entities.ChangeRecord.ChangeableEntity", "Changeable")
+                        .WithMany("ComplementaryInformations")
+                        .HasForeignKey("ChangeableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ChangeRecord");
+
+                    b.Navigation("Changeable");
+
+                    b.Navigation("CreatedBy");
+                });
+
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkCompetencyElementEntity", b =>
                 {
                     b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", "CompetencyElement")
@@ -825,9 +899,9 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", b =>
                 {
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "CurrentVersion")
+                    b.HasOne("Pdc.Infrastructure.Entities.ChangeRecord.ChangeRecordEntity", "ChangeRecord")
                         .WithMany()
-                        .HasForeignKey("CurrentVersionId");
+                        .HasForeignKey("ChangeRecordId");
 
                     b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "Units")
                         .WithMany()
@@ -856,7 +930,7 @@ namespace Pdc.Infrastructure.Migrations
                                 .HasForeignKey("CourseFrameworkEntityCourseCode");
                         });
 
-                    b.Navigation("CurrentVersion");
+                    b.Navigation("ChangeRecord");
 
                     b.Navigation("Units");
 
@@ -914,9 +988,9 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", b =>
                 {
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "CurrentVersion")
+                    b.HasOne("Pdc.Infrastructure.Entities.ChangeRecord.ChangeRecordEntity", "ChangeRecord")
                         .WithMany()
-                        .HasForeignKey("CurrentVersionId");
+                        .HasForeignKey("ChangeRecordId");
 
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "ProgramOfStudy")
                         .WithMany("Competencies")
@@ -927,85 +1001,11 @@ namespace Pdc.Infrastructure.Migrations
                         .HasForeignKey("UnitsId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("CurrentVersion");
+                    b.Navigation("ChangeRecord");
 
                     b.Navigation("ProgramOfStudy");
 
                     b.Navigation("Units");
-                });
-
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeDetailEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "ChangeRecord")
-                        .WithMany("ChangeDetails")
-                        .HasForeignKey("ChangeRecordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", "Changeable")
-                        .WithMany()
-                        .HasForeignKey("ChangeableId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ChangeRecord");
-
-                    b.Navigation("Changeable");
-                });
-
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "NextVersion")
-                        .WithMany()
-                        .HasForeignKey("NextVersionId");
-
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "ParentVersion")
-                        .WithMany()
-                        .HasForeignKey("ParentVersionId");
-
-                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "ValidatedBy")
-                        .WithMany()
-                        .HasForeignKey("ValidatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("NextVersion");
-
-                    b.Navigation("ParentVersion");
-
-                    b.Navigation("ValidatedBy");
-                });
-
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ComplementaryInformationEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", "Changeable")
-                        .WithMany("ComplementaryInformations")
-                        .HasForeignKey("ChangeableId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", "WrittenOnVersion")
-                        .WithMany("ComplementaryInformations")
-                        .HasForeignKey("WrittenOnVersionId");
-
-                    b.Navigation("Changeable");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("WrittenOnVersion");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.ContentElementEntity", b =>
@@ -1014,7 +1014,7 @@ namespace Pdc.Infrastructure.Migrations
                         .WithMany("ContentElements")
                         .HasForeignKey("CourseFrameworkPerformanceCriteriaId");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", null)
+                    b.HasOne("Pdc.Infrastructure.Entities.ChangeRecord.ChangeableEntity", null)
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ContentElementEntity", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1029,7 +1029,7 @@ namespace Pdc.Infrastructure.Migrations
                         .WithMany("CompetencyElements")
                         .HasForeignKey("CompetencyId");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", null)
+                    b.HasOne("Pdc.Infrastructure.Entities.ChangeRecord.ChangeableEntity", null)
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1044,7 +1044,7 @@ namespace Pdc.Infrastructure.Migrations
                         .WithMany("PerformanceCriterias")
                         .HasForeignKey("CompetencyElementId");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", null)
+                    b.HasOne("Pdc.Infrastructure.Entities.ChangeRecord.ChangeableEntity", null)
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1059,13 +1059,25 @@ namespace Pdc.Infrastructure.Migrations
                         .WithMany("RealisationContexts")
                         .HasForeignKey("CompetencyCode");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", null)
+                    b.HasOne("Pdc.Infrastructure.Entities.ChangeRecord.ChangeableEntity", null)
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.RealisationContextEntity", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Competency");
+                });
+
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.ChangeRecord.ChangeRecordEntity", b =>
+                {
+                    b.Navigation("ChangeDetails");
+
+                    b.Navigation("ComplementaryInformations");
+                });
+
+            modelBuilder.Entity("Pdc.Infrastructure.Entities.ChangeRecord.ChangeableEntity", b =>
+                {
+                    b.Navigation("ComplementaryInformations");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", b =>
@@ -1090,18 +1102,6 @@ namespace Pdc.Infrastructure.Migrations
                     b.Navigation("CompetencyElements");
 
                     b.Navigation("RealisationContexts");
-                });
-
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeRecordEntity", b =>
-                {
-                    b.Navigation("ChangeDetails");
-
-                    b.Navigation("ComplementaryInformations");
-                });
-
-            modelBuilder.Entity("Pdc.Infrastructure.Entities.Versioning.ChangeableEntity", b =>
-                {
-                    b.Navigation("ComplementaryInformations");
                 });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", b =>

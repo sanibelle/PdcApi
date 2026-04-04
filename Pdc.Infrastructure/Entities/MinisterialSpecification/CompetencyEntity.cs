@@ -1,9 +1,9 @@
 ﻿using Pdc.Infrastructure.Entities.CourseFramework;
-using Pdc.Infrastructure.Entities.Versioning;
+using Pdc.Infrastructure.Entities.Version;
 
 namespace Pdc.Infrastructure.Entities.MinisterialSpecification;
 
-public class CompetencyEntity : VersionableEntity
+public class CompetencyEntity : ChangeRecordableEntity
 {
     /// <summary>
     /// Code unique de la compétence. Ex 00SU

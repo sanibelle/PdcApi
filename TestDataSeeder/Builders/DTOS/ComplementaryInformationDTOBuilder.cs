@@ -8,7 +8,7 @@ public class ComplementaryInformationDTOBuilder
     private string _text = "Test DATA";
     private DateTime? _modifiedOn;
     private DateTime? _createdOn;
-    private int? _versionNumber;
+    private int? _changeRecordNumber;
     private UserDTO? _createdBy = null;
 
     public ComplementaryInformationDTOBuilder WithId(Guid? id)
@@ -17,9 +17,9 @@ public class ComplementaryInformationDTOBuilder
         return this;
     }
 
-    public ComplementaryInformationDTOBuilder WithVersionNumber(int versionNumber)
+    public ComplementaryInformationDTOBuilder WithChangeRecordNumber(int changeRecordNumber)
     {
-        _versionNumber = versionNumber;
+        _changeRecordNumber = changeRecordNumber;
         return this;
     }
 
@@ -42,7 +42,7 @@ public class ComplementaryInformationDTOBuilder
             Id = _id,
             Text = _text,
             ModifiedOn = _modifiedOn,
-            WrittenOnVersion = _versionNumber,
+            ChangeRecordNumber = _changeRecordNumber,
             CreatedOn = _createdOn,
             CreatedBy =  _createdBy
         };

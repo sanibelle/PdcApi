@@ -80,6 +80,18 @@
       v-model="model as any"
       @update:error-message="error = $event"
     />
+    <FormAtomsATextAreaInput
+      v-else-if="type === 'textarea'"
+      v-bind="$attrs"
+      :id="inputId"
+      :name="name"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      :rules="rules"
+      v-model="model as any"
+      :focus-on-mount="focusOnMount"
+      @update:error-message="error = $event"
+    />
     <FormAtomsABaseInput
       v-else
       v-bind="$attrs"

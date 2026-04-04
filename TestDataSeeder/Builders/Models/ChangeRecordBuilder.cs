@@ -1,5 +1,5 @@
-using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
+using Pdc.Domain.Models.Security;
 
 namespace TestDataSeeder.Builders.Models;
 
@@ -7,11 +7,11 @@ public class ChangeRecordBuilder
 {
     private Guid _id = Guid.NewGuid();
     private DateTime _createdOn = new DateTime(2024, 04, 01);
-    private int _versionNumber = 1;
+    private int _changeRecordNumber = 1;
     private string _description = "Test description";
     private bool _isDraft = false;
-    private ChangeRecord? _nextVersion = null;
-    private ChangeRecord? _parentVersion = null;
+    private ChangeRecord? _nextChangeRecord = null;
+    private ChangeRecord? _parentChangeRecord = null;
     private User _validatedBy;
     private User _createdBy;
 
@@ -29,9 +29,9 @@ public class ChangeRecordBuilder
         return this;
     }
 
-    public ChangeRecordBuilder WithVersionNumber(int versionNumber)
+    public ChangeRecordBuilder WithChangeRecordNumber(int changeRecordNumber)
     {
-        _versionNumber = versionNumber;
+        _changeRecordNumber = changeRecordNumber;
         return this;
     }
 
@@ -47,15 +47,15 @@ public class ChangeRecordBuilder
         return this;
     }
 
-    public ChangeRecordBuilder WithNextVersion(ChangeRecord nextVersion)
+    public ChangeRecordBuilder WithNextChangeRecord(ChangeRecord nextChangeRecord)
     {
-        _nextVersion = nextVersion;
+        _nextChangeRecord = nextChangeRecord;
         return this;
     }
 
-    public ChangeRecordBuilder WithParentVersion(ChangeRecord parentVersion)
+    public ChangeRecordBuilder WithParentChangeRecord(ChangeRecord parentChangeRecord)
     {
-        _parentVersion = parentVersion;
+        _parentChangeRecord = parentChangeRecord;
         return this;
     }
 
@@ -77,11 +77,11 @@ public class ChangeRecordBuilder
         {
             Id = _id,
             CreatedOn = _createdOn,
-            VersionNumber = _versionNumber,
+            ChangeRecordNumber = _changeRecordNumber,
             Description = _description,
             IsDraft = _isDraft,
-            NextVersion = _nextVersion,
-            ParentVersion = _parentVersion,
+            NextChangeRecord = _nextChangeRecord,
+            ParentChangeRecord = _parentChangeRecord,
             ValidatedBy = _validatedBy
         };
     }

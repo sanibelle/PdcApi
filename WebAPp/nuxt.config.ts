@@ -57,6 +57,7 @@ export default defineNuxtConfig({
     'pinia-plugin-persistedstate/nuxt',
     'nuxt-security',
     '@vee-validate/nuxt',
+    '@nuxt/eslint',
   ],
   runtimeConfig: {
     public: {

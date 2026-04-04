@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pdc.Domain.DTOS.Common;
-using Pdc.Domain.Interfaces.UseCases.Version;
+using Pdc.Domain.Interfaces.UseCases.ChangeRecord;
 using Pdc.Domain.Models.Security;
 using Pdc.WebAPI.Services;
 

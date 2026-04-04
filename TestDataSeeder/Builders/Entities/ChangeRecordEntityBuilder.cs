@@ -1,5 +1,5 @@
+using Pdc.Infrastructure.Entities.Version;
 using Pdc.Infrastructure.Entities.Identity;
-using Pdc.Infrastructure.Entities.Versioning;
 
 namespace TestDataSeeder.Builders.Entities;
 
@@ -12,9 +12,9 @@ public class ChangeRecordEntityBuilder
     private IdentityUserEntity _createdBy = new IdentityUserEntityBuilder().Build();
     private string _description = $"This is a test description value {Random.Shared.Next(0, 1000)}";
     private bool _isDraft = true;
-    private ChangeRecordEntity? _nextVersion = null;
-    private ChangeRecordEntity? _parentVersion = null;
-    private int _versionNumber = 1;
+    private ChangeRecordEntity? _nextChangeRecord = null;
+    private ChangeRecordEntity? _parentChangeRecord = null;
+    private int _changeRecordNumber = 1;
     private IdentityUserEntity _validatedBy = null;
 
     public ChangeRecordEntityBuilder() { }
@@ -67,21 +67,21 @@ public class ChangeRecordEntityBuilder
         return this;
     }
 
-    public ChangeRecordEntityBuilder WithNextVersion(ChangeRecordEntity nextVersion)
+    public ChangeRecordEntityBuilder WithNextChangeRecord(ChangeRecordEntity nextChangeRecord)
     {
-        _nextVersion = nextVersion;
+        _nextChangeRecord = nextChangeRecord;
         return this;
     }
 
-    public ChangeRecordEntityBuilder WithParentVersion(ChangeRecordEntity parentVersion)
+    public ChangeRecordEntityBuilder WithParentChangeRecord(ChangeRecordEntity parentChangeRecord)
     {
-        _parentVersion = parentVersion;
+        _parentChangeRecord = parentChangeRecord;
         return this;
     }
 
-    public ChangeRecordEntityBuilder WithVersionNumber(int versionNumber)
+    public ChangeRecordEntityBuilder WithChangeRecordNumber(int changeRecordNumber)
     {
-        _versionNumber = versionNumber;
+        _changeRecordNumber = changeRecordNumber;
         return this;
     }
 
@@ -107,9 +107,9 @@ public class ChangeRecordEntityBuilder
             CreatedOn = _createdOn,
             Description = _description,
             IsDraft = _isDraft,
-            NextVersion = _nextVersion,
-            ParentVersion = _parentVersion,
-            VersionNumber = _versionNumber,
+            NextChangeRecord = _nextChangeRecord,
+            ParentChangeRecord = _parentChangeRecord,
+            ChangeRecordNumber = _changeRecordNumber,
             ValidatedBy = _validatedBy,
             CreatedBy = _createdBy
         };
