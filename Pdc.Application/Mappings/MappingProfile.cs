@@ -18,11 +18,11 @@ public class MappingProfile : Profile
         CreateMap<ProgramOfStudy, ProgramOfStudyDTO>().ReverseMap();
         // Comptency  
         CreateMap<CompetencyDTO, MinisterialCompetency>()
-            .ForMember(dest => dest.CurrentVersion, opt => opt.Ignore())
+            .ForMember(dest => dest.ChangeRecord, opt => opt.Ignore())
             .ReverseMap()
-            .ForMember(dest => dest.IsDraft, opt => opt.MapFrom(src => src.CurrentVersion != null ? src.CurrentVersion.IsDraft : default))
-            .ForMember(dest => dest.VersionId, opt => opt.MapFrom(src => src.CurrentVersion != null ? src.CurrentVersion.Id : default))
-            .ForMember(dest => dest.VersionNumber, opt => opt.MapFrom(src => src.CurrentVersion != null ? src.CurrentVersion.VersionNumber : (int?)null));
+            .ForMember(dest => dest.IsDraft, opt => opt.MapFrom(src => src.ChangeRecord != null ? src.ChangeRecord.IsDraft : default))
+            .ForMember(dest => dest.ChangeRecordId, opt => opt.MapFrom(src => src.ChangeRecord != null ? src.ChangeRecord.Id : default))
+            .ForMember(dest => dest.ChangeRecordNumber, opt => opt.MapFrom(src => src.ChangeRecord != null ? src.ChangeRecord.ChangeRecordNumber : (int?)null));
         CreateMap<CompetencyElementDTO, MinisterialCompetencyElement>().ReverseMap();
         CreateMap<ChangeableDTO, RealisationContext>().ReverseMap();
         CreateMap<ChangeableDTO, PerformanceCriteria>().ReverseMap();
@@ -35,9 +35,9 @@ public class MappingProfile : Profile
             opt.Condition(src => !string.IsNullOrEmpty(src.CreatedBy?.UserName)); // Only map if source has CreatedBy
             opt.MapFrom(src => src.CreatedBy);
         })
-        .ForMember(dest => dest.WrittenOnVersion, opt => opt.Ignore())
+        .ForMember(dest => dest.WrittenOnChangeRecord, opt => opt.Ignore())
         .PreserveReferences()
         .ReverseMap()
-        .ForMember(dest => dest.WrittenOnVersion, opt => opt.MapFrom(src => src.WrittenOnVersion != null ? src.WrittenOnVersion.VersionNumber : (int?)default));
+        .ForMember(dest => dest.ChangeRecordNumber, opt => opt.MapFrom(src => src.WrittenOnChangeRecord != null ? src.WrittenOnChangeRecord.ChangeRecordNumber : (int?)default));
     }
 }

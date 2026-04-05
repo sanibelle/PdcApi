@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pdc.Domain;
-using Pdc.Infrastructure.Entities.Versioning;
+using Pdc.Infrastructure.Entities.Version;
 namespace Pdc.Infrastructure.Data.Configurations;
 
 public class ChangeableConfiguration : IEntityTypeConfiguration<ChangeableEntity>

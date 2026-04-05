@@ -8,13 +8,13 @@ namespace Pdc.Domain.DTOS.Common;
 public class ChangeRecordDTO
 {
     public Guid? Id { get; set; }
-    public int VersionNumber { get; set; }
+    public int ChangeRecordNumber { get; set; }
     public IEnumerable<ComplementaryInformation>? ComplementaryInformations { get; set; } = [];
     public IEnumerable<ChangeDetail>? ChangeDetails { get; set; } = [];
     public DateTime CreatedOn { get; set; }
     public bool IsDraft { get; set; }
     public string? Description { get; set; }
-    public ChangeRecord? ParentVersion { get; set; }
-    public ChangeRecord? NextVersion { get; set; }
+    public ChangeRecord? ParentChangeRecord { get; set; }
+    public ChangeRecord? NextChangeRecord { get; set; }
     public UserDTO? ValidateBy { get; set; }
 }

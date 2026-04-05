@@ -1,5 +1,5 @@
-using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
+using Pdc.Domain.Models.Security;
 
 namespace TestDataSeeder.Builders.Models;
 
@@ -8,7 +8,7 @@ public class ComplementaryInformationBuilder
     private Guid _id = Guid.NewGuid();
     private string _text = "Test DATA";
     private DateTime _modifiedOn = DateTime.UtcNow;
-    private ChangeRecord? _writtenOnVersion;
+    private ChangeRecord? _writtenOnChangeRecord;
     private User _createdBy = new UserBuilder().Build();
 
     public ComplementaryInformationBuilder WithId(Guid id)
@@ -29,9 +29,9 @@ public class ComplementaryInformationBuilder
         return this;
     }
 
-    public ComplementaryInformationBuilder WithChangeRecord(ChangeRecord writtenOnVersion)
+    public ComplementaryInformationBuilder WithChangeRecord(ChangeRecord changeRecord)
     {
-        _writtenOnVersion = writtenOnVersion;
+        _writtenOnChangeRecord = changeRecord;
         return this;
     }
 
@@ -42,7 +42,7 @@ public class ComplementaryInformationBuilder
             Id = _id,
             Text = _text,
             ModifiedOn = _modifiedOn,
-            WrittenOnVersion = _writtenOnVersion,
+            WrittenOnChangeRecord = _writtenOnChangeRecord,
             CreatedBy = _createdBy,
             CreatedOn = DateTime.UtcNow
         };

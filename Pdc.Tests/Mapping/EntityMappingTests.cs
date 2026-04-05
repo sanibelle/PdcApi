@@ -54,7 +54,7 @@ internal class EntityMappingTests
             .Build();
 
         var user = new User() { Id = Guid.NewGuid() };
-        _ministerialCompetency.SetVersionOnUntracked(new ChangeRecord(user));
+        _ministerialCompetency.SetChangeRecordOnUntracked(new ChangeRecord(user));
         _ministerialCompetency.SetCreatedByOnUntracked(user);
         _ministerialCompetency.SetCreatedOnOnUntracked();
         // Initialize mapper
@@ -82,8 +82,8 @@ internal class EntityMappingTests
 
         // Check that the first element is a ComplementaryInformation
         Assert.That(entity.CompetencyElements[0].ComplementaryInformations[0], Is.InstanceOf<ComplementaryInformation>());
-        Assert.That(entity.CompetencyElements[0].ComplementaryInformations[0].WrittenOnVersion, Is.Not.Null);
-        Assert.That(entity.CompetencyElements[0].ComplementaryInformations[0].WrittenOnVersion, Is.InstanceOf<ChangeRecord>());
+        Assert.That(entity.CompetencyElements[0].ComplementaryInformations[0].WrittenOnChangeRecord, Is.Not.Null);
+        Assert.That(entity.CompetencyElements[0].ComplementaryInformations[0].WrittenOnChangeRecord, Is.InstanceOf<ChangeRecord>());
 
         Assert.That(entity.RealisationContexts, Is.Not.Null);
         Assert.That(entity.RealisationContexts.Count, Is.EqualTo(1));
@@ -91,12 +91,12 @@ internal class EntityMappingTests
 
         // Check that the first element is a ComplementaryInformation
         Assert.That(entity.RealisationContexts[0].ComplementaryInformations[0], Is.InstanceOf<ComplementaryInformation>());
-        Assert.That(entity.RealisationContexts[0].ComplementaryInformations[0].WrittenOnVersion, Is.Not.Null);
-        Assert.That(entity.RealisationContexts[0].ComplementaryInformations[0].WrittenOnVersion, Is.InstanceOf<ChangeRecord>());
+        Assert.That(entity.RealisationContexts[0].ComplementaryInformations[0].WrittenOnChangeRecord, Is.Not.Null);
+        Assert.That(entity.RealisationContexts[0].ComplementaryInformations[0].WrittenOnChangeRecord, Is.InstanceOf<ChangeRecord>());
         // The version is the same object
         Assert.That(
-            entity.RealisationContexts[0].ComplementaryInformations[0].WrittenOnVersion,
-            Is.SameAs(entity.RealisationContexts[0].ComplementaryInformations[0].WrittenOnVersion));
+            entity.RealisationContexts[0].ComplementaryInformations[0].WrittenOnChangeRecord,
+            Is.SameAs(entity.RealisationContexts[0].ComplementaryInformations[0].WrittenOnChangeRecord));
     }
 
     [Test]

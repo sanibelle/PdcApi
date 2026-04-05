@@ -1,0 +1,11 @@
+﻿using Pdc.Infrastructure.Entities.Visitors;
+
+namespace Pdc.Infrastructure.Entities.Version;
+
+public abstract class ChangeableEntity
+{
+    public Guid? Id { get; set; }
+    public required string Value { get; set; }
+    public virtual ICollection<ComplementaryInformationEntity>? ComplementaryInformations { get; set; }
+    public abstract T Accept<T>(IChangeableVisitor<T> visitor);
+}

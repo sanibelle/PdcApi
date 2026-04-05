@@ -1,6 +1,6 @@
+using Pdc.Domain.Models.Versioning;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.MinisterialSpecification;
-using Pdc.Domain.Models.Versioning;
 
 namespace TestDataSeeder.Builders.Models;
 
@@ -14,7 +14,7 @@ public class MinisterialCompetencyBuilder
     private string _statementOfCompetency = "Default Statement";
     private List<RealisationContext> _realisationContexts = new List<RealisationContext>();
     private List<MinisterialCompetencyElement> _competencyElements = new List<MinisterialCompetencyElement>();
-    private ChangeRecord _currentVersion;
+    private ChangeRecord _currentChangeRecord;
 
     public MinisterialCompetencyBuilder() { }
 
@@ -78,9 +78,9 @@ public class MinisterialCompetencyBuilder
         return this;
     }
 
-    public MinisterialCompetencyBuilder WithCurrentVersion(ChangeRecord currentVersion)
+    public MinisterialCompetencyBuilder WithCurrentChangeREcord(ChangeRecord changeRecord)
     {
-        _currentVersion = currentVersion;
+        _currentChangeRecord = changeRecord;
         return this;
     }
 
@@ -96,7 +96,7 @@ public class MinisterialCompetencyBuilder
             StatementOfCompetency = _statementOfCompetency,
             RealisationContexts = _realisationContexts,
             CompetencyElements = _competencyElements,
-            CurrentVersion = _currentVersion
+            ChangeRecord = _currentChangeRecord
         };
     }
 }

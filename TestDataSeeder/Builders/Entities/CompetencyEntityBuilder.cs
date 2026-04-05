@@ -1,6 +1,6 @@
+using Pdc.Infrastructure.Entities.Version;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
-using Pdc.Infrastructure.Entities.Versioning;
 
 namespace TestDataSeeder.Builders.Entities;
 
@@ -14,7 +14,7 @@ public class CompetencyEntityBuilder(ProgramOfStudyEntity programOfStudy)
     private string _statementOfCompetency = "Effectuer le déploiement de serveurs intranet";
     private IList<RealisationContextEntity> _realisationContexts = new List<RealisationContextEntity>();
     private IList<CompetencyElementEntity> _competencyElements = new List<CompetencyElementEntity>();
-    private ChangeRecordEntity? _currentVersion;
+    private ChangeRecordEntity? _changeRecord;
 
     public CompetencyEntityBuilder WithCode(string code)
     {
@@ -76,9 +76,9 @@ public class CompetencyEntityBuilder(ProgramOfStudyEntity programOfStudy)
         return this;
     }
 
-    public CompetencyEntityBuilder WithCurrentVersion(ChangeRecordEntity currentVersion)
+    public CompetencyEntityBuilder WithCurrentChangeRecord(ChangeRecordEntity changeRecord)
     {
-        _currentVersion = currentVersion;
+        _changeRecord = changeRecord;
         return this;
     }
 
@@ -94,7 +94,7 @@ public class CompetencyEntityBuilder(ProgramOfStudyEntity programOfStudy)
             StatementOfCompetency = _statementOfCompetency,
             RealisationContexts = _realisationContexts,
             CompetencyElements = _competencyElements,
-            CurrentVersion = _currentVersion
+            ChangeRecord = _changeRecord
         };
     }
 }

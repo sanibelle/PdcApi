@@ -246,7 +246,7 @@ public class ComplementaryInformation : ApiTestBase
     }
 
     [Test]
-    [Ignore("TODO when the versionning will be implemented, complete this test.")]
+    [Ignore("TODO when the changeRecord will be implemented, complete this test.")]
     public async Task GivenComplementaryInformation_WhenUpdatingWithNewVersion_ThenShouldUpdateTheVersion()
     {
     }
@@ -257,7 +257,7 @@ public class ComplementaryInformation : ApiTestBase
         complementaryInformation.CreatedOn.Should().NotBeNull();
         complementaryInformation.CreatedBy.Should().NotBeNull();
         complementaryInformation.Id.Should().NotBeNull();
-        complementaryInformation.WrittenOnVersion.Should().NotBeNull();
+        complementaryInformation.ChangeRecordNumber.Should().NotBeNull();
     }
 
     private static void ValidatedUpdatedComplementaryInformation(ComplementaryInformationDTO complementaryInformationDTO, ComplementaryInformationDTO? updatedComplementaryInformation)
@@ -266,7 +266,7 @@ public class ComplementaryInformation : ApiTestBase
         updatedComplementaryInformation.Should().BeEquivalentTo(complementaryInformationDTO, options =>
            options
            .Excluding(x => x.Id)
-           .Excluding(x => x.WrittenOnVersion)
+           .Excluding(x => x.ChangeRecordNumber)
            .Excluding(x => x.CreatedOn)
            .Excluding(x => x.ModifiedOn)
            .Excluding(x => x.CreatedBy));
@@ -280,7 +280,7 @@ public class ComplementaryInformation : ApiTestBase
         createdComplementaryInformation.Should().BeEquivalentTo(complementaryInformationDTO, options =>
            options
            .Excluding(x => x.Id)
-           .Excluding(x => x.WrittenOnVersion)
+           .Excluding(x => x.ChangeRecordNumber)
            .Excluding(x => x.CreatedOn)
            .Excluding(x => x.CreatedBy));
 

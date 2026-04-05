@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
-using Pdc.Infrastructure.Entities.Versioning;
+using Pdc.Infrastructure.Entities.Version;
 namespace Pdc.Infrastructure.Data;
 
 public class AppDbContext : IdentityDbContext<IdentityUserEntity, IdentityRole<Guid>, Guid>

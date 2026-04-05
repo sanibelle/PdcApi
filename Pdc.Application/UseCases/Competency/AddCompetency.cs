@@ -32,7 +32,7 @@ public class AddCompetency(ICompetencyRepository competencyRepository,
         await ThrowIfDuplicateCode(programOfStudyCode, createCompetencyDto.Code);
         ProgramOfStudy program = await _programOfStudyRepository.FindByCode(programOfStudyCode);
         MinisterialCompetency competency = _mapper.Map<MinisterialCompetency>(createCompetencyDto);
-        competency.SetVersionOnUntracked(new ChangeRecord(currentUser));
+        competency.SetChangeRecordOnUntracked(new ChangeRecord(currentUser));
         competency.SetCreatedByOnUntracked(currentUser);
         competency.SetCreatedOnOnUntracked();
         MinisterialCompetency savedCompetency = await _competencyRepository.Add(program, competency);

@@ -1,38 +1,37 @@
 <script setup lang="ts">
-const { t } = useI18n();
-const localePath = useLocalePath();
-const route = useRoute();
-const programCode = route.params.programCode as string;
+  const { t } = useI18n();
+  const localePath = useLocalePath();
+  const route = useRoute();
+  const programCode = route.params.programCode as string;
 
-defineI18nRoute({
-  paths: {
-    fr: `/administration/programme/[programCode]`,
-  },
-});
+  defineI18nRoute({
+    paths: {
+      fr: `/administration/programme/[programCode]`,
+    },
+  });
 
-const { fetchProgramByCode } = useProgramOfStudyClient();
-const { fetchCompetencies } = useCompetencyClient();
-const programOfStudy = ref<ProgramOfStudy>();
-const competencies = ref<Competency[]>([]);
+  const { fetchProgramByCode } = useProgramOfStudyClient();
+  const { fetchCompetencies } = useCompetencyClient();
+  const programOfStudy = ref<ProgramOfStudy>();
+  const competencies = ref<Competency[]>([]);
 
-onMounted(async () => {
-  try {
-    programOfStudy.value = await fetchProgramByCode(programCode);
-    competencies.value = await fetchCompetencies(programCode);
-  } catch (e) {
-    console.error(e);
-    alert("ERREUR")
-    // TODO manage error (e.g., show a notification or redirect)
-  }
-});
+  onMounted(async () => {
+    try {
+      programOfStudy.value = await fetchProgramByCode(programCode);
+      competencies.value = await fetchCompetencies(programCode);
+    } catch (e) {
+      console.error(e);
+      // TODO manage error (e.g., show a notification or redirect)
+      alert('ERREUR');
+    }
+  });
 
-const handleSubmitted = async () => {
-  upsertCompetencyModal.close()
-  competencies.value = await fetchCompetencies(programCode);
-};
+  const handleSubmitted = async (competency: Competency) => {
+    competencies.value.unshift(competency);
+    upsertCompetencyModal.close();
+  };
 
-const upsertCompetencyModal = useModal();
-
+  const upsertCompetencyModal = useModal();
 </script>
 
 <template>
@@ -41,8 +40,11 @@ const upsertCompetencyModal = useModal();
   </h1>
   <section>
     <div class="flex-center">
-      <CommonAtomsAButton @click="upsertCompetencyModal.open()" data-testid="create-competency-btn">{{ t('createButton')
-        }}
+      <CommonAtomsAButton
+        data-testid="create-competency-btn"
+        @click="upsertCompetencyModal.open()"
+      >
+        {{ t('createButton') }}
       </CommonAtomsAButton>
     </div>
   </section>
@@ -56,7 +58,11 @@ const upsertCompetencyModal = useModal();
       </tr>
     </thead>
     <tbody>
-      <tr v-for="competency in competencies" :key="competency.code" class="flex-center">
+      <tr
+        v-for="competency in competencies"
+        :key="competency.code"
+        class="flex-center"
+      >
         <td>{{ competency.code }}</td>
         <td>{{ competency.statementOfCompetency }}</td>
         <td>
@@ -67,18 +73,25 @@ const upsertCompetencyModal = useModal();
       </tr>
     </tbody>
   </table>
-  <CommonTemplateAModal v-model="upsertCompetencyModal.isOpen.value" :title="t('title')" :hide-footer="true">
-    <ModulesAdministrationCompetencyMinimalForm @submitted="handleSubmitted" :program-code="programCode" />
+  <CommonTemplateAModal
+    v-model="upsertCompetencyModal.isOpen.value"
+    :title="t('title')"
+    :hide-footer="true"
+  >
+    <ModulesAdministrationCompetencyMinimalForm
+      :program-code="programCode"
+      @submitted="handleSubmitted"
+    />
   </CommonTemplateAModal>
 </template>
 
-<i18n lang="json">{
+<i18n lang="json">
+{
   "fr": {
     "title": "Gestion des compétences ministérielles",
     "createButton": "Ajouter une compétence",
     "backToList": "Retour à la liste",
     "loading": "Chargement...",
-    "programNotFound": "Programme non trouvé",
     "code": "Code",
     "statementOfCompetency": "Énoncé de compétence",
     "monthsDuration": "Durée en mois",
@@ -89,44 +102,45 @@ const upsertCompetencyModal = useModal();
     "noCompetenciesYet": "Aucune compétence ajoutée pour ce programme.",
     "action": "Actions"
   }
-}</i18n>
+}
+</i18n>
 
 <style scoped>
-.back-link {
-  color: #3b82f6;
-  text-decoration: none;
-  font-weight: 500;
-}
+  .back-link {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+  }
 
-.back-link:hover {
-  text-decoration: underline;
-}
+  .back-link:hover {
+    text-decoration: underline;
+  }
 
-.loading,
-.error {
-  padding: 1rem;
-  text-align: center;
-  font-size: 1.1rem;
-}
+  .loading,
+  .error {
+    padding: 1rem;
+    text-align: center;
+    font-size: 1.1rem;
+  }
 
-.error {
-  color: #ef4444;
-}
+  .error {
+    color: #ef4444;
+  }
 
-.program-details {
-  background: #f8fafc;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-top: 1rem;
-}
+  .program-details {
+    background: #f8fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+  }
 
-.detail-item {
-  margin-bottom: 0.75rem;
-  font-size: 1rem;
-}
+  .detail-item {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+  }
 
-.detail-item strong {
-  color: #374151;
-  margin-right: 0.5rem;
-}
+  .detail-item strong {
+    color: #374151;
+    margin-right: 0.5rem;
+  }
 </style>

@@ -10,16 +10,16 @@ using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
-using Pdc.Infrastructure.Entities.Versioning;
+using Pdc.Infrastructure.Entities.Version;
 
 namespace Pdc.Infrastructure.Repositories;
 
-public class CompetencyRepository(AppDbContext context, IComplementaryInformationRepository complementaryInformationRepository, IVersionRepository versionRepository, IMapper mapper, ILogger<CompetencyRepository> _logger) : ICompetencyRepository
+public class CompetencyRepository(AppDbContext context, IComplementaryInformationRepository complementaryInformationRepository, IChangeRecordRepository changeRecordRepository, IMapper mapper, ILogger<CompetencyRepository> _logger) : ICompetencyRepository
 {
     private readonly AppDbContext _context = context;
     private readonly IMapper _mapper = mapper;
     private readonly IComplementaryInformationRepository _complementaryInformationRepository = complementaryInformationRepository;
-    private readonly IVersionRepository _versionRepository = versionRepository;
+    private readonly IChangeRecordRepository _changeRecordRepository = changeRecordRepository;
 
     public async Task<List<MinisterialCompetency>> GetAll()
     {
@@ -33,10 +33,10 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         try
         {
             _logger.LogInformation($"Adding competency with code {competency.Code} to program of study {program.Code}");
-            ChangeRecord version = await _versionRepository.AddVersion(competency.CurrentVersion!);
+            ChangeRecord changeRecord = await _changeRecordRepository.AddChangeRecord(competency.ChangeRecord!);
 
             CompetencyEntity competencyEntity = _mapper.Map<CompetencyEntity>(competency);
-            competencyEntity.CurrentVersionId = version.Id;
+            competencyEntity.ChangeRecordId = changeRecord.Id;
             competencyEntity.ProgramOfStudyCode = program.Code;
 
             _logger.LogInformation($"Mapped competency to entity with code {competencyEntity.Code} for program of study {program.Code}");
@@ -46,15 +46,15 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
 
             foreach (RealisationContext rc in competency.RealisationContexts)
             {
-                await AddRealisationContexts(version, addedCompetencyEntity.Entity, rc);
+                await AddRealisationContexts(changeRecord, addedCompetencyEntity.Entity, rc);
             }
             foreach (MinisterialCompetencyElement ce in competency.CompetencyElements)
             {
-                CompetencyElementEntity addedCompetencyElementEntity = await AddCompetencyElement(version, addedCompetencyEntity.Entity, ce);
+                CompetencyElementEntity addedCompetencyElementEntity = await AddCompetencyElement(changeRecord, addedCompetencyEntity.Entity, ce);
 
                 foreach (PerformanceCriteria pc in ce.PerformanceCriterias)
                 {
-                    await AddPerformanceCriterias(version, addedCompetencyElementEntity, pc);
+                    await AddPerformanceCriterias(changeRecord, addedCompetencyElementEntity, pc);
                 }
             }
             _logger.LogInformation($"Before commit transaction with code {addedCompetencyEntity.Entity.Code} to database for program of study {program.Code}");
@@ -70,7 +70,7 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         }
     }
 
-    private async Task AddPerformanceCriterias(ChangeRecord version, CompetencyElementEntity competencyElementEntity, PerformanceCriteria pc)
+    private async Task AddPerformanceCriterias(ChangeRecord changeRecord, CompetencyElementEntity competencyElementEntity, PerformanceCriteria pc)
     {
         _logger.LogInformation($"Adding performance criteria with position {pc.Position} to competency element with id {competencyElementEntity.Id}");
         PerformanceCriteriaEntity performanceCriteriaEntity = _mapper.Map<PerformanceCriteriaEntity>(pc);
@@ -78,10 +78,10 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         EntityEntry<PerformanceCriteriaEntity> addedPerformanceCriteria = await _context.PerformanceCriterias.AddAsync(performanceCriteriaEntity);
         await _context.SaveChangesAsync();
         _logger.LogInformation($"Added performance criteria with position {pc.Position} to competency element with id {competencyElementEntity.Id}");
-        await UpsertComplementaryInformations(version.Id!.Value, pc.ComplementaryInformations, addedPerformanceCriteria.Entity.Id!.Value);
+        await UpsertComplementaryInformations(changeRecord.Id!.Value, pc.ComplementaryInformations, addedPerformanceCriteria.Entity.Id!.Value);
     }
 
-    private async Task<CompetencyElementEntity> AddCompetencyElement(ChangeRecord version, CompetencyEntity competencyEntity, MinisterialCompetencyElement ce)
+    private async Task<CompetencyElementEntity> AddCompetencyElement(ChangeRecord changeRecord, CompetencyEntity competencyEntity, MinisterialCompetencyElement ce)
     {
         _logger.LogInformation($"Adding competency element with position {ce.Position} to competency with code {competencyEntity.Code}");
         CompetencyElementEntity competencyElementEntity = _mapper.Map<CompetencyElementEntity>(ce);
@@ -89,11 +89,11 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         EntityEntry<CompetencyElementEntity> addedCompetencyElementEntity = await _context.CompetencyElements.AddAsync(competencyElementEntity);
         await _context.SaveChangesAsync();
         _logger.LogInformation($"Added competency element with position {ce.Position} to competency with code {competencyEntity.Code}");
-        await UpsertComplementaryInformations(version.Id!.Value, ce.ComplementaryInformations, addedCompetencyElementEntity.Entity.Id!.Value);
+        await UpsertComplementaryInformations(changeRecord.Id!.Value, ce.ComplementaryInformations, addedCompetencyElementEntity.Entity.Id!.Value);
         return addedCompetencyElementEntity.Entity;
     }
 
-    private async Task AddRealisationContexts(ChangeRecord version, CompetencyEntity competencyEntity, RealisationContext rc)
+    private async Task AddRealisationContexts(ChangeRecord changeRecord, CompetencyEntity competencyEntity, RealisationContext rc)
     {
         _logger.LogInformation($"Adding realisation context to competency with code {competencyEntity.Code}");
         RealisationContextEntity realisationContextEntity = _mapper.Map<RealisationContextEntity>(rc);
@@ -101,7 +101,7 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         EntityEntry<RealisationContextEntity> addedRealisationContextEntity = await _context.RealisationContexts.AddAsync(realisationContextEntity);
         await _context.SaveChangesAsync();
         _logger.LogInformation($"Added realisation context to competency with code {competencyEntity.Code}");
-        await UpsertComplementaryInformations(version.Id!.Value, rc.ComplementaryInformations, addedRealisationContextEntity.Entity.Id!.Value);
+        await UpsertComplementaryInformations(changeRecord.Id!.Value, rc.ComplementaryInformations, addedRealisationContextEntity.Entity.Id!.Value);
     }
 
 
@@ -123,27 +123,27 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
             {
                 if (rc.Id == null)
                 {
-                    await AddRealisationContexts(competency.CurrentVersion!, existingCompetency, rc);
+                    await AddRealisationContexts(competency.ChangeRecord!, existingCompetency, rc);
                 }
                 else
                 {
-                    await UpdateRealisationContexts(competency.CurrentVersion!, rc);
+                    await UpdateRealisationContexts(competency.ChangeRecord!, rc);
                 }
             }
             foreach (MinisterialCompetencyElement ce in competency.CompetencyElements)
             {
                 CompetencyElementEntity updatedCe = ce.Id == null
-                    ? await AddCompetencyElement(competency.CurrentVersion!, existingCompetency, ce)
-                    : await UpdateCompetencyElement(competency.CurrentVersion!, ce);
+                    ? await AddCompetencyElement(competency.ChangeRecord!, existingCompetency, ce)
+                    : await UpdateCompetencyElement(competency.ChangeRecord!, ce);
                 foreach (PerformanceCriteria pc in ce.PerformanceCriterias)
                 {
                     if (pc.Id == null)
                     {
-                        await AddPerformanceCriterias(competency.CurrentVersion!, updatedCe, pc);
+                        await AddPerformanceCriterias(competency.ChangeRecord!, updatedCe, pc);
                     }
                     else
                     {
-                        await UpdatePerformanceCriteria(competency.CurrentVersion!, pc);
+                        await UpdatePerformanceCriteria(competency.ChangeRecord!, pc);
                     }
                 }
             }
@@ -174,11 +174,11 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
                             .ThenInclude(ce => ce.PerformanceCriterias)
                                 .ThenInclude(pc => pc.ComplementaryInformations)
                         .Include(c => c.ProgramOfStudy)
-                        .Include(c => c.CurrentVersion)
+                        .Include(c => c.ChangeRecord)
                         .SingleOrDefaultAsync(x => x.Code == code) ?? throw new NotFoundException(nameof(MinisterialCompetency), code);
     }
 
-    private async Task<CompetencyElementEntity> UpdateCompetencyElement(ChangeRecord version, MinisterialCompetencyElement ce)
+    private async Task<CompetencyElementEntity> UpdateCompetencyElement(ChangeRecord changeRecord, MinisterialCompetencyElement ce)
     {
         _logger.LogInformation($"Updating competency element with id {ce.Id}");
         CompetencyElementEntity ceToUpdate = await _context.CompetencyElements
@@ -189,11 +189,11 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         EntityEntry<CompetencyElementEntity> updatedCompetencyElementEntity = _context.CompetencyElements.Update(ceToUpdate);
         await _context.SaveChangesAsync();
         _logger.LogInformation($"Updated competency element with id {ce.Id}");
-        await UpsertComplementaryInformations(version.Id!.Value, ce.ComplementaryInformations, updatedCompetencyElementEntity.Entity.Id!.Value);
+        await UpsertComplementaryInformations(changeRecord.Id!.Value, ce.ComplementaryInformations, updatedCompetencyElementEntity.Entity.Id!.Value);
         return ceToUpdate;
     }
 
-    private async Task UpdateRealisationContexts(ChangeRecord version, RealisationContext rc)
+    private async Task UpdateRealisationContexts(ChangeRecord changeRecord, RealisationContext rc)
     {
         _logger.LogInformation($"Updating realisation context with id {rc.Id}");
         RealisationContextEntity rcToUpdate = await _context.RealisationContexts
@@ -204,10 +204,10 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         EntityEntry<RealisationContextEntity> updatedRealisationContextEntity = _context.RealisationContexts.Update(rcToUpdate);
         await _context.SaveChangesAsync();
         _logger.LogInformation($"Updated realisation context with id {rc.Id}");
-        await UpsertComplementaryInformations(version.Id!.Value, rc.ComplementaryInformations, updatedRealisationContextEntity.Entity.Id!.Value);
+        await UpsertComplementaryInformations(changeRecord.Id!.Value, rc.ComplementaryInformations, updatedRealisationContextEntity.Entity.Id!.Value);
     }
 
-    private async Task UpdatePerformanceCriteria(ChangeRecord version, PerformanceCriteria pc)
+    private async Task UpdatePerformanceCriteria(ChangeRecord changeRecord, PerformanceCriteria pc)
     {
         _logger.LogInformation($"Updating performance criteria with id {pc.Id}");
         PerformanceCriteriaEntity pcToUpdate = await _context.PerformanceCriterias
@@ -218,22 +218,22 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         EntityEntry<PerformanceCriteriaEntity> updatedPerformanceCriteriaEntity = _context.PerformanceCriterias.Update(pcToUpdate);
         await _context.SaveChangesAsync();
         _logger.LogInformation($"Updated performance criteria with id {pc.Id}");
-        await UpsertComplementaryInformations(version.Id!.Value, pc.ComplementaryInformations, updatedPerformanceCriteriaEntity.Entity.Id!.Value);
+        await UpsertComplementaryInformations(changeRecord.Id!.Value, pc.ComplementaryInformations, updatedPerformanceCriteriaEntity.Entity.Id!.Value);
     }
 
-    private async Task UpsertComplementaryInformations(Guid versionId, ICollection<ComplementaryInformation> complementaryInformations, Guid changeableId)
+    private async Task UpsertComplementaryInformations(Guid changeRecordId, ICollection<ComplementaryInformation> complementaryInformations, Guid changeableId)
     {
         foreach (ComplementaryInformation ci in complementaryInformations)
         {
             if (ci.Id == null)
             {
                 _logger.LogInformation($"Adding complementary information to changeable with id {changeableId}");
-                await _complementaryInformationRepository.Add(ci, versionId, changeableId);
+                await _complementaryInformationRepository.Add(ci, changeRecordId, changeableId);
             }
             else
             {
                 _logger.LogInformation($"Updating complementary information with id {ci.Id} for changeable with id {changeableId}");
-                await _complementaryInformationRepository.Update(ci, versionId);
+                await _complementaryInformationRepository.Update(ci, changeRecordId);
             }
         }
     }
@@ -296,19 +296,19 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
             .AsNoTrackingWithIdentityResolution()
             .Include(c => c.RealisationContexts)
                 .ThenInclude(rc => rc.ComplementaryInformations!)
-                    .ThenInclude(cr => cr.WrittenOnVersion)
+                    .ThenInclude(cr => cr.ChangeRecord)
                         .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.CompetencyElements)
                 .ThenInclude(ce => ce.ComplementaryInformations!)
-                    .ThenInclude(cr => cr.WrittenOnVersion)
+                    .ThenInclude(cr => cr.ChangeRecord)
                         .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.CompetencyElements)
                 .ThenInclude(ce => ce.PerformanceCriterias)
                     .ThenInclude(pc => pc.ComplementaryInformations!)
-                        .ThenInclude(cr => cr.WrittenOnVersion)
+                        .ThenInclude(cr => cr.ChangeRecord)
                             .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.ProgramOfStudy)
-            .Include(c => c.CurrentVersion)
+            .Include(c => c.ChangeRecord)
                 .ThenInclude(v => v!.CreatedBy)
             .SingleOrDefaultAsync(x => x.Code == competencyCode);
         return competency ?? throw new NotFoundException(nameof(MinisterialCompetency), competencyCode);
@@ -318,7 +318,7 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
     {
         List<CompetencyEntity> comps = await _context.Competencies
             .AsNoTracking()
-            .Include(c => c.CurrentVersion)
+            .Include(c => c.ChangeRecord)
                 .ThenInclude(v => v!.CreatedBy)
             .Where(c => c.ProgramOfStudy != null && c.ProgramOfStudy.Code == programOfStudyCode)
             .ToListAsync();

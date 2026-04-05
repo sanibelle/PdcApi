@@ -14,7 +14,7 @@ public class CompetencyDTOBuilder
     private string _statementOfCompetency = "Default Statement";
     private ICollection<ChangeableDTO> _realisationContexts = new List<ChangeableDTO>();
     private ICollection<CompetencyElementDTO> _competencyElements = new List<CompetencyElementDTO>();
-    private int? _versionNumber = null;
+    private int? _changeRecordNumber = null;
 
     public CompetencyDTOBuilder WithCode(string code)
     {
@@ -64,9 +64,9 @@ public class CompetencyDTOBuilder
         return this;
     }
 
-    public CompetencyDTOBuilder WithVersionNumber(int? versionNumber)
+    public CompetencyDTOBuilder WithChangeRecordNumber(int? changeRecordNumber)
     {
-        _versionNumber = versionNumber;
+        _changeRecordNumber = changeRecordNumber;
         return this;
     }
 
@@ -81,7 +81,7 @@ public class CompetencyDTOBuilder
             StatementOfCompetency = _statementOfCompetency,
             RealisationContexts = _realisationContexts,
             CompetencyElements = _competencyElements,
-            VersionNumber = _versionNumber
+            ChangeRecordNumber = _changeRecordNumber
         };
     }
 }

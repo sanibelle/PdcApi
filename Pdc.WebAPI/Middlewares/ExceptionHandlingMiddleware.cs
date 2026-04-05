@@ -49,7 +49,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
             FluentValidation.ValidationException => StatusCodes.Status422UnprocessableEntity,
             NotFoundException => StatusCodes.Status404NotFound,
             DuplicateException => StatusCodes.Status409Conflict,
-            MissingVersionException => StatusCodes.Status400BadRequest,
+            MissingChangeRecordException => StatusCodes.Status400BadRequest,
             AuthException => StatusCodes.Status401Unauthorized,
             UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             ForbiddenException => StatusCodes.Status403Forbidden,

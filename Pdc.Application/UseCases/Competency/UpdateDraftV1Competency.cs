@@ -38,11 +38,11 @@ public class UpdateDraftV1Competency : IUpdateDraftV1CompetencyUseCase
         MinisterialCompetency competencyToUpdate = await _competencyRepository.FindByCode(updateCompetencyDto.Code);
         if (!competencyToUpdate.IsDraftAndV1OrNull())
         {
-            throw new InvalidOperationException("Cannot update a non-draft competency with version greater than 1.");
+            throw new InvalidOperationException("Cannot update a non-draft competency with change record greater than 1.");
         }
         _mapper.Map(updateCompetencyDto, competencyToUpdate);
         // On prend la version actuelle et on l'assigne à tous les objets qui ont une version.
-        competencyToUpdate.SetVersionOnUntracked(competencyToUpdate.CurrentVersion!);
+        competencyToUpdate.SetChangeRecordOnUntracked(competencyToUpdate.ChangeRecord!);
         competencyToUpdate.SetCreatedByOnUntracked(currentUser);
         competencyToUpdate.SetCreatedOnOnUntracked();
         MinisterialCompetency updatedProgramOfStudy = await _competencyRepository.Update(competencyToUpdate);
