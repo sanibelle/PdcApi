@@ -1,39 +1,44 @@
 <script setup lang="ts">
+  const { t } = useI18n();
+  const commentPanel = ref<HTMLDivElement | null>(null);
 
-const { t } = useI18n();
-const commentPanel = ref<HTMLDivElement | null>(null);
+  const observer = ref<MutationObserver | null>(null);
+  const childCount = ref(0);
 
-const observer = ref<MutationObserver | null>(null);
-const childCount = ref(0);
+  onMounted(() => {
+    if (commentPanel.value) {
+      childCount.value = commentPanel.value.childElementCount;
+      observer.value = new MutationObserver(() => {
+        childCount.value = commentPanel.value?.childElementCount ?? 0;
+      });
+      observer.value.observe(commentPanel.value, { childList: true });
+    }
+  });
 
-onMounted(() => {
-  if (commentPanel.value) {
-    childCount.value = commentPanel.value.childElementCount;
-    observer.value = new MutationObserver(() => {
-      childCount.value = commentPanel.value?.childElementCount ?? 0;
-    });
-    observer.value.observe(commentPanel.value, { childList: true });
-  }
-});
+  onUnmounted(() => {
+    observer.value?.disconnect();
+  });
 
-onUnmounted(() => {
-  observer.value?.disconnect();
-});
-
-const isVisible = computed(() => childCount.value > 1);
+  const isVisible = computed(() => childCount.value > 1);
 </script>
 
 <template>
-  <div id="comments-panel" v-show="isVisible" ref="commentPanel">
-    <div class="comments-panel-header">{{t('complementaryInformation')}}</div>
+  <div
+    v-show="isVisible"
+    id="comments-panel"
+    ref="commentPanel"
+  >
+    <div class="comments-panel-header">{{ t('complementaryInformation') }}</div>
   </div>
 </template>
 
-<i18n lang="json">{
+<i18n lang="json">
+{
   "fr": {
     "complementaryInformation": "Informations complémentaires"
   }
-}</i18n>
+}
+</i18n>
 
 <style lang="scss" scoped>
   #comments-panel {

@@ -138,7 +138,7 @@
           <div class="add-comment-actions">
             <FormMoleculesASubmitButton
               :is-submitting="isSubmitting"
-              data-testid="submit-draft-button"
+              data-testid="submit-button"
             >
               {{ t('submit') }}
             </FormMoleculesASubmitButton>

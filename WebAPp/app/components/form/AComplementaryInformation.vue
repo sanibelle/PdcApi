@@ -37,10 +37,10 @@
       :max="1000"
       class="comment-text"
     />
-    <div class="flex-between">
+    <div class="flex">
       <FormMoleculesASubmitButton
         :is-submitting="isSubmitting"
-        data-testid="submit-draft-button"
+        data-testid="submit-button"
       >
         {{ t('submit') }}
       </FormMoleculesASubmitButton>
