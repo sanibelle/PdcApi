@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pdc.Domain.DTOS.Common;
-using Pdc.Domain.Interfaces.UseCases.ChangeRecord;
+using Pdc.Domain.Interfaces.UseCases.Versioning;
 using Pdc.Domain.Models.Security;
 using Pdc.WebAPI.Services;
 
@@ -24,7 +24,7 @@ public class ChangeableController(
         User user = _userControllerService.GetUserFromHttpContext();
         ComplementaryInformationDTO createdComplementaryInformation = await _addComplementaryInformationUseCase.Execute(complementaryInformationDTO, changeableId, user);
         return CreatedAtAction(
-            nameof(ComplementaryInformation.Get),
+            nameof(ComplementaryInformationController.Get),
             controllerName: "ComplementaryInformation",
             new { id = createdComplementaryInformation.Id },
             createdComplementaryInformation);

@@ -4,13 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Pdc.Application.Mappings;
 using Pdc.Application.Services.UserService;
 using Pdc.Application.UseCases;
-using Pdc.Application.UseCases.Versioning;
 using Pdc.Application.UseCases.Competency;
-using Pdc.Domain.Interfaces.UseCases.ChangeRecord;
+using Pdc.Application.UseCases.Versioning;
 using Pdc.Domain.Interfaces.UseCases.Competency;
 using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 using Pdc.Domain.Interfaces.UseCases.Role;
 using Pdc.Domain.Interfaces.UseCases.User;
+using Pdc.Domain.Interfaces.UseCases.Versioning;
 using System.Reflection;
 
 namespace Pdc.Application;
@@ -46,6 +46,8 @@ public static class DependencyInjection
         services.AddScoped<IUpdateComplementaryInformationUseCase, UpdateComplementaryInformation>();
         services.AddScoped<IDeleteComplementaryInformationUseCase, DeleteComplementaryInformation>();
         services.AddScoped<IAddComplementaryInformationUseCase, AddComplementaryInformation>();
+        // ChangeRecord
+        services.AddScoped<IPublishChangeRecordUseCase, PublishChangeRecord>();
 
         services.AddAutoMapper(cfg =>
         {
