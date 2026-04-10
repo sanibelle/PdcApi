@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const authStore = useAuthStore();
+  const authStore = useAuthStore();
 </script>
 
 <template>
@@ -21,30 +21,29 @@ const authStore = useAuthStore();
       </ClientOnly>
     </header>
     <div class="wrapper">
-
-      <!-- Main content slot -->
       <div>
+        <!-- Main content slot -->
         <slot />
       </div>
       <CommonTemplateTheComplementaryInformationsContainer />
     </div>
-
+    <CommonTemplateAModal />
     <footer class="bg-gray-900 text-white py-8">POC semaines plan de cours</footer>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.wrapper {
-  display: flex;
-  align-items: flex-start;
-  gap: 24px;
-  padding: 24px;
-  max-width: 1280px;
-  margin: 0 auto;
-}
+  .wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 24px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
 
-.wrapper > div:first-child {
-  flex: 1;
-  min-width: 0;
-}
+  .wrapper > div:first-child {
+    flex: 1;
+    min-width: 0;
+  }
 </style>

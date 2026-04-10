@@ -1,22 +1,46 @@
-export function useModal() {
-  const isOpen = ref<boolean>(false);
+import type { ModalState } from '~~/shared/types/common/ModalState';
 
-  const open = () => {
-    isOpen.value = true;
+const state = reactive<ModalState>({
+  isOpen: false,
+  isSubmitting: false,
+  options: {},
+});
+
+export function useModal() {
+  const open = (options: GlobalModalOptions = {}) => {
+    Object.assign(state.options, options, {
+      component: options.component ? markRaw(options.component) : undefined,
+    });
+    state.isOpen = true;
   };
 
   const close = () => {
-    isOpen.value = false;
+    state.isOpen = false;
+    state.options.onCancel?.();
   };
 
-  const toggle = () => {
-    isOpen.value = !isOpen.value;
+  const confirm = async () => {
+    if (!state.options.onConfirm) {
+      state.isOpen = false;
+      return;
+    }
+
+    try {
+      state.isSubmitting = true;
+      await state.options.onConfirm();
+      if (state.options.closeOnConfirm !== false) {
+        state.isOpen = false;
+      }
+    } finally {
+      state.isSubmitting = false;
+    }
   };
 
   return {
-    isOpen,
+    // Expose state as readonly for the GlobalModal component
+    state: readonly(state),
     open,
     close,
-    toggle,
+    confirm,
   };
 }

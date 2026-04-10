@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import MinimalForm from '~/components/modules/administration/competency/MinimalForm.vue';
   const { t } = useI18n();
   const localePath = useLocalePath();
   const route = useRoute();
@@ -28,10 +29,22 @@
 
   const handleSubmitted = async (competency: Competency) => {
     competencies.value.unshift(competency);
-    upsertCompetencyModal.close();
+    modal.close();
   };
 
-  const upsertCompetencyModal = useModal();
+  const modal = useModal();
+
+  const handleCreateCompetencyClick = () => {
+    modal.open({
+      title: t('title'),
+      hideFooter: true,
+      component: MinimalForm,
+      componentProps: {
+        programCode,
+        onSubmitted: handleSubmitted,
+      },
+    });
+  };
 </script>
 
 <template>
@@ -42,7 +55,7 @@
     <div class="flex-center">
       <CommonAtomsAButton
         data-testid="create-competency-btn"
-        @click="upsertCompetencyModal.open()"
+        @click="handleCreateCompetencyClick"
       >
         {{ t('createButton') }}
       </CommonAtomsAButton>
@@ -73,16 +86,6 @@
       </tr>
     </tbody>
   </table>
-  <CommonTemplateAModal
-    v-model="upsertCompetencyModal.isOpen.value"
-    :title="t('title')"
-    :hide-footer="true"
-  >
-    <ModulesAdministrationCompetencyMinimalForm
-      :program-code="programCode"
-      @submitted="handleSubmitted"
-    />
-  </CommonTemplateAModal>
 </template>
 
 <i18n lang="json">

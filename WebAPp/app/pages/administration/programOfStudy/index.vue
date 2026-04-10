@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import TheForm from '~/components/modules/administration/programOfStudy/Form.vue';
   const { t } = useI18n();
   defineI18nRoute({
     paths: {
@@ -17,10 +18,21 @@
 
   const handleSubmitted = (programOfStudy: ProgramOfStudy) => {
     programsOfStudy.value.unshift(programOfStudy);
-    upsertProgramOfStudyModal.close();
+    modal.close();
   };
 
-  const upsertProgramOfStudyModal = useModal();
+  const modal = useModal();
+
+  const handleCreateNewProgramOfStudyClick = () => {
+    modal.open({
+      title: t('createButton'),
+      hideFooter: true,
+      component: TheForm,
+      componentProps: {
+        onSubmitted: handleSubmitted,
+      },
+    });
+  };
 </script>
 
 <template>
@@ -30,8 +42,8 @@
   <section>
     <div class="flex-center">
       <CommonAtomsAButton
-        @click="upsertProgramOfStudyModal.open()"
         id="create-program-btn"
+        @click="handleCreateNewProgramOfStudyClick"
       >
         {{ t('createButton') }}
       </CommonAtomsAButton>
@@ -60,14 +72,6 @@
       </tr>
     </tbody>
   </table>
-
-  <CommonTemplateAModal
-    v-model="upsertProgramOfStudyModal.isOpen.value"
-    :title="t('title')"
-    :hide-footer="true"
-  >
-    <ModulesAdministrationProgramOfStudyForm @submitted="handleSubmitted" />
-  </CommonTemplateAModal>
 </template>
 
 <i18n lang="json">
