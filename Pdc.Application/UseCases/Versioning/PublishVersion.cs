@@ -15,7 +15,7 @@ public class PublishChangeRecord(IChangeRecordRepository changeRecordRepository,
         ChangeRecord changeRecord = await changeRecordRepository.FindById(changeRecordId);
         if (changeRecord.IsDraft == false)
         {
-            throw new InvalidOperationException("Only change records that are not drafts can be published.");
+            throw new InvalidOperationException("Only draft change records can be published.");
         }
         changeRecord = await changeRecordRepository.Publish(changeRecordId);
         return mapper.Map<ChangeRecordDTO>(changeRecord);
