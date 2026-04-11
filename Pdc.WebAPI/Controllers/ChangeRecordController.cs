@@ -18,5 +18,4 @@ public class ChangeRecordController(
         ChangeRecordDTO changeRecord = await publishChangeRecordUseCase.Execute(changeRecordId);
         return Ok(changeRecord);
     }
-    }
 }
