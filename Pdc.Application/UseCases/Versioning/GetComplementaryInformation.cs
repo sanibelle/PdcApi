@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Interfaces.Repositories;
-using Pdc.Domain.Interfaces.UseCases.ChangeRecord;
+using Pdc.Domain.Interfaces.UseCases.Versioning;
 using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Application.UseCases.Versioning;

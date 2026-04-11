@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pdc.Domain.DTOS.Common;
-using Pdc.Domain.Interfaces.UseCases.ChangeRecord;
+using Pdc.Domain.Interfaces.UseCases.Versioning;
 using Pdc.Domain.Models.Security;
 using Pdc.WebAPI.Services;
 
@@ -10,7 +10,7 @@ namespace Pdc.WebAPI.Controllers;
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]
-public class ComplementaryInformation(
+public class ComplementaryInformationController(
                         IDeleteComplementaryInformationUseCase deleteComplementaryInformationUseCase,
                         IUpdateComplementaryInformationUseCase updateComplementaryInformationUseCase,
                         IGetComplementaryInformationUseCase getComplementaryInformationUseCase,

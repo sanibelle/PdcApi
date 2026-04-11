@@ -25,6 +25,24 @@
     editMode.value = false;
   };
 
+  const handleMinorEditClick = () => {
+    alert("Fonctionnalité à implémenter : permettre la modification mineure d'une version approuvée (ex : corriger les fautes de frappe).");
+  };
+
+  const handleCreateNewDraftClick = () => {
+    alert('TODO');
+  };
+
+  const modal = useModal();
+  const handleOpenPublishModal = () => {
+    modal.open({
+      title: t('modalTitle'),
+      content: t('approveChangeRecordText'),
+      confirmLabel: t('publishChangeRecord'),
+      onConfirm: handlePublishChangeRecord,
+    });
+  };
+
   const { publishChangeRecord } = useChangeRecordClient();
   const handlePublishChangeRecord = async () => {
     if (!competency.value) return;
@@ -33,7 +51,7 @@
       isSubmitting.value = true;
       await publishChangeRecord(competency.value.changeRecordId!);
       competency.value!.isDraft = false;
-      showPublishChangeRecordModal.close();
+      modal.close();
     } catch (error) {
       console.error('Error publishing changeRecord:', error);
       console.log('oyooo');
@@ -42,8 +60,6 @@
       isSubmitting.value = false;
     }
   };
-
-  const showPublishChangeRecordModal = useModal();
 </script>
 
 <template>
@@ -66,7 +82,10 @@
       </template>
       <template v-else>
         <ModulesAdministrationCompetencyDetailed :competency="competency" />
-        <div class="flex">
+        <div
+          v-if="competency.isDraft"
+          class="flex"
+        >
           <CommonAtomsAButton
             data-testid="edit-button"
             @click="editMode = true"
@@ -76,9 +95,27 @@
           <CommonAtomsAButton
             :is-submitting="isSubmitting"
             data-testid="approve-this-change-record-button"
-            @click="showPublishChangeRecordModal.open()"
+            @click="handleOpenPublishModal()"
           >
             {{ t('publishChangeRecord') }}
+          </CommonAtomsAButton>
+        </div>
+        <div
+          v-else
+          class="flex"
+        >
+          <CommonAtomsAButton
+            data-testid="minor-edit-button"
+            @click="handleMinorEditClick()"
+          >
+            {{ t('minorEditButton') }}
+          </CommonAtomsAButton>
+          <CommonAtomsAButton
+            :is-submitting="isSubmitting"
+            data-testid="create-new-draft-button"
+            @click="handleCreateNewDraftClick()"
+          >
+            {{ t('createANewDraft') }}
           </CommonAtomsAButton>
         </div>
       </template>
@@ -99,8 +136,10 @@
 {
   "fr": {
     "publishChangeRecord": "Publier cette version",
+    "minorEditButton": "Effectuer une correction mineure",
     "approveChangeRecordText": "En publiant cette version, il ne sera plus possible d'ajouter ou de supprimer d'éléments, seule la modification sera possible.",
     "modalTitle": "Publier cette version",
+    "createANewDraft": "Créer une nouvelle version",
     "title": "Compétences ministérielles",
     "editButton": "Modifier la compétence",
     "errorWhenPublishingChangeRecord": "Une erreur est survenue lors de la publication de la version. Veuillez réessayer."

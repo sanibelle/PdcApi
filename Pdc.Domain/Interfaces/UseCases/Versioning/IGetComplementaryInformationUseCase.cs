@@ -1,4 +1,4 @@
-﻿namespace Pdc.Domain.Interfaces.UseCases.ChangeRecord;
+﻿namespace Pdc.Domain.Interfaces.UseCases.Versioning;
 
 using Pdc.Domain.DTOS.Common;
 

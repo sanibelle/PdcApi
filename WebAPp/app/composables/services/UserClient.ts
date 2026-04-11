@@ -5,7 +5,7 @@ export const useUserClient = () => {
     const api = useApi();
     const user = await api.Get<User>('/Auth/profile');
     if (user === null) {
-      throw new Error('User not found or not authenticated');
+      throw new NotFoundException('User not found or not authenticated');
     }
     return user;
   };
@@ -14,7 +14,7 @@ export const useUserClient = () => {
     const api = useApi();
     const users = await api.Get<User[]>('/user');
     if (users === null) {
-      throw new Error('Users not found or not authenticated');
+      throw new NotFoundException('Users not found or not authenticated');
     }
     return users;
   };

@@ -1,86 +1,58 @@
 <script setup lang="ts">
   import '~/assets/css/form.css';
 
+  const { state, close, confirm } = useModal();
   const { t } = useI18n();
-  const props = defineProps({
-    title: {
-      type: String,
-      default: 'Modal',
-    },
-    closeOnOverlayClick: {
-      type: Boolean,
-      default: false,
-    },
-    hideFooter: {
-      type: Boolean,
-      default: false,
-    },
-    disableSubmitButton: {
-      type: Boolean,
-      default: false,
-    },
-    closeOnConfirm: {
-      type: Boolean,
-      default: true,
-    },
-  });
-
-  const model = defineModel<boolean>({
-    required: true,
-  });
-
-  const emit = defineEmits(['confirm']);
-
-  const confirm = () => {
-    emit('confirm');
-    model.value = !props.closeOnConfirm;
-  };
 </script>
 
 <template>
   <Teleport to="body">
     <Transition name="modal">
       <div
-        v-if="model"
+        v-if="state.isOpen"
         class="modal-overlay"
-        @click="model = !closeOnOverlayClick"
       >
         <div
           class="modal"
           @click.stop
         >
+          <!-- Header -->
           <div class="modal-header">
-            <slot name="header">
-              <h3>{{ title }}</h3>
-            </slot>
+            <h3>{{ state.options.title ?? t('confirm') }}</h3>
             <button
               class="close-button"
-              @click="model = false"
+              @click="close"
             >
               ×
             </button>
           </div>
+
+          <!-- Body: dynamic component OR plain text -->
           <div class="modal-body">
-            <slot />
+            <component
+              :is="state.options.component"
+              v-if="state.options.component"
+              v-bind="state.options.componentProps"
+            />
+            <p v-else-if="state.options.content">
+              {{ state.options.content }}
+            </p>
           </div>
+
+          <!-- Footer -->
           <div
-            v-if="!hideFooter"
+            v-if="!state.options.hideFooter"
             class="modal-footer"
           >
-            <slot name="footer">
-              <CommonAtomsAButton
-                class="modal-button"
-                @click="model = false"
-              >
-                {{ t('cancel') }}
-              </CommonAtomsAButton>
-              <FormMoleculesASubmitButton
-                :is-submitting="disableSubmitButton"
-                @click="confirm"
-              >
-                {{ t('confirm') }}
-              </FormMoleculesASubmitButton>
-            </slot>
+            <CommonAtomsAButton @click="close">
+              {{ state.options.cancelLabel ?? t('cancel') }}
+            </CommonAtomsAButton>
+            <FormMoleculesASubmitButton
+              :is-submitting="state.isSubmitting"
+              @click="confirm"
+            >
+              {{ state.options.confirmLabel ?? t('confirm') }}
+            </FormMoleculesASubmitButton>
           </div>
         </div>
       </div>

@@ -22,6 +22,16 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
         return _mapper.Map<ChangeRecord>(entity.Entity);
     }
 
+    public async Task<ChangeRecord> FindById(Guid changeRecordId)
+    {
+        ChangeRecordEntity? changeRecord = await FindEntityById(changeRecordId);
+        if (changeRecord == null)
+        {
+            throw new NotFoundException(nameof(ChangeRecordEntity), changeRecordId);
+        }
+        return _mapper.Map<ChangeRecord>(changeRecord);
+    }
+
     public async Task<Guid> FindCreatedById(Guid complementaryInformationId)
     {
         Guid? id = await _context.ComplementaryInformations
@@ -58,4 +68,22 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
         return current.Id.Value;
     }
 
+    public async Task<ChangeRecord> Publish(Guid changeRecordId)
+    {
+        ChangeRecordEntity? changeRecord = await FindEntityById(changeRecordId);
+        if (changeRecord == null)
+        {
+            throw new NotFoundException(nameof(ChangeRecordEntity), changeRecordId);
+        }
+        changeRecord.IsDraft = false;
+        _context.Update(changeRecord);
+        await _context.SaveChangesAsync();
+        return _mapper.Map<ChangeRecord>(changeRecord);
+    }
+
+    private async Task<ChangeRecordEntity?> FindEntityById(Guid changeRecordId)
+    {
+        return await _context.ChangeRecords.SingleOrDefaultAsync(x => x.Id == changeRecordId);
+
+    }
 }

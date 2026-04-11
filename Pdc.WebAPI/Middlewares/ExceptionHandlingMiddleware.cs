@@ -15,16 +15,11 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
         }
         catch (Exception ex)
         {
-            var status = GetStatusCode(ex);
-            if (status >= 500)
-                _logger.LogError(ex, "Unhandled exception.");
-            else
-                _logger.LogWarning(ex, "Handled exception with status {Status}.", status);
             await HandleExceptionAsync(context, ex);
         }
     }
 
-    private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var statusCode = GetStatusCode(exception);
         var env = context.RequestServices.GetRequiredService<IHostEnvironment>();
@@ -34,13 +29,16 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
             message = exception.Message,
             detail = env.IsDevelopment() ? exception.StackTrace : null
         };
-
+        if (statusCode >= 500)
+            _logger.LogError(exception, "Unhandled exception.");
+        else
+            _logger.LogWarning(exception, "Handled exception with status {Status}.", statusCode);
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;
         await context.Response.WriteAsJsonAsync(response);
     }
 
-    private static int GetStatusCode(Exception exception)
+    private int GetStatusCode(Exception exception)
     {
         // TODO log not managed exception
         return exception switch

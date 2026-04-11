@@ -1,5 +1,4 @@
-﻿// TODO $$$$ Payer fluent assertion
-using FluentAssertions;
+﻿using FluentAssertions;
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
 using Pdc.Application.Validators;

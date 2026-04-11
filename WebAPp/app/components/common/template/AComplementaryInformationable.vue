@@ -170,6 +170,8 @@
             <div class="comment-meta">
               <div class="comment-author">{{ truncateText(complementaryInformation.createdBy?.userName, 20) || t('unknownUser') }}</div>
               <div class="comment-date">
+                <div class="comment-version">V{{ complementaryInformation.changeRecordNumber }}</div>
+                -
                 <CommonMoleculesADate :date="complementaryInformation.createdOn" />
               </div>
             </div>
@@ -417,6 +419,7 @@
     }
 
     .comment-date {
+      display: flex;
       font-size: 0.6rem;
       color: #999;
       margin-bottom: 5px;

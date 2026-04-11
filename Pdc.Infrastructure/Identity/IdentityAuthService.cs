@@ -32,7 +32,7 @@ public class IdentityAuthService : IAuthService
     public async Task<User> GetCurrentUserAsync()
     {
         ClaimsPrincipal? user = _httpContextAccessor.HttpContext?.User;
-        if (user == null || !user.Identity?.IsAuthenticated == true)
+        if (user == null || user.Identity?.IsAuthenticated != true)
         {
             throw new NotFoundException(nameof(IdentityUserEntity), "current user not found");
         }
@@ -61,7 +61,7 @@ public class IdentityAuthService : IAuthService
     public async Task<bool> IsInRoleAsync(string role)
     {
         var user = _httpContextAccessor.HttpContext?.User;
-        if (user == null || !user.Identity?.IsAuthenticated == false)
+        if (user == null || user.Identity?.IsAuthenticated != true)
             return false;
 
         var userId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new Exception("userId is null");
@@ -84,5 +84,7 @@ public class IdentityAuthService : IAuthService
     {
         var identityUser = await _userManager.FindByIdAsync(userId) ?? throw new NotFoundException(nameof(IdentityUserEntity), userId);
         var result = await _userManager.AddToRoleAsync(identityUser, role);
+        if (!result.Succeeded)
+            throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
     }
 }

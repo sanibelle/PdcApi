@@ -1,5 +1,5 @@
 ﻿using Pdc.Domain.Interfaces.Repositories;
-using Pdc.Domain.Interfaces.UseCases.ChangeRecord;
+using Pdc.Domain.Interfaces.UseCases.Versioning;
 using Pdc.Domain.Models.Security;
 
 namespace Pdc.Application.UseCases.Versioning;

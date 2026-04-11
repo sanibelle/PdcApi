@@ -246,9 +246,30 @@ public class ComplementaryInformation : ApiTestBase
     }
 
     [Test]
-    [Ignore("TODO when the changeRecord will be implemented, complete this test.")]
     public async Task GivenComplementaryInformation_WhenUpdatingWithNewVersion_ThenShouldUpdateTheVersion()
     {
+        // 1frst, create a complementary information
+        CompetencyElementEntity competencyElement = DataSeeder.CompetencyEntity.CompetencyElements.First();
+        ComplementaryInformationDTO complementaryInformationDTO = new ComplementaryInformationDTOBuilder()
+            .WithText("This is the v1 text")
+            .Build();
+        var createResponse = await _Client.PostAsJsonAsync($"/api/changeable/{competencyElement.Id}/complementaryInformation", complementaryInformationDTO);
+        createResponse.EnsureSuccessStatusCode();
+        var createdComplementaryInformation = await createResponse.Content.ReadFromJsonAsync<ComplementaryInformationDTO>();
+        createdComplementaryInformation.Should().NotBeNull();
+        createdComplementaryInformation.ChangeRecordNumber.Equals(1);
+
+        // publish the version
+        Guid changeRecordId = DataSeeder.CompetencyEntity.ChangeRecord.Id!.Value;
+        var publishResponse = await _Client.PostAsync($"/api/changeRecord/publish/{changeRecordId}", null);
+        publishResponse.EnsureSuccessStatusCode();
+
+        complementaryInformationDTO.Text = "This is the updated text for v2";
+        var updateResponse = await _Client.PutAsJsonAsync($"/api/complementaryInformation/{createdComplementaryInformation.Id}", complementaryInformationDTO);
+        createResponse.EnsureSuccessStatusCode();
+        var updatedComplementaryInformation = await updateResponse.Content.ReadFromJsonAsync<ComplementaryInformationDTO>();
+        updatedComplementaryInformation.Should().NotBeNull();
+        updatedComplementaryInformation.ChangeRecordNumber.Equals(2);
     }
 
     private static void ValidatedComplementaryInformation(ComplementaryInformationDTO? complementaryInformation)
