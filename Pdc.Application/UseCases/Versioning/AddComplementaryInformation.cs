@@ -4,7 +4,7 @@ using FluentValidation.Results;
 using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
-using Pdc.Domain.Interfaces.UseCases.Versioning;
+using Pdc.Domain.Interfaces.UseCases.ChangeRecord;
 using Pdc.Domain.Models.Security;
 using Pdc.Domain.Models.Versioning;
 

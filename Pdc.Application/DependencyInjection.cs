@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Pdc.Application.Mappings;
 using Pdc.Application.Services.UserService;
 using Pdc.Application.UseCases;
+using Pdc.Application.UseCases.Versioning;
 using Pdc.Application.UseCases.Competency;
 using Pdc.Application.UseCases.Versioning;
 using Pdc.Domain.Interfaces.UseCases.Competency;
