@@ -7,11 +7,6 @@ export const useAuthStore = defineStore(
 
     const isAuthenticated = computed(() => user.value !== null);
 
-    const login = async () => {
-      // fetchUser should redirect to login page if not authenticated
-      user.value = await fetchUser();
-    };
-
     const authenticate = async () => {
       user.value = await fetchUser();
     };
@@ -24,7 +19,6 @@ export const useAuthStore = defineStore(
     return {
       user,
       isAuthenticated,
-      login,
       logout,
       authenticate,
     };
@@ -33,5 +27,5 @@ export const useAuthStore = defineStore(
     persist: {
       storage: piniaPluginPersistedstate.sessionStorage(),
     },
-  }
+  },
 );

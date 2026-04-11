@@ -1,5 +1,8 @@
 <script setup lang="ts">
   const authStore = useAuthStore();
+  onMounted(async () => {
+    await authStore.authenticate();
+  });
 </script>
 
 <template>
@@ -15,7 +18,7 @@
             <button @click="authStore.logout">Logout</button>
           </div>
           <div v-else>
-            <button @click="authStore.login">Login</button>
+            <button @click="authStore.authenticate">Login</button>
           </div>
         </div>
       </ClientOnly>

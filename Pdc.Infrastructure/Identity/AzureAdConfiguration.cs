@@ -85,6 +85,7 @@ public static class AzureAdConfiguration
                 {
                     // Synchroniser l'utilisateur avec Identity mais sans exposer ces détails
                     await SynchronizeAzureAdUser(context);
+                    await UpdateClaims(context);
                 },
                 OnAuthorizationCodeReceived = context =>
                 {
@@ -102,6 +103,28 @@ public static class AzureAdConfiguration
 
         services.AddHttpContextAccessor();
         return services;
+    }
+
+    // When the login happends, Azure already set all the claims to my token. I need to create a new one with just my own informations.
+    private static async Task UpdateClaims(TokenValidatedContext context)
+    {
+        var userManager = context.HttpContext.RequestServices
+            .GetRequiredService<UserManager<IdentityUserEntity>>();
+
+        var objectId = context.Principal!.FindFirstValue(AzureAdClaimTypes.ObjectId)!;
+        var user = await userManager.FindByLoginAsync("AzureAD", objectId);
+        var roles = await userManager.GetRolesAsync(user!);
+
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, user!.Id.ToString()),
+            new(ClaimTypes.Email, user.Email!),
+            new(ClaimTypes.Name, user.UserName!),
+        };
+        claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        context.Principal = new ClaimsPrincipal(identity);
     }
 
     private static async Task SynchronizeAzureAdUser(TokenValidatedContext context)

@@ -16,7 +16,7 @@
     try {
       const updatedItem = await updateComplementaryInformation(complementaryInformation.value!);
       complementaryInformation.value!.text = updatedItem.text;
-      complementaryInformation.value!.changeRecord = updatedItem.changeRecord;
+      complementaryInformation.value!.changeRecordNumber = updatedItem.changeRecordNumber;
       complementaryInformation.value!.isInEdit = false;
     } catch (error) {
       alert(t('errorWhenUpdatingComplementaryInformation'));
