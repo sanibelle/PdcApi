@@ -13,9 +13,10 @@ public class ChangeRecordController(
                         IPublishChangeRecordUseCase publishChangeRecordUseCase) : ControllerBase
 {
     [HttpPost("publish/{changeRecordId}")]
-    public async Task<ActionResult<ComplementaryInformationDTO>> Publish(Guid changeRecordId)
+    public async Task<ActionResult<ChangeRecordDTO>> Publish(Guid changeRecordId)
     {
         ChangeRecordDTO changeRecord = await publishChangeRecordUseCase.Execute(changeRecordId);
         return Ok(changeRecord);
+    }
     }
 }
