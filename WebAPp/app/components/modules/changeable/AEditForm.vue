@@ -55,7 +55,7 @@
 <i18n lang="json">
 {
   "fr": {
-    "title": "Cette modifcation ne sera pas suivie par le système de suivi des changements.",
+    "title": "Cette modification ne sera pas suivie par le système de suivi des changements.",
     "errorWhenUpdatingchangeable": "Une erreur est survenue lors de la mise à jour.",
     "cancel": "Annuler",
     "submit": "Mettre à jour"
