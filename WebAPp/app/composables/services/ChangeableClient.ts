@@ -1,11 +1,11 @@
 import { useApi } from './ApiClient';
 
 export const useChangeableClient = () => {
-  const updateChangeable = async (id: string, changteable: Changeable): Promise<Changeable> => {
+  const updateChangeable = async (id: string, changeableInput: Changeable): Promise<Changeable> => {
     const api = useApi();
     const changeable: Changeable = {
-      value: changteable.value,
-      id: changteable.id,
+      value: changeableInput.value,
+      id: changeableInput.id,
     };
     const updatedChangeable = await api.Put<Changeable>(`/changeable/${id}`, changeable);
 
