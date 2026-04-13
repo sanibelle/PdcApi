@@ -241,16 +241,16 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
 
     private async Task RemoveDeletedElements(MinisterialCompetency competency, CompetencyEntity existingCompetency)
     {
-        (List<ChangeableEntity> realisationContextToDelete, List<ComplementaryInformationEntity> realisationContextComplementaryInformationsToDelete) = RepoUtils.FindMissingAChangeableAndComplementaryInformationsForDeletion([.. competency.RealisationContexts.Cast<AChangeable>()], [.. existingCompetency.RealisationContexts.Cast<ChangeableEntity>()]);
+        (List<ChangeableEntity> realisationContextToDelete, List<ComplementaryInformationEntity> realisationContextComplementaryInformationsToDelete) = RepoUtils.FindMissingAChangeableAndComplementaryInformationsForDeletion([.. competency.RealisationContexts.Cast<Changeable>()], [.. existingCompetency.RealisationContexts.Cast<ChangeableEntity>()]);
         _logger.LogInformation($"Found {realisationContextToDelete.Count} realisation contexts to delete for competency with code {competency.Code} with ids ${string.Join(",", realisationContextToDelete.Select(x => x.Id))}");
         _context.RealisationContexts.RemoveRange(realisationContextToDelete.Cast<RealisationContextEntity>().ToList());
 
-        (List<ChangeableEntity> competencyElementsToDelete, List<ComplementaryInformationEntity> competencyElementsComplementaryInformationsToDelete) = RepoUtils.FindMissingAChangeableAndComplementaryInformationsForDeletion([.. competency.CompetencyElements.Cast<AChangeable>()], [.. existingCompetency.CompetencyElements.Cast<ChangeableEntity>()]);
+        (List<ChangeableEntity> competencyElementsToDelete, List<ComplementaryInformationEntity> competencyElementsComplementaryInformationsToDelete) = RepoUtils.FindMissingAChangeableAndComplementaryInformationsForDeletion([.. competency.CompetencyElements.Cast<Changeable>()], [.. existingCompetency.CompetencyElements.Cast<ChangeableEntity>()]);
         _logger.LogInformation($"Found {competencyElementsToDelete.Count} competency elements to delete for competency with code {competency.Code} with ids ${string.Join(",", competencyElementsToDelete.Select(x => x.Id))}");
         _context.CompetencyElements.RemoveRange(competencyElementsToDelete.Cast<CompetencyElementEntity>().ToList());
 
 
-        (List<ChangeableEntity> performanceCriteriasToDelete, List<ComplementaryInformationEntity> performanceCriteriasComplementaryInformationsToDelete) = RepoUtils.FindMissingAChangeableAndComplementaryInformationsForDeletion([.. competency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<AChangeable>()], [.. existingCompetency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<ChangeableEntity>()]);
+        (List<ChangeableEntity> performanceCriteriasToDelete, List<ComplementaryInformationEntity> performanceCriteriasComplementaryInformationsToDelete) = RepoUtils.FindMissingAChangeableAndComplementaryInformationsForDeletion([.. competency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<Changeable>()], [.. existingCompetency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<ChangeableEntity>()]);
         _logger.LogInformation($"Found {performanceCriteriasToDelete.Count} performance criteria to delete for competency with code {competency.Code} with ids ${string.Join(",", performanceCriteriasToDelete.Select(x => x.Id))}");
         _context.PerformanceCriterias.RemoveRange(performanceCriteriasToDelete.Cast<PerformanceCriteriaEntity>().ToList());
 

@@ -115,11 +115,14 @@
       "
       @mouseleave="isHovered = false"
     >
-      <span
-        v-if="!isViewOnly"
-        class="add-comment-btn"
-        @click="handleShowFormClick"
-      ></span>
+      <div class="icon-row">
+        <span
+          v-if="!isViewOnly"
+          class="add-comment-btn"
+          @click="handleShowFormClick"
+        ></span>
+        <slot name="action-btn"></slot>
+      </div>
       <slot></slot>
       <Transition name="slide-fade">
         <form
@@ -177,18 +180,14 @@
             </div>
             <!-- // TODO reutiliser le funky close button -->
             <template v-if="!isViewOnly && !complementaryInformation.isInEdit">
-              <button
+              <CommonMoleculesADeleteButton
                 class="btn-delete"
                 @click="onDeleteClick(complementaryInformation.id)"
-              >
-                ✕
-              </button>
-              <button
+              />
+              <CommonMoleculesAEditButton
                 class="btn-edit"
                 @click="showComplementaryInformationEditForm(complementaryInformation)"
-              >
-                ✎
-              </button>
+              />
             </template>
           </div>
           <FormAComplementaryInformation
@@ -312,33 +311,40 @@
   .commentable {
     position: relative;
 
-    &:hover .add-comment-btn {
+    &:hover .icon-row {
       opacity: 1;
     }
   }
 
-  .add-comment-btn {
+  .icon-row {
+    display: flex;
     position: absolute;
     top: 10px;
     right: 0px;
+    opacity: 0;
     transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+    & > * {
+      margin-left: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  }
+
+  .add-comment-btn {
     background: #e6b230;
     border: none;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
     transition:
       opacity 0.15s ease,
       transform 0.15s ease;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 
     &:hover {
-      transform: translateY(-50%) scale(1.1);
+      transform: translateY(-15%);
     }
 
     &::before {
@@ -433,33 +439,11 @@
     .btn-delete {
       opacity: 0;
       transition: opacity 0.15s ease;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 2px 4px;
-      border-radius: 3px;
-      line-height: 1;
-
-      &:hover {
-        color: #c0392b;
-        background: #fdecea;
-      }
     }
 
     .btn-edit {
       opacity: 0;
       transition: opacity 0.15s ease;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 2px 4px;
-      border-radius: 3px;
-      line-height: 1;
-
-      &:hover {
-        color: #c0392b;
-        background: #fdecea;
-      }
     }
   }
 </style>

@@ -48,6 +48,8 @@ public static class DependencyInjection
         services.AddScoped<IAddComplementaryInformationUseCase, AddComplementaryInformation>();
         // ChangeRecord
         services.AddScoped<IPublishChangeRecordUseCase, PublishChangeRecord>();
+        //Changeable
+        services.AddScoped<IUpdateChangeableUseCase, UpdateChangeable>();
 
         services.AddAutoMapper(cfg =>
         {
