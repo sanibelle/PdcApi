@@ -6,7 +6,7 @@ namespace Pdc.Infrastructure.Repositories;
 
 internal static class RepoUtils
 {
-    static internal (List<ChangeableEntity>, List<ComplementaryInformationEntity>) FindMissingAChangeableAndComplementaryInformationsForDeletion(List<Changeable> listWithMissing, List<ChangeableEntity> listToCompare)
+    static internal (List<ChangeableEntity>, List<ComplementaryInformationEntity>) FindMissingChangeableAndComplementaryInformationsForDeletion(List<Changeable> listWithMissing, List<ChangeableEntity> listToCompare)
     {
         var changeableToDelete = listToCompare
             .Where(x => !listWithMissing
