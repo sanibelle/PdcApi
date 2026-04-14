@@ -3,7 +3,7 @@ using Pdc.Domain.Enums;
 
 namespace Pdc.Domain.Models.Common;
 
-public class ContentElement : AChangeable
+public class ContentElement : Changeable
 {
     public TeachedLevelType TeachedLevel { get; set; }
 

@@ -45,10 +45,10 @@ public class CourseFramework
     ///    </item>
     ///    <item>
     ///        <term>Du texte</term>
-    ///        <definition><see cref="AChangeable"/></definition>
+    ///        <definition><see cref="Changeable"/></definition>
     ///    </item>
     ///</list>
     /// </summary>
-    public required IEnumerable<AChangeable> AssedElements { get; set; }
+    public required IEnumerable<Changeable> AssedElements { get; set; }
 }
 

@@ -2,6 +2,6 @@
 
 namespace Pdc.Domain.Models.Common;
 
-public class RealisationContext : AChangeable
+public class RealisationContext : Changeable
 {
 }

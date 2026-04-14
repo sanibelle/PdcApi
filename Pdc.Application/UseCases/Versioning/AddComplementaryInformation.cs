@@ -25,7 +25,7 @@ public class AddComplementaryInformation(IComplementaryInformationRepository com
         }
         if (!await _complementaryInformationRepository.ChangeableExists(changeableId))
         {
-            throw new NotFoundException(nameof(AChangeable), changeableId);
+            throw new NotFoundException(nameof(Changeable), changeableId);
         }
         ComplementaryInformation complementaryInformation = _mapper.Map<ComplementaryInformation>(complementaryInformationDTO);
         complementaryInformation.SetCreatedOnOnUntracked();

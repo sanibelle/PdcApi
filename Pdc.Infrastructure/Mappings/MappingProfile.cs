@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using Pdc.Domain.Models.Versioning;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
-using Pdc.Infrastructure.Entities.Version;
+using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
+using Pdc.Infrastructure.Entities.Version;
 
 namespace Pdc.Infrastructure.Mappings;
 
@@ -33,7 +33,7 @@ public class MappingProfile : Profile
             .ReverseMap()
             .PreserveReferences();
 
-        CreateMap<AChangeable, ChangeableEntity>()
+        CreateMap<Changeable, ChangeableEntity>()
             .PreserveReferences()
             .ReverseMap()
             .PreserveReferences();

@@ -120,15 +120,6 @@
         </div>
       </template>
     </section>
-    <CommonTemplateAModal
-      v-model="showPublishChangeRecordModal.isOpen.value"
-      :title="t('modalTitle')"
-      :disable-submit-button="isSubmitting"
-      :close-on-confirm="false"
-      @confirm="handlePublishChangeRecord"
-    >
-      <p>{{ t('approveChangeRecordText') }}</p>
-    </CommonTemplateAModal>
   </div>
 </template>
 
