@@ -12,7 +12,7 @@
 <template>
   <button
     :disabled="isDisabled"
-    class="btn-edit"
+    class="btn-delete"
     @click="emit('click', $event)"
   >
     ✕
@@ -20,7 +20,7 @@
 </template>
 
 <style lang="scss" scoped>
-  .btn-edit {
+  .btn-delete {
     transition: opacity 0.15s ease;
     background: none;
     border: none;
