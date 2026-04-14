@@ -19,6 +19,7 @@ public class UpdateChangeable(IChangeableRepository changeableRepository, IValid
         }
         Changeable changeableToUpdate = await changeableRepository.FindById(changeableId);
         mapper.Map(changeableDTO, changeableToUpdate);
+        changeableToUpdate.Id = changeableId;
         Changeable updatedChangeable = await changeableRepository.Update(changeableToUpdate);
         return mapper.Map<ChangeableDTO>(updatedChangeable);
     }

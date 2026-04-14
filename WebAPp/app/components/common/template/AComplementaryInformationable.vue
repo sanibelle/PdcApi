@@ -311,7 +311,8 @@
   .commentable {
     position: relative;
 
-    &:hover .icon-row {
+    &:hover .icon-row,
+    &:focus-within .icon-row {
       opacity: 1;
     }
   }
@@ -343,7 +344,8 @@
       transform 0.15s ease;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 
-    &:hover {
+    &:hover,
+    &:focus-within .icon-row {
       transform: translateY(-15%);
     }
 
@@ -398,10 +400,12 @@
 
     .comment-entry {
       padding: 5px 6px;
-      &:hover .btn-delete {
+      &:hover .btn-delete,
+      &:focus-within .icon-row {
         opacity: 1;
       }
-      &:hover .btn-edit {
+      &:hover .btn-edit,
+      &:focus-within .icon-row {
         opacity: 1;
       }
     }
