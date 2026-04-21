@@ -1,5 +1,6 @@
 ﻿using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.Security;
+using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.MinisterialSpecification;
 
@@ -14,6 +15,15 @@ public class MinisterialCompetency : Competency
             return true;
         }
         return ChangeRecord.IsDraft && ChangeRecord.ChangeRecordNumber == 1;
+    }
+
+    public bool IsLatestVersion()
+    {
+        if (ChangeRecord == null)
+        {
+            return false;
+        }
+        return ChangeRecord.NextChangeRecord != null;
     }
 
     public override void SetCreatedByOnUntracked(User user)
@@ -32,5 +42,12 @@ public class MinisterialCompetency : Competency
     {
         base.SetCreatedOnOnUntracked();
         CompetencyElements.ForEach(x => x.SetCreatedOnOnUntracked());
+    }
+
+    public override void RemoveDeletedChangeables(List<Guid> changeableIdsToDelete)
+    {
+        base.RemoveDeletedChangeables(changeableIdsToDelete);
+        CompetencyElements = CompetencyElements.Where(x => !changeableIdsToDelete.Contains(x.Id!.Value)).ToList();
+        CompetencyElements.ForEach(x => x.RemoveDeletedChangeables(changeableIdsToDelete));
     }
 }

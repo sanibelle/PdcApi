@@ -47,10 +47,5 @@ public class UpdateDraftV1Competency : IUpdateDraftV1CompetencyUseCase
         competencyToUpdate.SetCreatedOnOnUntracked();
         MinisterialCompetency updatedProgramOfStudy = await _competencyRepository.Update(competencyToUpdate);
         return _mapper.Map<CompetencyDTO>(updatedProgramOfStudy);
-
-        // TODO
-        // Si la compétence est en V1 et draft, on update sans tracker
-        // Un autre use case pour les changements mineurs en !IsDraft. Normalement, comme un changeable a toujours sa valeur la plus à jour, il ne devrait pas y avoir de problème à faire des updates mineurs.
-        // Finalement, si on fait des updates majeurs sur une version 1+, on track les changements de vn à vn+1.
     }
 }

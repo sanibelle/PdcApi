@@ -17,7 +17,22 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
     public async Task<ChangeRecord> AddChangeRecord(ChangeRecord changeRecord)
     {
         ChangeRecordEntity changeRecordEntity = _mapper.Map<ChangeRecordEntity>(changeRecord);
+        ChangeRecordEntity? parentChangeRecord = null;
+        // getting the parent first.
+        if (changeRecordEntity.ParentChangeRecord?.Id != null)
+        {
+            parentChangeRecord = await FindEntityById(changeRecordEntity.ParentChangeRecord.Id.Value);
+        }
+        if (parentChangeRecord != null)
+        {
+            changeRecordEntity.ParentChangeRecord = parentChangeRecord;
+
+        }
         EntityEntry<ChangeRecordEntity> entity = await _context.ChangeRecords.AddAsync(changeRecordEntity);
+        if (parentChangeRecord != null)
+        {
+            parentChangeRecord.NextChangeRecord = entity.Entity;
+        }
         await _context.SaveChangesAsync();
         return _mapper.Map<ChangeRecord>(entity.Entity);
     }

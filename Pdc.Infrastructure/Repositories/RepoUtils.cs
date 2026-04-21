@@ -6,11 +6,13 @@ namespace Pdc.Infrastructure.Repositories;
 
 internal static class RepoUtils
 {
+    //TODO éventuellement déléguer cette logique dans les classes ciblées par cette logique
     static internal (List<ChangeableEntity>, List<ComplementaryInformationEntity>) FindMissingChangeableAndComplementaryInformationsForDeletion(List<Changeable> listWithMissing, List<ChangeableEntity> listToCompare)
     {
         var changeableToDelete = listToCompare
             .Where(x => !listWithMissing
-                .Select(y => y.Id).Contains(x.Id))
+                .Select(y => y.Id)
+                .Contains(x.Id))
             .ToList();
 
         // Gets all the complementary informations to delete that are not handled  by the cascade delete.

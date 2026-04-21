@@ -45,6 +45,7 @@ public static class DependencyInjection
         services.AddScoped<IComplementaryInformationRepository, ComplementaryInformationRepository>();
         services.AddScoped<IChangeRecordRepository, ChangeRecordRepository>();
         services.AddScoped<IChangeableRepository, ChangeableRepository>();
+        services.AddScoped<IChangeDetailsRepository, ChangeDetailsRepository>();
 
         services.AddAutoMapper((serviceProvider, automapper) =>
         {

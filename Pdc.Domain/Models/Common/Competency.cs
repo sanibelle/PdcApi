@@ -1,9 +1,10 @@
 ﻿using Pdc.Domain.Interfaces.Propagables;
+using Pdc.Domain.Interfaces.Versioning;
 using Pdc.Domain.Models.Security;
 
 namespace Pdc.Domain.Models.Common;
 
-public class Competency : IChangeRecordPropagable, ICreatedByPropagable, ICreatedOnPropagable
+public class Competency : IChangeRecordPropagable, ICreatedByPropagable, ICreatedOnPropagable, IChangeablesContainer
 {
     /// <summary>
     /// Code unique de la compétence. Ex 00SU
@@ -35,5 +36,10 @@ public class Competency : IChangeRecordPropagable, ICreatedByPropagable, ICreate
     public virtual void SetCreatedOnOnUntracked()
     {
         RealisationContexts.ForEach(x => x.SetCreatedOnOnUntracked());
+    }
+
+    public virtual void RemoveDeletedChangeables(List<Guid> changeableIdsToDelete)
+    {
+        RealisationContexts = RealisationContexts.Where(x => !changeableIdsToDelete.Contains(x.Id!.Value)).ToList();
     }
 }

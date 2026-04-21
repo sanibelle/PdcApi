@@ -13,11 +13,11 @@ using Pdc.Domain.Enums;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Interfaces.UseCases.Competency;
-using Pdc.Domain.Models.Versioning;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
 using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Domain.Models.Security;
+using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using TestDataSeeder.Builders.DTOS;
 using TestDataSeeder.Builders.Models;
@@ -33,6 +33,7 @@ public class MinisterialCompetencyTest
     //// Competency use cases
     IAddCompetencyUseCase _createCompetencyUseCase;
     IUpdateDraftV1CompetencyUseCase _updateDraftV1CompetencyUseCase;
+    IUpdatePublishedCompetencyUseCase _updateDraftCompetencyUseCase;
     // TODO tester la methode GET
     //IGetCompetencyUseCase _getCompetencyUseCase;
     //IDeleteCompetencyUseCase _deleteCompetencyUseCase;

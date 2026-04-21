@@ -5,8 +5,9 @@ namespace Pdc.Infrastructure.Entities.Version;
 public class ChangeDetailEntity
 {
     public Guid? Id { get; set; }
-    public required virtual ChangeRecordEntity ChangeRecord { get; set; }
-    public required virtual ChangeableEntity Changeable { get; set; }
+    public required Guid ChangeRecordId { get; set; }
+    public virtual ChangeRecordEntity? ChangeRecord { get; set; }
+    public virtual ChangeableEntity? Changeable { get; set; }
     public required ChangeType ChangeType { get; set; }
     /// <summary>
     /// Holds the old value of the property when updated or deleted.
@@ -14,5 +15,3 @@ public class ChangeDetailEntity
     public string? OldValue { get; set; }
 
 }
-//TODO quand je vais tester. Un delete après un update devrait montrer la version initiale (pas l'entre deux)
-// voir le diagramme UML pour comprendre.AncientValue : "Valeur initiale"

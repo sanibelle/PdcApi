@@ -82,40 +82,20 @@
       </template>
       <template v-else>
         <ModulesAdministrationCompetencyDetailed :competency="competency" />
-        <div
-          v-if="competency.isDraft"
-          class="flex"
-        >
+        <div class="flex">
           <CommonAtomsAButton
             data-testid="edit-button"
             @click="editMode = true"
           >
-            {{ t('editButton') }}
+            {{ competency.isDraft ? t('editDraft') : t('createANewDraft') }}
           </CommonAtomsAButton>
           <CommonAtomsAButton
+            v-if="competency.isDraft"
             :is-submitting="isSubmitting"
             data-testid="approve-this-change-record-button"
             @click="handleOpenPublishModal()"
           >
             {{ t('publishChangeRecord') }}
-          </CommonAtomsAButton>
-        </div>
-        <div
-          v-else
-          class="flex"
-        >
-          <CommonAtomsAButton
-            data-testid="minor-edit-button"
-            @click="handleMinorEditClick()"
-          >
-            {{ t('minorEditButton') }}
-          </CommonAtomsAButton>
-          <CommonAtomsAButton
-            :is-submitting="isSubmitting"
-            data-testid="create-new-draft-button"
-            @click="handleCreateNewDraftClick()"
-          >
-            {{ t('createANewDraft') }}
           </CommonAtomsAButton>
         </div>
       </template>
@@ -132,7 +112,7 @@
     "modalTitle": "Publier cette version",
     "createANewDraft": "Créer une nouvelle version",
     "title": "Compétences ministérielles",
-    "editButton": "Modifier la compétence",
+    "editDraft": "Modifier ce brouillon",
     "errorWhenPublishingChangeRecord": "Une erreur est survenue lors de la publication de la version. Veuillez réessayer."
   }
 }

@@ -47,6 +47,20 @@ public class ChangeRecord : ICreatedByPropagable, ICreatedOnPropagable
     }
 
     /// <summary>
+    /// Creates a new version with the new version number.
+    /// </summary>
+    /// <param name="change">The parent change record</param>
+    /// <param name="user">The user creating the new change record</param>
+    public ChangeRecord(ChangeRecord changeRecord, User user)
+    {
+        ChangeRecordNumber = changeRecord.ChangeRecordNumber + 1;
+        ParentChangeRecord = changeRecord;
+        IsDraft = true;
+        CreatedBy = user;
+        CreatedOn = DateTime.UtcNow;
+    }
+
+    /// <summary>
     /// Creates a default version with the version number statring at 1
     /// </summary>
     public ChangeRecord(User createdBy)
