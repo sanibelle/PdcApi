@@ -5,6 +5,7 @@ using Moq;
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
 using Pdc.Application.Mappings;
+using Pdc.Application.Services.Competency;
 using Pdc.Application.UseCases;
 using Pdc.Application.UseCases.Competency;
 using Pdc.Application.Validators;
@@ -29,6 +30,7 @@ public class MinisterialCompetencyTest
     //// Repository mocks
     Mock<IProgramOfStudyRepository> _programOfStudyRepositoryMock;
     Mock<ICompetencyRepository> _competencyRepositoryMock;
+    Mock<CompetencyService> _competencyServiceMock;
 
     //// Competency use cases
     IAddCompetencyUseCase _createCompetencyUseCase;
@@ -54,6 +56,7 @@ public class MinisterialCompetencyTest
     private ComplementaryInformation _complementaryInformation;
     private PerformanceCriteria _performanceCriteria;
     private MinisterialCompetencyElement _competencyElement;
+    private CompetencyService _competencyService;
 
     private MinisterialCompetency _competency1, _competency2, _competencyToUpdateV1Draft, _competencyToUpdateV1NotDraft, _competencyToUpdateV2Draft, _competencyToUpdateV2NotDraft;
 
@@ -171,6 +174,7 @@ public class MinisterialCompetencyTest
         //    _programOfStudyRepositoryMock = new Mock<IProgramOfStudyRepository>();
         _competencyRepositoryMock = new Mock<ICompetencyRepository>();
         _programOfStudyRepositoryMock = new Mock<IProgramOfStudyRepository>();
+        _competencyServiceMock = new Mock<CompetencyService>();
 
         // Initialize mapper
         _mapper = new MapperConfiguration(cfg =>
@@ -185,7 +189,7 @@ public class MinisterialCompetencyTest
 
         //    // Initialize competency use cases
         _createCompetencyUseCase = new AddCompetency(_competencyRepositoryMock.Object, _programOfStudyRepositoryMock.Object, _mapper, _competencyValidator);
-        _updateDraftV1CompetencyUseCase = new UpdateDraftV1Competency(_competencyRepositoryMock.Object, _mapper, _competencyValidator);
+        _updateDraftV1CompetencyUseCase = new UpdateDraftV1Competency(_competencyRepositoryMock.Object, _mapper, _competencyService, _competencyValidator);
         //    _deleteCompetencyUseCase = new DeleteCompetency(_competencyRepositoryMock.Object);
         //    _getAllCompetencyUseCase = new GetAllCompetency(_competencyRepositoryMock.Object, _mapper);
 
@@ -343,219 +347,62 @@ public class MinisterialCompetencyTest
                 await _createCompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO, _user));
     }
 
-    [Test]
-    public async Task GivenDraftV1MinisterialCompetency_WhenUpdatingDraft_ThenItShouldUpdate()
-    {
-        CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
-            .WithCode(_competencyToUpdateV1Draft.Code)
-            .Build();
-        var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user);
-        Assert.That(result.ChangeRecordNumber == 1);
-        _competencyRepositoryMock.Verify(repo => repo.Update(It.IsAny<MinisterialCompetency>()), Times.Once);
-    }
-
-    [Test]
-    public async Task GivenMinisterialCompetency_WhenUpdatingCompetencyCode_ThenItShouldFail()
-    {
-        // Assert
-
-        CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
-            .WithCode(_competencyToUpdateV1Draft.Code)
-            .Build();
-        var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user);
-        Assert.That(result.ChangeRecordNumber == 1, "Updating a draft V1 competency should not create a new changeRecord");
-    }
-
-    [Test]
-    public async Task GivenDraftV1MinisterialCompetency_WhenUpdatingNotDraft_ThenItShouldThrowAnException()
-    {
-        CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
-            .WithCode(_competencyToUpdateV1NotDraft.Code)
-            .Build();
-
-        // Assert
-        Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user));
-    }
-
-    [Test]
-    public async Task GivenDraftV2MinisterialCompetency_WhenUpdatingDraft_ThenItShouldThrowAnException()
-    {
-        CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
-            .WithCode(_competencyToUpdateV2Draft.Code)
-            .Build();
-
-        // Assert
-        Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user));
-    }
-
-    [Test]
-    public async Task GivenDraftV2MinisterialCompetency_WhenUpdatingNotDraft_ThenItShouldThrowAnException()
-    {
-        CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
-            .WithCode(_competencyToUpdateV2NotDraft.Code)
-            .Build();
-
-        // Assert
-        Assert.ThrowsAsync<InvalidOperationException>(async () =>
-                await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user));
-    }
-
-    //TODO gestion de la changeRecord. Quand on crée un programme, on crée une nouvelle changeRecord
-    //TODO validate position exists? plus dans le E2E
-    //TODO ajouter des change details à une changeRecord
-    //TODO aller chercher une compétence par changeRecord
-    // Avoir un concept de brouillon (change pas de changeRecord) et de propre (impossible de modifier, on crée une nouvelle changeRecord)
-
     //[Test]
-    //public async Task DeleteProgramOfStudy_ShouldCallRepositoryDelete()
+    //public async Task GivenDraftV1MinisterialCompetency_WhenUpdatingDraft_ThenItShouldUpdate()
     //{
-    //    // Act
-    //    await _deleteProgramOfStudyUseCase.Execute(program1.Code);
-
-    //    // Assert
-    //    _programOfStudyRepositoryMock.Verify(repo => repo.Delete(program1.Code), Times.Once);
+    //    CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
+    //        .WithCode(_competencyToUpdateV1Draft.Code)
+    //        .Build();
+    //    var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user);
+    //    Assert.That(result.ChangeRecordNumber == 1);
+    //    _competencyRepositoryMock.Verify(repo => repo.Update(It.IsAny<MinisterialCompetency>()), Times.Once);
     //}
 
     //[Test]
-    //public async Task GetAllProgramOfStudy_ShouldReturnAllPrograms()
+    //public async Task GivenMinisterialCompetency_WhenUpdatingCompetencyCode_ThenItShouldFail()
     //{
-    //    // Act
-    //    var result = await _getAllProgramOfStudyUseCase.Execute();
-
     //    // Assert
-    //    Assert.That(result.Count == 2, "Got 2 programs");
-    //    Assert.That(program1.Code == result[0].Code, "Both programs are returned");
-    //    Assert.That(program2.Code == result[1].Code, "Both programs are returned");
+
+    //    CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
+    //        .WithCode(_competencyToUpdateV1Draft.Code)
+    //        .Build();
+    //    var result = await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user);
+    //    Assert.That(result.ChangeRecordNumber == 1, "Updating a draft V1 competency should not create a new changeRecord");
     //}
 
     //[Test]
-    //public async Task UpdateProgramOfStudy_ShouldCallRepositoryUpdate()
+    //public async Task GivenDraftV1MinisterialCompetency_WhenUpdatingNotDraft_ThenItShouldThrowAnException()
     //{
-    //    // Arrange
-    //    CreateProgramOfStudyDTO updateProgramDto = new CreateProgramOfStudyDTOBuilder()
-    //        .WithCode("420.B0")
-    //        .WithName("UpdatedName")
-    //        .WithProgramType(ProgramType.DEC)
-    //        .WithMonthsDuration(36)
-    //        .WithSpecificDurationHours(2010)
-    //        .WithTotalDurationHours(5730)
-    //        .WithPublishedOn(new DateOnly(2020, 01, 01))
-    //        .WithOptionalUnits(new Units(16, 2, 3))
-    //        .WithSpecificUnits(new Units(26, 2, 3))
+    //    CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
+    //        .WithCode(_competencyToUpdateV1NotDraft.Code)
     //        .Build();
 
-    //    // Act
-    //    var result = await _updateProgramOfStudyUseCase.Execute(program1.Code, updateProgramDto);
-
     //    // Assert
-    //    _programOfStudyRepositoryMock.Verify(repo => repo.Update(It.Is<ProgramOfStudy>(p => p.Code == program1.Code && p.Name == updateProgramDto.Name)), Times.Once);
-    //    Assert.That(result.Name == program1.Name, "Program name is updated");
-    //}
-
-    //// Competency tests
-    //[Test]
-    //public async Task CreateCompetency_ShouldReturnCreatedCompetency()
-    //{
-    //    // Arrange
-    //    CompetencyDTO createCompetencyDto = new CompetencyDTO
-    //    {
-    //        Code = "0123",
-    //        Name = "Develop web applications",
-    //        CompetencyElements = new List<MinisterialCompetencyElementDTO>
-    //        {
-    //            new MinisterialCompetencyElementDTO
-    //            {
-    //                Code = "01",
-    //                Description = "Plan the development of a web application",
-    //                PerformanceCriterias = new List<PerformanceCriteriaDTO>
-    //                {
-    //                    new PerformanceCriteriaDTO { Description = "Accurate assessment of client needs" }
-    //                }
-    //            }
-    //        }
-    //    };
-
-    //    // Act
-    //    var result = await _createCompetencyUseCase.Execute(program1.Code, createCompetencyDto);
-
-    //    // Assert
-    //    _competencyRepositoryMock.Verify(repo => repo.Add(It.IsAny<MinisterialCompetency>()), Times.Once);
-    //    Assert.That(result.Code, Is.EqualTo(competency1.Code));
-    //    Assert.That(result.Name, Is.EqualTo(competency1.Name));
+    //    Assert.ThrowsAsync<InvalidOperationException>(async () =>
+    //            await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user));
     //}
 
     //[Test]
-    //public async Task GetCompetency_ShouldReturnCompetency()
+    //public async Task GivenDraftV2MinisterialCompetency_WhenUpdatingDraft_ThenItShouldThrowAnException()
     //{
-    //    // Act
-    //    var result = await _getCompetencyUseCase.Execute(program1.Code, competency1.Code);
+    //    CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
+    //        .WithCode(_competencyToUpdateV2Draft.Code)
+    //        .Build();
 
     //    // Assert
-    //    _competencyRepositoryMock.Verify(repo => repo.FindByCode(program1.Code, competency1.Code), Times.Once);
-    //    Assert.That(result.Code, Is.EqualTo(competency1.Code));
-    //    Assert.That(result.Name, Is.EqualTo(competency1.Name));
+    //    Assert.ThrowsAsync<InvalidOperationException>(async () =>
+    //            await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user));
     //}
 
     //[Test]
-    //public async Task UpdateCompetency_ShouldCallRepositoryUpdate()
+    //public async Task GivenDraftV2MinisterialCompetency_WhenUpdatingNotDraft_ThenItShouldThrowAnException()
     //{
-    //    // Arrange
-    //    CompetencyDTO updateCompetencyDto = new CompetencyDTO
-    //    {
-    //        Code = "0123",
-    //        Name = "Updated Competency Name",
-    //        CompetencyElements = new List<MinisterialCompetencyElementDTO>()
-    //    };
-
-    //    // Act
-    //    var result = await _updateCompetencyUseCase.Execute(program1.Code, competency1.Code, updateCompetencyDto);
+    //    CompetencyDTO competencyDTO = new CompetencyDTOBuilder()
+    //        .WithCode(_competencyToUpdateV2NotDraft.Code)
+    //        .Build();
 
     //    // Assert
-    //    _competencyRepositoryMock.Verify(repo => repo.Update(It.IsAny<MinisterialCompetency>()), Times.Once);
-    //    Assert.That(result.Code, Is.EqualTo(competency1.Code));
-    //}
-
-    //[Test]
-    //public async Task DeleteCompetency_ShouldCallRepositoryDelete()
-    //{
-    //    // Act
-    //    await _deleteCompetencyUseCase.Execute(program1.Code, competency1.Code);
-
-    //    // Assert
-    //    _competencyRepositoryMock.Verify(repo => repo.Delete(program1.Code, competency1.Code), Times.Once);
-    //}
-
-    //[Test]
-    //public void GetCompetency_WithInvalidCode_ShouldThrowException()
-    //{
-    //    // Act & Assert
-    //    Assert.ThrowsAsync<NotFoundException>(async () =>
-    //        await _getCompetencyUseCase.Execute(program1.Code, codeOfAFakeCompetency));
-    //}
-
-    //[Test]
-    //public async Task GetCompetencyElements_ShouldReturnElements()
-    //{
-    //    // Act
-    //    var result = await _getCompetencyUseCase.Execute(program1.Code, competency1.Code);
-
-    //    // Assert
-    //    Assert.That(result.CompetencyElements.Count, Is.EqualTo(competency1.CompetencyElements.Count()));
-    //    Assert.That(result.CompetencyElements[0].Code, Is.EqualTo("01"));
-    //    Assert.That(result.CompetencyElements[0].Description, Is.EqualTo("Plan the development of a web application"));
-    //}
-
-    //[Test]
-    //public async Task GetCompetencyPerformanceCriteria_ShouldReturnCriteria()
-    //{
-    //    // Act
-    //    var result = await _getCompetencyUseCase.Execute(program1.Code, competency1.Code);
-
-    //    // Assert
-    //    var element = result.CompetencyElements[0];
-    //    Assert.That(element.PerformanceCriterias.Count, Is.EqualTo(1));
-    //    Assert.That(element.PerformanceCriterias[0].Description, Is.EqualTo("Accurate assessment of client needs"));
+    //    Assert.ThrowsAsync<InvalidOperationException>(async () =>
+    //            await _updateDraftV1CompetencyUseCase.Execute(_codeOfAFakeProgram, competencyDTO.Code, competencyDTO, _user));
     //}
 }

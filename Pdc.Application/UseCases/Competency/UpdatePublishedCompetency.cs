@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Pdc.Application.DTOS;
+using Pdc.Application.Services.Competency;
+using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Interfaces.UseCases.Competency;
 using Pdc.Domain.Models.MinisterialSpecification;
@@ -12,27 +14,20 @@ namespace Pdc.Application.UseCases;
 public class UpdatePublishedCompetency(ICompetencyRepository competencyRepository,
                            IChangeDetailsRepository changeDetailsRepository,
                            IMapper mapper,
-                           IValidator<CompetencyDTO> validator) : IUpdatePublishedCompetencyUseCase
+                           IValidator<CompetencyDTO> validator,
+                           CompetencyService competencyService) : IUpdatePublishedCompetencyUseCase
 {
     public async Task<CompetencyDTO> Execute(string programOfStudyCode, string competencyCode, CompetencyDTO updateCompetencyDto, User currentUser)
     {
-        var validationResult = await validator.ValidateAsync(updateCompetencyDto);
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
-        if (competencyCode != updateCompetencyDto.Code)
-        {
-            throw new ValidationException("Competency code in the URL does not match the code in the body. The code should not be changed.");
-        }
+        await competencyService.ValidateCompetencyAsync(competencyCode, updateCompetencyDto);
         MinisterialCompetency competencyToUpdate = await competencyRepository.FindByCode(updateCompetencyDto.Code);
         if (competencyToUpdate.ChangeRecord == null)
         {
-            throw new Exception("Missing changeRecord on a competency to update.");
+            throw new InvalidChangeRecordException("Missing changeRecord on a competency to update.");
         }
-        if (!competencyToUpdate.IsLatestVersion() || competencyToUpdate.ChangeRecord.Id != updateCompetencyDto.ChangeRecordId)
+        if (!competencyToUpdate.IsLatestVersion() || competencyToUpdate.ChangeRecord.Id != updateCompetencyDto.ChangeRecordId || competencyToUpdate.ChangeRecord.ChangeRecordNumber != updateCompetencyDto.ChangeRecordNumber)
         {
-            throw new InvalidOperationException("The targetted change record to update is not the latest.");
+            throw new InvalidChangeRecordException("The targeted change record to update is not the latest.");
         }
         ChangeRecord changeRecord = new ChangeRecord(competencyToUpdate.ChangeRecord, currentUser);
         mapper.Map(updateCompetencyDto, competencyToUpdate);
@@ -46,12 +41,6 @@ public class UpdatePublishedCompetency(ICompetencyRepository competencyRepositor
 
         // UpdateAndTrack se charge de gérer le suivi des changements
         MinisterialCompetency updatedCompetency = await competencyRepository.UpdateAndTrack(competencyToUpdate);
-
-        // Removing the deleted elements.
-        List<Guid> changeableIdsToDelete = await changeDetailsRepository.FindDeletedChangeableIdByChangeRecordId(updatedCompetency.ChangeRecord.Id!.Value);
-        updatedCompetency.RemoveDeletedChangeables(changeableIdsToDelete);
-
-        return mapper.Map<CompetencyDTO>(updatedCompetency);
-        // TODO faire fonctionner quand on met à jour une version draft, il faudrait modifier les changeDetails quand on CRUD.
+        return await competencyService.RemoveDeletedChangeables(updatedCompetency);
     }
 }

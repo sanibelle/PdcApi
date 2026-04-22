@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pdc.Application.Mappings;
+using Pdc.Application.Services.Competency;
 using Pdc.Application.Services.UserService;
 using Pdc.Application.UseCases;
 using Pdc.Application.UseCases.Competency;
@@ -34,6 +35,7 @@ public static class DependencyInjection
         services.AddScoped<IUpdateDraftV1CompetencyUseCase, UpdateDraftV1Competency>();
         services.AddScoped<IUpdatePublishedCompetencyUseCase, UpdatePublishedCompetency>();
         services.AddScoped<IDeleteCompetencyUseCase, DeleteCompetency>();
+        services.AddScoped<CompetencyService>();
         //User
         services.AddScoped<IGetUsersUseCase, GetUsers>();
         services.AddScoped<ISetUserRolesUseCase, SetUserRoles>();

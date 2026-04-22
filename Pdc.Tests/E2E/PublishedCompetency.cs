@@ -1,4 +1,5 @@
-﻿using Pdc.Application.DTOS;
+﻿using FluentAssertions;
+using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
 using Pdc.Domain.DTOS.Common;
 using Pdc.Tests.E2E;
@@ -13,7 +14,7 @@ public class PublishedCompetencyApiTest : ApiTestBase
 {
 
     [Test]
-    public async Task GivenExistingV1DraftCompetency_WhenUpdatingCompetency_ThenShouldUpdateCompetencyWithNoChangeDetails()
+    public async Task GivenPublishedV2Competency_WhenUpdatingCompetency_ThenShouldRetunrUpdatedCompetency()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
         ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
@@ -73,7 +74,91 @@ public class PublishedCompetencyApiTest : ApiTestBase
 
         CompetencyUtils.AssertDraftCompetencyBasedOnResponse(competencyToUpdateDTO, updatedCompetency, 2);
     }
-    // Faker une version 1 draft.
+
+    [Test]
+    public async Task GivenPublishedV2Competency_WhenUpdatingCompetencyWithFakeChangeRecord_ThenShouldFail()
+    {
+        string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
+        ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
+        ChangeableDTO realisationContext, performanceCriteria;
+        CompetencyElementDTO competencyElement;
+        CompetencyDTO competencyToCreateDTO = CompetencyUtils.CreateCompetency();
+
+        // Prepare - Create and publish the competency
+        var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyToCreateDTO);
+        createResponse.EnsureSuccessStatusCode();
+        // Publish the new version
+        var competencyToUpdateDTO = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+        var publishResponse = await _Client.PostAsync($"/api/changeRecord/publish/{competencyToUpdateDTO.ChangeRecordId.Value}", null);
+        publishResponse.EnsureSuccessStatusCode();
+
+        var getResponse = await _Client.GetAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}");
+        getResponse.EnsureSuccessStatusCode();
+        competencyToUpdateDTO = await getResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+
+        competencyToUpdateDTO.ChangeRecordId = new Guid();
+
+        var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
+        updateResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+    }
+
+    [Test]
+    public async Task GivenPublishedV2Competency_WhenUpdatingCompetencyWithFakeDraftVersion_ThenShouldFail()
+    {
+        string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
+        ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
+        ChangeableDTO realisationContext, performanceCriteria;
+        CompetencyElementDTO competencyElement;
+        CompetencyDTO competencyToCreateDTO = CompetencyUtils.CreateCompetency();
+
+        // Prepare - Create and publish the competency
+        var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyToCreateDTO);
+        createResponse.EnsureSuccessStatusCode();
+        // Publish the new version
+        var competencyToUpdateDTO = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+        var publishResponse = await _Client.PostAsync($"/api/changeRecord/publish/{competencyToUpdateDTO.ChangeRecordId.Value}", null);
+        publishResponse.EnsureSuccessStatusCode();
+
+        var getResponse = await _Client.GetAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}");
+        getResponse.EnsureSuccessStatusCode();
+        competencyToUpdateDTO = await getResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+
+        competencyToUpdateDTO.ChangeRecordNumber = 1;
+        competencyToUpdateDTO.IsDraft = true;
+
+        var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
+        updateResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+    }
+
+    [Test]
+    public async Task GivenPublishedV2Competency_WhenUpdatingCompetencyWithFakeDraft_ThenShouldFail()
+    {
+        string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
+        ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
+        ChangeableDTO realisationContext, performanceCriteria;
+        CompetencyElementDTO competencyElement;
+        CompetencyDTO competencyToCreateDTO = CompetencyUtils.CreateCompetency();
+
+        // Prepare - Create and publish the competency
+        var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyToCreateDTO);
+        createResponse.EnsureSuccessStatusCode();
+        // Publish the new version
+        var competencyToUpdateDTO = await createResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+        var publishResponse = await _Client.PostAsync($"/api/changeRecord/publish/{competencyToUpdateDTO.ChangeRecordId.Value}", null);
+        publishResponse.EnsureSuccessStatusCode();
+
+        var getResponse = await _Client.GetAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}");
+        getResponse.EnsureSuccessStatusCode();
+        competencyToUpdateDTO = await getResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
+
+        competencyToUpdateDTO.IsDraft = true;
+
+        var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
+        updateResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
+    }
+
+
+
     // Faker une version 300 published.
     // Faker une version 2 draft.
 }
