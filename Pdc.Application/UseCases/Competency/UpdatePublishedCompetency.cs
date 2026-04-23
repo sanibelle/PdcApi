@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using Pdc.Application.DTOS;
 using Pdc.Application.Services.Competency;
 using Pdc.Domain.Exceptions;
@@ -12,9 +11,7 @@ using Pdc.Domain.Models.Versioning;
 namespace Pdc.Application.UseCases;
 
 public class UpdatePublishedCompetency(ICompetencyRepository competencyRepository,
-                           IChangeDetailsRepository changeDetailsRepository,
                            IMapper mapper,
-                           IValidator<CompetencyDTO> validator,
                            CompetencyService competencyService) : IUpdatePublishedCompetencyUseCase
 {
     public async Task<CompetencyDTO> Execute(string programOfStudyCode, string competencyCode, CompetencyDTO updateCompetencyDto, User currentUser)

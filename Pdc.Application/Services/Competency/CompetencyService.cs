@@ -6,8 +6,7 @@ using Pdc.Domain.Models.MinisterialSpecification;
 
 namespace Pdc.Application.Services.Competency;
 
-public class CompetencyService(ICompetencyRepository competencyRepository,
-                       IChangeDetailsRepository changeDetailsRepository,
+public class CompetencyService(IChangeDetailsRepository changeDetailsRepository,
                        IMapper mapper,
                        IValidator<CompetencyDTO> validator)
 {
@@ -18,6 +17,7 @@ public class CompetencyService(ICompetencyRepository competencyRepository,
 
         return mapper.Map<CompetencyDTO>(competency);
     }
+
     public async Task ValidateCompetencyAsync(string competencyCode, CompetencyDTO updateCompetencyDto)
     {
         var validationResult = await validator.ValidateAsync(updateCompetencyDto);
