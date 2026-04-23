@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Pdc.Domain.Enums;
 using Pdc.Domain.Interfaces.Repositories;
@@ -8,7 +7,7 @@ using Pdc.Infrastructure.Entities.Version;
 
 namespace Pdc.Infrastructure.Repositories;
 
-public class ChangeDetailsRepository(AppDbContext context, IMapper mapper) : IChangeDetailsRepository
+public class ChangeDetailsRepository(AppDbContext context) : IChangeDetailsRepository
 {
     public async Task<List<Guid>> FindDeletedChangeableIdByChangeRecordId(Guid changeRecordId)
     {
