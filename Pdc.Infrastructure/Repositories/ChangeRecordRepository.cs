@@ -70,10 +70,10 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
         {
             throw new NotFoundException(nameof(ChangeRecordEntity), changeRecordId);
         }
-        while (current.ChangeRecordId != null)
+        while (current.ParentChangeRecordId != null)
         {
             current = await _context.ChangeRecords
-                .FirstAsync(x => x.Id == current.ChangeRecordId);
+                .FirstAsync(x => x.Id == current.ParentChangeRecordId);
         }
 
         if (current?.Id == null)
