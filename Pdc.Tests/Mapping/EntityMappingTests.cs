@@ -66,6 +66,12 @@ internal class EntityMappingTests
     }
 
     [Test]
+    public void AssertMapper()
+    {
+        _mapper.ConfigurationProvider.AssertConfigurationIsValid();
+    }
+
+    [Test]
     public void MappingMinisterialCompetency_ShouldKeepReferenceChangeRecordOnlyOnce()
     {
         var entity = _mapper.Map<MinisterialCompetency>(_ministerialCompetency);

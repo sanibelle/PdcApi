@@ -32,7 +32,6 @@ public class ChangeRecordEntity
     public virtual IdentityUserEntity? ValidatedBy { get; set; }
     public DateTime? ValidatedOn { get; set; }
     public Guid? NextChangeRecordId { get; set; }
-    public Guid? ChangeRecordId { get; set; }
     public Guid? ParentChangeRecordId { get; set; }
 
     public ChangeRecordEntity()
