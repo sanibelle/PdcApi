@@ -27,7 +27,7 @@ public class UpdateDraftV1Competency(ICompetencyRepository competencyRepository,
         competencyToUpdate.SetChangeRecordOnUntracked(competencyToUpdate.ChangeRecord!);
         competencyToUpdate.SetCreatedByOnUntracked(currentUser);
         competencyToUpdate.SetCreatedOnOnUntracked();
-        MinisterialCompetency updatedProgramOfStudy = await competencyRepository.Update(competencyToUpdate);
-        return mapper.Map<CompetencyDTO>(updatedProgramOfStudy);
+        MinisterialCompetency updatedCompetency = await competencyRepository.Update(competencyToUpdate);
+        return mapper.Map<CompetencyDTO>(updatedCompetency);
     }
 }

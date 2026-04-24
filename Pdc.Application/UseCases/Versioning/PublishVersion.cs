@@ -20,6 +20,7 @@ public class PublishChangeRecord(IChangeRecordRepository changeRecordRepository,
         }
         changeRecord.ValidatedBy = user;
         changeRecord.ValidatedOn = DateTime.UtcNow;
+        changeRecord.IsDraft = false;
         changeRecord = await changeRecordRepository.Publish(changeRecord);
         return mapper.Map<ChangeRecordDTO>(changeRecord);
     }
