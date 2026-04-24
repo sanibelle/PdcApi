@@ -14,7 +14,7 @@ public class PublishedCompetencyApiTest : ApiTestBase
 {
 
     [Test]
-    public async Task GivenPublishedV2Competency_WhenUpdatingCompetency_ThenShouldRetunrUpdatedCompetency()
+    public async Task GivenPublishedV2Competency_WhenUpdatingCompetency_ThenShouldReturnUpdatedCompetency()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
         ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
@@ -79,9 +79,6 @@ public class PublishedCompetencyApiTest : ApiTestBase
     public async Task GivenPublishedV2Competency_WhenUpdatingCompetencyWithFakeChangeRecord_ThenShouldFail()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
-        ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
-        ChangeableDTO realisationContext, performanceCriteria;
-        CompetencyElementDTO competencyElement;
         CompetencyDTO competencyToCreateDTO = CompetencyUtils.CreateCompetency();
 
         // Prepare - Create and publish the competency
@@ -106,9 +103,6 @@ public class PublishedCompetencyApiTest : ApiTestBase
     public async Task GivenPublishedV2Competency_WhenUpdatingCompetencyWithFakeDraftVersion_ThenShouldFail()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
-        ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
-        ChangeableDTO realisationContext, performanceCriteria;
-        CompetencyElementDTO competencyElement;
         CompetencyDTO competencyToCreateDTO = CompetencyUtils.CreateCompetency();
 
         // Prepare - Create and publish the competency
@@ -134,9 +128,6 @@ public class PublishedCompetencyApiTest : ApiTestBase
     public async Task GivenPublishedV2Competency_WhenUpdatingCompetencyWithFakeDraft_ThenShouldFail()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
-        ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
-        ChangeableDTO realisationContext, performanceCriteria;
-        CompetencyElementDTO competencyElement;
         CompetencyDTO competencyToCreateDTO = CompetencyUtils.CreateCompetency();
 
         // Prepare - Create and publish the competency
@@ -156,9 +147,4 @@ public class PublishedCompetencyApiTest : ApiTestBase
         var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
         updateResponse.StatusCode.Should().Be(System.Net.HttpStatusCode.BadRequest);
     }
-
-
-
-    // Faker une version 300 published.
-    // Faker une version 2 draft.
 }

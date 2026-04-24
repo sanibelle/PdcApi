@@ -14,7 +14,10 @@ internal class ChangeDetailsTracker(AppDbContext context) : IChangeTracker
 
     public async Task TrackUpdate(ChangeableEntity entity, string? oldValue, Guid changeRecordId)
     {
-        await Create(entity, oldValue, ChangeType.Update, changeRecordId);
+        if (entity.Value != oldValue)
+        {
+            await Create(entity, oldValue, ChangeType.Update, changeRecordId);
+        }
     }
 
     public async Task TrackDelete(ChangeableEntity entity, string? oldValue, Guid changeRecordId)
@@ -24,13 +27,12 @@ internal class ChangeDetailsTracker(AppDbContext context) : IChangeTracker
 
     private async Task Create(ChangeableEntity entity, string? oldValue, ChangeType changeType, Guid changeRecordId)
     {
-        context.ChangeDetails.Add(new ChangeDetailEntity
+        await context.ChangeDetails.AddAsync(new ChangeDetailEntity
         {
             ChangeRecordId = changeRecordId,
             ChangeType = changeType,
             Changeable = entity,
             OldValue = oldValue
         });
-        await Task.CompletedTask;
     }
 }

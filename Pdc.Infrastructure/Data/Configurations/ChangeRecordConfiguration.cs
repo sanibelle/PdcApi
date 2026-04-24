@@ -24,7 +24,7 @@ public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEn
         //Not really one to many, but ef needs that
         builder.HasOne(x => x.ParentChangeRecord)
             .WithMany()
-            .HasForeignKey(x => x.ChangeRecordId);
+            .HasForeignKey(x => x.ParentChangeRecordId);
         ;
 
         //Not really one to many, but ef needs that

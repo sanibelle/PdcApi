@@ -83,14 +83,19 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
         return current.Id.Value;
     }
 
-    public async Task<ChangeRecord> Publish(Guid changeRecordId)
+    public async Task<ChangeRecord> Publish(ChangeRecord changeRecord)
     {
-        ChangeRecordEntity? changeRecord = await FindEntityById(changeRecordId);
-        if (changeRecord == null)
+        ChangeRecordEntity? changeRecordEntity = await FindEntityById(changeRecord.Id!.Value);
+        if (changeRecordEntity == null)
         {
-            throw new NotFoundException(nameof(ChangeRecordEntity), changeRecordId);
+            throw new NotFoundException(nameof(ChangeRecordEntity), changeRecord.Id.Value);
         }
-        changeRecord.IsDraft = false;
+        if (changeRecordEntity.ChangeRecordNumber != changeRecord.ChangeRecordNumber + 1)
+        {
+            throw new InvalidChangeRecordException($"The version of the change record with id {changeRecordEntity.Id!.Value} should be going from {changeRecordEntity.ChangeRecordNumber} to {changeRecordEntity.ChangeRecordNumber + 1} but set to {changeRecord.ChangeRecordNumber}.")
+        }
+        _mapper.Map(changeRecord, changeRecordEntity);
+        changeRecord.IsDraft = false; // making sure that the new value is false
         _context.Update(changeRecord);
         await _context.SaveChangesAsync();
         return _mapper.Map<ChangeRecord>(changeRecord);

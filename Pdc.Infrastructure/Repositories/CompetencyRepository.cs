@@ -110,7 +110,7 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         await UpsertComplementaryInformations(changeRecord.Id!.Value, rc.ComplementaryInformations, addedRealisationContextEntity.Entity.Id!.Value);
         await tracker.TrackAdd(addedRealisationContextEntity.Entity, changeRecord.Id.Value);
     }
-    public async Task<MinisterialCompetency> UpdateAndTrack(MinisterialCompetency competency)
+    public async Task<MinisterialCompetency> UpdateWithChangeTracking(MinisterialCompetency competency)
     {
         using var transaction = await _context.Database.BeginTransactionAsync();
         try

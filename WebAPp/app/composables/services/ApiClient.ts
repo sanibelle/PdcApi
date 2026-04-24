@@ -65,6 +65,7 @@ export class ApiClient {
             throw createError({
               status: 403,
               statusText: 'Forbidden',
+              data: response._data,
             });
           }
           console.error(e);

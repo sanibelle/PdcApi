@@ -69,7 +69,7 @@ public class ComplementaryInformationRepository(AppDbContext context, IChangeRec
             .Select(x => x.CreatedById)
             .SingleOrDefaultAsync();
 
-        if (Guid.Empty == id) // when complementaryInformation is not found, it retunrs a default Guid.
+        if (Guid.Empty == id) // when complementaryInformation is not found, it returns a default Guid.
         {
             throw new NotFoundException(nameof(ComplementaryInformationEntity) + "CreatedBy Id not found, value is null", complementaryInformationId);
         }

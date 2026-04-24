@@ -49,7 +49,7 @@ public class ChangeRecord : ICreatedByPropagable, ICreatedOnPropagable
     /// <summary>
     /// Creates a new version with the new version number.
     /// </summary>
-    /// <param name="change">The parent change record</param>
+    /// <param name="changeRecord">The parent change record</param>
     /// <param name="user">The user creating the new change record</param>
     public ChangeRecord(ChangeRecord changeRecord, User user)
     {

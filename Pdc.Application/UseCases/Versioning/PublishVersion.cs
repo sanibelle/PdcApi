@@ -20,7 +20,7 @@ public class PublishChangeRecord(IChangeRecordRepository changeRecordRepository,
         }
         changeRecord.ValidatedBy = user;
         changeRecord.ValidatedOn = DateTime.UtcNow;
-        changeRecord = await changeRecordRepository.Publish(changeRecordId);
+        changeRecord = await changeRecordRepository.Publish(changeRecord);
         return mapper.Map<ChangeRecordDTO>(changeRecord);
     }
 }

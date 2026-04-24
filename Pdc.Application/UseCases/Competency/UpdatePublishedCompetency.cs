@@ -22,7 +22,7 @@ public class UpdatePublishedCompetency(ICompetencyRepository competencyRepositor
         {
             throw new InvalidChangeRecordException("Missing changeRecord on a competency to update.");
         }
-        if (!competencyToUpdate.IsLatestVersion() || competencyToUpdate.ChangeRecord.Id != updateCompetencyDto.ChangeRecordId || competencyToUpdate.ChangeRecord.ChangeRecordNumber != updateCompetencyDto.ChangeRecordNumber)
+        if (competencyToUpdate.IsLatestVersion() || competencyToUpdate.ChangeRecord.Id != updateCompetencyDto.ChangeRecordId || competencyToUpdate.ChangeRecord.ChangeRecordNumber != updateCompetencyDto.ChangeRecordNumber)
         {
             throw new InvalidChangeRecordException("The targeted change record to update is not the latest.");
         }
@@ -37,7 +37,7 @@ public class UpdatePublishedCompetency(ICompetencyRepository competencyRepositor
 
 
         // UpdateAndTrack se charge de gérer le suivi des changements
-        MinisterialCompetency updatedCompetency = await competencyRepository.UpdateAndTrack(competencyToUpdate);
+        MinisterialCompetency updatedCompetency = await competencyRepository.UpdateWithChangeTracking(competencyToUpdate);
         return await competencyService.RemoveDeletedChangeables(updatedCompetency);
     }
 }

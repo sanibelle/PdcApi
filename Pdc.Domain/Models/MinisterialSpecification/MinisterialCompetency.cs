@@ -23,7 +23,7 @@ public class MinisterialCompetency : Competency
         {
             return false;
         }
-        return ChangeRecord.NextChangeRecord != null;
+        return ChangeRecord.NextChangeRecord == null;
     }
 
     public override void SetCreatedByOnUntracked(User user)
