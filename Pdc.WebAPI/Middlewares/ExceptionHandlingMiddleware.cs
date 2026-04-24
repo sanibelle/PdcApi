@@ -48,6 +48,7 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
             NotFoundException => StatusCodes.Status404NotFound,
             DuplicateException => StatusCodes.Status409Conflict,
             MissingChangeRecordException => StatusCodes.Status400BadRequest,
+            InvalidChangeRecordException => StatusCodes.Status400BadRequest,
             AuthException => StatusCodes.Status401Unauthorized,
             UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
             ForbiddenException => StatusCodes.Status403Forbidden,

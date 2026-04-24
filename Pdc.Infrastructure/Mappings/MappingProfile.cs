@@ -80,25 +80,26 @@ public class MappingProfile : Profile
         CreateMap<ChangeRecord, ChangeRecordEntity>()
             .PreserveReferences()
             .ForMember(dest => dest.CreatedById,
+
                opt => opt.MapFrom(src => src.CreatedBy != null ? src.CreatedBy.Id : null))
             .ForMember(dest => dest.CreatedBy,
                 opt => opt.Ignore()) // will not track and only use the id to prevent ef core trying to create a new user.
             .ForMember(dest => dest.ValidatedById,
+
                opt => opt.MapFrom(src => src.ValidatedBy != null ? src.ValidatedBy.Id : null))
-            .ForMember(dest => dest.ValidatedBy,// will not track and only use the id to prevent ef core trying to create an new user.
+            .ForMember(dest => dest.ValidatedBy,
                 opt => opt.Ignore())
-            .ForMember(dest => dest.NextChangeRecord,  // explicitly map back
-                opt => opt.MapFrom(src => src.NextChangeRecord == null ? null : src.NextChangeRecord))
-            .ReverseMap()
-            .ForMember(dest => dest.CreatedBy,  // explicitly map back
-                opt => opt.MapFrom(src => src.CreatedBy))
-            .ForMember(dest => dest.ValidatedBy,  // explicitly map back
-                opt => opt.MapFrom(src => src.ValidatedBy))
+
+            .ForMember(dest => dest.NextChangeRecordId,
+                opt => opt.MapFrom(src => src.NextChangeRecord == null ? null : src.NextChangeRecord.Id))
+            .ForMember(dest => dest.NextChangeRecord,
+                opt => opt.Ignore())
+
+            .ForMember(dest => dest.ParentChangeRecordId,
+                opt => opt.MapFrom(src => src.ParentChangeRecord == null ? null : src.ParentChangeRecord.Id))
             .ForMember(dest => dest.ParentChangeRecord,  // explicitly map back
-                opt => opt.MapFrom(src => src.ParentChangeRecord == null ? null : src.ParentChangeRecord))
-            .ForMember(dest => dest.NextChangeRecord,  // explicitly map back
-                opt => opt.MapFrom(src => src.NextChangeRecord == null ? null : src.NextChangeRecord))
-            .PreserveReferences();
+                opt => opt.Ignore())
+            .ReverseMap();
 
         // security
         CreateMap<User, IdentityUserEntity>()

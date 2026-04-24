@@ -17,7 +17,22 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
     public async Task<ChangeRecord> AddChangeRecord(ChangeRecord changeRecord)
     {
         ChangeRecordEntity changeRecordEntity = _mapper.Map<ChangeRecordEntity>(changeRecord);
+        ChangeRecordEntity? parentChangeRecord = null;
+        // getting the parent first.
+        if (changeRecordEntity.ParentChangeRecord?.Id != null)
+        {
+            parentChangeRecord = await FindEntityById(changeRecordEntity.ParentChangeRecord.Id.Value);
+        }
+        if (parentChangeRecord != null)
+        {
+            changeRecordEntity.ParentChangeRecord = parentChangeRecord;
+
+        }
         EntityEntry<ChangeRecordEntity> entity = await _context.ChangeRecords.AddAsync(changeRecordEntity);
+        if (parentChangeRecord != null)
+        {
+            parentChangeRecord.NextChangeRecord = entity.Entity;
+        }
         await _context.SaveChangesAsync();
         return _mapper.Map<ChangeRecord>(entity.Entity);
     }
@@ -68,17 +83,21 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
         return current.Id.Value;
     }
 
-    public async Task<ChangeRecord> Publish(Guid changeRecordId)
+    public async Task<ChangeRecord> Publish(ChangeRecord changeRecord)
     {
-        ChangeRecordEntity? changeRecord = await FindEntityById(changeRecordId);
-        if (changeRecord == null)
+        ChangeRecordEntity? changeRecordEntity = await FindEntityById(changeRecord.Id!.Value);
+        if (changeRecordEntity == null)
         {
-            throw new NotFoundException(nameof(ChangeRecordEntity), changeRecordId);
+            throw new NotFoundException(nameof(ChangeRecordEntity), changeRecord.Id.Value);
         }
-        changeRecord.IsDraft = false;
-        _context.Update(changeRecord);
+        if (changeRecordEntity.ChangeRecordNumber != changeRecord.ChangeRecordNumber)
+        {
+            throw new InvalidChangeRecordException($"The version of the change record with id {changeRecordEntity.Id!.Value} should have the same version : {changeRecordEntity.ChangeRecordNumber} but was set to {changeRecord.ChangeRecordNumber}.");
+        }
+        _mapper.Map(changeRecord, changeRecordEntity);
+        _context.Update(changeRecordEntity);
         await _context.SaveChangesAsync();
-        return _mapper.Map<ChangeRecord>(changeRecord);
+        return _mapper.Map<ChangeRecord>(changeRecordEntity);
     }
 
     private async Task<ChangeRecordEntity?> FindEntityById(Guid changeRecordId)

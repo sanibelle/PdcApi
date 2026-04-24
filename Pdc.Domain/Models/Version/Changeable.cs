@@ -9,10 +9,10 @@ public class Changeable : IChangeRecordPropagable, ICreatedByPropagable, ICreate
     public required string Value { get; set; }
     public required List<ComplementaryInformation> ComplementaryInformations { get; set; } = [];
 
-    public virtual void SetChangeRecordOnUntracked(ChangeRecord version)
+    public virtual void SetChangeRecordOnUntracked(ChangeRecord changeRecord)
     {
-        if (version is null) throw new ArgumentNullException(nameof(version));
-        ComplementaryInformations.ForEach(x => x.SetChangeRecordOnUntracked(version));
+        if (changeRecord is null) throw new ArgumentNullException(nameof(changeRecord));
+        ComplementaryInformations.ForEach(x => x.SetChangeRecordOnUntracked(changeRecord));
     }
 
     public virtual void SetCreatedByOnUntracked(User user)

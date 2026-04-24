@@ -11,50 +11,24 @@ namespace Pdc.WebAPI.Controllers;
 [ApiController]
 [Authorize]
 [Route("api/[controller]")]
-public class ProgramOfStudyController : ControllerBase
+public class ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
+                                IDeleteProgramOfStudyUseCase deleteProgramOfStudyUseCase,
+                                IGetProgramOfStudyUseCase getProgramOfStudyUseCase,
+                                IGetProgramOfStudiesUseCase getProgramOfStudiesUseCase,
+                                IUpdateProgramOfStudyUseCase updateUseCase,
+                                IAddCompetencyUseCase createCompetencyUseCase,
+                                IDeleteCompetencyUseCase deleteCompetencyUseCase,
+                                IUpdateDraftV1CompetencyUseCase updateDraftV1CompetencyUseCase,
+                                IUpdatePublishedCompetencyUseCase updatePublishedCompetencyUseCase,
+                                IGetCompetenciesByProgramOfStudyUseCase getCompetenciesByProgramOfStudyUseCase,
+                                IGetCompetencyUseCase getCompetencyUseCase,
+                                UserControllerService userControllerService) : ControllerBase
 {
-    private readonly IAddProgramOfStudyUseCase _createUseCase;
-    private readonly IAddCompetencyUseCase _createCompetencyUseCase;
-    private readonly IDeleteCompetencyUseCase _deleteCompetencyUseCase;
-    private readonly IDeleteProgramOfStudyUseCase _deleteProgramOfStudyUseCase;
-    private readonly IGetProgramOfStudiesUseCase _getProgramOfStudiesUseCase;
-    private readonly IUpdateDraftV1CompetencyUseCase _updateDraftV1CompetencyUseCase;
-    private readonly IUpdateProgramOfStudyUseCase _updateUseCase;
-    private readonly IGetProgramOfStudyUseCase _getUseCase;
-    private readonly IGetCompetencyUseCase _getCompetencyUseCase;
-    private readonly IGetCompetenciesByProgramOfStudyUseCase _getCompetenciesByProgramOfStudyUseCase;
-    private readonly UserControllerService _userControllerService;
-
-    public ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
-                                    IDeleteProgramOfStudyUseCase deleteProgramOfStudyUseCase,
-                                    IGetProgramOfStudyUseCase getProgramOfStudyUseCase,
-                                    IGetProgramOfStudiesUseCase getProgramOfStudiesUseCase,
-                                    IUpdateProgramOfStudyUseCase updateUseCase,
-                                    IAddCompetencyUseCase createCompetencyUseCase,
-                                    IDeleteCompetencyUseCase deleteCompetencyUseCase,
-                                    IUpdateDraftV1CompetencyUseCase updateDraftV1CompetencyUseCase,
-                                    IGetCompetenciesByProgramOfStudyUseCase getCompetenciesByProgramOfStudyUseCase,
-                                    IGetCompetencyUseCase getCompetencyUseCase,
-                                    UserControllerService userControllerService)
-    {
-        _createUseCase = createUseCase;
-        _deleteProgramOfStudyUseCase = deleteProgramOfStudyUseCase;
-        _getProgramOfStudiesUseCase = getProgramOfStudiesUseCase;
-        _deleteCompetencyUseCase = deleteCompetencyUseCase;
-        _getUseCase = getProgramOfStudyUseCase;
-        _updateUseCase=updateUseCase;
-        _createCompetencyUseCase = createCompetencyUseCase;
-        _updateDraftV1CompetencyUseCase = updateDraftV1CompetencyUseCase;
-        _getCompetencyUseCase = getCompetencyUseCase;
-        _getCompetenciesByProgramOfStudyUseCase = getCompetenciesByProgramOfStudyUseCase;
-        _userControllerService = userControllerService;
-    }
-
     #region ProgramOfStudy
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ProgramOfStudyDTO>>> GetAll()
     {
-        var programOfStudies = await _getProgramOfStudiesUseCase.Execute();
+        var programOfStudies = await getProgramOfStudiesUseCase.Execute();
         return Ok(programOfStudies);
     }
 
@@ -65,14 +39,14 @@ public class ProgramOfStudyController : ControllerBase
         return CreatedAtAction(
             nameof(Get),
             new { code = programOfStudy.Code },
-            await _createUseCase.Execute(programOfStudy));
+            await createUseCase.Execute(programOfStudy));
     }
 
     [Authorize]
     [HttpGet("{code}")]
     public async Task<IActionResult> Get(string code)
     {
-        var program = await _getUseCase.Execute(code);
+        var program = await getProgramOfStudyUseCase.Execute(code);
         return Ok(program);
     }
 
@@ -80,7 +54,7 @@ public class ProgramOfStudyController : ControllerBase
     [HttpPut("{code}")]
     public async Task<IActionResult> Update(string code, [FromBody] ProgramOfStudyDTO programOfStudyDTO)
     {
-        var program = await _updateUseCase.Execute(code, programOfStudyDTO);
+        var program = await updateUseCase.Execute(code, programOfStudyDTO);
         return Ok(program);
     }
 
@@ -88,7 +62,7 @@ public class ProgramOfStudyController : ControllerBase
     [HttpDelete("{code}")]
     public async Task<IActionResult> Delete(string code)
     {
-        await _deleteProgramOfStudyUseCase.Execute(code);
+        await deleteProgramOfStudyUseCase.Execute(code);
         return NoContent();
     }
     #endregion
@@ -97,8 +71,8 @@ public class ProgramOfStudyController : ControllerBase
     [HttpPost("{programOfStudyCode}/competency")]
     public async Task<ActionResult<CompetencyDTO>> AddCompetency(string programOfStudyCode, [FromBody] CompetencyDTO createCompetencyDTO)
     {
-        User user = _userControllerService.GetUserFromHttpContext();
-        CompetencyDTO competency = await _createCompetencyUseCase.Execute(programOfStudyCode, createCompetencyDTO, user);
+        User user = userControllerService.GetUserFromHttpContext();
+        CompetencyDTO competency = await createCompetencyUseCase.Execute(programOfStudyCode, createCompetencyDTO, user);
 
         return CreatedAtAction(
             nameof(GetCompetency),
@@ -110,7 +84,7 @@ public class ProgramOfStudyController : ControllerBase
     [HttpGet("{programOfStudyCode}/competency/{competencyCode}")]
     public async Task<ActionResult<CompetencyDTO>> GetCompetency(string programOfStudyCode, string competencyCode)
     {
-        CompetencyDTO competency = await _getCompetencyUseCase.Execute(programOfStudyCode, competencyCode);
+        CompetencyDTO competency = await getCompetencyUseCase.Execute(programOfStudyCode, competencyCode);
         return Ok(competency);
     }
 
@@ -118,7 +92,7 @@ public class ProgramOfStudyController : ControllerBase
     [HttpGet("{programOfStudyCode}/competency")]
     public async Task<ActionResult<IList<CompetencyDTO>>> GetCompetencies(string programOfStudyCode)
     {
-        IList<CompetencyDTO> competencies = await _getCompetenciesByProgramOfStudyUseCase.Execute(programOfStudyCode);
+        IList<CompetencyDTO> competencies = await getCompetenciesByProgramOfStudyUseCase.Execute(programOfStudyCode);
         return Ok(competencies);
     }
 
@@ -126,16 +100,21 @@ public class ProgramOfStudyController : ControllerBase
     [HttpPut("{programOfStudyCode}/competency/{competencyCode}")]
     public async Task<ActionResult<CompetencyDTO>> UpdateCompetency(string programOfStudyCode, string competencyCode, [FromBody] CompetencyDTO updateCompetencyDTO)
     {
-        User user = _userControllerService.GetUserFromHttpContext();
+        User user = userControllerService.GetUserFromHttpContext();
         if (updateCompetencyDTO.ChangeRecordNumber == 1 && updateCompetencyDTO.IsDraft)
         {
-            CompetencyDTO competency = await _updateDraftV1CompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO, user);
-
+            CompetencyDTO competency = await updateDraftV1CompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO, user);
+            return Ok(competency);
+        }
+        else if (!updateCompetencyDTO.IsDraft)
+        {
+            CompetencyDTO competency = await updatePublishedCompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO, user);
             return Ok(competency);
         }
         else
         {
-            throw new NotSupportedException("Not coded yet");
+            //TODO la mise à jour d'une version draft > 1.
+            return BadRequest("Invalid update request for competency. Please check the ChangeRecordNumber and IsDraft properties.");
         }
     }
 
@@ -143,7 +122,7 @@ public class ProgramOfStudyController : ControllerBase
     [HttpDelete("{programOfStudyCode}/competency/{competencyCode}")]
     public async Task<ActionResult> DeleteCompetency(string programOfStudyCode, string competencyCode)
     {
-        await _deleteCompetencyUseCase.Execute(programOfStudyCode, competencyCode);
+        await deleteCompetencyUseCase.Execute(programOfStudyCode, competencyCode);
         return NoContent();
     }
     #endregion

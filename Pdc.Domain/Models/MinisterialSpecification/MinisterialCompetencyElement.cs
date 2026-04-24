@@ -1,10 +1,16 @@
-﻿using Pdc.Domain.Models.Security;
+﻿using Pdc.Domain.Interfaces.Versioning;
+using Pdc.Domain.Models.Security;
 
 namespace Pdc.Domain.Models.MinisterialSpecification;
 
-public class MinisterialCompetencyElement : CompetencyElement
+public class MinisterialCompetencyElement : CompetencyElement, IChangeablesContainer
 {
     public List<PerformanceCriteria> PerformanceCriterias { get; set; } = [];
+
+    public void RemoveDeletedChangeables(List<Guid> changeableIdsToDelete)
+    {
+        PerformanceCriterias = PerformanceCriterias.Where(x => !changeableIdsToDelete.Contains(x.Id!.Value)).ToList();
+    }
 
     public override void SetChangeRecordOnUntracked(Versioning.ChangeRecord changeRecord)
     {

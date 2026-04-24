@@ -57,10 +57,16 @@ export class ApiClient {
           this.HandleResponseStatus(response.status);
         } catch (e) {
           // if UnauthorizedException, redirect to login page
-          if (e instanceof UnauthorizedException || e instanceof ForbiddenException) {
+          if (e instanceof UnauthorizedException) {
             await this.NavigateToLoginPage(`${this.baseURL}/auth/login`, options);
           } else if (e instanceof ValidationException || e instanceof DuplicateException) {
             if (!options.silentSubmissionError) throw e; // throw error to be handled in the component
+          } else if (e instanceof ForbiddenException) {
+            throw createError({
+              status: 403,
+              statusText: 'Forbidden',
+              data: response._data,
+            });
           }
           console.error(e);
         }
