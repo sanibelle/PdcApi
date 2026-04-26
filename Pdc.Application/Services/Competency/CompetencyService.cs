@@ -10,13 +10,9 @@ public class CompetencyService(IChangeDetailsRepository changeDetailsRepository,
                        IMapper mapper,
                        IValidator<CompetencyDTO> validator)
 {
-    public async Task<CompetencyDTO> RemoveDeletedChangeables(MinisterialCompetency competency)
+    public async Task<CompetencyDTO> RemoveDeletedChangeables(MinisterialCompetency competency, Guid targetChangeRecordId, int? recordNumberToSkip = null)
     {
-        if (competency.ChangeRecord?.Id == null)
-        {
-            throw new NullReferenceException("Competency must have a valid ChangeRecord with an Id.");
-        }
-        List<Guid> changeableIdsToDelete = await changeDetailsRepository.FindDeletedChangeableIdByChangeRecordId(competency.ChangeRecord.Id.Value);
+        List<Guid> changeableIdsToDelete = await changeDetailsRepository.FindDeletedChangeableIdByChangeRecordId(targetChangeRecordId, recordNumberToSkip);
         competency.RemoveDeletedChangeables(changeableIdsToDelete);
 
         return mapper.Map<CompetencyDTO>(competency);

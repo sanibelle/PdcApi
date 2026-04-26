@@ -38,6 +38,10 @@ public class UpdatePublishedCompetency(ICompetencyRepository competencyRepositor
 
         // UpdateAndTrack se charge de gérer le suivi des changements
         MinisterialCompetency updatedCompetency = await competencyRepository.UpdateWithChangeTracking(competencyToUpdate);
-        return await competencyService.RemoveDeletedChangeables(updatedCompetency);
+        if (!updatedCompetency.ChangeRecord.Id.HasValue)
+        {
+            throw new NullReferenceException("Competency must have a valid ChangeRecord with an Id.");
+        }
+        return await competencyService.RemoveDeletedChangeables(updatedCompetency, updatedCompetency.ChangeRecord.Id.Value);
     }
 }

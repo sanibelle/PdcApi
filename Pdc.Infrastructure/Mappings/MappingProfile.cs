@@ -34,6 +34,11 @@ public class MappingProfile : Profile
             .ReverseMap()
             .PreserveReferences();
 
+        CreateMap<ChangeDetail, ChangeDetailEntity>()
+            .PreserveReferences()
+            .ReverseMap()
+            .PreserveReferences();
+
         CreateMap<Changeable, ChangeableEntity>()
             .PreserveReferences()
             .ReverseMap()

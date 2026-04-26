@@ -64,6 +64,7 @@ internal static class CompetencyUtils
                     .Excluding(x => x.ChangeRecordId)
                     .Excluding(x => x.Units)
                     .Excluding(x => x.CompetencyElements)
+                    .Excluding(x => x.ChangeDetails)
                     .Excluding(x => x.RealisationContexts));
 
         Assert.That(competencyToCompare.ChangeRecordNumber == targetVersionNumber);
