@@ -28,7 +28,7 @@
         <!-- Main content slot -->
         <slot />
       </div>
-      <CommonTemplateTheComplementaryInformationsContainer />
+      <ModulesAdministrationComplementaryInformationTheContainer />
     </div>
     <CommonTemplateAModal />
     <footer class="bg-gray-900 text-white py-8">POC semaines plan de cours</footer>

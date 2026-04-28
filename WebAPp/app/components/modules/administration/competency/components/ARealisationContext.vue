@@ -25,18 +25,18 @@
 
 <template>
   <FormATextInput
+    v-model="model.value"
     :focus-on-mount="index === indexToFocus"
     :name="`competency.realisationContexts[${index}].value`"
     :min="3"
     :max="100"
     :required="true"
-    v-model="model.value"
   >
     <CommonAtomsAButton
       :data-testid="`delete-realisation-context-button-${index}`"
       :aria-label="t('deleteRealisationContext')"
-      @click="() => emit('deleteRow', index)"
-      :preventDefault="true"
+      :prevent-default="true"
+      @click.prevent="() => emit('deleteRow', index)"
     >
       -
     </CommonAtomsAButton>

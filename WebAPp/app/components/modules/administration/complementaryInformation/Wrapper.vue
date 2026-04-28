@@ -4,7 +4,7 @@
   const { t } = useI18n();
 
   const complementaryInformations = defineModel<EditableComplementaryInformation[]>();
-  const props = defineProps({
+  defineProps({
     isViewOnly: {
       default: true,
       type: Boolean,
@@ -27,40 +27,13 @@
 
   const handleShowFormClick = () => {
     showForm.value = !showForm.value;
-    comment.value = '';
   };
 
   const onCancelClick = () => {
     showForm.value = false;
   };
 
-  const { createComplementaryInformation, deleteComplementaryInformation } = useComplementaryInformationClient();
-  const comment = ref('');
-
-  const { handleSubmit, isSubmitting } = useForm<ComplementaryInformation>({
-    validateOnMount: false,
-  });
-
-  const onSubmit = handleSubmit(async () => {
-    try {
-      if (props.changeableId) {
-        const newItem = await createComplementaryInformation(props.changeableId, { text: comment.value });
-        if (complementaryInformations.value) {
-          complementaryInformations.value.push(newItem);
-        } else {
-          complementaryInformations.value = [newItem];
-        }
-      } else {
-        // TODO error management with nice modal
-        alert(t('errorAddingCommentMissingChangeableId'));
-      }
-    } catch (error) {
-      // TODO error management with nice modal
-      alert(t('errorWhenAddingComplementaryInformation'));
-      console.error('Error creating complementary information:', error);
-    }
-    showForm.value = false;
-  });
+  const { deleteComplementaryInformation } = useComplementaryInformationClient();
 
   const onDeleteClick = async (id: string | undefined) => {
     //TODO ajouter une validation qui demande si on est certain.
@@ -103,6 +76,15 @@
     }
     return text.substring(0, maxLength) + '...';
   };
+
+  const onCommentAdded = (newItem: EditableComplementaryInformation) => {
+    if (complementaryInformations.value) {
+      complementaryInformations.value.push(newItem);
+    } else {
+      complementaryInformations.value = [newItem];
+    }
+    showForm.value = false;
+  };
 </script>
 
 <template>
@@ -125,34 +107,12 @@
       </div>
       <slot></slot>
       <Transition name="slide-fade">
-        <form
+        <ModulesAdministrationComplementaryInformationFormCreate
           v-if="showForm"
-          class="add-comment-form"
-          @submit="onSubmit"
-        >
-          <FormATextAreaInput
-            v-model="comment"
-            :focus-on-mount="true"
-            name="comment"
-            :required="true"
-            :max="1000"
-            :placeholder="t('addComment')"
-          />
-          <div class="add-comment-actions">
-            <FormMoleculesASubmitButton
-              :is-submitting="isSubmitting"
-              data-testid="submit-button"
-            >
-              {{ t('submit') }}
-            </FormMoleculesASubmitButton>
-            <CommonAtomsAButton
-              class="cancel"
-              @click="onCancelClick"
-            >
-              {{ t('cancel') }}
-            </CommonAtomsAButton>
-          </div>
-        </form>
+          :changeable-id="changeableId"
+          @added="onCommentAdded"
+          @cancel="onCancelClick"
+        />
       </Transition>
     </div>
     <Teleport to="#comments-panel">
@@ -190,7 +150,7 @@
               />
             </template>
           </div>
-          <FormAComplementaryInformation
+          <ModulesAdministrationComplementaryInformationFormEdit
             v-if="complementaryInformation.isInEdit"
             v-model="complementaryInformation!"
             @cancel="hideComplementaryInformationEditForm(complementaryInformation)"

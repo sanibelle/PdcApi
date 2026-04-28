@@ -28,18 +28,18 @@
 
 <template>
   <FormATextInput
-    :name="`competency.competencyElements[${competencyElementIndex}].performanceCriterias[${performanceCriteriaIndex}].value`"
+    v-model="model.value"
+    :name="`competencyElements[${competencyElementIndex}].performanceCriterias[${performanceCriteriaIndex}].value`"
     :min="3"
     :max="100"
     :required="true"
     :focus-on-mount="performanceCriteriaIndex === indexToFocus"
-    v-model="model.value"
   >
     <CommonAtomsAButton
       :aria-label="t('deleteButtonText')"
       :data-testid="`delete-performance-criteria-button-${competencyElementIndex}-${performanceCriteriaIndex}`"
+      :prevent-default="true"
       @click="() => emit('deleteRow', competencyElementIndex, performanceCriteriaIndex)"
-      :preventDefault="true"
     >
       -
     </CommonAtomsAButton>
