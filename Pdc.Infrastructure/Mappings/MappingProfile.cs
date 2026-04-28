@@ -35,6 +35,8 @@ public class MappingProfile : Profile
             .PreserveReferences();
 
         CreateMap<ChangeDetail, ChangeDetailEntity>()
+            .ForMember(dest => dest.ChangeRecordId,
+               opt => opt.MapFrom(src => src.ChangeRecord != null ? src.ChangeRecord.Id : null))
             .PreserveReferences()
             .ReverseMap()
             .PreserveReferences();
