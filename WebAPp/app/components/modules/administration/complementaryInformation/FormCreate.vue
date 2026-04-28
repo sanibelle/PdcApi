@@ -1,9 +1,7 @@
 <script setup lang="ts">
-  import type { ComplementaryInformation, EditableComplementaryInformation } from '...';
-
   const { t } = useI18n();
   const props = defineProps<{ changeableId?: string }>();
-  const emit = defineEmits<{ added: [item: EditableComplementaryInformation]; cancel: [] }>();
+  const emit = defineEmits<{ added: [item: ComplementaryInformation]; cancel: [] }>();
 
   const comment = ref('');
   const { createComplementaryInformation } = useComplementaryInformationClient();

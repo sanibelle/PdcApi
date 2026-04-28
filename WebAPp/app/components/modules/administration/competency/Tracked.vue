@@ -38,7 +38,7 @@
               v-if="!isDraft"
               #action-btn
             >
-              <ModulesChangeableAEditButton v-model="competency.realisationContexts[index]!" />
+              <ModulesChangeableEditButton v-model="competency.realisationContexts[index]!" />
             </template>
             {{ context.value }}
           </ModulesAdministrationComplementaryInformationWrapper>
@@ -70,7 +70,7 @@
                 v-if="!isDraft"
                 #action-btn
               >
-                <ModulesChangeableAEditButton v-model="competency.competencyElements[ceIndex]!" />
+                <ModulesChangeableEditButton v-model="competency.competencyElements[ceIndex]!" />
               </template>
               {{ ceIndex + 1 }}. {{ competencyElement.value }}
             </ModulesAdministrationComplementaryInformationWrapper>
@@ -90,7 +90,7 @@
                   v-if="!isDraft"
                   #action-btn
                 >
-                  <ModulesChangeableAEditButton v-model="competency.competencyElements[ceIndex]!.performanceCriterias[pcIndex]!" />
+                  <ModulesChangeableEditButton v-model="competency.competencyElements[ceIndex]!.performanceCriterias[pcIndex]!" />
                 </template>
                 {{ performanceCriteria.value }}
               </ModulesAdministrationComplementaryInformationWrapper>

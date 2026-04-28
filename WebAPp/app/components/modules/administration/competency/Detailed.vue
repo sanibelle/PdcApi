@@ -8,6 +8,7 @@
     },
   });
 
+  const changeDetails = computed(() => props.competency.changeDetails || []);
   const isDraft = computed(() => props.competency.isDraft);
 </script>
 
@@ -32,15 +33,17 @@
             v-model="context.complementaryInformations"
             :is-view-only="false"
             :changeable-id="context.id"
-            class="criterion"
           >
             <template
               v-if="!isDraft"
               #action-btn
             >
-              <ModulesChangeableAEditButton v-model="competency.realisationContexts[index]!" />
+              <ModulesChangeableEditButton v-model="competency.realisationContexts[index]!" />
             </template>
-            {{ context.value }}
+            <ModulesChangeableDisplay
+              :change-details="changeDetails"
+              :changeable="context"
+            />
           </ModulesAdministrationComplementaryInformationWrapper>
         </template>
       </CommonMoleculesARow>
@@ -70,9 +73,12 @@
                 v-if="!isDraft"
                 #action-btn
               >
-                <ModulesChangeableAEditButton v-model="competency.competencyElements[ceIndex]!" />
+                <ModulesChangeableEditButton v-model="competency.competencyElements[ceIndex]!" />
               </template>
-              {{ ceIndex + 1 }}. {{ competencyElement.value }}
+              <ModulesChangeableDisplay
+                :change-details="changeDetails"
+                :changeable="competencyElement"
+              />
             </ModulesAdministrationComplementaryInformationWrapper>
           </template>
           <template #col-right>
@@ -90,9 +96,12 @@
                   v-if="!isDraft"
                   #action-btn
                 >
-                  <ModulesChangeableAEditButton v-model="competency.competencyElements[ceIndex]!.performanceCriterias[pcIndex]!" />
+                  <ModulesChangeableEditButton v-model="competency.competencyElements[ceIndex]!.performanceCriterias[pcIndex]!" />
                 </template>
-                {{ performanceCriteria.value }}
+                <ModulesChangeableDisplay
+                  :change-details="changeDetails"
+                  :changeable="performanceCriteria"
+                />
               </ModulesAdministrationComplementaryInformationWrapper>
             </div>
           </template>
@@ -112,13 +121,3 @@
   }
 }
 </i18n>
-
-<style lang="scss" scoped>
-  .criterion {
-    padding: 6px 10px;
-    font-size: 13px;
-    color: #333;
-    position: relative;
-    cursor: default;
-  }
-</style>

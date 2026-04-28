@@ -10,12 +10,13 @@
     },
   });
 
-  const { fetchCompetencyByCode } = useCompetencyClient();
+  const { fetchTrackedCompetencyByCode } = useCompetencyClient();
   const competency = ref<Competency>();
   const editMode = ref(false);
 
   onMounted(async () => {
-    competency.value = await fetchCompetencyByCode(programCode, competencyCode);
+    // TODO charger les cangements juste au besoin
+    competency.value = await fetchTrackedCompetencyByCode(programCode, competencyCode, 2);
   });
 
   const isSubmitting = ref(false);

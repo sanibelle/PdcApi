@@ -18,6 +18,14 @@ export const useCompetencyClient = () => {
     return competency;
   };
 
+  const fetchTrackedCompetencyByCode = async (programCode: string, competencyCode: string, versionNumber: number): Promise<Competency> => {
+    const competency = await api.Get<Competency>(`/programofstudy/${programCode}/competency/${competencyCode}/v${versionNumber}`);
+    if (competency == null) {
+      throw new Error('Failed to fetch competency - server returned null response');
+    }
+    return competency;
+  };
+
   const createCompetency = async (programCode: string, competency: Competency): Promise<Competency> => {
     const createdCompetency = await api.Post<Competency>(`/programofstudy/${programCode}/competency`, competency);
 
@@ -36,5 +44,5 @@ export const useCompetencyClient = () => {
     return updatedCompetency;
   };
 
-  return { fetchCompetencies, createCompetency, fetchCompetencyByCode, updateCompetency };
+  return { fetchCompetencies, createCompetency, fetchCompetencyByCode, updateCompetency, fetchTrackedCompetencyByCode };
 };
