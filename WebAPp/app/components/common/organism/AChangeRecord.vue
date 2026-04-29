@@ -26,25 +26,13 @@
     (e: 'update:changeNumberToCompare', value: number | null): void;
   }>();
 
-  watch(
-    () => showChangeHistory.value,
-    (newValue) => {
-      if (newValue) {
-        changeRecordNumberToCompare.value = props.changeRecordNumber;
-        emit('update:changeNumberToCompare', changeRecordNumberToCompare.value);
-      } else {
-        emit('update:changeNumberToCompare', null);
-      }
-    },
-  );
-  watch(
-    () => changeRecordNumberToCompare.value,
-    () => {
-      if (showChangeHistory.value) {
-        emit('update:changeNumberToCompare', changeRecordNumberToCompare.value);
-      }
-    },
-  );
+  watch([() => showChangeHistory.value, () => changeRecordNumberToCompare.value], ([showChangeHistory, changeRecordNumber]) => {
+    if (showChangeHistory) {
+      emit('update:changeNumberToCompare', changeRecordNumber);
+    } else {
+      emit('update:changeNumberToCompare', null);
+    }
+  });
 </script>
 
 <template>
