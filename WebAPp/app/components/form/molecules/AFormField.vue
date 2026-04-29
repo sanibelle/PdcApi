@@ -63,9 +63,9 @@
 <template>
   <div class="flex">
     <FormAtomsABaseLabel
+      v-if="label"
       :for-id="inputId"
       :required="required"
-      v-if="label"
     >
       {{ label }}
     </FormAtomsABaseLabel>
@@ -73,22 +73,21 @@
       v-if="type === 'checkbox'"
       v-bind="$attrs"
       :id="inputId"
+      v-model="model as any"
       :name="name"
-      :placeholder="placeholder"
       :disabled="disabled"
       :rules="rules"
-      v-model="model as any"
       @update:error-message="error = $event"
     />
     <FormAtomsATextAreaInput
       v-else-if="type === 'textarea'"
       v-bind="$attrs"
       :id="inputId"
+      v-model="model as any"
       :name="name"
       :placeholder="placeholder"
       :disabled="disabled"
       :rules="rules"
-      v-model="model as any"
       :focus-on-mount="focusOnMount"
       @update:error-message="error = $event"
     />
@@ -96,12 +95,12 @@
       v-else
       v-bind="$attrs"
       :id="inputId"
+      v-model="model as any"
       :name="name"
       :placeholder="placeholder"
       :disabled="disabled"
       :rules="rules"
       :focus-on-mount="focusOnMount"
-      v-model="model as any"
       @update:error-message="error = $event"
     />
     <div

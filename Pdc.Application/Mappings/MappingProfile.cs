@@ -28,6 +28,9 @@ public class MappingProfile : Profile
         CreateMap<ChangeableDTO, PerformanceCriteria>().ReverseMap();
         CreateMap<ChangeableDTO, Changeable>().ReverseMap();
         CreateMap<ChangeRecordDTO, ChangeRecord>().ReverseMap();
+        CreateMap<ChangeDetailDTO, ChangeDetail>()
+            .ReverseMap()
+            .ForMember(dest => dest.ChangeableId, opt => opt.MapFrom(src => src.Changeable.Id != null ? src.Changeable.Id.Value : default));
         CreateMap<UserDTO, User>()
             .ReverseMap();
         CreateMap<ComplementaryInformationDTO, ComplementaryInformation>()

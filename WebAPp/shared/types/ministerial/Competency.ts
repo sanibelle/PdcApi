@@ -6,6 +6,7 @@ export type Competency = {
   statementOfCompetency: string;
   realisationContexts: RealisationContext[];
   competencyElements: CompetencyElement[];
+  changeDetails: ChangeDetail[];
   isDraft: boolean;
   changeRecordNumber?: number;
   changeRecordId?: string;

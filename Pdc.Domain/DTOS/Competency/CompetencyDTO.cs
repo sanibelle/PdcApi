@@ -17,7 +17,5 @@ public class CompetencyDTO
     public Guid? ChangeRecordId { get; set; }
     public bool IsDraft { get; set; } = false;
     public CompetencyDTO() { }
-
-
-
+    public List<ChangeDetailDTO> ChangeDetails { get; set; } = new List<ChangeDetailDTO>();
 }

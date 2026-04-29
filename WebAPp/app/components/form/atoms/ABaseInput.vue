@@ -1,100 +1,114 @@
 <script setup lang="ts">
-import { useField } from 'vee-validate';
+  import { FormContextKey, useField } from 'vee-validate';
 
-const props = defineProps({
-  name: {
-    type: String,
+  const props = defineProps({
+    name: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      default: 'text',
+    },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    rules: {
+      type: [String, Object],
+      default: '',
+    },
+    focusOnMount: {
+      type: Boolean,
+      default: false,
+    },
+    id: {
+      type: String,
+      default: undefined,
+    },
+  });
+
+  const nameRef = toRef(props, 'name');
+  const rulesRef = toRef(props, 'rules');
+
+  const emit = defineEmits(['update:errorMessage']);
+
+  const model = defineModel<string | number | undefined>({
     required: true,
-  },
-  type: {
-    type: String,
-    default: 'text',
-  },
-  placeholder: {
-    type: String,
-    default: '',
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  rules: {
-    type: [String, Object],
-    default: '',
-  },
-  focusOnMount: {
-    type: Boolean,
-    default: false,
-  },
-});
+  });
 
-const emit = defineEmits(['update:errorMessage']);
+  const { value, errorMessage, handleBlur, setValue, handleChange } = useField<string | number | undefined>(nameRef, rulesRef, {
+    validateOnMount: false,
+    initialValue: model.value,
+    validateOnValueUpdate: false,
+  });
 
-const model = defineModel<string | number | undefined>({
-  required: true,
-})
+  watch(
+    () => model.value,
+    (newValue) => {
+      if (newValue !== value.value) {
+        setValue(newValue);
+      }
+    },
+  );
 
-const { value, errorMessage, handleBlur, setValue, handleChange } = useField<string | number | undefined>(props.name, props.rules, {
-  validateOnMount: false,
-  initialValue: model.value,
-  validateOnValueUpdate: false,
-});
+  const onChange = (event: Event) => {
+    handleChange(event, !!errorMessage.value);
+    const target = event.target as HTMLInputElement;
+    model.value = target.value;
+  };
 
+  const onBlur = (event: Event) => {
+    handleBlur(event, !!errorMessage.value);
+  };
 
-watch(
-  () => model.value,
-  (newValue) => {
-    if (newValue !== value.value) {
-      setValue(newValue);
-    }
-  }
-);
-
-const onChange = (event: Event) => {
-  handleChange(event, !!errorMessage.value);
-  const target = event.target as HTMLInputElement;
-  model.value = target.value;
-};
-
-const onBlur = (event: Event) => {
-  handleBlur(event, !!errorMessage.value);
-};
-
-watch(
-  errorMessage,
-  (newErrorMessage) => {
+  watch(errorMessage, (newErrorMessage) => {
     emit('update:errorMessage', newErrorMessage);
-  }
-);
+  });
 </script>
 
 <template>
-  <input v-focus="focusOnMount" :name="name" :value="value" :type="type" :placeholder="placeholder" :disabled="disabled" class="base-input"
-    :class="{ error: errorMessage }" @input="onChange" @blur="onBlur" />
+  <input
+    :id="id"
+    v-focus="focusOnMount"
+    :name="name"
+    :value="value"
+    :type="type"
+    :placeholder="placeholder"
+    :disabled="disabled"
+    class="base-input"
+    :class="{ error: errorMessage }"
+    @input="onChange"
+    @blur="onBlur"
+  />
 </template>
 
 <style scoped>
-.base-input {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: border-color 0.2s ease;
+  .base-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
 
-  &:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.5);
-  }
+    &:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.5);
+    }
 
-  &:disabled {
-    background-color: #f1f5f9;
-    cursor: not-allowed;
-  }
+    &:disabled {
+      background-color: #f1f5f9;
+      cursor: not-allowed;
+    }
 
-  &.error {
-    border-color: #ef4444;
+    &.error {
+      border-color: #ef4444;
+    }
   }
-}
 </style>

@@ -10,13 +10,21 @@
     },
   });
 
-  const { fetchCompetencyByCode } = useCompetencyClient();
+  const { fetchTrackedCompetencyByCode, fetchCompetencyByCode } = useCompetencyClient();
   const competency = ref<Competency>();
   const editMode = ref(false);
 
   onMounted(async () => {
     competency.value = await fetchCompetencyByCode(programCode, competencyCode);
   });
+
+  const handleFetchTrackedCompetencyByChangeRecordNumber = async (changeRecordNumber: number | null) => {
+    if (changeRecordNumber) {
+      competency.value = await fetchTrackedCompetencyByCode(programCode, competencyCode, changeRecordNumber);
+    } else {
+      competency.value = await fetchCompetencyByCode(programCode, competencyCode);
+    }
+  };
 
   const isSubmitting = ref(false);
 
@@ -71,6 +79,7 @@
       v-if="competency?.changeRecordNumber"
       :change-record-number="competency?.changeRecordNumber"
       :is-draft="competency?.isDraft"
+      @update:change-number-to-compare="handleFetchTrackedCompetencyByChangeRecordNumber"
     />
     <section v-if="competency">
       <template v-if="editMode">

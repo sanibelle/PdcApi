@@ -8,7 +8,6 @@
     },
   });
 
-  const changeDetails = computed(() => props.competency.changeDetails || []);
   const isDraft = computed(() => props.competency.isDraft);
 </script>
 
@@ -33,6 +32,7 @@
             v-model="context.complementaryInformations"
             :is-view-only="false"
             :changeable-id="context.id"
+            class="criterion"
           >
             <template
               v-if="!isDraft"
@@ -40,10 +40,7 @@
             >
               <ModulesChangeableEditButton v-model="competency.realisationContexts[index]!" />
             </template>
-            <ModulesChangeableDisplay
-              :change-details="changeDetails"
-              :changeable="context"
-            />
+            {{ context.value }}
           </ModulesAdministrationComplementaryInformationWrapper>
         </template>
       </CommonMoleculesARow>
@@ -75,10 +72,7 @@
               >
                 <ModulesChangeableEditButton v-model="competency.competencyElements[ceIndex]!" />
               </template>
-              <ModulesChangeableDisplay
-                :change-details="changeDetails"
-                :changeable="competencyElement"
-              />
+              {{ ceIndex + 1 }}. {{ competencyElement.value }}
             </ModulesAdministrationComplementaryInformationWrapper>
           </template>
           <template #col-right>
@@ -98,10 +92,7 @@
                 >
                   <ModulesChangeableEditButton v-model="competency.competencyElements[ceIndex]!.performanceCriterias[pcIndex]!" />
                 </template>
-                <ModulesChangeableDisplay
-                  :change-details="changeDetails"
-                  :changeable="performanceCriteria"
-                />
+                {{ performanceCriteria.value }}
               </ModulesAdministrationComplementaryInformationWrapper>
             </div>
           </template>
@@ -121,3 +112,13 @@
   }
 }
 </i18n>
+
+<style lang="scss" scoped>
+  .criterion {
+    padding: 6px 10px;
+    font-size: 13px;
+    color: #333;
+    position: relative;
+    cursor: default;
+  }
+</style>

@@ -22,6 +22,7 @@ public class ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
                                 IUpdatePublishedCompetencyUseCase updatePublishedCompetencyUseCase,
                                 IGetCompetenciesByProgramOfStudyUseCase getCompetenciesByProgramOfStudyUseCase,
                                 IGetCompetencyUseCase getCompetencyUseCase,
+                                IGetCompetencyWithChangeDetailsUseCase getCompetencyWithChangeDetailsUseCase,
                                 UserControllerService userControllerService) : ControllerBase
 {
     #region ProgramOfStudy
@@ -80,11 +81,18 @@ public class ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
             competency);
     }
 
-    [Authorize(Roles = Roles.Competency)]
     [HttpGet("{programOfStudyCode}/competency/{competencyCode}")]
     public async Task<ActionResult<CompetencyDTO>> GetCompetency(string programOfStudyCode, string competencyCode)
     {
         CompetencyDTO competency = await getCompetencyUseCase.Execute(programOfStudyCode, competencyCode);
+        return Ok(competency);
+    }
+
+    [Authorize(Roles = Roles.Competency)]
+    [HttpGet("{programOfStudyCode}/competency/{competencyCode}/v{versionNumber}")]
+    public async Task<ActionResult<CompetencyDTO>> GetCompetency(string programOfStudyCode, string competencyCode, int versionNumber)
+    {
+        CompetencyDTO competency = await getCompetencyWithChangeDetailsUseCase.Execute(programOfStudyCode, competencyCode, versionNumber);
         return Ok(competency);
     }
 

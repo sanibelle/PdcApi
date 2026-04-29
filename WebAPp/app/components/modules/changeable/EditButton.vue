@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import AEditForm from './AEditForm.vue';
+  import EditForm from './EditForm.vue';
 
   const { t } = useI18n();
 
@@ -12,7 +12,7 @@
   const handleShowForm = () => {
     open({
       title: t('title'),
-      component: AEditForm,
+      component: EditForm,
       hideFooter: true,
       componentProps: {
         modelValue: model,
@@ -26,7 +26,7 @@
 </script>
 
 <template>
-  <CommonMoleculesAEditButton @click="handleShowForm" />
+  <CommonMoleculesEditButton @click="handleShowForm" />
 </template>
 
 <i18n lang="json">

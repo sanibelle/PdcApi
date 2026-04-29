@@ -342,6 +342,7 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         await _context.SaveChangesAsync();
     }
 
+    // XXX Question client: Est-ce qu'une compétence peut avoir le même code dans un autre programme?
     public async Task<MinisterialCompetency> FindByCode(string competencyCode)
     {
         CompetencyEntity entity = await FindDetailedEntityByCode(competencyCode);

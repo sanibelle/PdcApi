@@ -1,10 +1,8 @@
 <script setup lang="ts">
-  import type { ComplementaryInformation, EditableComplementaryInformation } from '~~/shared/types/common/ComplementaryInformation';
-
   const { t } = useI18n();
 
   const complementaryInformations = defineModel<EditableComplementaryInformation[]>();
-  const props = defineProps({
+  defineProps({
     isViewOnly: {
       default: true,
       type: Boolean,
@@ -27,40 +25,13 @@
 
   const handleShowFormClick = () => {
     showForm.value = !showForm.value;
-    comment.value = '';
   };
 
   const onCancelClick = () => {
     showForm.value = false;
   };
 
-  const { createComplementaryInformation, deleteComplementaryInformation } = useComplementaryInformationClient();
-  const comment = ref('');
-
-  const { handleSubmit, isSubmitting } = useForm<ComplementaryInformation>({
-    validateOnMount: false,
-  });
-
-  const onSubmit = handleSubmit(async () => {
-    try {
-      if (props.changeableId) {
-        const newItem = await createComplementaryInformation(props.changeableId, { text: comment.value });
-        if (complementaryInformations.value) {
-          complementaryInformations.value.push(newItem);
-        } else {
-          complementaryInformations.value = [newItem];
-        }
-      } else {
-        // TODO error management with nice modal
-        alert(t('errorAddingCommentMissingChangeableId'));
-      }
-    } catch (error) {
-      // TODO error management with nice modal
-      alert(t('errorWhenAddingComplementaryInformation'));
-      console.error('Error creating complementary information:', error);
-    }
-    showForm.value = false;
-  });
+  const { deleteComplementaryInformation } = useComplementaryInformationClient();
 
   const onDeleteClick = async (id: string | undefined) => {
     //TODO ajouter une validation qui demande si on est certain.
@@ -103,108 +74,94 @@
     }
     return text.substring(0, maxLength) + '...';
   };
+
+  const onCommentAdded = (newItem: ComplementaryInformation) => {
+    if (complementaryInformations.value) {
+      complementaryInformations.value.push(newItem);
+    } else {
+      complementaryInformations.value = [newItem];
+    }
+    showForm.value = false;
+  };
 </script>
 
 <template>
-  <div>
+  <div
+    class="commentable"
+    :class="{ 'has-comment': hasComments, highlight: isHovered && hasComments }"
+    @mouseenter="
+      isHovered = true;
+      scrollToComment();
+    "
+    @mouseleave="isHovered = false"
+  >
+    <div class="icon-row">
+      <span
+        v-if="!isViewOnly"
+        class="add-comment-btn"
+        @click="handleShowFormClick"
+      ></span>
+      <slot name="action-btn"></slot>
+    </div>
+    <slot></slot>
+    <Transition name="slide-fade">
+      <ModulesAdministrationComplementaryInformationFormCreate
+        v-if="showForm"
+        :changeable-id="changeableId"
+        @added="onCommentAdded"
+        @cancel="onCancelClick"
+      />
+    </Transition>
+  </div>
+  <Teleport to="#comments-panel">
     <div
-      :class="{ 'has-comment': hasComments, highlight: isHovered && hasComments, commentable: true }"
-      @mouseenter="
-        isHovered = true;
-        scrollToComment();
-      "
+      v-if="hasComments"
+      ref="commentRef"
+      class="comment"
+      :class="{ highlight: isHovered }"
+      @mouseenter="isHovered = true"
       @mouseleave="isHovered = false"
     >
-      <div class="icon-row">
-        <span
-          v-if="!isViewOnly"
-          class="add-comment-btn"
-          @click="handleShowFormClick"
-        ></span>
-        <slot name="action-btn"></slot>
-      </div>
-      <slot></slot>
-      <Transition name="slide-fade">
-        <form
-          v-if="showForm"
-          class="add-comment-form"
-          @submit="onSubmit"
-        >
-          <FormATextAreaInput
-            v-model="comment"
-            :focus-on-mount="true"
-            name="comment"
-            :required="true"
-            :max="1000"
-            :placeholder="t('addComment')"
-          />
-          <div class="add-comment-actions">
-            <FormMoleculesASubmitButton
-              :is-submitting="isSubmitting"
-              data-testid="submit-button"
-            >
-              {{ t('submit') }}
-            </FormMoleculesASubmitButton>
-            <CommonAtomsAButton
-              class="cancel"
-              @click="onCancelClick"
-            >
-              {{ t('cancel') }}
-            </CommonAtomsAButton>
-          </div>
-        </form>
-      </Transition>
-    </div>
-    <Teleport to="#comments-panel">
       <div
-        v-if="hasComments"
-        ref="commentRef"
-        class="comment"
-        :class="{ highlight: isHovered }"
-        @mouseenter="isHovered = true"
-        @mouseleave="isHovered = false"
+        v-for="complementaryInformation of complementaryInformations"
+        :key="complementaryInformation.id"
+        class="comment-entry"
       >
-        <div
-          v-for="complementaryInformation of complementaryInformations"
-          :key="complementaryInformation.id"
-          class="comment-entry"
-        >
-          <div class="comment-header">
-            <div class="comment-meta">
-              <div class="comment-author">{{ truncateText(complementaryInformation.createdBy?.userName, 20) || t('unknownUser') }}</div>
-              <div class="comment-date">
-                <div class="comment-version">V{{ complementaryInformation.changeRecordNumber }}</div>
-                -
-                <CommonMoleculesADate :date="complementaryInformation.createdOn" />
-              </div>
+        <div class="comment-header">
+          <div class="comment-meta">
+            <div class="comment-author">{{ truncateText(complementaryInformation.createdBy?.userName, 20) || t('unknownUser') }}</div>
+            <div class="comment-date">
+              <div class="comment-version">V{{ complementaryInformation.changeRecordNumber }}</div>
+              -
+              <CommonMoleculesADate :date="complementaryInformation.createdOn" />
             </div>
-            <!-- // TODO reutiliser le funky close button -->
-            <template v-if="!isViewOnly && !complementaryInformation.isInEdit">
-              <CommonMoleculesADeleteButton
-                class="btn-delete"
-                @click="onDeleteClick(complementaryInformation.id)"
-              />
-              <CommonMoleculesAEditButton
-                class="btn-edit"
-                @click="showComplementaryInformationEditForm(complementaryInformation)"
-              />
-            </template>
           </div>
-          <FormAComplementaryInformation
-            v-if="complementaryInformation.isInEdit"
-            v-model="complementaryInformation!"
-            @cancel="hideComplementaryInformationEditForm(complementaryInformation)"
-          />
-          <div
-            v-else
-            class="comment-text"
-          >
-            {{ complementaryInformation.text }}
-          </div>
+          <!-- // TODO reutiliser le funky close button -->
+          <template v-if="!isViewOnly && !complementaryInformation.isInEdit">
+            <CommonMoleculesADeleteButton
+              class="btn-delete"
+              @click="onDeleteClick(complementaryInformation.id)"
+            />
+            <CommonMoleculesAEditButton
+              class="btn-edit"
+              @click="showComplementaryInformationEditForm(complementaryInformation)"
+            />
+          </template>
+        </div>
+        <ModulesAdministrationComplementaryInformationFormEdit
+          v-if="complementaryInformation.isInEdit"
+          v-model="complementaryInformation!"
+          @cancel="hideComplementaryInformationEditForm(complementaryInformation)"
+        />
+        <div
+          v-else
+          class="comment-text"
+        >
+          {{ complementaryInformation.text }}
         </div>
       </div>
-    </Teleport>
-  </div>
+    </div>
+  </Teleport>
 </template>
 
 <i18n lang="json">

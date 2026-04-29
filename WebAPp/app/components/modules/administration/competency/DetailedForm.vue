@@ -171,7 +171,7 @@
               />
             </template>
             <template #col-right>
-              <CommonTemplateAComplementaryInformationable
+              <ModulesAdministrationComplementaryInformationWrapper
                 v-for="(realisationContext, index) in competency.realisationContexts"
                 :key="index"
                 v-model="realisationContext.complementaryInformations!"
@@ -184,7 +184,7 @@
                   :index-to-focus="realisationContextIndexToFocus"
                   @delete-row="removeRealisationContextRow"
                 />
-              </CommonTemplateAComplementaryInformationable>
+              </ModulesAdministrationComplementaryInformationWrapper>
               <div
                 data-testid="add-realisation-context"
                 @click="addRealisationContextRow"
@@ -192,6 +192,7 @@
                 <FormATextInput
                   v-model="addElementPlaceholderRef"
                   :name="`add-realisation-context-input`"
+                  @focus="addRealisationContextRow"
                 />
               </div>
             </template>
@@ -214,7 +215,7 @@
             class="row"
           >
             <template #col-left>
-              <CommonTemplateAComplementaryInformationable
+              <ModulesAdministrationComplementaryInformationWrapper
                 v-model="competencyElement.complementaryInformations!"
                 :index="competencyElementIndex"
                 :name="`competency.competencyElements[${competencyElementIndex}]`"
@@ -225,10 +226,10 @@
                   :index-to-focus="competencyElementIndexToFocus"
                   @delete-row="removeCompetencyElementRow"
                 />
-              </CommonTemplateAComplementaryInformationable>
+              </ModulesAdministrationComplementaryInformationWrapper>
             </template>
             <template #col-right>
-              <CommonTemplateAComplementaryInformationable
+              <ModulesAdministrationComplementaryInformationWrapper
                 v-for="(performanceCriteria, performanceCriteriaIndex) in competencyElement.performanceCriterias"
                 :key="performanceCriteriaIndex"
                 v-model="performanceCriteria.complementaryInformations!"
@@ -242,7 +243,7 @@
                   :performance-criteria-index="performanceCriteriaIndex"
                   @delete-row="removePerformanceCriteriaRow(competencyElementIndex, performanceCriteriaIndex)"
                 />
-              </CommonTemplateAComplementaryInformationable>
+              </ModulesAdministrationComplementaryInformationWrapper>
               <div
                 :data-testid="`add-performance-criteria-${competencyElementIndex}`"
                 @click.prevent="addPerformanceCriteriaRow(competencyElementIndex)"
@@ -250,6 +251,7 @@
                 <FormATextInput
                   v-model="addElementPlaceholderRef"
                   :name="`add-performance-criteria-input`"
+                  @focus="addPerformanceCriteriaRow(competencyElementIndex)"
                 />
               </div>
             </template>
@@ -264,6 +266,7 @@
                 <FormATextInput
                   v-model="addElementPlaceholderRef"
                   :name="`add-competency-element-input`"
+                  @focus="addCompetencyElementRow"
                 />
               </div>
             </template>

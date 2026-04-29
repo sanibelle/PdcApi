@@ -47,6 +47,32 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
         return _mapper.Map<ChangeRecord>(changeRecord);
     }
 
+    public async Task<Guid> FindIdByParentIdAndNumber(int changeRecordNumber, Guid parentChangeRecordId)
+    {
+
+        ChangeRecordEntity? current = null;
+        do
+        {
+            current = await _context.ChangeRecords
+                .SingleAsync(x => x.Id == parentChangeRecordId);
+
+            // the number is incremental by one, so if the current number is less than the searched number, it means that the change record with the searched number does not exist in the change record history.
+            if (current?.Id == null || current.ChangeRecordNumber < changeRecordNumber)
+            {
+                break;
+            }
+            if (current.ChangeRecordNumber == changeRecordNumber)
+            {
+                return current.Id!.Value;
+            }
+            current = await _context.ChangeRecords
+                .FirstAsync(x => x.Id == current.ParentChangeRecordId);
+        }
+        while (current.ParentChangeRecordId != null);
+
+        throw new NotFoundException("The change record with number " + changeRecordNumber + " does not exist for the parent change record with id " + parentChangeRecordId);
+    }
+
     public async Task<Guid> FindCreatedById(Guid complementaryInformationId)
     {
         Guid? id = await _context.ComplementaryInformations
