@@ -1,7 +1,7 @@
 <script setup lang="ts">
   const { t } = useI18n();
 
-  defineProps({
+  const props = defineProps({
     changeRecordNumber: {
       type: Number,
       required: true,
@@ -11,6 +11,40 @@
       default: false,
     },
   });
+  const showChangeHistory = ref(false);
+  const changeRecordNumberToCompare = ref(props.changeRecordNumber);
+  const nextIsDisabled = computed(() => changeRecordNumberToCompare.value == props.changeRecordNumber);
+  const previousIsDisabled = computed(() => changeRecordNumberToCompare.value == 2);
+
+  /**
+   * Emits the `update:changeNumberToCompare` event when the change number to compare is updated.
+   *
+   * @param value - The selected change number, or `null` if we do not want to show the change history.
+   *
+   */
+  const emit = defineEmits<{
+    (e: 'update:changeNumberToCompare', value: number | null): void;
+  }>();
+
+  watch(
+    () => showChangeHistory.value,
+    (newValue) => {
+      if (newValue) {
+        changeRecordNumberToCompare.value = props.changeRecordNumber;
+        emit('update:changeNumberToCompare', changeRecordNumberToCompare.value);
+      } else {
+        emit('update:changeNumberToCompare', null);
+      }
+    },
+  );
+  watch(
+    () => changeRecordNumberToCompare.value,
+    () => {
+      if (showChangeHistory.value) {
+        emit('update:changeNumberToCompare', changeRecordNumberToCompare.value);
+      }
+    },
+  );
 </script>
 
 <template>
@@ -18,6 +52,32 @@
     class="changeRecord-badge"
     :class="{ draft: isDraft }"
   >
+    <CommonAtomsAButton
+      v-if="showChangeHistory"
+      :is-disabled="previousIsDisabled"
+      @click="changeRecordNumberToCompare--"
+    >
+      ◀
+    </CommonAtomsAButton>
+    <span
+      v-if="showChangeHistory"
+      class="changeRecord-text"
+    >
+      v{{ changeRecordNumberToCompare }}
+    </span>
+    <FormACheckboxInput
+      v-if="changeRecordNumber > 1"
+      v-model="showChangeHistory"
+      :name="'showChangeHistory'"
+      :label="t('showChangeHistory')"
+    />
+    <CommonAtomsAButton
+      v-if="showChangeHistory"
+      :is-disabled="nextIsDisabled"
+      @click="changeRecordNumberToCompare++"
+    >
+      ▶
+    </CommonAtomsAButton>
     <span class="changeRecord-text">v{{ changeRecordNumber }}</span>
     <div
       v-if="isDraft"
@@ -49,6 +109,7 @@
         "notv1": "Tous les changements effectués à cette version seront suivis et auront un impact dans tous les documents qui y sont liés.",
         "notdraft": "Cette version est approuvée. Seules les modifications mineures sont possibles (ex : corriger les fautes de frappe).",
         "newVersion": "Pour effectuer des modifications majeures, veuillez créer une nouvelle version.",
+        "showChangeHistory": "Afficher l'historique des changements",
     }
 }
 </i18n>

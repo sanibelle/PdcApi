@@ -19,10 +19,7 @@
   const computedClass = computed(() => [props.color, `text-${props.size}`, `font-${props.weight}`]);
 </script>
 <template>
-  <span
-    :class="computedClass"
-    class="test"
-  >
+  <span :class="computedClass">
     <slot />
   </span>
 </template>
