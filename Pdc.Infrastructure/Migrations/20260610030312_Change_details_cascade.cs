@@ -14,10 +14,6 @@ namespace Pdc.Infrastructure.Migrations
                 name: "FK_ChangeDetails_Changeables_ChangeableId",
                 table: "ChangeDetails");
 
-            migrationBuilder.DropColumn(
-                name: "ChangeRecordId",
-                table: "ChangeRecords");
-
             migrationBuilder.AlterColumn<Guid>(
                 name: "ChangeableId",
                 table: "ChangeDetails",

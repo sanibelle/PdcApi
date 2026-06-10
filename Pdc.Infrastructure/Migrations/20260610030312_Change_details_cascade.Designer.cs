@@ -12,7 +12,7 @@ using Pdc.Infrastructure.Data;
 namespace Pdc.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260610022627_Change_details_cascade")]
+    [Migration("20260610030312_Change_details_cascade")]
     partial class Change_details_cascade
     {
         /// <inheritdoc />
