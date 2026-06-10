@@ -518,13 +518,16 @@ namespace Pdc.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("ChangeRecordEntityId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("ChangeRecordId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("ChangeType")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("ChangeableId")
+                    b.Property<Guid>("ChangeableId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("OldValue")
@@ -532,6 +535,8 @@ namespace Pdc.Infrastructure.Migrations
                         .HasColumnType("character varying(5000)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChangeRecordEntityId");
 
                     b.HasIndex("ChangeRecordId");
 
@@ -544,9 +549,6 @@ namespace Pdc.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ChangeRecordId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("ChangeRecordNumber")
@@ -939,15 +941,21 @@ namespace Pdc.Infrastructure.Migrations
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Version.ChangeDetailEntity", b =>
                 {
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "ChangeRecord")
+                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", null)
                         .WithMany("ChangeDetails")
+                        .HasForeignKey("ChangeRecordEntityId");
+
+                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "ChangeRecord")
+                        .WithMany()
                         .HasForeignKey("ChangeRecordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", "Changeable")
                         .WithMany()
-                        .HasForeignKey("ChangeableId");
+                        .HasForeignKey("ChangeableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ChangeRecord");
 

@@ -22,22 +22,26 @@ public class UpdatePublishedCompetency(ICompetencyRepository competencyRepositor
         {
             throw new InvalidChangeRecordException("Missing changeRecord on a competency to update.");
         }
-        if (competencyToUpdate.IsLatestVersion() || competencyToUpdate.ChangeRecord.Id != updateCompetencyDto.ChangeRecordId || competencyToUpdate.ChangeRecord.ChangeRecordNumber != updateCompetencyDto.ChangeRecordNumber)
+        if (!competencyToUpdate.IsLatestVersion() || competencyToUpdate.ChangeRecord.Id != updateCompetencyDto.ChangeRecordId || competencyToUpdate.ChangeRecord.ChangeRecordNumber != updateCompetencyDto.ChangeRecordNumber)
         {
             throw new InvalidChangeRecordException("The targeted change record to update is not the latest.");
         }
-        ChangeRecord changeRecord = new ChangeRecord(competencyToUpdate.ChangeRecord, currentUser);
-        mapper.Map(updateCompetencyDto, competencyToUpdate);
 
+        // creating a new change record for the new draft version, only if the competency is published, otherwise we will update the existing change record of the draft or v1 competency
+        if (competencyToUpdate.IsPublished())
+        {
+            ChangeRecord changeRecord = new ChangeRecord(competencyToUpdate.ChangeRecord, currentUser);
+            competencyToUpdate.ChangeRecord = changeRecord;
+        }
+
+        mapper.Map(updateCompetencyDto, competencyToUpdate);
         // setting the new change record for the new draft version
-        competencyToUpdate.ChangeRecord = changeRecord;
-        competencyToUpdate.SetChangeRecordOnUntracked(changeRecord);
+        competencyToUpdate.SetChangeRecordOnUntracked(competencyToUpdate.ChangeRecord);
         competencyToUpdate.SetCreatedByOnUntracked(currentUser);
         competencyToUpdate.SetCreatedOnOnUntracked();
 
-
         // UpdateAndTrack se charge de gérer le suivi des changements
-        MinisterialCompetency updatedCompetency = await competencyRepository.UpdateWithChangeTracking(competencyToUpdate);
+        MinisterialCompetency updatedCompetency = await competencyRepository.UpdateTrackedChangeable(competencyToUpdate);
         if (!updatedCompetency.ChangeRecord.Id.HasValue)
         {
             throw new NullReferenceException("Competency must have a valid ChangeRecord with an Id.");

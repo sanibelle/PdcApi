@@ -8,6 +8,7 @@ public class ChangeDetailEntity
     public required Guid ChangeRecordId { get; set; }
     public virtual ChangeRecordEntity? ChangeRecord { get; set; }
     public virtual ChangeableEntity? Changeable { get; set; }
+    public Guid ChangeableId { get; set; }
     public required ChangeType ChangeType { get; set; }
     /// <summary>
     /// Holds the old value of the property when updated or deleted.

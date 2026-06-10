@@ -17,12 +17,22 @@ public class MinisterialCompetency : Competency
         return ChangeRecord.IsDraft && ChangeRecord.ChangeRecordNumber == 1;
     }
 
+    public bool IsPublished()
+    {
+        if (ChangeRecord == null)
+        {
+            return false;
+        }
+        return !ChangeRecord.IsDraft;
+    }
+
     public bool IsLatestVersion()
     {
         if (ChangeRecord == null)
         {
             return false;
         }
+        // TODO pourquoi est-ce que NextChangeRecord n'est pas null? Automapper?
         return ChangeRecord.NextChangeRecord == null;
     }
 

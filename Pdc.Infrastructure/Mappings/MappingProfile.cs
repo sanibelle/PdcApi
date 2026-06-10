@@ -100,25 +100,16 @@ public class MappingProfile : Profile
                opt => opt.MapFrom(src => src.ValidatedBy != null ? src.ValidatedBy.Id : null))
             .ForMember(dest => dest.ValidatedBy,
                 opt => opt.Ignore())
-
             .ForMember(dest => dest.NextChangeRecordId,
                 opt => opt.MapFrom(src => src.NextChangeRecord == null ? null : src.NextChangeRecord.Id))
             .ForMember(dest => dest.NextChangeRecord,
                 opt => opt.Ignore())
-
             .ForMember(dest => dest.ParentChangeRecordId,
                 opt => opt.MapFrom(src => src.ParentChangeRecord == null ? null : src.ParentChangeRecord.Id))
-            .ForMember(dest => dest.ParentChangeRecord,  // explicitly map back
-                opt => opt.Ignore())
-        .ReverseMap()
-            .ForMember(dest => dest.CreatedBy,  // explicitly map back
-                opt => opt.MapFrom(src => src.CreatedBy))
-            .ForMember(dest => dest.ValidatedBy,  // explicitly map back
-                opt => opt.MapFrom(src => src.ValidatedBy))
-            .ForMember(dest => dest.ParentChangeRecord,  // explicitly map back
-                opt => opt.MapFrom(src => src.ParentChangeRecord == null ? null : src.ParentChangeRecord))
-            .ForMember(dest => dest.NextChangeRecord,  // explicitly map back
-                opt => opt.MapFrom(src => src.NextChangeRecord == null ? null : src.NextChangeRecord))
+            .ForMember(dest => dest.ParentChangeRecord,
+                opt => opt.Ignore());
+
+        CreateMap<ChangeRecordEntity, ChangeRecord>()
             .PreserveReferences();
 
         // security

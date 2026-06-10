@@ -114,15 +114,10 @@ public class ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
             CompetencyDTO competency = await updateDraftV1CompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO, user);
             return Ok(competency);
         }
-        else if (!updateCompetencyDTO.IsDraft)
+        else
         {
             CompetencyDTO competency = await updatePublishedCompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO, user);
             return Ok(competency);
-        }
-        else
-        {
-            //TODO la mise à jour d'une version draft > 1.
-            return BadRequest("Invalid update request for competency. Please check the ChangeRecordNumber and IsDraft properties.");
         }
     }
 

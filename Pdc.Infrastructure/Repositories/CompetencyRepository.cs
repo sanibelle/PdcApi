@@ -79,7 +79,7 @@ internal class CompetencyRepository(
         }
     }
 
-    public async Task<MinisterialCompetency> UpdateWithChangeTracking(MinisterialCompetency competency)
+    public async Task<MinisterialCompetency> UpdateTrackedChangeable(MinisterialCompetency competency)
     {
         using var transaction = await context.Database.BeginTransactionAsync();
         try
@@ -87,9 +87,13 @@ internal class CompetencyRepository(
             IChangeTracker tracker = new ChangeDetailsTracker(context);
             logger.LogInformation($"Updating competency with code {competency.Code}");
             CompetencyEntity existingCompetency = await FindCompetencyEntityByCode(competency.Code);
-            // TODO on ne crée pas toujours un change record. Valider comment on va gérer ça.
-            ChangeRecord changeRecord = await changeRecordRepository.AddChangeRecord(competency.ChangeRecord!);
-            competency.ChangeRecord = changeRecord;
+
+            // if the id is null, then we must add the change record.
+            if (competency.ChangeRecord.Id == null)
+            {
+                ChangeRecord changeRecord = await changeRecordRepository.AddChangeRecord(competency.ChangeRecord!);
+                competency.ChangeRecord = changeRecord;
+            }
 
             await UpdateCompetencyAndChilds(competency, tracker, existingCompetency, trackedRealisationContextChangeApplier, trackedCompetencyElementChangeApplier, trackedPerformanceCriteriaChangeApplier);
 
@@ -238,7 +242,11 @@ internal class CompetencyRepository(
                             .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.ProgramOfStudy)
             .Include(c => c.ChangeRecord)
-                .ThenInclude(v => v!.CreatedBy)
+                .ThenInclude(v => v.CreatedBy)
+            .Include(c => c.ChangeRecord)
+                .ThenInclude(v => v.NextChangeRecord)
+            .Include(c => c.ChangeRecord)
+                .ThenInclude(v => v!.ParentChangeRecord)
             .SingleOrDefaultAsync(x => x.Code == competencyCode);
         return competency ?? throw new NotFoundException(nameof(MinisterialCompetency), competencyCode);
     }
