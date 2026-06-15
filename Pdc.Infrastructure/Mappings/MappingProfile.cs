@@ -23,11 +23,10 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CompetencyElements, opt => opt.Ignore())
             .PreserveReferences()
             .ReverseMap()
-            .ForMember(dest => dest.RealisationContexts,  // explicitly map back
+            .ForMember(dest => dest.RealisationContexts,
                 opt => opt.MapFrom(src => src.RealisationContexts))
             .ForMember(dest => dest.Units,
-                opt => opt.MapFrom((src, dest, member, ctx) =>
-                    src.Units == null ? null : ctx.Mapper.Map<Units>(src.Units)));
+                opt => opt.MapFrom(src => src.Units));
 
         CreateMap<Units, UnitsEntity>()
             .PreserveReferences()
@@ -51,7 +50,7 @@ public class MappingProfile : Profile
             .PreserveReferences()
             .ForMember(x => x.ComplementaryInformations, opt => opt.Ignore())
             .ReverseMap()
-            .ForMember(dest => dest.ComplementaryInformations,  // explicitly map back
+            .ForMember(dest => dest.ComplementaryInformations,
                 opt => opt.MapFrom(src => src.ComplementaryInformations))
             .PreserveReferences();
 
@@ -75,7 +74,7 @@ public class MappingProfile : Profile
             .ForMember(x => x.ComplementaryInformations, opt => opt.Ignore())
             .ForMember(x => x.CourseFrameworkPerformanceCriteria, opt => opt.Ignore())
             .ReverseMap()
-            .ForMember(dest => dest.ComplementaryInformations,  // explicitly map back
+            .ForMember(dest => dest.ComplementaryInformations,
                 opt => opt.MapFrom(src => src.ComplementaryInformations))
             .PreserveReferences();
 
@@ -84,7 +83,7 @@ public class MappingProfile : Profile
             .ForMember(x => x.ComplementaryInformations, opt => opt.Ignore())
             .ForMember(x => x.Competency, opt => opt.Ignore())
             .ReverseMap()
-            .ForMember(dest => dest.ComplementaryInformations,  // explicitly map back
+            .ForMember(dest => dest.ComplementaryInformations,
                 opt => opt.MapFrom(src => src.ComplementaryInformations))
             .PreserveReferences();
 
@@ -110,11 +109,12 @@ public class MappingProfile : Profile
                 opt => opt.Ignore());
 
         CreateMap<ChangeRecordEntity, ChangeRecord>()
+            .MaxDepth(1)
             .PreserveReferences();
 
         // security
         CreateMap<User, IdentityUserEntity>()
-            .PreserveReferences() // used for the change record references
+            .PreserveReferences()
             .ForMember(x => x.NormalizedUserName, opt => opt.Ignore())
             .ForMember(x => x.NormalizedEmail, opt => opt.Ignore())
             .ForMember(x => x.EmailConfirmed, opt => opt.Ignore())
@@ -145,29 +145,28 @@ public class MappingProfile : Profile
             .ForMember(x => x.ProgramOfStudy, opt => opt.Ignore())
             .PreserveReferences();
 
-        // Do not remove, the usage of explicit mapping instead of using reverseMap is to prevent the creation of the empty Units object when the Units property is null.
         CreateMap<CompetencyEntity, MinisterialCompetency>()
-            .ForMember(dest => dest.CompetencyElements,  // explicitly map back
+            .PreserveReferences()
+            .ForMember(dest => dest.CompetencyElements,
                 opt => opt.MapFrom(src => src.CompetencyElements))
             .ForMember(dest => dest.Units,
-                opt => opt.MapFrom((src, dest, member, ctx) =>
-                    src.Units == null ? null : ctx.Mapper.Map<Units>(src.Units)));
+                opt => opt.MapFrom(src => src.Units));
 
         CreateMap<MinisterialCompetencyElement, CompetencyElementEntity>()
-            .PreserveReferences() // used for the ChangeRecordEntity references
+            .PreserveReferences()
             .ForMember(x => x.ComplementaryInformations, opt => opt.Ignore())
             .ForMember(x => x.PerformanceCriterias, opt => opt.Ignore())
             .ForMember(x => x.Competency, opt => opt.Ignore())
             .ReverseMap()
-            .ForMember(dest => dest.PerformanceCriterias,  // explicitly map back
+            .ForMember(dest => dest.PerformanceCriterias,
                 opt => opt.MapFrom(src => src.PerformanceCriterias))
-            .ForMember(dest => dest.ComplementaryInformations,  // explicitly map back
+            .ForMember(dest => dest.ComplementaryInformations,
                 opt => opt.MapFrom(src => src.ComplementaryInformations))
-            .PreserveReferences(); // used for the change record references
+            .PreserveReferences();
 
         // CourseFrameworkCompetency
         CreateMap<CourseFrameworkCompetency, CourseFrameworkCompetencyEntity>()
-            .PreserveReferences() // used for the change record references
+            .PreserveReferences()
             .ForMember(x => x.Id, opt => opt.Ignore())
             .ForMember(x => x.Competency, opt => opt.Ignore())
             .ForMember(x => x.CourseFramework, opt => opt.Ignore())
@@ -175,18 +174,18 @@ public class MappingProfile : Profile
             .ReverseMap();
 
         CreateMap<CourseFrameworkCompetencyElement, CourseFrameworkCompetencyElementEntity>()
-            .PreserveReferences() // used for the change record references
+            .PreserveReferences()
             .ForMember(x => x.CompetencyElement, opt => opt.Ignore())
             .ForMember(x => x.CourseFramework, opt => opt.Ignore())
             .ForMember(x => x.Hours, opt => opt.Ignore())
             .ReverseMap()
-            .PreserveReferences(); // used for the change record references;
+            .PreserveReferences();
 
         CreateMap<CompetencyElement, CompetencyElementEntity>()
-            .PreserveReferences() // used for the change record references
+            .PreserveReferences()
             .ForMember(x => x.PerformanceCriterias, opt => opt.Ignore())
             .ForMember(x => x.Competency, opt => opt.Ignore())
             .ReverseMap()
-            .PreserveReferences(); // used for the change record references;
+            .PreserveReferences();
     }
 }
