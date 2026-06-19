@@ -1,3 +1,4 @@
+import { Page } from "@playwright/test";
 import { test, expect } from "./test-fixtures";
 
 
@@ -257,9 +258,9 @@ test.describe("ministerial competency", () => {
     
     await adminPage.getByTestId("submit-draft-button").click();
     await adminPage.goto("/administration/programme/Seededprogram/competence/tracked"); // TODO remove this when the bug of the change history will be fixed.
-    await adminPage.getByTestId("show-change-history-checkbox").first().click();
-    expect(await adminPage.locator(".deleted").count()).toBe(6 + 5); // 5 is the number of updates.
-    expect(await adminPage.locator(".created").count()).toBe(9 + 5); // 5 is the number of updates.
+
+    await assertChangeDetails(adminPage, 6+5, 9+5); 
+
     // Updating the new version
     await adminPage.getByTestId("edit-button").first().click();
     // realisation contexts    
@@ -281,10 +282,8 @@ test.describe("ministerial competency", () => {
     await adminPage.getByTestId("approve-this-change-record-button").first().click();
 
     await adminPage.goto("/administration/programme/Seededprogram/competence/tracked");
-    await adminPage.getByTestId("show-change-history-checkbox").first().click();
-    
-    expect(await adminPage.locator(".deleted").count()).toBe(7 + 4); // 4 is the number of updates.
-    expect(await adminPage.locator(".created").count()).toBe(5 + 4); // 4 is the number of updates.
+    await assertChangeDetails(adminPage, 7+4, 5+4); 
+
   });
 
   const createAndTestCompetency = async (adminPage, code) => {
@@ -394,3 +393,19 @@ test.describe("ministerial competency", () => {
 
 
 });
+async function assertChangeDetails(adminPage: Page, nbDeleted: number, nbCreated: number) {
+  const [response] = await Promise.all([
+    adminPage.waitForResponse(
+      (response) => response.url().includes("/competency/tracked") &&
+        response.request().method() === "GET"
+    ),
+    adminPage.getByTestId("show-change-history-checkbox").first().click()
+  ]);
+  expect(response.status()).toBe(200);
+  const responseBody = await response.json();
+  const changeDetails = responseBody.changeDetails;
+  expect(changeDetails).toHaveLength(new Set(changeDetails.map((cd: any) => cd.id)).size);
+  await expect(adminPage.locator(".deleted")).toHaveCount(nbDeleted);
+  await expect(adminPage.locator(".created")).toHaveCount(nbCreated);
+}
+
