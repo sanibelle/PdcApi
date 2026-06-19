@@ -18,17 +18,15 @@ jobs:
         with:
           node-version: 'latest'
 
-      - name: Install dependencies
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install
-          dir: ./WebAPp
-
       - name: Enable Corepack
         run: corepack enable
 
       - name: Install dependencies in WebAPp
         run: yarn install
+        working-directory: WebAPp
+
+      - name: Build WebAPp
+        run: yarn build
         working-directory: WebAPp
 
       - name: Stop front-end

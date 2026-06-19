@@ -74,7 +74,7 @@ internal abstract class ATrackedChangeApplier<T, TParent, TEntity> : AUntrackedC
         List<Guid> updatedOnThisVersionIds = DeleteUpdatedChangeablesOnThisVersion(changeables, changeDetails);
         // filters the changeables to only keep the ones not updated
         changeables = [.. changeables.Where(x => !updatedOnThisVersionIds.Contains(x.Id!.Value))];
-        List<Guid> alreadyDeletedIds = FindDeletedChangeablesOnPeviousVersion(changeables, changeDetails);
+        List<Guid> alreadyDeletedIds = FindDeletedChangeablesOnPreviousVersion(changeables, changeDetails);
         // filters the changeables to only keep the ones not updated
         changeables = [.. changeables.Where(x => !alreadyDeletedIds.Contains(x.Id!.Value))];
 
@@ -123,7 +123,7 @@ internal abstract class ATrackedChangeApplier<T, TParent, TEntity> : AUntrackedC
     /// <param name="changeables">the list of changeables</param>
     /// <param name="changeDetails">the list of change details targetting the changeables</param>
     /// <returns>the ids of the changeables not deleted</returns>
-    private List<Guid> FindDeletedChangeablesOnPeviousVersion(List<ChangeableEntity> changeables, List<ChangeDetailEntity> changeDetails)
+    private List<Guid> FindDeletedChangeablesOnPreviousVersion(List<ChangeableEntity> changeables, List<ChangeDetailEntity> changeDetails)
     {
         List<ChangeableEntity> deletedChangeablesOnPreviousVersion = [.. changeables
             .Where(x => changeDetails
@@ -151,7 +151,6 @@ internal abstract class ATrackedChangeApplier<T, TParent, TEntity> : AUntrackedC
         Logger.LogInformation($"Found {addedChangeablesToDelete.Count} changeables that were added but deleted on this version with code with ids ${string.Join(",", addedChangeablesToDelete.Select(x => x.Id))}");
         Context.Set<TEntity>().RemoveRange(addedChangeablesToDelete.Cast<TEntity>());
         return addedChangeablesToDelete.Select(x => x.Id!.Value).ToList();
-        // TODO dans mon test, valider que j'au un cascade delete sur les change details.
     }
 
     /// <summary>
