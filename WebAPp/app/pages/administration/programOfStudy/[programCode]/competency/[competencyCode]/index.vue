@@ -33,14 +33,6 @@
     editMode.value = false;
   };
 
-  const handleMinorEditClick = () => {
-    alert("Fonctionnalité à implémenter : permettre la modification mineure d'une version approuvée (ex : corriger les fautes de frappe).");
-  };
-
-  const handleCreateNewDraftClick = () => {
-    alert('TODO');
-  };
-
   const modal = useModal();
   const handleOpenPublishModal = () => {
     modal.open({
@@ -68,6 +60,11 @@
       isSubmitting.value = false;
     }
   };
+
+  const openEditMode = async () => {
+    await handleFetchTrackedCompetencyByChangeRecordNumber(null);
+    editMode.value = true;
+  };
 </script>
 
 <template>
@@ -94,7 +91,7 @@
         <div class="flex">
           <CommonAtomsAButton
             data-testid="edit-button"
-            @click="editMode = true"
+            @click="openEditMode()"
           >
             {{ competency.isDraft ? t('editDraft') : t('createANewDraft') }}
           </CommonAtomsAButton>

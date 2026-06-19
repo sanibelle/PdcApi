@@ -29,1089 +29,1089 @@ namespace Pdc.Infrastructure.Migrations
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("ChangeableEntityCourseFrameworkEntity", b =>
-                {
-                    b.Property<Guid>("AssedElementsId")
-                        .HasColumnType("uuid");
+            {
+                b.Property<Guid>("AssedElementsId")
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("CourseFrameworkEntityCourseCode")
-                        .HasColumnType("text");
+                b.Property<string>("CourseFrameworkEntityCourseCode")
+                    .HasColumnType("text");
 
-                    b.HasKey("AssedElementsId", "CourseFrameworkEntityCourseCode");
+                b.HasKey("AssedElementsId", "CourseFrameworkEntityCourseCode");
 
-                    b.HasIndex("CourseFrameworkEntityCourseCode");
+                b.HasIndex("CourseFrameworkEntityCourseCode");
 
-                    b.ToTable("ChangeableEntityCourseFrameworkEntity");
-                });
+                b.ToTable("ChangeableEntityCourseFrameworkEntity");
+            });
 
             modelBuilder.Entity("CourseFrameworkEntityCourseFrameworkEntity", b =>
-                {
-                    b.Property<string>("CourseFrameworkEntityCourseCode")
-                        .HasColumnType("text");
+            {
+                b.Property<string>("CourseFrameworkEntityCourseCode")
+                    .HasColumnType("text");
 
-                    b.Property<string>("PrerequisitesCourseCode")
-                        .HasColumnType("text");
+                b.Property<string>("PrerequisitesCourseCode")
+                    .HasColumnType("text");
 
-                    b.HasKey("CourseFrameworkEntityCourseCode", "PrerequisitesCourseCode");
+                b.HasKey("CourseFrameworkEntityCourseCode", "PrerequisitesCourseCode");
 
-                    b.HasIndex("PrerequisitesCourseCode");
+                b.HasIndex("PrerequisitesCourseCode");
 
-                    b.ToTable("CourseFrameworkPrerequisites", (string)null);
-                });
+                b.ToTable("CourseFrameworkPrerequisites", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("text");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("Name")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("NormalizedName")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
+                b.HasIndex("NormalizedName")
+                    .IsUnique()
+                    .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
-                });
+                b.ToTable("AspNetRoles", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("text");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("text");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("RoleId")
+                    .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
+                b.ToTable("AspNetRoleClaims", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("text");
+                b.Property<string>("ClaimType")
+                    .HasColumnType("text");
 
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("text");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
+                b.ToTable("AspNetUserClaims", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+            {
+                b.Property<string>("LoginProvider")
+                    .HasColumnType("text");
 
-                    b.Property<string>("ProviderKey")
-                        .HasColumnType("text");
+                b.Property<string>("ProviderKey")
+                    .HasColumnType("text");
 
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("text");
+                b.Property<string>("ProviderDisplayName")
+                    .HasColumnType("text");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uuid");
 
-                    b.HasKey("LoginProvider", "ProviderKey");
+                b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("UserId");
+                b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
+                b.ToTable("AspNetUserLogins", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+            {
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("RoleId")
+                    .HasColumnType("uuid");
 
-                    b.HasKey("UserId", "RoleId");
+                b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("RoleId");
+                b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
+                b.ToTable("AspNetUserRoles", (string)null);
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+            {
+                b.Property<Guid>("UserId")
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                b.Property<string>("LoginProvider")
+                    .HasColumnType("text");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
+                b.Property<string>("Name")
+                    .HasColumnType("text");
 
-                    b.Property<string>("Value")
-                        .HasColumnType("text");
+                b.Property<string>("Value")
+                    .HasColumnType("text");
 
-                    b.HasKey("UserId", "LoginProvider", "Name");
+                b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
-                });
+                b.ToTable("AspNetUserTokens", (string)null);
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkCompetencyElementEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid>("CompetencyElementId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("CompetencyElementId")
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("CourseFrameworkId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                b.Property<string>("CourseFrameworkId")
+                    .IsRequired()
+                    .HasColumnType("text");
 
-                    b.Property<int>("Hours")
-                        .HasColumnType("integer");
+                b.Property<int>("Hours")
+                    .HasColumnType("integer");
 
-                    b.Property<bool>("IsAssedElement")
-                        .HasColumnType("boolean");
+                b.Property<bool>("IsAssedElement")
+                    .HasColumnType("boolean");
 
-                    b.Property<int>("ReachedTaxonomyLevel")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(6);
+                b.Property<int>("ReachedTaxonomyLevel")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer")
+                    .HasDefaultValue(6);
 
-                    b.Property<int>("TeachedLevel")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1);
+                b.Property<int>("TeachedLevel")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("integer")
+                    .HasDefaultValue(1);
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("CompetencyElementId");
+                b.HasIndex("CompetencyElementId");
 
-                    b.HasIndex("CourseFrameworkId");
+                b.HasIndex("CourseFrameworkId");
 
-                    b.ToTable("CourseFrameworkCompetencyElements");
-                });
+                b.ToTable("CourseFrameworkCompetencyElements");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkCompetencyEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("CompetencyDistribution")
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
+                b.Property<string>("CompetencyDistribution")
+                    .HasMaxLength(5000)
+                    .HasColumnType("character varying(5000)");
 
-                    b.Property<string>("CompetencyId")
-                        .IsRequired()
-                        .HasColumnType("text");
+                b.Property<string>("CompetencyId")
+                    .IsRequired()
+                    .HasColumnType("text");
 
-                    b.Property<string>("CourseFrameworkCourseCode")
-                        .HasColumnType("text");
+                b.Property<string>("CourseFrameworkCourseCode")
+                    .HasColumnType("text");
 
-                    b.Property<int>("Hours")
-                        .HasColumnType("integer");
+                b.Property<int>("Hours")
+                    .HasColumnType("integer");
 
-                    b.Property<bool>("IsAssedElement")
-                        .HasColumnType("boolean");
+                b.Property<bool>("IsAssedElement")
+                    .HasColumnType("boolean");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("CompetencyId");
+                b.HasIndex("CompetencyId");
 
-                    b.HasIndex("CourseFrameworkCourseCode");
+                b.HasIndex("CourseFrameworkCourseCode");
 
-                    b.ToTable("CourseFrameworkCompetencies");
-                });
+                b.ToTable("CourseFrameworkCompetencies");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", b =>
-                {
-                    b.Property<string>("CourseCode")
-                        .HasColumnType("text");
+            {
+                b.Property<string>("CourseCode")
+                    .HasColumnType("text");
 
-                    b.Property<Guid?>("ChangeRecordId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("ChangeRecordId")
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("CourseCharacteristics")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
+                b.Property<string>("CourseCharacteristics")
+                    .IsRequired()
+                    .HasMaxLength(5000)
+                    .HasColumnType("character varying(5000)");
 
-                    b.Property<string>("FinalCourseObjective")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
+                b.Property<string>("FinalCourseObjective")
+                    .IsRequired()
+                    .HasMaxLength(5000)
+                    .HasColumnType("character varying(5000)");
 
-                    b.Property<short>("Hours")
-                        .HasColumnType("smallint");
+                b.Property<short>("Hours")
+                    .HasColumnType("smallint");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnType("character varying(200)");
 
-                    b.Property<string>("OtherSpecifications")
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
+                b.Property<string>("OtherSpecifications")
+                    .HasMaxLength(5000)
+                    .HasColumnType("character varying(5000)");
 
-                    b.Property<short>("Semester")
-                        .HasColumnType("smallint");
+                b.Property<short>("Semester")
+                    .HasColumnType("smallint");
 
-                    b.Property<string>("StatementOfComplexAuthenticTask")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
+                b.Property<string>("StatementOfComplexAuthenticTask")
+                    .IsRequired()
+                    .HasMaxLength(5000)
+                    .HasColumnType("character varying(5000)");
 
-                    b.Property<string>("TaskPresentation")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
+                b.Property<string>("TaskPresentation")
+                    .IsRequired()
+                    .HasMaxLength(5000)
+                    .HasColumnType("character varying(5000)");
 
-                    b.Property<Guid?>("UnitsId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("UnitsId")
+                    .HasColumnType("uuid");
 
-                    b.HasKey("CourseCode");
+                b.HasKey("CourseCode");
 
-                    b.HasIndex("ChangeRecordId");
+                b.HasIndex("ChangeRecordId");
 
-                    b.HasIndex("UnitsId");
+                b.HasIndex("UnitsId");
 
-                    b.ToTable("CourseFrameworks");
-                });
+                b.ToTable("CourseFrameworks");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkPerformanceCriteriaEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("CourseFrameworkCourseCode")
-                        .HasColumnType("text");
+                b.Property<string>("CourseFrameworkCourseCode")
+                    .HasColumnType("text");
 
-                    b.Property<bool>("IsAssedElement")
-                        .HasColumnType("boolean");
+                b.Property<bool>("IsAssedElement")
+                    .HasColumnType("boolean");
 
-                    b.Property<Guid>("PerformanceCriteriaId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("PerformanceCriteriaId")
+                    .HasColumnType("uuid");
 
-                    b.Property<int>("TeachedLevel")
-                        .HasColumnType("integer");
+                b.Property<int>("TeachedLevel")
+                    .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("CourseFrameworkCourseCode");
+                b.HasIndex("CourseFrameworkCourseCode");
 
-                    b.HasIndex("PerformanceCriteriaId");
+                b.HasIndex("PerformanceCriteriaId");
 
-                    b.ToTable("CourseFrameworkPerformanceCriterias");
-                });
+                b.ToTable("CourseFrameworkPerformanceCriterias");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", b =>
-                {
-                    b.Property<string>("Code")
-                        .HasColumnType("text");
+            {
+                b.Property<string>("Code")
+                    .HasColumnType("text");
 
-                    b.Property<Guid?>("ComplementaryUnitsId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("ComplementaryUnitsId")
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid?>("GeneralUnitsId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("GeneralUnitsId")
+                    .HasColumnType("uuid");
 
-                    b.Property<int>("MonthsDuration")
-                        .HasColumnType("integer");
+                b.Property<int>("MonthsDuration")
+                    .HasColumnType("integer");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .HasColumnType("character varying(255)");
 
-                    b.Property<Guid?>("OptionalUnitsId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("OptionalUnitsId")
+                    .HasColumnType("uuid");
 
-                    b.Property<int>("ProgramType")
-                        .HasColumnType("integer");
+                b.Property<int>("ProgramType")
+                    .HasColumnType("integer");
 
-                    b.Property<DateOnly>("PublishedOn")
-                        .HasColumnType("date");
+                b.Property<DateOnly>("PublishedOn")
+                    .HasColumnType("date");
 
-                    b.Property<int>("SpecificDurationHours")
-                        .HasColumnType("integer");
+                b.Property<int>("SpecificDurationHours")
+                    .HasColumnType("integer");
 
-                    b.Property<Guid?>("SpecificUnitsId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("SpecificUnitsId")
+                    .HasColumnType("uuid");
 
-                    b.Property<int>("TotalDurationHours")
-                        .HasColumnType("integer");
+                b.Property<int>("TotalDurationHours")
+                    .HasColumnType("integer");
 
-                    b.HasKey("Code");
+                b.HasKey("Code");
 
-                    b.HasIndex("ComplementaryUnitsId")
-                        .IsUnique();
+                b.HasIndex("ComplementaryUnitsId")
+                    .IsUnique();
 
-                    b.HasIndex("GeneralUnitsId")
-                        .IsUnique();
+                b.HasIndex("GeneralUnitsId")
+                    .IsUnique();
 
-                    b.HasIndex("OptionalUnitsId")
-                        .IsUnique();
+                b.HasIndex("OptionalUnitsId")
+                    .IsUnique();
 
-                    b.HasIndex("SpecificUnitsId")
-                        .IsUnique();
+                b.HasIndex("SpecificUnitsId")
+                    .IsUnique();
 
-                    b.ToTable("ProgramOfStudies");
-                });
+                b.ToTable("ProgramOfStudies");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
+                b.Property<int>("AccessFailedCount")
+                    .HasColumnType("integer");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("text");
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("Email")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
+                b.Property<bool>("EmailConfirmed")
+                    .HasColumnType("boolean");
 
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
+                b.Property<bool>("LockoutEnabled")
+                    .HasColumnType("boolean");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTimeOffset?>("LockoutEnd")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("NormalizedEmail")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("NormalizedUserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
+                b.Property<string>("PasswordHash")
+                    .HasColumnType("text");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
+                b.Property<string>("PhoneNumber")
+                    .HasColumnType("text");
 
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
+                b.Property<bool>("PhoneNumberConfirmed")
+                    .HasColumnType("boolean");
 
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
+                b.Property<string>("SecurityStamp")
+                    .HasColumnType("text");
 
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
+                b.Property<bool>("TwoFactorEnabled")
+                    .HasColumnType("boolean");
 
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                b.Property<string>("UserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("character varying(256)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
+                b.HasIndex("NormalizedEmail")
+                    .HasDatabaseName("EmailIndex");
 
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
+                b.HasIndex("NormalizedUserName")
+                    .IsUnique()
+                    .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
-                });
+                b.ToTable("AspNetUsers", (string)null);
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", b =>
-                {
-                    b.Property<string>("Code")
-                        .HasColumnType("text");
+            {
+                b.Property<string>("Code")
+                    .HasColumnType("text");
 
-                    b.Property<Guid?>("ChangeRecordId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("ChangeRecordId")
+                    .HasColumnType("uuid");
 
-                    b.Property<bool>("IsMandatory")
-                        .HasColumnType("boolean");
+                b.Property<bool>("IsMandatory")
+                    .HasColumnType("boolean");
 
-                    b.Property<bool>("IsOptional")
-                        .HasColumnType("boolean");
+                b.Property<bool>("IsOptional")
+                    .HasColumnType("boolean");
 
-                    b.Property<string>("ProgramOfStudyCode")
-                        .HasColumnType("text");
+                b.Property<string>("ProgramOfStudyCode")
+                    .HasColumnType("text");
 
-                    b.Property<string>("StatementOfCompetency")
-                        .IsRequired()
-                        .HasMaxLength(1500)
-                        .HasColumnType("character varying(1500)");
+                b.Property<string>("StatementOfCompetency")
+                    .IsRequired()
+                    .HasMaxLength(1500)
+                    .HasColumnType("character varying(1500)");
 
-                    b.Property<Guid?>("UnitsId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("UnitsId")
+                    .HasColumnType("uuid");
 
-                    b.HasKey("Code");
+                b.HasKey("Code");
 
-                    b.HasIndex("ChangeRecordId");
+                b.HasIndex("ChangeRecordId");
 
-                    b.HasIndex("ProgramOfStudyCode");
+                b.HasIndex("ProgramOfStudyCode");
 
-                    b.HasIndex("UnitsId");
+                b.HasIndex("UnitsId");
 
-                    b.ToTable("Competencies");
-                });
+                b.ToTable("Competencies");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid");
 
-                    b.Property<int?>("Denominator")
-                        .HasColumnType("integer");
+                b.Property<int?>("Denominator")
+                    .HasColumnType("integer");
 
-                    b.Property<int?>("Numerator")
-                        .HasColumnType("integer");
+                b.Property<int?>("Numerator")
+                    .HasColumnType("integer");
 
-                    b.Property<int>("WholeUnit")
-                        .HasColumnType("integer");
+                b.Property<int>("WholeUnit")
+                    .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Units");
-                });
+                b.ToTable("Units");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Version.ChangeDetailEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid>("ChangeRecordId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("ChangeRecordId")
+                    .HasColumnType("uuid");
 
-                    b.Property<int>("ChangeType")
-                        .HasColumnType("integer");
+                b.Property<int>("ChangeType")
+                    .HasColumnType("integer");
 
-                    b.Property<Guid?>("ChangeableId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("ChangeableId")
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("OldValue")
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
+                b.Property<string>("OldValue")
+                    .HasMaxLength(5000)
+                    .HasColumnType("character varying(5000)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("ChangeRecordId");
+                b.HasIndex("ChangeRecordId");
 
-                    b.HasIndex("ChangeableId");
+                b.HasIndex("ChangeableId");
 
-                    b.ToTable("ChangeDetails");
-                });
+                b.ToTable("ChangeDetails");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ChangeRecordId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("ChangeRecordId")
+                    .HasColumnType("uuid");
 
-                    b.Property<int>("ChangeRecordNumber")
-                        .HasColumnType("integer");
+                b.Property<int>("ChangeRecordNumber")
+                    .HasColumnType("integer");
 
-                    b.Property<Guid>("CreatedById")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("CreatedById")
+                    .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
+                b.Property<DateTime>("CreatedOn")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("now()");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
+                b.Property<string>("Description")
+                    .HasMaxLength(5000)
+                    .HasColumnType("character varying(5000)");
 
-                    b.Property<bool>("IsDraft")
-                        .HasColumnType("boolean");
+                b.Property<bool>("IsDraft")
+                    .HasColumnType("boolean");
 
-                    b.Property<Guid?>("NextChangeRecordId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("NextChangeRecordId")
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ParentChangeRecordId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("ParentChangeRecordId")
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ValidatedById")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("ValidatedById")
+                    .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("ValidatedOn")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTime?>("ValidatedOn")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
+                b.HasIndex("CreatedById");
 
-                    b.HasIndex("NextChangeRecordId");
+                b.HasIndex("NextChangeRecordId");
 
-                    b.HasIndex("ParentChangeRecordId");
+                b.HasIndex("ParentChangeRecordId");
 
-                    b.HasIndex("ValidatedById");
+                b.HasIndex("ValidatedById");
 
-                    b.ToTable("ChangeRecords");
-                });
+                b.ToTable("ChangeRecords");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Version.ChangeableEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid");
 
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
+                b.Property<string>("Value")
+                    .IsRequired()
+                    .HasMaxLength(5000)
+                    .HasColumnType("character varying(5000)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Changeables", (string)null);
+                b.ToTable("Changeables", (string)null);
 
-                    b.UseTptMappingStrategy();
-                });
+                b.UseTptMappingStrategy();
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Version.ComplementaryInformationEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+            {
+                b.Property<Guid>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ChangeRecordId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("ChangeRecordId")
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid>("ChangeableId")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("ChangeableId")
+                    .HasColumnType("uuid");
 
-                    b.Property<Guid>("CreatedById")
-                        .HasColumnType("uuid");
+                b.Property<Guid>("CreatedById")
+                    .HasColumnType("uuid");
 
-                    b.Property<DateTime>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
+                b.Property<DateTime>("CreatedOn")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("timestamp with time zone")
+                    .HasDefaultValueSql("now()");
 
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("timestamp with time zone");
+                b.Property<DateTime?>("ModifiedOn")
+                    .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasMaxLength(5000)
-                        .HasColumnType("character varying(5000)");
+                b.Property<string>("Text")
+                    .IsRequired()
+                    .HasMaxLength(5000)
+                    .HasColumnType("character varying(5000)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.HasIndex("ChangeRecordId");
+                b.HasIndex("ChangeRecordId");
 
-                    b.HasIndex("ChangeableId");
+                b.HasIndex("ChangeableId");
 
-                    b.HasIndex("CreatedById");
+                b.HasIndex("CreatedById");
 
-                    b.ToTable("ComplementaryInformations");
-                });
+                b.ToTable("ComplementaryInformations");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.ContentElementEntity", b =>
-                {
-                    b.HasBaseType("Pdc.Infrastructure.Entities.Version.ChangeableEntity");
+            {
+                b.HasBaseType("Pdc.Infrastructure.Entities.Version.ChangeableEntity");
 
-                    b.Property<Guid?>("CourseFrameworkPerformanceCriteriaId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("CourseFrameworkPerformanceCriteriaId")
+                    .HasColumnType("uuid");
 
-                    b.Property<bool>("IsAssedElement")
-                        .HasColumnType("boolean");
+                b.Property<bool>("IsAssedElement")
+                    .HasColumnType("boolean");
 
-                    b.Property<int>("TeachedLevel")
-                        .HasColumnType("integer");
+                b.Property<int>("TeachedLevel")
+                    .HasColumnType("integer");
 
-                    b.HasIndex("CourseFrameworkPerformanceCriteriaId");
+                b.HasIndex("CourseFrameworkPerformanceCriteriaId");
 
-                    b.ToTable("ContentElements");
-                });
+                b.ToTable("ContentElements");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", b =>
-                {
-                    b.HasBaseType("Pdc.Infrastructure.Entities.Version.ChangeableEntity");
+            {
+                b.HasBaseType("Pdc.Infrastructure.Entities.Version.ChangeableEntity");
 
-                    b.Property<string>("CompetencyId")
-                        .HasColumnType("text");
+                b.Property<string>("CompetencyId")
+                    .HasColumnType("text");
 
-                    b.Property<int>("Position")
-                        .HasColumnType("integer");
+                b.Property<int>("Position")
+                    .HasColumnType("integer");
 
-                    b.HasIndex("CompetencyId");
+                b.HasIndex("CompetencyId");
 
-                    b.ToTable("CompetencyElements");
-                });
+                b.ToTable("CompetencyElements");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", b =>
-                {
-                    b.HasBaseType("Pdc.Infrastructure.Entities.Version.ChangeableEntity");
+            {
+                b.HasBaseType("Pdc.Infrastructure.Entities.Version.ChangeableEntity");
 
-                    b.Property<Guid?>("CompetencyElementId")
-                        .HasColumnType("uuid");
+                b.Property<Guid?>("CompetencyElementId")
+                    .HasColumnType("uuid");
 
-                    b.Property<int>("Position")
-                        .HasColumnType("integer");
+                b.Property<int>("Position")
+                    .HasColumnType("integer");
 
-                    b.HasIndex("CompetencyElementId");
+                b.HasIndex("CompetencyElementId");
 
-                    b.ToTable("PerformanceCriterias");
-                });
+                b.ToTable("PerformanceCriterias");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.RealisationContextEntity", b =>
-                {
-                    b.HasBaseType("Pdc.Infrastructure.Entities.Version.ChangeableEntity");
+            {
+                b.HasBaseType("Pdc.Infrastructure.Entities.Version.ChangeableEntity");
 
-                    b.Property<string>("CompetencyCode")
-                        .HasColumnType("text");
+                b.Property<string>("CompetencyCode")
+                    .HasColumnType("text");
 
-                    b.HasIndex("CompetencyCode");
+                b.HasIndex("CompetencyCode");
 
-                    b.ToTable("RealisationContexts");
-                });
+                b.ToTable("RealisationContexts");
+            });
 
             modelBuilder.Entity("ChangeableEntityCourseFrameworkEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", null)
-                        .WithMany()
-                        .HasForeignKey("AssedElementsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", null)
+                    .WithMany()
+                    .HasForeignKey("AssedElementsId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", null)
-                        .WithMany()
-                        .HasForeignKey("CourseFrameworkEntityCourseCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", null)
+                    .WithMany()
+                    .HasForeignKey("CourseFrameworkEntityCourseCode")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("CourseFrameworkEntityCourseFrameworkEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", null)
-                        .WithMany()
-                        .HasForeignKey("CourseFrameworkEntityCourseCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", null)
+                    .WithMany()
+                    .HasForeignKey("CourseFrameworkEntityCourseCode")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", null)
-                        .WithMany()
-                        .HasForeignKey("PrerequisitesCourseCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", null)
+                    .WithMany()
+                    .HasForeignKey("PrerequisitesCourseCode")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", null)
+                    .WithMany()
+                    .HasForeignKey("UserId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkCompetencyElementEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", "CompetencyElement")
-                        .WithMany()
-                        .HasForeignKey("CompetencyElementId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", "CompetencyElement")
+                    .WithMany()
+                    .HasForeignKey("CompetencyElementId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                    b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CourseFramework")
-                        .WithMany()
-                        .HasForeignKey("CourseFrameworkId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CourseFramework")
+                    .WithMany()
+                    .HasForeignKey("CourseFrameworkId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                    b.Navigation("CompetencyElement");
+                b.Navigation("CompetencyElement");
 
-                    b.Navigation("CourseFramework");
-                });
+                b.Navigation("CourseFramework");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkCompetencyEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", "Competency")
-                        .WithMany()
-                        .HasForeignKey("CompetencyId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", "Competency")
+                    .WithMany()
+                    .HasForeignKey("CompetencyId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                    b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CourseFramework")
-                        .WithMany("CourseFrameworkCompetencies")
-                        .HasForeignKey("CourseFrameworkCourseCode");
+                b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CourseFramework")
+                    .WithMany("CourseFrameworkCompetencies")
+                    .HasForeignKey("CourseFrameworkCourseCode");
 
-                    b.Navigation("Competency");
+                b.Navigation("Competency");
 
-                    b.Navigation("CourseFramework");
-                });
+                b.Navigation("CourseFramework");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", b =>
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "ChangeRecord")
+                    .WithMany()
+                    .HasForeignKey("ChangeRecordId");
+
+                b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "Units")
+                    .WithMany()
+                    .HasForeignKey("UnitsId")
+                    .OnDelete(DeleteBehavior.ClientCascade);
+
+                b.OwnsOne("Pdc.Domain.Models.Common.Weighting", "Weighting", b1 =>
                 {
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "ChangeRecord")
-                        .WithMany()
-                        .HasForeignKey("ChangeRecordId");
+                    b1.Property<string>("CourseFrameworkEntityCourseCode")
+                        .HasColumnType("text");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "Units")
-                        .WithMany()
-                        .HasForeignKey("UnitsId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                    b1.Property<short>("LaboratoryHours")
+                        .HasColumnType("smallint");
 
-                    b.OwnsOne("Pdc.Domain.Models.Common.Weighting", "Weighting", b1 =>
-                        {
-                            b1.Property<string>("CourseFrameworkEntityCourseCode")
-                                .HasColumnType("text");
+                    b1.Property<short>("PersonnalWorkHours")
+                        .HasColumnType("smallint");
 
-                            b1.Property<short>("LaboratoryHours")
-                                .HasColumnType("smallint");
+                    b1.Property<short>("TheoryHours")
+                        .HasColumnType("smallint");
 
-                            b1.Property<short>("PersonnalWorkHours")
-                                .HasColumnType("smallint");
+                    b1.HasKey("CourseFrameworkEntityCourseCode");
 
-                            b1.Property<short>("TheoryHours")
-                                .HasColumnType("smallint");
+                    b1.ToTable("CourseFrameworks");
 
-                            b1.HasKey("CourseFrameworkEntityCourseCode");
-
-                            b1.ToTable("CourseFrameworks");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CourseFrameworkEntityCourseCode");
-                        });
-
-                    b.Navigation("ChangeRecord");
-
-                    b.Navigation("Units");
-
-                    b.Navigation("Weighting")
-                        .IsRequired();
+                    b1.WithOwner()
+                        .HasForeignKey("CourseFrameworkEntityCourseCode");
                 });
+
+                b.Navigation("ChangeRecord");
+
+                b.Navigation("Units");
+
+                b.Navigation("Weighting")
+                    .IsRequired();
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkPerformanceCriteriaEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CourseFramework")
-                        .WithMany("CourseFrameworkPerformanceCriterias")
-                        .HasForeignKey("CourseFrameworkCourseCode");
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CourseFramework")
+                    .WithMany("CourseFrameworkPerformanceCriterias")
+                    .HasForeignKey("CourseFrameworkCourseCode");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", "PerformanceCriteria")
-                        .WithMany()
-                        .HasForeignKey("PerformanceCriteriaId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", "PerformanceCriteria")
+                    .WithMany()
+                    .HasForeignKey("PerformanceCriteriaId")
+                    .OnDelete(DeleteBehavior.NoAction)
+                    .IsRequired();
 
-                    b.Navigation("CourseFramework");
+                b.Navigation("CourseFramework");
 
-                    b.Navigation("PerformanceCriteria");
-                });
+                b.Navigation("PerformanceCriteria");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "ComplementaryUnits")
-                        .WithOne()
-                        .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "ComplementaryUnitsId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "ComplementaryUnits")
+                    .WithOne()
+                    .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "ComplementaryUnitsId")
+                    .OnDelete(DeleteBehavior.ClientCascade);
 
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "GeneralUnits")
-                        .WithOne()
-                        .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "GeneralUnitsId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "GeneralUnits")
+                    .WithOne()
+                    .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "GeneralUnitsId")
+                    .OnDelete(DeleteBehavior.ClientCascade);
 
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "OptionalUnits")
-                        .WithOne()
-                        .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "OptionalUnitsId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "OptionalUnits")
+                    .WithOne()
+                    .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "OptionalUnitsId")
+                    .OnDelete(DeleteBehavior.ClientCascade);
 
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "SpecificUnits")
-                        .WithOne()
-                        .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "SpecificUnitsId")
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "SpecificUnits")
+                    .WithOne()
+                    .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "SpecificUnitsId")
+                    .OnDelete(DeleteBehavior.ClientCascade);
 
-                    b.Navigation("ComplementaryUnits");
+                b.Navigation("ComplementaryUnits");
 
-                    b.Navigation("GeneralUnits");
+                b.Navigation("GeneralUnits");
 
-                    b.Navigation("OptionalUnits");
+                b.Navigation("OptionalUnits");
 
-                    b.Navigation("SpecificUnits");
-                });
+                b.Navigation("SpecificUnits");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "ChangeRecord")
-                        .WithMany()
-                        .HasForeignKey("ChangeRecordId");
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "ChangeRecord")
+                    .WithMany()
+                    .HasForeignKey("ChangeRecordId");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "ProgramOfStudy")
-                        .WithMany("Competencies")
-                        .HasForeignKey("ProgramOfStudyCode");
+                b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "ProgramOfStudy")
+                    .WithMany("Competencies")
+                    .HasForeignKey("ProgramOfStudyCode");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "Units")
-                        .WithMany()
-                        .HasForeignKey("UnitsId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.UnitsEntity", "Units")
+                    .WithMany()
+                    .HasForeignKey("UnitsId")
+                    .OnDelete(DeleteBehavior.Cascade);
 
-                    b.Navigation("ChangeRecord");
+                b.Navigation("ChangeRecord");
 
-                    b.Navigation("ProgramOfStudy");
+                b.Navigation("ProgramOfStudy");
 
-                    b.Navigation("Units");
-                });
+                b.Navigation("Units");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Version.ChangeDetailEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "ChangeRecord")
-                        .WithMany("ChangeDetails")
-                        .HasForeignKey("ChangeRecordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "ChangeRecord")
+                    .WithMany("ChangeDetails")
+                    .HasForeignKey("ChangeRecordId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", "Changeable")
-                        .WithMany()
-                        .HasForeignKey("ChangeableId");
+                b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", "Changeable")
+                    .WithMany()
+                    .HasForeignKey("ChangeableId");
 
-                    b.Navigation("ChangeRecord");
+                b.Navigation("ChangeRecord");
 
-                    b.Navigation("Changeable");
-                });
+                b.Navigation("Changeable");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "CreatedBy")
+                    .WithMany()
+                    .HasForeignKey("CreatedById")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "NextChangeRecord")
-                        .WithMany()
-                        .HasForeignKey("NextChangeRecordId");
+                b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "NextChangeRecord")
+                    .WithMany()
+                    .HasForeignKey("NextChangeRecordId");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "ParentChangeRecord")
-                        .WithMany()
-                        .HasForeignKey("ParentChangeRecordId");
+                b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "ParentChangeRecord")
+                    .WithMany()
+                    .HasForeignKey("ParentChangeRecordId");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "ValidatedBy")
-                        .WithMany()
-                        .HasForeignKey("ValidatedById")
-                        .OnDelete(DeleteBehavior.Restrict);
+                b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "ValidatedBy")
+                    .WithMany()
+                    .HasForeignKey("ValidatedById")
+                    .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("CreatedBy");
+                b.Navigation("CreatedBy");
 
-                    b.Navigation("NextChangeRecord");
+                b.Navigation("NextChangeRecord");
 
-                    b.Navigation("ParentChangeRecord");
+                b.Navigation("ParentChangeRecord");
 
-                    b.Navigation("ValidatedBy");
-                });
+                b.Navigation("ValidatedBy");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Version.ComplementaryInformationEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "ChangeRecord")
-                        .WithMany("ComplementaryInformations")
-                        .HasForeignKey("ChangeRecordId");
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", "ChangeRecord")
+                    .WithMany("ComplementaryInformations")
+                    .HasForeignKey("ChangeRecordId");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", "Changeable")
-                        .WithMany("ComplementaryInformations")
-                        .HasForeignKey("ChangeableId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", "Changeable")
+                    .WithMany("ComplementaryInformations")
+                    .HasForeignKey("ChangeableId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "CreatedBy")
+                    .WithMany()
+                    .HasForeignKey("CreatedById")
+                    .OnDelete(DeleteBehavior.Restrict)
+                    .IsRequired();
 
-                    b.Navigation("ChangeRecord");
+                b.Navigation("ChangeRecord");
 
-                    b.Navigation("Changeable");
+                b.Navigation("Changeable");
 
-                    b.Navigation("CreatedBy");
-                });
+                b.Navigation("CreatedBy");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.ContentElementEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkPerformanceCriteriaEntity", "CourseFrameworkPerformanceCriteria")
-                        .WithMany("ContentElements")
-                        .HasForeignKey("CourseFrameworkPerformanceCriteriaId");
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkPerformanceCriteriaEntity", "CourseFrameworkPerformanceCriteria")
+                    .WithMany("ContentElements")
+                    .HasForeignKey("CourseFrameworkPerformanceCriteriaId");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", null)
-                        .WithOne()
-                        .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ContentElementEntity", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", null)
+                    .WithOne()
+                    .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.ContentElementEntity", "Id")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("CourseFrameworkPerformanceCriteria");
-                });
+                b.Navigation("CourseFrameworkPerformanceCriteria");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", "Competency")
-                        .WithMany("CompetencyElements")
-                        .HasForeignKey("CompetencyId");
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", "Competency")
+                    .WithMany("CompetencyElements")
+                    .HasForeignKey("CompetencyId");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", null)
-                        .WithOne()
-                        .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", null)
+                    .WithOne()
+                    .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", "Id")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Competency");
-                });
+                b.Navigation("Competency");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", "CompetencyElement")
-                        .WithMany("PerformanceCriterias")
-                        .HasForeignKey("CompetencyElementId");
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", "CompetencyElement")
+                    .WithMany("PerformanceCriterias")
+                    .HasForeignKey("CompetencyElementId");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", null)
-                        .WithOne()
-                        .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", null)
+                    .WithOne()
+                    .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.PerformanceCriteriaEntity", "Id")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("CompetencyElement");
-                });
+                b.Navigation("CompetencyElement");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.RealisationContextEntity", b =>
-                {
-                    b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", "Competency")
-                        .WithMany("RealisationContexts")
-                        .HasForeignKey("CompetencyCode");
+            {
+                b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", "Competency")
+                    .WithMany("RealisationContexts")
+                    .HasForeignKey("CompetencyCode");
 
-                    b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", null)
-                        .WithOne()
-                        .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.RealisationContextEntity", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                b.HasOne("Pdc.Infrastructure.Entities.Version.ChangeableEntity", null)
+                    .WithOne()
+                    .HasForeignKey("Pdc.Infrastructure.Entities.MinisterialSpecification.RealisationContextEntity", "Id")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.Navigation("Competency");
-                });
+                b.Navigation("Competency");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", b =>
-                {
-                    b.Navigation("CourseFrameworkCompetencies");
+            {
+                b.Navigation("CourseFrameworkCompetencies");
 
-                    b.Navigation("CourseFrameworkPerformanceCriterias");
-                });
+                b.Navigation("CourseFrameworkPerformanceCriterias");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkPerformanceCriteriaEntity", b =>
-                {
-                    b.Navigation("ContentElements");
-                });
+            {
+                b.Navigation("ContentElements");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", b =>
-                {
-                    b.Navigation("Competencies");
-                });
+            {
+                b.Navigation("Competencies");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", b =>
-                {
-                    b.Navigation("CompetencyElements");
+            {
+                b.Navigation("CompetencyElements");
 
-                    b.Navigation("RealisationContexts");
-                });
+                b.Navigation("RealisationContexts");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Version.ChangeRecordEntity", b =>
-                {
-                    b.Navigation("ChangeDetails");
+            {
+                b.Navigation("ChangeDetails");
 
-                    b.Navigation("ComplementaryInformations");
-                });
+                b.Navigation("ComplementaryInformations");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.Version.ChangeableEntity", b =>
-                {
-                    b.Navigation("ComplementaryInformations");
-                });
+            {
+                b.Navigation("ComplementaryInformations");
+            });
 
             modelBuilder.Entity("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyElementEntity", b =>
-                {
-                    b.Navigation("PerformanceCriterias");
-                });
+            {
+                b.Navigation("PerformanceCriterias");
+            });
 #pragma warning restore 612, 618
         }
     }

@@ -1,8 +1,8 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Pdc.Domain.Enums;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.Common;
@@ -12,60 +12,65 @@ using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.ChangeTracker;
 using Pdc.Infrastructure.Data;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
-using Pdc.Infrastructure.Entities.Version;
 using Pdc.Infrastructure.Interfaces;
 
 namespace Pdc.Infrastructure.Repositories;
 
-public class CompetencyRepository(AppDbContext context, IComplementaryInformationRepository complementaryInformationRepository, IChangeRecordRepository changeRecordRepository, IMapper mapper, ILogger<CompetencyRepository> _logger) : ICompetencyRepository
+internal class CompetencyRepository(
+    AppDbContext context,
+    IChangeRecordRepository changeRecordRepository,
+    IMapper mapper,
+    ILogger<CompetencyRepository> logger,
+    [FromKeyedServices("tracked")] IChangeApplier<RealisationContext, CompetencyEntity, RealisationContextEntity> trackedRealisationContextChangeApplier,
+    [FromKeyedServices("tracked")] IChangeApplier<MinisterialCompetencyElement, CompetencyEntity, CompetencyElementEntity> trackedCompetencyElementChangeApplier,
+    [FromKeyedServices("tracked")] IChangeApplier<PerformanceCriteria, CompetencyElementEntity, PerformanceCriteriaEntity> trackedPerformanceCriteriaChangeApplier,
+    [FromKeyedServices("untracked")] IChangeApplier<RealisationContext, CompetencyEntity, RealisationContextEntity> untrackedRealisationContextChangeApplier,
+    [FromKeyedServices("untracked")] IChangeApplier<MinisterialCompetencyElement, CompetencyEntity, CompetencyElementEntity> untrackedCompetencyElementChangeApplier,
+    [FromKeyedServices("untracked")] IChangeApplier<PerformanceCriteria, CompetencyElementEntity, PerformanceCriteriaEntity> untrackedPerformanceCriteriaChangeApplier) : ICompetencyRepository
 {
-    private readonly AppDbContext _context = context;
-    private readonly IMapper _mapper = mapper;
-    private readonly IComplementaryInformationRepository _complementaryInformationRepository = complementaryInformationRepository;
-    private readonly IChangeRecordRepository _changeRecordRepository = changeRecordRepository;
-
     public async Task<List<MinisterialCompetency>> GetAll()
     {
-        List<CompetencyEntity> entities = await _context.Competencies.AsNoTracking().ToListAsync();
-        return _mapper.Map<List<MinisterialCompetency>>(entities);
+        List<CompetencyEntity> entities = await context.Competencies.AsNoTracking().ToListAsync();
+        return mapper.Map<List<MinisterialCompetency>>(entities);
     }
 
     public async Task<MinisterialCompetency> Add(ProgramOfStudy program, MinisterialCompetency competency)
     {
-        using var transaction = await _context.Database.BeginTransactionAsync();
+        using var transaction = await context.Database.BeginTransactionAsync();
         try
         {
             IChangeTracker tracker = new NoOpChangeDetailsTracker();
-            _logger.LogInformation($"Adding competency with code {competency.Code} to program of study {program.Code}");
-            ChangeRecord changeRecord = await _changeRecordRepository.AddChangeRecord(competency.ChangeRecord!);
+            logger.LogInformation($"Adding competency with code {competency.Code} to program of study {program.Code}");
+            ChangeRecord changeRecord = await changeRecordRepository.AddChangeRecord(competency.ChangeRecord!);
 
-            CompetencyEntity competencyEntity = _mapper.Map<CompetencyEntity>(competency);
+            CompetencyEntity competencyEntity = mapper.Map<CompetencyEntity>(competency);
             competencyEntity.ChangeRecordId = changeRecord.Id;
             competencyEntity.ProgramOfStudyCode = program.Code;
 
-            _logger.LogInformation($"Mapped competency to entity with code {competencyEntity.Code} for program of study {program.Code}");
-            EntityEntry<CompetencyEntity> addedCompetencyEntity = await _context.Competencies.AddAsync(competencyEntity);
+            logger.LogInformation($"Mapped competency to entity with code {competencyEntity.Code} for program of study {program.Code}");
+            EntityEntry<CompetencyEntity> addedCompetencyEntity = await context.Competencies.AddAsync(competencyEntity);
 
-            _logger.LogInformation($"Saved competency entity with code {addedCompetencyEntity.Entity.Code} to database for program of study {program.Code}");
+            logger.LogInformation($"Saved competency entity with code {addedCompetencyEntity.Entity.Code} to database for program of study {program.Code}");
 
             foreach (RealisationContext rc in competency.RealisationContexts)
             {
-                await AddRealisationContext(changeRecord, addedCompetencyEntity.Entity, rc, tracker);
+                await untrackedRealisationContextChangeApplier.Add(changeRecord, addedCompetencyEntity.Entity, rc, tracker);
             }
             foreach (MinisterialCompetencyElement ce in competency.CompetencyElements)
             {
-                CompetencyElementEntity addedCompetencyElementEntity = await AddCompetencyElement(changeRecord, addedCompetencyEntity.Entity, ce, tracker);
+                CompetencyElementEntity addedCompetencyElementEntity = await untrackedCompetencyElementChangeApplier.Add(changeRecord, addedCompetencyEntity.Entity, ce, tracker);
 
                 foreach (PerformanceCriteria pc in ce.PerformanceCriterias)
                 {
-                    await AddPerformanceCriteria(changeRecord, addedCompetencyElementEntity, pc, tracker);
+                    await untrackedPerformanceCriteriaChangeApplier.Add(changeRecord, addedCompetencyElementEntity, pc, tracker);
                 }
             }
-            _logger.LogInformation($"Before commit transaction with code {addedCompetencyEntity.Entity.Code} to database for program of study {program.Code}");
-            await _context.SaveChangesAsync();
+
+            logger.LogInformation($"Before commit transaction with code {addedCompetencyEntity.Entity.Code} to database for program of study {program.Code}");
+            await context.SaveChangesAsync();
             await transaction.CommitAsync();
-            _logger.LogInformation($"Transaction success with code {addedCompetencyEntity.Entity.Code} ");
-            return _mapper.Map<MinisterialCompetency>(competencyEntity);
+            logger.LogInformation($"Transaction success with code {addedCompetencyEntity.Entity.Code} ");
+            return mapper.Map<MinisterialCompetency>(competencyEntity);
         }
         catch
         {
@@ -74,99 +79,64 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
         }
     }
 
-    private async Task AddPerformanceCriteria(ChangeRecord changeRecord, CompetencyElementEntity competencyElementEntity, PerformanceCriteria pc, IChangeTracker tracker)
+    public async Task<MinisterialCompetency> UpdateTrackedChangeable(MinisterialCompetency competency)
     {
-        _logger.LogInformation($"Adding performance criteria with position {pc.Position} to competency element with id {competencyElementEntity.Id}");
-        PerformanceCriteriaEntity performanceCriteriaEntity = _mapper.Map<PerformanceCriteriaEntity>(pc);
-        performanceCriteriaEntity.CompetencyElement = competencyElementEntity;
-        EntityEntry<PerformanceCriteriaEntity> addedPerformanceCriteria = await _context.PerformanceCriterias.AddAsync(performanceCriteriaEntity);
-        await _context.SaveChangesAsync();
-        _logger.LogInformation($"Added performance criteria with position {pc.Position} to competency element with id {competencyElementEntity.Id}");
-        await UpsertComplementaryInformations(changeRecord.Id!.Value, pc.ComplementaryInformations, addedPerformanceCriteria.Entity.Id!.Value);
-        await tracker.TrackAdd(addedPerformanceCriteria.Entity, changeRecord.Id.Value);
-    }
-
-    private async Task<CompetencyElementEntity> AddCompetencyElement(ChangeRecord changeRecord, CompetencyEntity competencyEntity, MinisterialCompetencyElement ce, IChangeTracker tracker)
-    {
-        _logger.LogInformation($"Adding competency element with position {ce.Position} to competency with code {competencyEntity.Code}");
-        CompetencyElementEntity competencyElementEntity = _mapper.Map<CompetencyElementEntity>(ce);
-        competencyElementEntity.Competency = competencyEntity;
-        EntityEntry<CompetencyElementEntity> addedCompetencyElementEntity = await _context.CompetencyElements.AddAsync(competencyElementEntity);
-        await _context.SaveChangesAsync();
-        _logger.LogInformation($"Added competency element with position {ce.Position} to competency with code {competencyEntity.Code}");
-        await UpsertComplementaryInformations(changeRecord.Id!.Value, ce.ComplementaryInformations, addedCompetencyElementEntity.Entity.Id!.Value);
-        await tracker.TrackAdd(addedCompetencyElementEntity.Entity, changeRecord.Id.Value);
-        return addedCompetencyElementEntity.Entity;
-    }
-
-    private async Task AddRealisationContext(ChangeRecord changeRecord, CompetencyEntity competencyEntity, RealisationContext rc, IChangeTracker tracker)
-    {
-        _logger.LogInformation($"Adding realisation context to competency with code {competencyEntity.Code}");
-        RealisationContextEntity realisationContextEntity = _mapper.Map<RealisationContextEntity>(rc);
-        realisationContextEntity.Competency = competencyEntity;
-        EntityEntry<RealisationContextEntity> addedRealisationContextEntity = await _context.RealisationContexts.AddAsync(realisationContextEntity);
-        await _context.SaveChangesAsync();
-        _logger.LogInformation($"Added realisation context to competency with code {competencyEntity.Code}");
-        await UpsertComplementaryInformations(changeRecord.Id!.Value, rc.ComplementaryInformations, addedRealisationContextEntity.Entity.Id!.Value);
-        await tracker.TrackAdd(addedRealisationContextEntity.Entity, changeRecord.Id.Value);
-    }
-    public async Task<MinisterialCompetency> UpdateWithChangeTracking(MinisterialCompetency competency)
-    {
-        using var transaction = await _context.Database.BeginTransactionAsync();
+        using var transaction = await context.Database.BeginTransactionAsync();
         try
         {
-            IChangeTracker tracker = new ChangeDetailsTracker(_context);
-            _logger.LogInformation($"Updating competency with code {competency.Code}");
+            IChangeTracker tracker = new ChangeDetailsTracker(context);
+            logger.LogDebug($"Updating competency with code {competency.Code}");
             CompetencyEntity existingCompetency = await FindCompetencyEntityByCode(competency.Code);
-            ChangeRecord changeRecord = await _changeRecordRepository.AddChangeRecord(competency.ChangeRecord!);
-            competency.ChangeRecord = changeRecord;
 
-            await TrackDeletedElements(competency, existingCompetency, changeRecord.Id!.Value);
+            // if the id is null, then we must add the change record.
+            if (competency.ChangeRecord.Id == null)
+            {
+                ChangeRecord changeRecord = await changeRecordRepository.AddChangeRecord(competency.ChangeRecord!);
+                competency.ChangeRecord = changeRecord;
+            }
 
-            await UpdateCompetencyAndChilds(competency, tracker, existingCompetency);
+            await UpdateCompetencyAndChilds(competency, tracker, existingCompetency, trackedRealisationContextChangeApplier, trackedCompetencyElementChangeApplier, trackedPerformanceCriteriaChangeApplier);
 
-            _logger.LogInformation($"Commiting competency with code {competency.Code}");
+            logger.LogDebug($"Commiting competency with code {competency.Code}");
             await transaction.CommitAsync();
-            _logger.LogInformation($"Comitted competency with code {competency.Code}");
+            logger.LogDebug($"Comitted competency with code {competency.Code}");
             return await FindByCode(competency.Code);
         }
         catch
         {
             await transaction.RollbackAsync();
-            _logger.LogError($"Failed to updated the competency with code {competency.Code}");
+            logger.LogError($"Failed to updated the competency with code {competency.Code}");
             throw;
         }
     }
 
 
-    public async Task<MinisterialCompetency> Update(MinisterialCompetency competency)
+    public async Task<MinisterialCompetency> UpdateUntrackedChangeable(MinisterialCompetency competency)
     {
-        using var transaction = await _context.Database.BeginTransactionAsync();
+        using var transaction = await context.Database.BeginTransactionAsync();
         try
         {
             IChangeTracker tracker = new NoOpChangeDetailsTracker();
-            _logger.LogInformation($"Updating competency with code {competency.Code}");
+            logger.LogInformation($"Updating competency with code {competency.Code}");
             CompetencyEntity existingCompetency = await FindCompetencyEntityByCode(competency.Code);
 
-            await RemoveDeletedElements(competency, existingCompetency);
-
-            await UpdateCompetencyAndChilds(competency, tracker, existingCompetency);
-            _logger.LogInformation($"Commiting competency with code {competency.Code}");
+            await UpdateCompetencyAndChilds(competency, tracker, existingCompetency, untrackedRealisationContextChangeApplier, untrackedCompetencyElementChangeApplier, untrackedPerformanceCriteriaChangeApplier);
+            logger.LogInformation($"Commiting competency with code {competency.Code}");
             await transaction.CommitAsync();
-            _logger.LogInformation($"Comitted competency with code {competency.Code}");
+            logger.LogInformation($"Comitted competency with code {competency.Code}");
             return await FindByCode(competency.Code);
         }
         catch
         {
             await transaction.RollbackAsync();
-            _logger.LogError($"Failed to updated the competency with code {competency.Code}");
+            logger.LogError($"Failed to updated the competency with code {competency.Code}");
             throw;
         }
     }
 
     private async Task<CompetencyEntity> FindCompetencyEntityByCode(string code)
     {
-        return await _context.Competencies
+        return await context.Competencies
                         .AsSplitQuery()
                         .Include(c => c.RealisationContexts)
                             .ThenInclude(rc => rc.ComplementaryInformations)
@@ -180,178 +150,70 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
                         .SingleOrDefaultAsync(x => x.Code == code) ?? throw new NotFoundException(nameof(MinisterialCompetency), code);
     }
 
-    private async Task UpdateCompetencyAndChilds(MinisterialCompetency competency, IChangeTracker tracker, CompetencyEntity existingCompetency)
+    private async Task UpdateCompetencyAndChilds(MinisterialCompetency competency,
+                                                 IChangeTracker tracker,
+                                                 CompetencyEntity existingCompetency,
+                                                 IChangeApplier<RealisationContext, CompetencyEntity, RealisationContextEntity> realisationContextChangeApplier,
+                                                 IChangeApplier<MinisterialCompetencyElement, CompetencyEntity, CompetencyElementEntity> competencyElementChangeApplier,
+                                                 IChangeApplier<PerformanceCriteria, CompetencyElementEntity, PerformanceCriteriaEntity> performanceCriteriaChangeApplier)
     {
-        _mapper.Map(competency, existingCompetency);
-        await _context.SaveChangesAsync();
+        mapper.Map(competency, existingCompetency);
+        await context.SaveChangesAsync();
+
+        await realisationContextChangeApplier.Delete(competency.RealisationContexts, existingCompetency.RealisationContexts, tracker, competency.ChangeRecord.Id);
+        await competencyElementChangeApplier.Delete(competency.CompetencyElements, existingCompetency.CompetencyElements, tracker, competency.ChangeRecord.Id);
+        await performanceCriteriaChangeApplier.Delete(competency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).ToList(), existingCompetency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).ToList(), tracker, competency.ChangeRecord.Id);
 
         foreach (RealisationContext rc in competency.RealisationContexts)
         {
             if (rc.Id == null)
             {
-                await AddRealisationContext(competency.ChangeRecord!, existingCompetency, rc, tracker);
+                await realisationContextChangeApplier.Add(competency.ChangeRecord!, existingCompetency, rc, tracker);
             }
             else
             {
-                await UpdateRealisationContext(competency.ChangeRecord!, rc, tracker);
+                await realisationContextChangeApplier.Update(competency.ChangeRecord!, rc, tracker);
             }
         }
         foreach (MinisterialCompetencyElement ce in competency.CompetencyElements)
         {
             CompetencyElementEntity updatedCe = ce.Id == null
-                ? await AddCompetencyElement(competency.ChangeRecord!, existingCompetency, ce, tracker)
-                : await UpdateCompetencyElement(competency.ChangeRecord!, ce, tracker);
+                ? await competencyElementChangeApplier.Add(competency.ChangeRecord!, existingCompetency, ce, tracker)
+                : await competencyElementChangeApplier.Update(competency.ChangeRecord!, ce, tracker);
+            updatedCe.Position = ce.Position;
             foreach (PerformanceCriteria pc in ce.PerformanceCriterias)
             {
-                if (pc.Id == null)
-                {
-                    await AddPerformanceCriteria(competency.ChangeRecord!, updatedCe, pc, tracker);
-                }
-                else
-                {
-                    await UpdatePerformanceCriteria(competency.ChangeRecord!, pc, tracker);
-                }
+                PerformanceCriteriaEntity updatedPC = pc.Id == null
+                ? await performanceCriteriaChangeApplier.Add(competency.ChangeRecord!, updatedCe, pc, tracker)
+                : await performanceCriteriaChangeApplier.Update(competency.ChangeRecord!, pc, tracker);
+                updatedPC.Position = pc.Position;
             }
         }
 
-        await _context.SaveChangesAsync();
-    }
-
-    private async Task<CompetencyElementEntity> UpdateCompetencyElement(ChangeRecord changeRecord, MinisterialCompetencyElement ce, IChangeTracker tracker)
-    {
-        _logger.LogInformation($"Updating competency element with id {ce.Id}");
-        CompetencyElementEntity ceToUpdate = await _context.CompetencyElements
-            .Include(ce => ce.ComplementaryInformations)
-            .SingleOrDefaultAsync(x => x.Id == ce.Id) ?? throw new NotFoundException(nameof(CompetencyElementEntity), ce.Id!);
-        string oldValue = ceToUpdate.Value;
-
-        _mapper.Map(ce, ceToUpdate);
-        EntityEntry<CompetencyElementEntity> updatedCompetencyElementEntity = _context.CompetencyElements.Update(ceToUpdate);
-        await _context.SaveChangesAsync();
-        _logger.LogInformation($"Updated competency element with id {ce.Id}");
-        await UpsertComplementaryInformations(changeRecord.Id!.Value, ce.ComplementaryInformations, updatedCompetencyElementEntity.Entity.Id!.Value);
-        await tracker.TrackUpdate(updatedCompetencyElementEntity.Entity, oldValue, changeRecord.Id.Value);
-        return ceToUpdate;
-    }
-
-    private async Task UpdateRealisationContext(ChangeRecord changeRecord, RealisationContext rc, IChangeTracker tracker)
-    {
-        _logger.LogInformation($"Updating realisation context with id {rc.Id}");
-        RealisationContextEntity rcToUpdate = await _context.RealisationContexts
-            .Include(rc => rc.ComplementaryInformations)
-            .SingleOrDefaultAsync(x => x.Id == rc.Id) ?? throw new NotFoundException(nameof(RealisationContextEntity), rc.Id!);
-        string oldValue = rcToUpdate.Value;
-
-        _mapper.Map(rc, rcToUpdate);
-        EntityEntry<RealisationContextEntity> updatedRealisationContextEntity = _context.RealisationContexts.Update(rcToUpdate);
-        await _context.SaveChangesAsync();
-        _logger.LogInformation($"Updated realisation context with id {rc.Id}");
-        await UpsertComplementaryInformations(changeRecord.Id!.Value, rc.ComplementaryInformations, updatedRealisationContextEntity.Entity.Id!.Value);
-        await tracker.TrackUpdate(updatedRealisationContextEntity.Entity, oldValue, changeRecord.Id.Value);
-    }
-
-    private async Task UpdatePerformanceCriteria(ChangeRecord changeRecord, PerformanceCriteria pc, IChangeTracker tracker)
-    {
-        _logger.LogInformation($"Updating performance criteria with id {pc.Id}");
-        PerformanceCriteriaEntity pcToUpdate = await _context.PerformanceCriterias
-            .Include(pc => pc.ComplementaryInformations)
-            .SingleOrDefaultAsync(x => x.Id == pc.Id) ?? throw new NotFoundException(nameof(PerformanceCriteriaEntity), pc.Id!);
-        string oldValue = pcToUpdate.Value;
-
-        _mapper.Map(pc, pcToUpdate);
-        EntityEntry<PerformanceCriteriaEntity> updatedPerformanceCriteriaEntity = _context.PerformanceCriterias.Update(pcToUpdate);
-        await _context.SaveChangesAsync();
-        _logger.LogInformation($"Updated performance criteria with id {pc.Id}");
-        await UpsertComplementaryInformations(changeRecord.Id!.Value, pc.ComplementaryInformations, updatedPerformanceCriteriaEntity.Entity.Id!.Value);
-        await tracker.TrackUpdate(updatedPerformanceCriteriaEntity.Entity, oldValue, changeRecord.Id.Value);
-    }
-
-    private async Task UpsertComplementaryInformations(Guid changeRecordId, ICollection<ComplementaryInformation> complementaryInformations, Guid changeableId)
-    {
-        foreach (ComplementaryInformation ci in complementaryInformations)
-        {
-            if (ci.Id == null)
-            {
-                _logger.LogInformation($"Adding complementary information to changeable with id {changeableId}");
-                await _complementaryInformationRepository.Add(ci, changeRecordId, changeableId);
-            }
-            else
-            {
-                _logger.LogInformation($"Updating complementary information with id {ci.Id} for changeable with id {changeableId}");
-                await _complementaryInformationRepository.Update(ci, changeRecordId);
-            }
-        }
-    }
-
-
-    private async Task RemoveDeletedElements(MinisterialCompetency competency, CompetencyEntity existingCompetency)
-    {
-        (List<ChangeableEntity> realisationContextToDelete, List<ComplementaryInformationEntity> realisationContextComplementaryInformationsToDelete) = RepoUtils.FindMissingChangeableAndComplementaryInformationsForDeletion([.. competency.RealisationContexts.Cast<Changeable>()], [.. existingCompetency.RealisationContexts.Cast<ChangeableEntity>()]);
-        _logger.LogInformation($"Found {realisationContextToDelete.Count} realisation contexts to delete for competency with code {competency.Code} with ids ${string.Join(",", realisationContextToDelete.Select(x => x.Id))}");
-        _context.RealisationContexts.RemoveRange(realisationContextToDelete.Cast<RealisationContextEntity>().ToList());
-
-        (List<ChangeableEntity> competencyElementsToDelete, List<ComplementaryInformationEntity> competencyElementsComplementaryInformationsToDelete) = RepoUtils.FindMissingChangeableAndComplementaryInformationsForDeletion([.. competency.CompetencyElements.Cast<Changeable>()], [.. existingCompetency.CompetencyElements.Cast<ChangeableEntity>()]);
-        _logger.LogInformation($"Found {competencyElementsToDelete.Count} competency elements to delete for competency with code {competency.Code} with ids ${string.Join(",", competencyElementsToDelete.Select(x => x.Id))}");
-        _context.CompetencyElements.RemoveRange(competencyElementsToDelete.Cast<CompetencyElementEntity>().ToList());
-
-
-        (List<ChangeableEntity> performanceCriteriasToDelete, List<ComplementaryInformationEntity> performanceCriteriasComplementaryInformationsToDelete) = RepoUtils.FindMissingChangeableAndComplementaryInformationsForDeletion([.. competency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<Changeable>()], [.. existingCompetency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<ChangeableEntity>()]);
-        _logger.LogInformation($"Found {performanceCriteriasToDelete.Count} performance criteria to delete for competency with code {competency.Code} with ids ${string.Join(",", performanceCriteriasToDelete.Select(x => x.Id))}");
-        _context.PerformanceCriterias.RemoveRange(performanceCriteriasToDelete.Cast<PerformanceCriteriaEntity>().ToList());
-
-        List<ComplementaryInformationEntity> allComplementaryInformationsToDelete = [.. realisationContextComplementaryInformationsToDelete, .. competencyElementsComplementaryInformationsToDelete, .. performanceCriteriasComplementaryInformationsToDelete];
-        _logger.LogInformation($"Found {allComplementaryInformationsToDelete.Count} complementary informations to delete for competency with code {competency.Code} with ids ${string.Join(",", allComplementaryInformationsToDelete.Select(x => x.Id))}");
-        _context.ComplementaryInformations.RemoveRange(allComplementaryInformationsToDelete);
-
-        await _context.SaveChangesAsync();
-    }
-
-    private async Task TrackDeletedElements(MinisterialCompetency competency, CompetencyEntity existingCompetency, Guid changeRecordId)
-    {
-        (List<ChangeableEntity> realisationContextToDelete, List<ComplementaryInformationEntity> _) = RepoUtils.FindMissingChangeableAndComplementaryInformationsForDeletion([.. competency.RealisationContexts.Cast<Changeable>()], [.. existingCompetency.RealisationContexts.Cast<ChangeableEntity>()]);
-        _logger.LogInformation($"Found {realisationContextToDelete.Count} realisation contexts to track for deletetion for competency with code {competency.Code} with ids ${string.Join(",", realisationContextToDelete.Select(x => x.Id))}");
-
-        (List<ChangeableEntity> competencyElementsToDelete, List<ComplementaryInformationEntity> _) = RepoUtils.FindMissingChangeableAndComplementaryInformationsForDeletion([.. competency.CompetencyElements.Cast<Changeable>()], [.. existingCompetency.CompetencyElements.Cast<ChangeableEntity>()]);
-        _logger.LogInformation($"Found {competencyElementsToDelete.Count} competency elements to track for deletetion for competency with code {competency.Code} with ids ${string.Join(",", competencyElementsToDelete.Select(x => x.Id))}");
-
-
-        (List<ChangeableEntity> performanceCriteriasToDelete, List<ComplementaryInformationEntity> _) = RepoUtils.FindMissingChangeableAndComplementaryInformationsForDeletion([.. competency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<Changeable>()], [.. existingCompetency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Cast<ChangeableEntity>()]);
-        _logger.LogInformation($"Found {performanceCriteriasToDelete.Count} performance criteria to track for deletetion for competency with code {competency.Code} with ids ${string.Join(",", performanceCriteriasToDelete.Select(x => x.Id))}");
-        List<ChangeableEntity> allDeletionsToTrack = [.. realisationContextToDelete, .. competencyElementsToDelete, .. performanceCriteriasToDelete];
-        List<ChangeDetailEntity> changeDetails = allDeletionsToTrack.Select(x =>
-        {
-            return new ChangeDetailEntity
-            {
-                ChangeRecordId = changeRecordId,
-                Changeable = x,
-                OldValue = x.Value,
-                ChangeType = ChangeType.Delete
-            };
-        }).ToList();
-        await _context.ChangeDetails.AddRangeAsync(changeDetails);
+        await context.SaveChangesAsync();
     }
 
     public async Task Delete(string programOfStudyCode, string competencyCode)
     {
-        CompetencyEntity? entity = await _context.Competencies
+        CompetencyEntity? entity = await context.Competencies
             .Include(x => x.ProgramOfStudy)
             .SingleOrDefaultAsync(x => x.Code == competencyCode && x.ProgramOfStudy.Code == programOfStudyCode)
             ?? throw new NotFoundException(nameof(CompetencyEntity), competencyCode);
 
-        _context.Competencies.Remove(entity);
-        await _context.SaveChangesAsync();
+        context.Competencies.Remove(entity);
+        await context.SaveChangesAsync();
     }
 
     // XXX Question client: Est-ce qu'une compétence peut avoir le même code dans un autre programme?
     public async Task<MinisterialCompetency> FindByCode(string competencyCode)
     {
         CompetencyEntity entity = await FindDetailedEntityByCode(competencyCode);
-        return _mapper.Map<MinisterialCompetency>(entity);
+        return mapper.Map<MinisterialCompetency>(entity);
     }
 
     public async Task<bool> ExistsEntityByCode(string programOfStudyCode, string competencyCode)
     {
-        return await _context.Competencies
+        return await context.Competencies
             .Include(x => x.ProgramOfStudy)
             .Where(x => x.Code == competencyCode && x.ProgramOfStudyCode == programOfStudyCode)
             .AnyAsync();
@@ -359,7 +221,7 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
 
     private async Task<CompetencyEntity> FindDetailedEntityByCode(string competencyCode)
     {
-        CompetencyEntity? competency = await _context.Competencies
+        CompetencyEntity? competency = await context.Competencies
             .AsSplitQuery()
             .AsNoTrackingWithIdentityResolution()
             .Include(c => c.RealisationContexts)
@@ -377,19 +239,23 @@ public class CompetencyRepository(AppDbContext context, IComplementaryInformatio
                             .ThenInclude(ci => ci!.CreatedBy)
             .Include(c => c.ProgramOfStudy)
             .Include(c => c.ChangeRecord)
-                .ThenInclude(v => v!.CreatedBy)
+                .ThenInclude(v => v.CreatedBy)
+            .Include(c => c.ChangeRecord)
+                .ThenInclude(v => v.NextChangeRecord)
+            .Include(c => c.ChangeRecord)
+                .ThenInclude(v => v!.ParentChangeRecord)
             .SingleOrDefaultAsync(x => x.Code == competencyCode);
         return competency ?? throw new NotFoundException(nameof(MinisterialCompetency), competencyCode);
     }
 
     public async Task<List<MinisterialCompetency>> GetByProgramOfStudy(string programOfStudyCode)
     {
-        List<CompetencyEntity> comps = await _context.Competencies
+        List<CompetencyEntity> comps = await context.Competencies
             .AsNoTracking()
             .Include(c => c.ChangeRecord)
                 .ThenInclude(v => v!.CreatedBy)
             .Where(c => c.ProgramOfStudy != null && c.ProgramOfStudy.Code == programOfStudyCode)
             .ToListAsync();
-        return _mapper.Map<List<MinisterialCompetency>>(comps);
+        return mapper.Map<List<MinisterialCompetency>>(comps);
     }
 }

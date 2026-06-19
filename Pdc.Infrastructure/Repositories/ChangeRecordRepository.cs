@@ -19,9 +19,9 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
         ChangeRecordEntity changeRecordEntity = _mapper.Map<ChangeRecordEntity>(changeRecord);
         ChangeRecordEntity? parentChangeRecord = null;
         // getting the parent first.
-        if (changeRecordEntity.ParentChangeRecord?.Id != null)
+        if (changeRecordEntity.ParentChangeRecordId.HasValue)
         {
-            parentChangeRecord = await FindEntityById(changeRecordEntity.ParentChangeRecord.Id.Value);
+            parentChangeRecord = await FindEntityById(changeRecordEntity.ParentChangeRecordId.Value);
         }
         if (parentChangeRecord != null)
         {

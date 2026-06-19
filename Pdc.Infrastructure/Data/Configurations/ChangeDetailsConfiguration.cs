@@ -12,18 +12,22 @@ public class ChangeDetailConfiguration : IEntityTypeConfiguration<ChangeDetailEn
 
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
+
         builder.Property(x => x.OldValue)
             .HasMaxLength(Constants.MaxChangeableLength);
 
         builder.Property(x => x.ChangeType)
             .IsRequired();
 
-        //builder.HasOne(x => x.ChangeRecord)
-        //    .WithMany()
-        //    .IsRequired();
+        builder.HasOne(x => x.ChangeRecord)
+            .WithMany()
+            .HasForeignKey(x => x.ChangeRecordId)
+            .IsRequired();
 
-        //builder.HasOne(x => x.Changeable)
-        //    .WithMany()
-        //    .IsRequired();
+        builder.HasOne(x => x.Changeable)
+            .WithMany()
+            .HasForeignKey(c => c.ChangeableId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

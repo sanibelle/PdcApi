@@ -175,8 +175,7 @@
                 v-for="(realisationContext, index) in competency.realisationContexts"
                 :key="index"
                 v-model="realisationContext.complementaryInformations!"
-                :index="index"
-                :name="`competency.realisationContexts[${index}]`"
+                :changeable-id="realisationContext.id"
               >
                 <ModulesAdministrationCompetencyComponentsARealisationContext
                   v-model="realisationContext!"
@@ -185,10 +184,7 @@
                   @delete-row="removeRealisationContextRow"
                 />
               </ModulesAdministrationComplementaryInformationWrapper>
-              <div
-                data-testid="add-realisation-context"
-                @click="addRealisationContextRow"
-              >
+              <div data-testid="add-realisation-context">
                 <FormATextInput
                   v-model="addElementPlaceholderRef"
                   :name="`add-realisation-context-input`"
@@ -217,8 +213,7 @@
             <template #col-left>
               <ModulesAdministrationComplementaryInformationWrapper
                 v-model="competencyElement.complementaryInformations!"
-                :index="competencyElementIndex"
-                :name="`competency.competencyElements[${competencyElementIndex}]`"
+                :changeable-id="competencyElement.id"
               >
                 <ModulesAdministrationCompetencyComponentsACompetencyElement
                   v-model="competencyElement!"
@@ -233,8 +228,7 @@
                 v-for="(performanceCriteria, performanceCriteriaIndex) in competencyElement.performanceCriterias"
                 :key="performanceCriteriaIndex"
                 v-model="performanceCriteria.complementaryInformations!"
-                :index="performanceCriteriaIndex"
-                :name="`competency.competencyElements[${competencyElementIndex}].performanceCriterias[${performanceCriteriaIndex}]`"
+                :changeable-id="performanceCriteria.id"
               >
                 <ModulesAdministrationCompetencyComponentsAPerformanceCriteria
                   v-model="performanceCriteria!"
@@ -244,10 +238,7 @@
                   @delete-row="removePerformanceCriteriaRow(competencyElementIndex, performanceCriteriaIndex)"
                 />
               </ModulesAdministrationComplementaryInformationWrapper>
-              <div
-                :data-testid="`add-performance-criteria-${competencyElementIndex}`"
-                @click.prevent="addPerformanceCriteriaRow(competencyElementIndex)"
-              >
+              <div :data-testid="`add-performance-criteria-${competencyElementIndex}`">
                 <FormATextInput
                   v-model="addElementPlaceholderRef"
                   :name="`add-performance-criteria-input`"
@@ -259,10 +250,7 @@
           <!-- add new row for competency element -->
           <CommonMoleculesARow>
             <template #col-left>
-              <div
-                :data-testid="`add-competency-element`"
-                @click.prevent="addCompetencyElementRow"
-              >
+              <div :data-testid="`add-competency-element`">
                 <FormATextInput
                   v-model="addElementPlaceholderRef"
                   :name="`add-competency-element-input`"

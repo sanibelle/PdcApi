@@ -21,11 +21,11 @@ public class ChangeRecord : ICreatedByPropagable, ICreatedOnPropagable
     /// <summary>
     /// The version before
     /// </summary>
-    public ChangeRecord? ParentChangeRecord { get; set; }
+    public ChangeRecord? ParentChangeRecord { get; set; } = null;
     /// <summary>
     /// The version with the changes
     /// </summary>
-    public ChangeRecord? NextChangeRecord { get; set; }
+    public ChangeRecord? NextChangeRecord { get; set; } = null;
     /// <summary>
     /// Who created the version
     /// </summary>

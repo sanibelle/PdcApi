@@ -29,7 +29,7 @@
 <template>
   <FormATextInput
     v-model="model.value"
-    :name="`competencyElements[${competencyElementIndex}].performanceCriterias[${performanceCriteriaIndex}].value`"
+    :name="`competency.competencyElements[${competencyElementIndex}].performanceCriterias[${performanceCriteriaIndex}].value`"
     :min="3"
     :max="100"
     :required="true"

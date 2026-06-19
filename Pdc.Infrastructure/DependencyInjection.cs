@@ -3,8 +3,12 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pdc.Domain.Interfaces.Repositories;
+using Pdc.Domain.Models.Common;
+using Pdc.Domain.Models.MinisterialSpecification;
 using Pdc.Infrastructure.Data;
+using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Infrastructure.Identity;
+using Pdc.Infrastructure.Interfaces;
 using Pdc.Infrastructure.Mappings;
 using Pdc.Infrastructure.Repositories;
 
@@ -47,6 +51,15 @@ public static class DependencyInjection
         services.AddScoped<IChangeableRepository, ChangeableRepository>();
         services.AddScoped<IChangeDetailsRepository, ChangeDetailsRepository>();
 
+        //ChangeTracker
+        services.AddKeyedScoped<IChangeApplier<RealisationContext, CompetencyEntity, RealisationContextEntity>, UntrackedRealisationContextChangeApplier>("untracked");
+        services.AddKeyedScoped<IChangeApplier<MinisterialCompetencyElement, CompetencyEntity, CompetencyElementEntity>, UntrackedCompetencyElementChangeApplier>("untracked");
+        services.AddKeyedScoped<IChangeApplier<PerformanceCriteria, CompetencyElementEntity, PerformanceCriteriaEntity>, UntrackedPerformanceCriteriaChangeApplier>("untracked");
+        services.AddKeyedScoped<IChangeApplier<RealisationContext, CompetencyEntity, RealisationContextEntity>, TrackedRealisationContextChangeApplier>("tracked");
+        services.AddKeyedScoped<IChangeApplier<MinisterialCompetencyElement, CompetencyEntity, CompetencyElementEntity>, TrackedCompetencyElementChangeApplier>("tracked");
+        services.AddKeyedScoped<IChangeApplier<PerformanceCriteria, CompetencyElementEntity, PerformanceCriteriaEntity>, TrackedPerformanceCriteriaChangeApplier>("tracked");
+
+        // Mapper
         services.AddAutoMapper((serviceProvider, automapper) =>
         {
         }, typeof(MappingProfile));

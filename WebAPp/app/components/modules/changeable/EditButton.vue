@@ -26,7 +26,7 @@
 </script>
 
 <template>
-  <CommonMoleculesEditButton @click="handleShowForm" />
+  <CommonMoleculesAEditButton @click="handleShowForm" />
 </template>
 
 <i18n lang="json">

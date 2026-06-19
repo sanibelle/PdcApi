@@ -1,3 +1,4 @@
+import { Page } from "@playwright/test";
 import { test, expect } from "./test-fixtures";
 
 
@@ -11,7 +12,7 @@ test.describe("ministerial competency", () => {
   test("Creating a valid detailed ministerial competency", async ({
     adminPage,
   }) => {
-    await addAndTestDetailesToCompetency(adminPage, "code1");
+    await addAndTestDetailsToCompetency(adminPage, "code1");
   });
 
   test("updating number 1, removing number 2, keeping number 3, adding number 4", async ({
@@ -93,7 +94,11 @@ test.describe("ministerial competency", () => {
     await adminPage.waitForLoadState("networkidle");
 
     // first add
-    await adminPage.getByText("realisation context 1").locator('.add-comment-btn').click();
+    await adminPage
+      .locator('.commentable')
+      .filter({ hasText: 'realisation context 1' })
+      .locator('.add-comment-btn')
+      .click();
     await adminPage.locator('textarea').first().fill('realisationContext1 complementary information 1');
     await adminPage.getByTestId("submit-button").first().click();
     await expect(await adminPage.locator('.comment-text').first()).toHaveText('realisationContext1 complementary information 1');
@@ -101,7 +106,11 @@ test.describe("ministerial competency", () => {
     await expect(await adminPage.locator('textarea')).not.toBeVisible();
 
     // second information
-    await adminPage.getByText("realisation context 1").locator('.add-comment-btn').click();
+    await adminPage
+      .locator('.commentable')
+      .filter({ hasText: 'realisation context 1' })
+      .locator('.add-comment-btn')
+      .click();
     await adminPage.locator('textarea').first().fill('second realisationContext1 complementary information 1');
     await adminPage.getByTestId("submit-button").first().click();
     await expect(await adminPage.locator('textarea')).not.toBeVisible();
@@ -143,7 +152,11 @@ test.describe("ministerial competency", () => {
     await adminPage.waitForLoadState("networkidle");
 
     // first add failing.
-    await adminPage.getByText("realisation context 1").locator('.add-comment-btn').click();
+    await adminPage
+      .locator('.commentable')
+      .filter({ hasText: 'realisation context 1' })
+      .locator('.add-comment-btn')
+      .click();
     adminPage.getByTestId("submit-button").first().click()
     await expect(adminPage.locator('.error-message')).toBeVisible();
 
@@ -163,7 +176,7 @@ test.describe("ministerial competency", () => {
     adminPage,
   }) => {
     await createAndTestCompetency(adminPage, "pub1");
-    await addAndTestDetailesToCompetency(adminPage, "pub1");
+    await addAndTestDetailsToCompetency(adminPage, "pub1");
     await adminPage.getByTestId("approve-this-change-record-button").first().click();
 
     const [response] = await Promise.all([
@@ -178,7 +191,7 @@ test.describe("ministerial competency", () => {
     await expect(response.status()).toBe(200);
   });
 
-  test("Modify a published competency", async ({
+  test("Minor update a published competency", async ({
     adminPage,
   }) => {
     await adminPage.goto("/administration/programme/Seededprogram/competence/pub1");
@@ -198,6 +211,79 @@ test.describe("ministerial competency", () => {
 
     await expect(response.status()).toBe(200);
     await expect(adminPage.locator('.commentable').first()).toContainText('minor update');
+  });
+
+  test("Create a new version and update it", async ({
+    adminPage,
+  }) => {
+    await createAndTestCompetency(adminPage, "tracked");
+    await addAndTestDetailsToCompetency(adminPage, "tracked");
+    await adminPage.getByTestId("approve-this-change-record-button").first().click();
+    await adminPage.locator(".modal-footer button[type='submit']").first().click()
+  
+    // Creating a new version
+    await adminPage.getByTestId("edit-button").first().click();
+    // Deleting middle ones
+    await adminPage.getByTestId("delete-realisation-context-button-1").click();
+    await adminPage.getByTestId("delete-competency-element-button-1").click();
+    await adminPage.getByTestId("delete-performance-criteria-button-0-1").click();
+    
+    //adding a new element everywhere
+    await adminPage.getByTestId("add-realisation-context").click();
+    await adminPage.locator(`input[name="competency.realisationContexts[0].value"]`).fill(`updated realisation context to delete`);
+    await adminPage.locator(`input[name="competency.realisationContexts[1].value"]`).fill(`updated realisation context to re update`);
+    await adminPage.locator(`input[name="competency.realisationContexts[2].value"]`).fill(`new realisation context to delete`);
+    await adminPage.getByTestId("add-realisation-context").click();
+    await adminPage.locator(`input[name="competency.realisationContexts[3].value"]`).fill(`new realisation context to update`);
+    
+    await adminPage.locator(`input[name="competency.competencyElements[1].value"]`).fill(`updated competency element to update`);
+    await adminPage.locator(`input[name="competency.competencyElements[1].performanceCriterias[0].value"]`).fill(`updated performance criteria to delete`);
+    await adminPage.locator(`input[name="competency.competencyElements[1].performanceCriterias[1].value"]`).fill(`updated performance criteria to update`);
+    await adminPage.getByTestId("add-performance-criteria-0").click();
+    await adminPage.locator(`input[name="competency.competencyElements[0].performanceCriterias[2].value"]`).fill(`new performance criteria to delete`);
+    await adminPage.getByTestId("add-performance-criteria-1").click();
+    await adminPage.locator(`input[name="competency.competencyElements[1].performanceCriterias[3].value"]`).fill(`new performance criteria to update`);
+    
+    await adminPage.getByTestId("add-competency-element").click();
+    await adminPage.getByTestId("add-performance-criteria-2").click();
+    await adminPage.locator(`input[name="competency.competencyElements[2].value"]`).fill(`new competency element to delete`);
+    await adminPage.locator(`input[name="competency.competencyElements[2].performanceCriterias[0].value"]`).fill(`performance criteria that will be deleted`);
+    
+    await adminPage.getByTestId("add-competency-element").click();
+    await adminPage.getByTestId("add-performance-criteria-3").click();
+    await adminPage.getByTestId("add-performance-criteria-3").click();
+    await adminPage.locator(`input[name="competency.competencyElements[3].value"]`).fill(`new competency element to update`);
+    await adminPage.locator(`input[name="competency.competencyElements[3].performanceCriterias[0].value"]`).fill(`performance criteria that will be updated`);
+    await adminPage.locator(`input[name="competency.competencyElements[3].performanceCriterias[1].value"]`).fill(`performance criteria that will be deleted`);
+    
+    await adminPage.getByTestId("submit-draft-button").click();
+    await adminPage.goto("/administration/programme/Seededprogram/competence/tracked"); // TODO remove this when the bug of the change history will be fixed.
+
+    await assertChangeDetails(adminPage, 6+5, 9+5); 
+
+    // Updating the new version
+    await adminPage.getByTestId("edit-button").first().click();
+    // realisation contexts    
+    await adminPage.locator(`input[name="competency.realisationContexts[3].value"]`).fill(`new realisation context updated`);
+    await adminPage.locator(`input[name="competency.realisationContexts[1].value"]`).fill(`reupdated realisation context`);
+    await adminPage.getByTestId("delete-realisation-context-button-2").click();
+    await adminPage.getByTestId("delete-realisation-context-button-0").click();
+    // competency elements
+    await adminPage.getByTestId("delete-performance-criteria-button-0-2").click();
+    await adminPage.locator(`input[name="competency.competencyElements[1].performanceCriterias[3].value"]`).fill(`new performance criteria updated`);
+    await adminPage.locator(`input[name="competency.competencyElements[3].value"]`).fill(`competency element updated`);
+    await adminPage.locator(`input[name="competency.competencyElements[3].performanceCriterias[0].value"]`).fill(`performance criteria updated`);
+    await adminPage.getByTestId("delete-performance-criteria-button-3-1").click();
+    await adminPage.getByTestId("add-performance-criteria-3").click();
+    await adminPage.locator(`input[name="competency.competencyElements[3].performanceCriterias[1].value"]`).fill(`performance criteria created`);
+    
+    await adminPage.getByTestId("delete-competency-element-button-2").click();
+    await adminPage.getByTestId("submit-draft-button").click();
+    await adminPage.getByTestId("approve-this-change-record-button").first().click();
+
+    await adminPage.goto("/administration/programme/Seededprogram/competence/tracked");
+    await assertChangeDetails(adminPage, 7+4, 5+4); 
+
   });
 
   const createAndTestCompetency = async (adminPage, code) => {
@@ -243,10 +329,10 @@ test.describe("ministerial competency", () => {
 
     await expect(response.status()).toBe(201);
     await expect(adminPage.locator(".modal-overlay")).toBeHidden();
-    await expect(adminPage.getByRole('cell', { name: 'code1' })).toBeVisible();
+    await expect(adminPage.getByRole('cell', { name: code })).toBeVisible();
   }
 
-  const addAndTestDetailesToCompetency = async (adminPage, code) => {
+  const addAndTestDetailsToCompetency = async (adminPage, code) => {
     await adminPage.goto("/administration/programme/Seededprogram/competence/" + code);
     await adminPage.waitForLoadState("networkidle");
     await adminPage.getByTestId("edit-button").first().click();
@@ -307,3 +393,19 @@ test.describe("ministerial competency", () => {
 
 
 });
+async function assertChangeDetails(adminPage: Page, nbDeleted: number, nbCreated: number) {
+  const [response] = await Promise.all([
+    adminPage.waitForResponse(
+      (response) => response.url().includes("/competency/tracked") &&
+        response.request().method() === "GET"
+    ),
+    adminPage.getByTestId("show-change-history-checkbox").first().click()
+  ]);
+  expect(response.status()).toBe(200);
+  const responseBody = await response.json();
+  const changeDetails = responseBody.changeDetails;
+  expect(changeDetails).toHaveLength(new Set(changeDetails.map((cd: any) => cd.id)).size);
+  await expect(adminPage.locator(".deleted")).toHaveCount(nbDeleted);
+  await expect(adminPage.locator(".created")).toHaveCount(nbCreated);
+}
+

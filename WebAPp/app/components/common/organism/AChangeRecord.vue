@@ -56,6 +56,7 @@
     <FormACheckboxInput
       v-if="changeRecordNumber > 1"
       v-model="showChangeHistory"
+      data-testid="show-change-history-checkbox"
       :name="'showChangeHistory'"
       :label="t('showChangeHistory')"
     />

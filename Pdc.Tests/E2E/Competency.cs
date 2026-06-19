@@ -16,7 +16,7 @@ public class CompetencyApiTests : ApiTestBase
 {
 
     [Test]
-    public async Task GivenExistingProgram_WhenCreatingCompetency_ThenShouldCompetencyUtils()
+    public async Task GivenExistingProgram_WhenCreatingCompetency_ThenShouldCreateCompetency()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
         CompetencyDTO competencyDTO = CompetencyUtils.CreateCompetency();
