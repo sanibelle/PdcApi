@@ -21,6 +21,7 @@ public class ChangeDetailConfiguration : IEntityTypeConfiguration<ChangeDetailEn
 
         builder.HasOne(x => x.ChangeRecord)
             .WithMany()
+            .HasForeignKey(x => x.ChangeRecordId)
             .IsRequired();
 
         builder.HasOne(x => x.Changeable)
@@ -29,6 +30,4 @@ public class ChangeDetailConfiguration : IEntityTypeConfiguration<ChangeDetailEn
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
     }
-
-    // TODO faire la migration
 }

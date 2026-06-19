@@ -24,7 +24,7 @@ internal class CompetencyRepository(
     [FromKeyedServices("tracked")] IChangeApplier<RealisationContext, CompetencyEntity, RealisationContextEntity> trackedRealisationContextChangeApplier,
     [FromKeyedServices("tracked")] IChangeApplier<MinisterialCompetencyElement, CompetencyEntity, CompetencyElementEntity> trackedCompetencyElementChangeApplier,
     [FromKeyedServices("tracked")] IChangeApplier<PerformanceCriteria, CompetencyElementEntity, PerformanceCriteriaEntity> trackedPerformanceCriteriaChangeApplier,
-    [FromKeyedServices("tracked")] IChangeApplier<RealisationContext, CompetencyEntity, RealisationContextEntity> untrackedRealisationContextChangeApplier,
+    [FromKeyedServices("untracked")] IChangeApplier<RealisationContext, CompetencyEntity, RealisationContextEntity> untrackedRealisationContextChangeApplier,
     [FromKeyedServices("untracked")] IChangeApplier<MinisterialCompetencyElement, CompetencyEntity, CompetencyElementEntity> untrackedCompetencyElementChangeApplier,
     [FromKeyedServices("untracked")] IChangeApplier<PerformanceCriteria, CompetencyElementEntity, PerformanceCriteriaEntity> untrackedPerformanceCriteriaChangeApplier) : ICompetencyRepository
 {
@@ -85,7 +85,7 @@ internal class CompetencyRepository(
         try
         {
             IChangeTracker tracker = new ChangeDetailsTracker(context);
-            logger.LogInformation($"Updating competency with code {competency.Code}");
+            logger.LogDebug($"Updating competency with code {competency.Code}");
             CompetencyEntity existingCompetency = await FindCompetencyEntityByCode(competency.Code);
 
             // if the id is null, then we must add the change record.
@@ -97,9 +97,9 @@ internal class CompetencyRepository(
 
             await UpdateCompetencyAndChilds(competency, tracker, existingCompetency, trackedRealisationContextChangeApplier, trackedCompetencyElementChangeApplier, trackedPerformanceCriteriaChangeApplier);
 
-            logger.LogInformation($"Commiting competency with code {competency.Code}");
+            logger.LogDebug($"Commiting competency with code {competency.Code}");
             await transaction.CommitAsync();
-            logger.LogInformation($"Comitted competency with code {competency.Code}");
+            logger.LogDebug($"Comitted competency with code {competency.Code}");
             return await FindByCode(competency.Code);
         }
         catch
@@ -180,16 +180,13 @@ internal class CompetencyRepository(
             CompetencyElementEntity updatedCe = ce.Id == null
                 ? await competencyElementChangeApplier.Add(competency.ChangeRecord!, existingCompetency, ce, tracker)
                 : await competencyElementChangeApplier.Update(competency.ChangeRecord!, ce, tracker);
+            updatedCe.Position = ce.Position;
             foreach (PerformanceCriteria pc in ce.PerformanceCriterias)
             {
-                if (pc.Id == null)
-                {
-                    await performanceCriteriaChangeApplier.Add(competency.ChangeRecord!, updatedCe, pc, tracker);
-                }
-                else
-                {
-                    await performanceCriteriaChangeApplier.Update(competency.ChangeRecord!, pc, tracker);
-                }
+                PerformanceCriteriaEntity updatedPC = pc.Id == null
+                ? await performanceCriteriaChangeApplier.Add(competency.ChangeRecord!, updatedCe, pc, tracker)
+                : await performanceCriteriaChangeApplier.Update(competency.ChangeRecord!, pc, tracker);
+                updatedPC.Position = pc.Position;
             }
         }
 

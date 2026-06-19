@@ -1,22 +1,25 @@
 <script setup lang="ts">
-defineProps({
-  isDisabled: {
-    type: Boolean,
-    default: false,
-  },
-  isSubmitting: {
-    type: Boolean,
-    default: false,
-  },
-});
+  defineOptions({
+    inheritAttrs: false,
+  }); // to prevent data-testid and other attributes from being passed to the wrapper div
+  defineProps({
+    isDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    isSubmitting: {
+      type: Boolean,
+      default: false,
+    },
+  });
 
-const { t } = useI18n();
+  const { t } = useI18n();
 </script>
 
 <template>
   <div class="wrapper">
-    <CommonAtomsAButton 
-      :is-disabled="isDisabled || isSubmitting" 
+    <CommonAtomsAButton
+      :is-disabled="isDisabled || isSubmitting"
       :type="'submit'"
       v-bind="$attrs"
     >
@@ -42,15 +45,15 @@ const { t } = useI18n();
 </i18n>
 
 <style lang="scss" scoped>
-.wrapper {
-  height: 30px;
-}
-
-:deep(button) {
-  background-color: hsl(128, 56%, 29%);
-  &:hover {
-    background-color: hsl(128, 56%, 39%);
+  .wrapper {
+    height: 30px;
   }
-  min-width: 7rem;
-}
+
+  :deep(button) {
+    background-color: hsl(128, 56%, 29%);
+    &:hover {
+      background-color: hsl(128, 56%, 39%);
+    }
+    min-width: 7rem;
+  }
 </style>

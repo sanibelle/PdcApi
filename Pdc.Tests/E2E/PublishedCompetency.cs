@@ -180,24 +180,24 @@ public class PublishedCompetencyApiTest : ApiTestBase
         // Creating a new draft by updating to the same version.
         var updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}", competencyToUpdateDTO);
         updateResponse.EnsureSuccessStatusCode();
-        getResponse = await _Client.GetAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}/v{2}");
+        getResponse = await _Client.GetAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}");
         var updatedCompetency = await getResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
 
         // Second update
         // Modifying
-        var modifiedAddedElement = updatedCompetency.RealisationContexts.ElementAt(2);
-        var modifiedUpdatedElement = updatedCompetency.RealisationContexts.ElementAt(1);
+        var modifiedUpdatedElement = updatedCompetency.RealisationContexts.ElementAt(0);
+        var modifiedAddedElement = updatedCompetency.RealisationContexts.ElementAt(1);
         // - An Added element
         modifiedAddedElement.Value = "Modified value of the added element";
         // - A Modified element
         modifiedUpdatedElement.Value = "Modified value of the updated element";
         // Deleting
-        var deletedAddedElementId = updatedCompetency.CompetencyElements.ElementAt(2).Id;
-        var deletedUpdatedElementId = updatedCompetency.CompetencyElements.ElementAt(1).Id;
+        var deletedUpdatedElementId = updatedCompetency.CompetencyElements.ElementAt(0).Id;
+        var deletedAddedElementId = updatedCompetency.CompetencyElements.ElementAt(1).Id;
         // - An Added element
-        updatedCompetency.CompetencyElements.Remove(updatedCompetency.CompetencyElements.ElementAt(2));
+        updatedCompetency.CompetencyElements.Remove(updatedCompetency.CompetencyElements.ElementAt(0));
         // - A Modified element
-        updatedCompetency.CompetencyElements.Remove(updatedCompetency.CompetencyElements.ElementAt(1));
+        updatedCompetency.CompetencyElements.Remove(updatedCompetency.CompetencyElements.ElementAt(0));
 
         // Sending the update to the api a second time
         updateResponse = await _Client.PutAsJsonAsync($"/api/programofstudy/{_programCode}/competency/{updatedCompetency.Code}", updatedCompetency);
@@ -209,7 +209,7 @@ public class PublishedCompetencyApiTest : ApiTestBase
 
         updatedCompetency.ChangeDetails.Should().NotBeEmpty();
         var deletedChangeDetails = updatedCompetency.ChangeDetails.Where(x => x.ChangeType == Domain.Enums.ChangeType.Delete).Select(x => x.ChangeableId).ToList();
-        deletedChangeDetails.Should().HaveCount(6);
+        deletedChangeDetails.Should().HaveCount(5);
         updatedCompetency.ChangeDetails.Where(x => x.ChangeType == Domain.Enums.ChangeType.Add).Should().HaveCount(2);
         updatedCompetency.ChangeDetails.Where(x => x.ChangeType == Domain.Enums.ChangeType.Update).Should().HaveCount(1);
         updatedCompetency.RealisationContexts.Any(x => deletedChangeDetails.Any(y => y == x.Id)).Should().BeTrue();

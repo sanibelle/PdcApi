@@ -20,7 +20,7 @@ internal static class CompetencyUtils
             .WithText("competencyElementComplementaryInformation")
             .Build();
         var realisationContext = new ChangeableDTOBuilder()
-            .WithValue("realisationContext")
+            .WithValue("realisationContext1")
             .AddComplementaryInformation(realisationContextComplementaryInformation)
             .Build();
         var realisationContext2 = new ChangeableDTOBuilder()

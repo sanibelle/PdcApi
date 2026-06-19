@@ -31,10 +31,6 @@ internal abstract class ATrackedChangeApplier<T, TParent, TEntity> : AUntrackedC
             throw new NullReferenceException($"ChangeRecordId is required for the update of {typeof(T).Name}");
         }
         TEntity changeableEntity = await Context.Set<TEntity>().SingleOrDefaultAsync(x => x.Id == toUpdate.Id) ?? throw new NotFoundException(typeof(TEntity).Name, toUpdate.Id!);
-        if (changeableEntity.Value == toUpdate.Value)
-        {
-            return changeableEntity;
-        }
 
         ChangeDetailEntity? changeDetail = await Context.ChangeDetails.SingleOrDefaultAsync(x => x.ChangeRecordId == changeRecord.Id.Value && x.Changeable.Id == toUpdate.Id);
 
@@ -78,6 +74,9 @@ internal abstract class ATrackedChangeApplier<T, TParent, TEntity> : AUntrackedC
         List<Guid> updatedOnThisVersionIds = DeleteUpdatedChangeablesOnThisVersion(changeables, changeDetails);
         // filters the changeables to only keep the ones not updated
         changeables = [.. changeables.Where(x => !updatedOnThisVersionIds.Contains(x.Id!.Value))];
+        List<Guid> alreadyDeletedIds = FindDeletedChangeablesOnPeviousVersion(changeables, changeDetails);
+        // filters the changeables to only keep the ones not updated
+        changeables = [.. changeables.Where(x => !alreadyDeletedIds.Contains(x.Id!.Value))];
 
         // the list should contain only changeables that were not updated or added on this version at this point.
         foreach (var changeable in changeables)
@@ -107,11 +106,31 @@ internal abstract class ATrackedChangeApplier<T, TParent, TEntity> : AUntrackedC
         foreach (var c in moifiedChangeableToUpdate)
         {
             ChangeDetailEntity changeDetail = changeDetails.Single(x => x.ChangeableId == c.Id);
-            c.Value = changeDetail.OldValue!;
+            if (changeDetail.OldValue == null)
+            {
+                throw new InvalidOperationException($"OldValue is required for Update change type on change detail with changeable id {c.Id}");
+            }
+            c.Value = changeDetail.OldValue;
             changeDetail.OldValue = null;
             changeDetail.ChangeType = ChangeType.Delete;
         }
         return moifiedChangeableToUpdate.Select(x => x.Id!.Value).ToList();
+    }
+
+    /// <summary>
+    /// Finds the deleted changeables on previous version to prevent the duplicate deletion tracking of an already deleted element.
+    /// </summary>
+    /// <param name="changeables">the list of changeables</param>
+    /// <param name="changeDetails">the list of change details targetting the changeables</param>
+    /// <returns>the ids of the changeables not deleted</returns>
+    private List<Guid> FindDeletedChangeablesOnPeviousVersion(List<ChangeableEntity> changeables, List<ChangeDetailEntity> changeDetails)
+    {
+        List<ChangeableEntity> deletedChangeablesOnPreviousVersion = [.. changeables
+            .Where(x => changeDetails
+                .Where(y => y.ChangeType == ChangeType.Delete)
+                .Any(y => y.ChangeableId == x.Id))];
+
+        return deletedChangeablesOnPreviousVersion.Select(x => x.Id!.Value).ToList();
     }
 
     /// <summary>

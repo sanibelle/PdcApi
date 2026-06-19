@@ -32,7 +32,6 @@ public class MinisterialCompetency : Competency
         {
             return false;
         }
-        // TODO pourquoi est-ce que NextChangeRecord n'est pas null? Automapper?
         return ChangeRecord.NextChangeRecord == null;
     }
 
