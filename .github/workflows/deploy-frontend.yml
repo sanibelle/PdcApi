@@ -16,7 +16,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: 'latest'
 
       - name: Install dependencies
         uses: borales/actions-yarn@v4
@@ -24,11 +24,12 @@ jobs:
           cmd: install
           dir: ./WebAPp
 
-      - name: Install dependencies
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: build
-          dir: ./WebAPp
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies in WebAPp
+        run: yarn install
+        working-directory: WebAPp
 
       - name: Stop front-end
         uses: appleboy/ssh-action@v1

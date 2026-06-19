@@ -174,20 +174,19 @@ jobs:
 
     - uses: actions/setup-node@v4
       with:
-        node-version: lts/*
+        node-version: 'latest'
 
-    - name: Install dependencies in Playwright
-      uses: borales/actions-yarn@v4
-      with:
-        cmd: install
-        dir: Playwright
+    - name: Enable Corepack
+      run: corepack enable
 
     - name: Install dependencies in WebAPp
-      uses: borales/actions-yarn@v4
-      with:
-        cmd: install
-        dir: WebAPp
+      run: yarn install
+      working-directory: WebAPp
     
+    - name: Install dependencies in Playwright
+      run: yarn install
+      working-directory: Playwright
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v5
       with:
@@ -200,7 +199,7 @@ jobs:
       run: dotnet build Pdc.sln --configuration Test --no-restore
     
     - name: Install Playwright Browsers
-      run: npx playwright install chromium --with-deps
+      run: npx playwright install --with-deps chromium
       working-directory: Playwright
     
     - name: Run Playwright tests
