@@ -14,9 +14,7 @@ namespace Pdc.Infrastructure.Migrations
                 name: "FK_ChangeDetails_Changeables_ChangeableId",
                 table: "ChangeDetails");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_ChangeRecords_ChangeRecords_ChangeRecordId",
-                table: "ChangeRecords");
+            migrationBuilder.Sql(@"ALTER TABLE ""ChangeRecords"" DROP CONSTRAINT IF EXISTS ""FK_ChangeRecords_ChangeRecords_ChangeRecordId""");
 
             migrationBuilder.DropIndex(
                 name: "IX_ChangeRecords_ChangeRecordId",
