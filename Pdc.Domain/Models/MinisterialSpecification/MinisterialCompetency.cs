@@ -53,10 +53,22 @@ public class MinisterialCompetency : Competency
         CompetencyElements.ForEach(x => x.SetCreatedOnOnUntracked());
     }
 
-    public override void RemoveDeletedChangeables(List<Guid> changeableIdsToDelete)
+    public override void RemoveChangeablesByIds(List<Guid> changeableIdsToDelete)
     {
-        base.RemoveDeletedChangeables(changeableIdsToDelete);
+        base.RemoveChangeablesByIds(changeableIdsToDelete);
         CompetencyElements = CompetencyElements.Where(x => !changeableIdsToDelete.Contains(x.Id!.Value)).ToList();
-        CompetencyElements.ForEach(x => x.RemoveDeletedChangeables(changeableIdsToDelete));
+        CompetencyElements.ForEach(x => x.RemoveChangeablesByIds(changeableIdsToDelete));
+    }
+
+    public override void SetValueById(Guid id, string value)
+    {
+        var ce = CompetencyElements.FirstOrDefault(x => x.Id == id);
+        CompetencyElements.ForEach(x => x.SetValueById(id, value));
+        if (ce is not null)
+        {
+            ce.Value = value;
+            return;
+        }
+        base.SetValueById(id, value);
     }
 }

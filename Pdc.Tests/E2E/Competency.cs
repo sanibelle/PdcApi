@@ -87,7 +87,7 @@ public class CompetencyApiTests : ApiTestBase
         updateResponse.EnsureSuccessStatusCode();
         var updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
 
-        CompetencyUtils.AssertDraftCompetencyBasedOnResponse(competencyToUpdateDTO, updatedCompetency);
+        CompetencyUtils.AssertDraftCompetencyBasedOnResponse(competencyToUpdateDTO, updatedCompetency!);
     }
 
     [Test]
@@ -95,7 +95,7 @@ public class CompetencyApiTests : ApiTestBase
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
         ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
-        ChangeableDTO realisationContext, performanceCriteria;
+        ChangeableDTO performanceCriteria;
         CompetencyElementDTO competencyElement;
         CompetencyDTO competencyToCreateDTO = CompetencyUtils.CreateCompetency();
 
@@ -150,7 +150,7 @@ public class CompetencyApiTests : ApiTestBase
         updatedCompetency = await updateResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
         updatedCompetency.CompetencyElements.Should().HaveCount(1);
         updatedCompetency.CompetencyElements.First().Id.Should().NotBe(deletedId.ToString());
-        updatedCompetency.CompetencyElements.First().ComplementaryInformations.First().CreatedBy.Should().NotBe(null);
+        updatedCompetency.CompetencyElements.First().ComplementaryInformations!.First().CreatedBy.Should().NotBe(null);
         updatedCompetency.ChangeRecordId.Should().NotBe(Guid.Empty);
     }
 
@@ -158,9 +158,6 @@ public class CompetencyApiTests : ApiTestBase
     public async Task GivenExistingV1DraftCompetency_WhenDeletingCompetency_ThenShouldDeleteCompetencyWithNoChangeDetails()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
-        ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
-        ChangeableDTO realisationContext, performanceCriteria;
-        CompetencyElementDTO competencyElement;
         CompetencyDTO competencyToCreateDTO = CompetencyUtils.CreateCompetency();
 
         // Act - Create the competency

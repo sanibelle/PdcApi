@@ -46,6 +46,7 @@ public class UpdatePublishedCompetency(ICompetencyRepository competencyRepositor
         {
             throw new NullReferenceException("Competency must have a valid ChangeRecord with an Id.");
         }
-        return await competencyService.RemoveDeletedChangeables(updatedCompetency, updatedCompetency.ChangeRecord.Id.Value);
+        return mapper.Map<CompetencyDTO>(await competencyService.RemoveDeletedChangeables(updatedCompetency, updatedCompetency.ChangeRecord.Id.Value));
+
     }
 }

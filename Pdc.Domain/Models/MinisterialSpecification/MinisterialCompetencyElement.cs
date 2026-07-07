@@ -7,7 +7,7 @@ public class MinisterialCompetencyElement : CompetencyElement, IChangeablesConta
 {
     public List<PerformanceCriteria> PerformanceCriterias { get; set; } = [];
 
-    public void RemoveDeletedChangeables(List<Guid> changeableIdsToDelete)
+    public void RemoveChangeablesByIds(List<Guid> changeableIdsToDelete)
     {
         PerformanceCriterias = PerformanceCriterias.Where(x => !changeableIdsToDelete.Contains(x.Id!.Value)).ToList();
     }
@@ -30,4 +30,14 @@ public class MinisterialCompetencyElement : CompetencyElement, IChangeablesConta
         base.SetCreatedOnOnUntracked();
         PerformanceCriterias.ForEach(x => x.SetCreatedOnOnUntracked());
     }
+
+    public void SetValueById(Guid id, string value)
+    {
+        var pc = PerformanceCriterias.FirstOrDefault(x => x.Id == id);
+        if (pc is not null)
+        {
+            pc.Value = value;
+        }
+    }
+
 }
