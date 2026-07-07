@@ -49,7 +49,7 @@ public class CompetencyService(IChangeDetailsRepository changeDetailsRepository,
         }
     }
 
-    public async Task RemoveAddedChangeablesFromLaterVersion(MinisterialCompetency competency, int changeRecordNumber)
+    public async Task RemoveAddedChangeablesFromNextVersions(MinisterialCompetency competency, int changeRecordNumber)
     {
         List<Guid> changeDetailIds = await changeRecordRepository.FindNextChangeDetailsByChangeRecordNumber(changeRecordNumber, ChangeType.Add);
         competency.RemoveChangeablesByIds(changeDetailIds);

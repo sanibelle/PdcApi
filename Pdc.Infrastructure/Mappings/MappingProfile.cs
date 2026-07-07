@@ -109,10 +109,6 @@ public class MappingProfile : Profile
                 opt => opt.Ignore());
 
         CreateMap<ChangeRecordEntity, ChangeRecord>()
-            //.ForMember(dest => dest.ParentChangeRecord,
-            //    opt => opt.MapFrom(src => src.ParentChangeRecord == null ? null : src.ParentChangeRecord))
-            //.ForMember(dest => dest.NextChangeRecord,
-            //    opt => opt.MapFrom(src => src.NextChangeRecord == null ? null : src.NextChangeRecord))
             .PreserveReferences()
             .MaxDepth(2); // Prevents circular reference issues when mapping Parent and Next ChangeRecords
 

@@ -25,7 +25,7 @@ public class GetCompetencyWithChangeDetails(ICompetencyRepository competencyRepo
         MinisterialCompetency cleanedCompetency = await competencyService.RemoveDeletedChangeables(competency, competency.ChangeRecord.Id.Value, changeRecordNumber);
         List<ChangeDetail> changeDetails = await changeDetailsRepository.GetChangeDetailsByChangeRecordId(parentChangeRecordId);
         await competencyService.SetChangeableValueOnTargetVersion(changeDetails, cleanedCompetency, parentChangeRecordId);
-        await competencyService.RemoveAddedChangeablesFromLaterVersion(cleanedCompetency, changeRecordNumber);
+        await competencyService.RemoveAddedChangeablesFromNextVersions(cleanedCompetency, changeRecordNumber);
         CompetencyDTO competencyDTO = mapper.Map<CompetencyDTO>(cleanedCompetency);
         competencyDTO.ChangeDetails = mapper.Map<List<ChangeDetailDTO>>(changeDetails);
         return competencyDTO;
