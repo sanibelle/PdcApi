@@ -204,15 +204,15 @@ public class PublishedCompetencyApiTest : ApiTestBase
     /// <code>
     /// Competency, v1 [create]
     /// ├── RealisationContexts
-    /// │   ├── "Realisation context #1", v1 [create] → v2 [delete]
+    /// │   ├── "Realisation context `#1`", v1 [create] → v2 [delete]
     /// │   ├── "Updated realisation context of the existing element", v1 [create] → v2 [update]
     /// │   └── "New realisation Context", v2 [create]
     /// └── CompetencyElements
-    ///     ├── "Competency element #1", v1 [create] → v2 [delete]
+    ///     ├── "Competency element `#1`", v1 [create] → v2 [delete]
     ///     ├── "Updated competency element of the existing element" (Position = 1), v1 [create] → v2 [update]
     ///     │   └── PerformanceCriterias
-    ///     │       ├── "Performance criteria #1", v1 [create] → v2 [delete]
-    ///     │       ├── "Performance criteria #2", v1 [create]
+    ///     │       ├── "Performance criteria `#1`", v1 [create] → v2 [delete]
+    ///     │       ├── "Performance criteria `#2`", v1 [create]
     ///     │       └── "Added during update" (Position = 1), v2 [create]
     ///     └── "New competency element" (Position = last), v2 [create]
     ///         ├── PerformanceCriterias
@@ -234,8 +234,7 @@ public class PublishedCompetencyApiTest : ApiTestBase
     /// A tuple containing:
     /// <list type="bullet">
     /// <item><c>_programCode</c>: the code of the program of study the competency belongs to.</item>
-    /// <item><c>competencyToUpdateDTO</c>: the modified competency DTO, ready to be sent as the draft V2 update.</item>
-    /// <item><c>getResponse</c>: the raw HTTP response from the GET of the published V1 competency (before the in-memory modifications).</item>
+    /// <item><c>competencyToUpdateDTO</c>: the resulting draft V2 competency DTO, as returned by the API after the update.</item>
     /// </list>
     /// </returns>
     private async Task<(string _programCode, CompetencyDTO? competencyToUpdateDTO)> CreateDraftV2Competency()
