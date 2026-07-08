@@ -4,8 +4,8 @@ using FluentValidation.Results;
 using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Interfaces.UseCases.Versioning;
-using Pdc.Domain.Models.Versioning;
 using Pdc.Domain.Models.Security;
+using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Application.UseCases.Versioning;
 
@@ -33,7 +33,7 @@ public class UpdateComplementaryInformation(IComplementaryInformationRepository 
         {
             throw new InvalidOperationException("WrittenOnVersion is not set on the existing entity.");
         }
-        Guid versionId = await _versionRepository.FindParentByChangeRecordId(existingComplementaryInformation.WrittenOnChangeRecord!.Id!.Value);
+        Guid versionId = await _versionRepository.FindLatestChangeRecordIdByChangeRecordId(existingComplementaryInformation.WrittenOnChangeRecord!.RootId!.Value);
         ComplementaryInformation complementaryInformation = _mapper.Map<ComplementaryInformation>(complementaryInformationDTO);
         complementaryInformation.Id = complementaryInformationId;
         complementaryInformation.ModifiedOn = DateTime.UtcNow;

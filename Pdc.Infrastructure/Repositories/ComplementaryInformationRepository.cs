@@ -59,7 +59,7 @@ public class ComplementaryInformationRepository(AppDbContext context, IChangeRec
 
         return changeRecord?.Id == null
             ? throw new NotFoundException(nameof(ChangeRecordEntity))
-            : await _changeRecordRepository.FindParentByChangeRecordId(changeRecord.Id.Value);
+            : await _changeRecordRepository.FindLatestChangeRecordIdByChangeRecordId(changeRecord.RootId);
     }
 
     public async Task<Guid> FindCreatedByByComplementaryInformationId(Guid complementaryInformationId)

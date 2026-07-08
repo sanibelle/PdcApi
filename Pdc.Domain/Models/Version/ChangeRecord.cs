@@ -9,6 +9,7 @@ namespace Pdc.Domain.Models.Versioning;
 public class ChangeRecord : ICreatedByPropagable, ICreatedOnPropagable
 {
     public int ChangeRecordNumber { get; set; }
+    public Guid? RootId { get; set; }
     private IEnumerable<ComplementaryInformation> _complementaryInformations { get; set; } = new List<ComplementaryInformation>();
     private IEnumerable<ChangeDetail> _changeDetails { get; set; } = new List<ChangeDetail>();
     public Guid? Id { get; set; }
@@ -51,13 +52,14 @@ public class ChangeRecord : ICreatedByPropagable, ICreatedOnPropagable
     /// </summary>
     /// <param name="changeRecord">The parent change record</param>
     /// <param name="user">The user creating the new change record</param>
-    public ChangeRecord(ChangeRecord changeRecord, User user)
+    public ChangeRecord(ChangeRecord changeRecord, User user, Guid rootId)
     {
         ChangeRecordNumber = changeRecord.ChangeRecordNumber + 1;
         ParentChangeRecord = changeRecord;
         IsDraft = true;
         CreatedBy = user;
         CreatedOn = DateTime.UtcNow;
+        RootId = rootId;
     }
 
     /// <summary>

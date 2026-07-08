@@ -30,7 +30,7 @@ public class UpdatePublishedCompetency(ICompetencyRepository competencyRepositor
         // creating a new change record for the new draft version, only if the competency is published, otherwise we will update the existing change record of the draft or v1 competency
         if (competencyToUpdate.IsPublished())
         {
-            ChangeRecord changeRecord = new ChangeRecord(competencyToUpdate.ChangeRecord, currentUser);
+            ChangeRecord changeRecord = new(competencyToUpdate.ChangeRecord, currentUser, competencyToUpdate.ChangeRecord.RootId!.Value);
             competencyToUpdate.ChangeRecord = changeRecord;
         }
 

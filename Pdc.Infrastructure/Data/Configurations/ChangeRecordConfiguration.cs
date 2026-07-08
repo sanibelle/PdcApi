@@ -11,6 +11,10 @@ public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEn
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
 
+        builder.HasOne(x => x.Root)
+            .WithMany()
+            .HasForeignKey(x => x.RootId);
+
         builder.Property(x => x.Description)
             .HasMaxLength(5000);
 
@@ -25,7 +29,6 @@ public class ChangeRecordConfiguration : IEntityTypeConfiguration<ChangeRecordEn
         builder.HasOne(x => x.ParentChangeRecord)
             .WithMany()
             .HasForeignKey(x => x.ParentChangeRecordId);
-        ;
 
         //Not really one to many, but ef needs that
         builder.HasOne(x => x.NextChangeRecord)

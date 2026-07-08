@@ -103,6 +103,8 @@ public class MappingProfile : Profile
                 opt => opt.MapFrom(src => src.NextChangeRecord == null ? null : src.NextChangeRecord.Id))
             .ForMember(dest => dest.NextChangeRecord,
                 opt => opt.Ignore())
+            .ForMember(dest => dest.Root,
+                opt => opt.Ignore())
             .ForMember(dest => dest.ParentChangeRecordId,
                 opt => opt.MapFrom(src => src.ParentChangeRecord == null ? null : src.ParentChangeRecord.Id))
             .ForMember(dest => dest.ParentChangeRecord,

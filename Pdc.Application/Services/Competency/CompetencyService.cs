@@ -43,7 +43,7 @@ public class CompetencyService(IChangeDetailsRepository changeDetailsRepository,
     {
         List<ChangeDetail> createUpdateChangeDetails = changeDetails.Where(x => x.ChangeType != ChangeType.Delete).ToList();
         if (createUpdateChangeDetails.Count == 0) return;
-        await foreach (var changeDetail in changeRecordRepository.FindPreviousChangeDetailsByChangeType(createUpdateChangeDetails, ChangeType.Update))
+        await foreach (var changeDetail in changeRecordRepository.FindNextChangeDetailsByChangeType(createUpdateChangeDetails, ChangeType.Update, competency.ChangeRecord.RootId!.Value))
         {
             competency.SetValueById(changeDetail.Changeable.Id!.Value, changeDetail.OldValue ?? "");
         }
@@ -51,7 +51,7 @@ public class CompetencyService(IChangeDetailsRepository changeDetailsRepository,
 
     public async Task RemoveAddedChangeablesFromNextVersions(MinisterialCompetency competency, int changeRecordNumber)
     {
-        List<Guid> changeDetailIds = await changeRecordRepository.FindNextChangeDetailsByChangeRecordNumber(changeRecordNumber, ChangeType.Add);
+        List<Guid> changeDetailIds = await changeRecordRepository.FindNextChangeDetailsByChangeRecordNumber(changeRecordNumber, ChangeType.Add, competency.ChangeRecord.RootId!.Value);
         competency.RemoveChangeablesByIds(changeDetailIds);
     }
 }

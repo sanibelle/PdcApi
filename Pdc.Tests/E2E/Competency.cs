@@ -38,7 +38,7 @@ public class CompetencyApiTests : ApiTestBase
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
         CompetencyDTO competencyDTO = CompetencyUtils.CreateCompetency();
-        CompetencyValidation validation = new CompetencyValidation();
+        CompetencyValidation validation = new();
         competencyDTO.Code = DataSeeder.CompetencyEntity.Code;
         validation.Validate(competencyDTO).IsValid.Should().BeTrue();
         var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);

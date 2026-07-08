@@ -168,26 +168,6 @@ public class PublishedCompetencyApiTest : ApiTestBase
         updatedCompetency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Any(x => deletedChangeDetails.Any(y => y == x.Id)).Should().BeTrue();
     }
 
-
-    [Test]
-    public async Task GivenPublishedV3Competency_WhenUpdatedCompetency_ThenCompetencyAndChangeDetailsWhenLookingForASpecificVersion()
-    {
-        (string _programCode, CompetencyDTO? competencyToUpdateDTO)=await CreateDraftV2Competency();
-        var getResponse = await _Client.GetAsync($"/api/programofstudy/{_programCode}/competency/{competencyToUpdateDTO.Code}/v{2}");
-        getResponse.EnsureSuccessStatusCode();
-        var updatedCompetency = await getResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
-
-        updatedCompetency.ChangeDetails.Should().NotBeEmpty();
-        var deletedChangeDetails = updatedCompetency.ChangeDetails.Where(x => x.ChangeType == Domain.Enums.ChangeType.Delete).Select(x => x.ChangeableId).ToList();
-        deletedChangeDetails.Should().HaveCount(4);
-        updatedCompetency.ChangeDetails.Where(x => x.ChangeType == Domain.Enums.ChangeType.Add).Should().HaveCount(4);
-        updatedCompetency.ChangeDetails.Where(x => x.ChangeType == Domain.Enums.ChangeType.Update).Should().HaveCount(2);
-
-        updatedCompetency.RealisationContexts.Any(x => deletedChangeDetails.Any(y => y == x.Id)).Should().BeTrue();
-        updatedCompetency.CompetencyElements.Any(x => deletedChangeDetails.Any(y => y == x.Id)).Should().BeTrue();
-        updatedCompetency.CompetencyElements.SelectMany(x => x.PerformanceCriterias).Any(x => deletedChangeDetails.Any(y => y == x.Id)).Should().BeTrue();
-    }
-
     [Test]
     public async Task GivenPublishedV3CompetencyAndGettingV2Changes_WhenUpdatingAnElementOnV1AndV3_ThenValuesOfVOnUpdatedV3Elements()
     {

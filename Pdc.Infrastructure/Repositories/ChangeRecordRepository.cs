@@ -34,7 +34,16 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
         {
             parentChangeRecord.NextChangeRecord = entity.Entity;
         }
+        if (changeRecord.RootId.HasValue)
+        {
+            changeRecordEntity.RootId = changeRecord.RootId.Value;
+        }
+        else
+        {
+            changeRecordEntity.Root = changeRecordEntity;
+        }
         await _context.SaveChangesAsync();
+
         return _mapper.Map<ChangeRecord>(entity.Entity);
     }
 
@@ -48,27 +57,17 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
         return _mapper.Map<ChangeRecord>(changeRecord);
     }
 
-    public async Task<Guid> FindIdByParentIdAndNumber(int changeRecordNumber, Guid parentChangeRecordId)
+    public async Task<Guid> FindIdByRootIdAndNumber(int changeRecordNumber, Guid rootId)
     {
-
-        ChangeRecordEntity? current = current = await _context.ChangeRecords
-                .SingleAsync(x => x.Id == parentChangeRecordId);
-        do
+        Guid? id = await _context.ChangeRecords
+                .Where(x => x.ChangeRecordNumber == changeRecordNumber && x.RootId == rootId)
+                .Select(x => x.Id)
+                .SingleAsync();
+        if (!id.HasValue)
         {
-            // the number is incremental by one, so if the current number is less than the searched number, it means that the change record with the searched number does not exist in the change record history.
-            if (current?.Id == null || current.ChangeRecordNumber < changeRecordNumber)
-            {
-                break;
-            }
-            if (current.ChangeRecordNumber == changeRecordNumber)
-            {
-                return current.Id!.Value;
-            }
-            current = await _context.ChangeRecords
-                .FirstAsync(x => x.Id == current.ParentChangeRecordId);
+            throw new NotFoundException(nameof(ChangeRecordEntity), $"Change record with number {changeRecordNumber} and rootId {rootId} not found.");
         }
-        while (current.ParentChangeRecordId != null);
-        throw new NotFoundException("The change record with number " + changeRecordNumber + " does not exist for the parent change record with id " + parentChangeRecordId);
+        return id.Value;
     }
 
     public async Task<Guid> FindCreatedById(Guid complementaryInformationId)
@@ -85,26 +84,15 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
         return id.Value;
     }
 
-    public async Task<Guid> FindParentByChangeRecordId(Guid changeRecordId)
+    public async Task<Guid> FindLatestChangeRecordIdByChangeRecordId(Guid rootId)
     {
-        ChangeRecordEntity current = await _context.ChangeRecords
-            .FirstAsync(x => x.Id == changeRecordId);
-
-        if (current?.Id == null)
-        {
-            throw new NotFoundException(nameof(ChangeRecordEntity), changeRecordId);
-        }
-        while (current.ParentChangeRecordId != null)
-        {
-            current = await _context.ChangeRecords
-                .FirstAsync(x => x.Id == current.ParentChangeRecordId);
-        }
-
-        if (current?.Id == null)
-        {
-            throw new NotFoundException(nameof(ChangeRecordEntity) + "ParentChangeRecord Id not found, value is null", changeRecordId);
-        }
-        return current.Id.Value;
+        return await _context.ChangeRecords
+            .Where(x => x.RootId == rootId)
+            .OrderByDescending(x => x.ChangeRecordNumber)
+            .Select(x => x.Id)
+            .FirstOrDefaultAsync()
+            ??
+            throw new NotFoundException(nameof(ChangeRecordEntity) + "Latest ChangeRecord by rootId not found, value is null", rootId);
     }
 
     public async Task<ChangeRecord> Publish(ChangeRecord changeRecord)
@@ -130,14 +118,15 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
 
     }
 
-    public async IAsyncEnumerable<ChangeDetail> FindPreviousChangeDetailsByChangeType(List<ChangeDetail> updatedChangeDetails, ChangeType changeType)
+    public async IAsyncEnumerable<ChangeDetail> FindNextChangeDetailsByChangeType(List<ChangeDetail> updatedChangeDetails, ChangeType changeType, Guid rootId)
     {
         foreach (ChangeDetail cd in updatedChangeDetails)
         {
             ChangeDetailEntity? latestChangeDetail = await _context.ChangeDetails.Where(x => x.ChangeableId == cd.Changeable.Id)
                 .Where(x => x.ChangeType == changeType)
-                .Where(x => x.Id != cd.Id) //Not getting the current change detail 
-                .Where(x => x.ChangeRecord.CreatedOn >= cd.ChangeRecord.CreatedOn) // = for test suites since creation date will happend at the same ms
+                .Where(x => x.Id != cd.Id)
+                .Where(x => x.ChangeRecord.ChangeRecordNumber >= cd.ChangeRecord.ChangeRecordNumber)
+                .Where(x => x.ChangeRecord.RootId == rootId)
                 .Include(x => x.ChangeRecord)
                 .Include(x => x.Changeable)
                 .OrderBy(x => x.ChangeRecord.CreatedOn) // oldest first
@@ -150,10 +139,11 @@ public class ChangeRecordRepository(AppDbContext context, IMapper mapper) : ICha
         }
     }
 
-    public async Task<List<Guid>> FindNextChangeDetailsByChangeRecordNumber(int changeRecordNumber, ChangeType changeType)
+    public async Task<List<Guid>> FindNextChangeDetailsByChangeRecordNumber(int changeRecordNumber, ChangeType changeType, Guid rootId)
     {
         return await _context.ChangeDetails
             .Where(x => x.ChangeRecord.ChangeRecordNumber > changeRecordNumber)
+            .Where(x => x.ChangeRecord.RootId == rootId)
             .Where(x => x.ChangeType == changeType)
             .AsNoTracking()
             .Select(x => x.ChangeableId)

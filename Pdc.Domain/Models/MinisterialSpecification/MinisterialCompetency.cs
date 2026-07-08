@@ -6,7 +6,7 @@ namespace Pdc.Domain.Models.MinisterialSpecification;
 
 public class MinisterialCompetency : Competency
 {
-    public List<MinisterialCompetencyElement> CompetencyElements { get; set; } = new List<MinisterialCompetencyElement>();
+    public List<MinisterialCompetencyElement> CompetencyElements { get; set; } = [];
 
     public bool IsDraftAndV1OrNull()
     {
