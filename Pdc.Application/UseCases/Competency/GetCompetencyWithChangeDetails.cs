@@ -18,13 +18,15 @@ public class GetCompetencyWithChangeDetails(ICompetencyRepository competencyRepo
         {
             throw new NullReferenceException("Competency must have a valid ChangeRecord with an Id.");
         }
-        Guid parentChangeRecordId = await changeRecordRepository.FindIdByParentIdAndNumber(changeRecordNumber, competency.ChangeRecord.Id.Value);
-
+        Guid parentChangeRecordId = await changeRecordRepository.FindIdByRootIdAndNumber(changeRecordNumber, competency.ChangeRecord.RootId!.Value);
 
         // removing the changeables that have been deleted in the change record history, so that they are not included in the response
         // but keeping the delete of the current version since the change details will need them
-        CompetencyDTO competencyDTO = await competencyService.RemoveDeletedChangeables(competency, competency.ChangeRecord.Id.Value, changeRecordNumber);
+        MinisterialCompetency cleanedCompetency = await competencyService.RemoveDeletedChangeables(competency, competency.ChangeRecord.Id.Value, changeRecordNumber);
         List<ChangeDetail> changeDetails = await changeDetailsRepository.GetChangeDetailsByChangeRecordId(parentChangeRecordId);
+        await competencyService.SetChangeableValueOnTargetVersion(changeDetails, cleanedCompetency, parentChangeRecordId);
+        await competencyService.RemoveAddedChangeablesFromNextVersions(cleanedCompetency, changeRecordNumber);
+        CompetencyDTO competencyDTO = mapper.Map<CompetencyDTO>(cleanedCompetency);
         competencyDTO.ChangeDetails = mapper.Map<List<ChangeDetailDTO>>(changeDetails);
         return competencyDTO;
     }

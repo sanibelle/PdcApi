@@ -2,6 +2,7 @@
 {
     public interface IChangeablesContainer
     {
-        void RemoveDeletedChangeables(List<Guid> changeableIdsToDelete);
+        void RemoveChangeablesByIds(List<Guid> changeableIdsToDelete);
+        void SetValueById(Guid id, string value);
     }
 }

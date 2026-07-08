@@ -14,7 +14,5 @@ public class ChangeRecordDTO
     public DateTime CreatedOn { get; set; }
     public bool IsDraft { get; set; }
     public string? Description { get; set; }
-    public ChangeRecord? ParentChangeRecord { get; set; }
-    public ChangeRecord? NextChangeRecord { get; set; }
     public UserDTO? ValidateBy { get; set; }
 }

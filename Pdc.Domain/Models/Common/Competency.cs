@@ -38,8 +38,17 @@ public class Competency : IChangeRecordPropagable, ICreatedByPropagable, ICreate
         RealisationContexts.ForEach(x => x.SetCreatedOnOnUntracked());
     }
 
-    public virtual void RemoveDeletedChangeables(List<Guid> changeableIdsToDelete)
+    public virtual void RemoveChangeablesByIds(List<Guid> changeableIdsToDelete)
     {
         RealisationContexts = RealisationContexts.Where(x => !changeableIdsToDelete.Contains(x.Id!.Value)).ToList();
+    }
+
+    public virtual void SetValueById(Guid id, string value)
+    {
+        var rc = RealisationContexts.FirstOrDefault(x => x.Id == id);
+        if (rc is not null)
+        {
+            rc.Value = value;
+        }
     }
 }

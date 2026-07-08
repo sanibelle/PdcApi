@@ -22,6 +22,8 @@ public class ChangeRecordEntity
     /// <summary>
     /// The version before
     /// </summary>
+    public virtual ChangeRecordEntity? Root { get; set; } = null;
+    public Guid RootId { get; set; } // Id of the first change record in the chain. The root is null when the record is the first one in the chain.
     public virtual ChangeRecordEntity? ParentChangeRecord { get; set; } = null;
     /// <summary>
     /// The version with the changes

@@ -16,12 +16,19 @@ public class ChangeRecordEntityBuilder
     private ChangeRecordEntity? _parentChangeRecord = null;
     private int _changeRecordNumber = 1;
     private IdentityUserEntity _validatedBy = null;
+    private Guid? _rootId = null;
 
     public ChangeRecordEntityBuilder() { }
 
     public ChangeRecordEntityBuilder WithId(Guid id)
     {
         _id = id;
+        return this;
+    }
+
+    public ChangeRecordEntityBuilder WithRootId(Guid rootId)
+    {
+        _rootId = rootId;
         return this;
     }
 
@@ -99,7 +106,7 @@ public class ChangeRecordEntityBuilder
 
     public ChangeRecordEntity Build()
     {
-        return new ChangeRecordEntity
+        var entity = new ChangeRecordEntity
         {
             Id = _id,
             ChangeDetails = _changeDetails,
@@ -111,8 +118,17 @@ public class ChangeRecordEntityBuilder
             ParentChangeRecord = _parentChangeRecord,
             ChangeRecordNumber = _changeRecordNumber,
             ValidatedBy = _validatedBy,
-            CreatedBy = _createdBy
+            CreatedBy = _createdBy,
         };
+        if (_rootId.HasValue)
+        {
+            entity.RootId = _rootId.Value;
+        }
+        else
+        {
+            entity.Root = entity;
+        }
+        return entity;
     }
 }
 

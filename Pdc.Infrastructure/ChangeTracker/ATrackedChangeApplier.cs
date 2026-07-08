@@ -51,11 +51,6 @@ internal abstract class ATrackedChangeApplier<T, TParent, TEntity> : AUntrackedC
                 throw new InvalidOperationException($"Invalid change type {changeDetail.ChangeType} for change detail with id {toUpdate.Id}");
         }
         return changeableEntity;
-
-        // XXX TODO bug. Quand on va valider deux versions diffrentes anciennes, il faudrait aller chercher le old value de la version actuelle + n la plus près pour afficher les bonnes valeurs 
-        // EX V1  V2  V3
-        // A   U   D
-        // Si on compare V2 et V1, on a afficher A => D et pas U car changeDetails.OldValue sera égal à A, mais changeable.Value = D. 
     }
 
     public override async Task Delete(List<T> updated, ICollection<TEntity> existing, IChangeTracker tracker, Guid? changeRecordId = null)
