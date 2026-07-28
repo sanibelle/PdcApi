@@ -50,6 +50,7 @@ public static class DependencyInjection
         services.AddScoped<IChangeRecordRepository, ChangeRecordRepository>();
         services.AddScoped<IChangeableRepository, ChangeableRepository>();
         services.AddScoped<IChangeDetailsRepository, ChangeDetailsRepository>();
+        services.AddScoped<ICourseFrameworkRepository, CourseFrameworkRepository>();
 
         //ChangeTracker
         services.AddKeyedScoped<IChangeApplier<RealisationContext, CompetencyEntity, RealisationContextEntity>, UntrackedRealisationContextChangeApplier>("untracked");

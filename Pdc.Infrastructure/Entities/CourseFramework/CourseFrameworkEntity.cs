@@ -1,14 +1,16 @@
 ﻿using Pdc.Domain.Models.Common;
-using Pdc.Infrastructure.Entities.Version;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
+using Pdc.Infrastructure.Entities.Version;
 
 namespace Pdc.Infrastructure.Entities.CourseFramework;
 
 public class CourseFrameworkEntity : ChangeRecordableEntity
 {
-    public virtual ICollection<CourseFrameworkCompetencyEntity>? CourseFrameworkCompetencies { get; set; }
-    public virtual ICollection<CourseFrameworkPerformanceCriteriaEntity>? CourseFrameworkPerformanceCriterias { get; set; }
-    public virtual ICollection<CourseFrameworkEntity>? Prerequisites { get; set; }
+    public virtual IList<CourseFrameworkCompetencyEntity>? CourseFrameworkCompetencies { get; set; }
+    public virtual ProgramOfStudyEntity? ProgramOfStudy { get; set; }
+    public string? ProgramOfStudyId { get; set; }
+    public virtual IList<CourseFrameworkPerformanceCriteriaEntity>? CourseFrameworkPerformanceCriterias { get; set; }
+    public virtual IList<CourseFrameworkEntity>? Prerequisites { get; set; }
     /// <summary>
     /// Éléments évalués. Peut être un : 
     /// <list type="bullet">
@@ -30,7 +32,7 @@ public class CourseFrameworkEntity : ChangeRecordableEntity
     ///    </item>
     ///</list>
     /// </summary>
-    public virtual ICollection<ChangeableEntity>? AssedElements { get; set; }
+    public virtual IList<ChangeableEntity>? AssedElements { get; set; }
     public required string Name { get; set; }
     public required string CourseCode { get; set; }
     public required Weighting Weighting { get; set; }

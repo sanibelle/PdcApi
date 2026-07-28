@@ -28,7 +28,7 @@ public static class DependencyInjection
         services.AddScoped<IGetProgramOfStudiesUseCase, GetProgramOfStudies>();
         services.AddScoped<IUpdateProgramOfStudyUseCase, UpdateProgramOfStudy>();
         services.AddScoped<IGetProgramOfStudyUseCase, GetProgramOfStudy>();
-        //Competency
+        // Competency
         services.AddScoped<IAddCompetencyUseCase, AddCompetency>();
         services.AddScoped<IGetCompetencyUseCase, GetCompetency>();
         services.AddScoped<IGetCompetencyWithChangeDetailsUseCase, GetCompetencyWithChangeDetails>();
@@ -37,11 +37,11 @@ public static class DependencyInjection
         services.AddScoped<IUpdatePublishedCompetencyUseCase, UpdatePublishedCompetency>();
         services.AddScoped<IDeleteCompetencyUseCase, DeleteCompetency>();
         services.AddScoped<CompetencyService>();
-        //User
+        // User
         services.AddScoped<IGetUsersUseCase, GetUsers>();
         services.AddScoped<ISetUserRolesUseCase, SetUserRoles>();
         services.AddScoped<IGetUserUseCase, GetUser>();
-        //Role
+        // Role
         services.AddScoped<IGetRolesUseCase, GetRoles>();
         // Auth
         services.AddScoped<IUserService, UserService>();
@@ -52,8 +52,10 @@ public static class DependencyInjection
         services.AddScoped<IAddComplementaryInformationUseCase, AddComplementaryInformation>();
         // ChangeRecord
         services.AddScoped<IPublishChangeRecordUseCase, PublishChangeRecord>();
-        //Changeable
+        // Changeable
         services.AddScoped<IUpdateChangeableUseCase, UpdateChangeable>();
+        // Course Framework
+        services.AddScoped<IGetCourseFrameworksByProgramOfStudyUseCase, GetCourseFrameworksByProgramOfStudy>();
 
         services.AddAutoMapper(cfg =>
         {

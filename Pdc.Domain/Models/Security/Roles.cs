@@ -3,7 +3,7 @@
 public static class Roles
 {
     public const string Admin = "Admin";
-    public const string StudyProgram = "StudyProgram";
+    public const string PogramOfStudy = "StudyProgram";
     public const string Competency = "Competency";
     public const string User = "User";
     public const string PublishChangeRecord = "PublishChangeRecord";

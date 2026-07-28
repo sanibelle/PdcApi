@@ -11,7 +11,7 @@ namespace Pdc.Infrastructure.Migrations
     {
         private string[] roles =
         {
-                Roles.StudyProgram,
+                Roles.PogramOfStudy,
                 Roles.Competency,
                 Roles.Admin,
                 Roles.User

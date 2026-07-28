@@ -43,5 +43,7 @@ public class MappingProfile : Profile
         .PreserveReferences()
         .ReverseMap()
         .ForMember(dest => dest.ChangeRecordNumber, opt => opt.MapFrom(src => src.WrittenOnChangeRecord != null ? src.WrittenOnChangeRecord.ChangeRecordNumber : (int?)default));
+        // Course Framework
+        CreateMap<CourseFrameworkDTO, CourseFramework>().ReverseMap();
     }
 }

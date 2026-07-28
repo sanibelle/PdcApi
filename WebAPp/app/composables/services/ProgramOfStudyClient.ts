@@ -1,4 +1,3 @@
-// composables/services/ProgramService.ts
 import { useApi } from './ApiClient';
 
 export const useProgramOfStudyClient = () => {

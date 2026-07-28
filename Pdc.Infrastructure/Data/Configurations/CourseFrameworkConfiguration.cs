@@ -10,8 +10,14 @@ public class CourseFrameworkConfiguration : IEntityTypeConfiguration<CourseFrame
     {
         builder.HasKey(x => x.CourseCode);
 
+        builder.HasOne(x => x.ProgramOfStudy)
+            .WithMany()
+            .HasForeignKey(x => x.ProgramOfStudyId)
+            .OnDelete(DeleteBehavior.NoAction)
+            .IsRequired();
+
         builder.Property(x => x.Name)
-            .HasMaxLength(200)
+            .HasMaxLength(400)
             .IsRequired();
 
         builder.Property(x => x.Semester)

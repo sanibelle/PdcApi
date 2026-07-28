@@ -23,6 +23,7 @@ public class ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
                                 IGetCompetenciesByProgramOfStudyUseCase getCompetenciesByProgramOfStudyUseCase,
                                 IGetCompetencyUseCase getCompetencyUseCase,
                                 IGetCompetencyWithChangeDetailsUseCase getCompetencyWithChangeDetailsUseCase,
+                                IGetCourseFrameworksByProgramOfStudyUseCase getCourseFrameworksByProgramOfStudyUseCase,
                                 UserControllerService userControllerService) : ControllerBase
 {
     #region ProgramOfStudy
@@ -33,7 +34,7 @@ public class ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
         return Ok(programOfStudies);
     }
 
-    [Authorize(Roles = Roles.StudyProgram)]
+    [Authorize(Roles = Roles.PogramOfStudy)]
     [HttpPost]
     public async Task<ActionResult<ProgramOfStudyDTO>> Create(ProgramOfStudyDTO programOfStudy)
     {
@@ -51,7 +52,7 @@ public class ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
         return Ok(program);
     }
 
-    [Authorize(Roles = Roles.StudyProgram)]
+    [Authorize(Roles = Roles.PogramOfStudy)]
     [HttpPut("{code}")]
     public async Task<IActionResult> Update(string code, [FromBody] ProgramOfStudyDTO programOfStudyDTO)
     {
@@ -59,7 +60,7 @@ public class ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
         return Ok(program);
     }
 
-    [Authorize(Roles = Roles.StudyProgram)]
+    [Authorize(Roles = Roles.PogramOfStudy)]
     [HttpDelete("{code}")]
     public async Task<IActionResult> Delete(string code)
     {
@@ -127,6 +128,76 @@ public class ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
     {
         await deleteCompetencyUseCase.Execute(programOfStudyCode, competencyCode);
         return NoContent();
+    }
+    #endregion
+    #region CourseFramework
+    [Authorize(Roles = Roles.Competency)]
+    [HttpPost("{programOfStudyCode}/courseFramework")]
+    public async Task<ActionResult<CompetencyDTO>> AddCourseFramework(string programOfStudyCode, [FromBody] CompetencyDTO createCompetencyDTO)
+    {
+        throw new NotImplementedException();
+        //User user = userControllerService.GetUserFromHttpContext();
+        //CompetencyDTO competency = await createCompetencyUseCase.Execute(programOfStudyCode, createCompetencyDTO, user);
+
+        //return CreatedAtAction(
+        //    nameof(GetCompetency),
+        //    new { programOfStudyCode, competencyCode = competency.Code },
+        //    competency);
+    }
+
+    [HttpGet("{programOfStudyCode}/courseFramework/{courseFrameworkCode}")]
+    public async Task<ActionResult<CompetencyDTO>> GetCourseFramework(string programOfStudyCode, string competencyCode)
+    {
+        throw new NotImplementedException();
+
+        //CompetencyDTO competency = await getCompetencyUseCase.Execute(programOfStudyCode, competencyCode);
+        //return Ok(competency);
+    }
+
+    [Authorize(Roles = Roles.Competency)]
+    [HttpGet("{programOfStudyCode}/courseFramework/{courseFrameworkCode}/v{versionNumber}")]
+    public async Task<ActionResult<CompetencyDTO>> GetCourseFramework(string programOfStudyCode, string courseFrameworkCode, int versionNumber)
+    {
+        throw new NotImplementedException();
+
+        //CompetencyDTO competency = await getCompetencyWithChangeDetailsUseCase.Execute(programOfStudyCode, competencyCode, versionNumber);
+        //return Ok(competency);
+    }
+
+    [Authorize(Roles = Roles.Competency)]
+    [HttpGet("{programOfStudyCode}/courseFramework")]
+    public async Task<ActionResult<IList<CompetencyDTO>>> GetCourseFrameworks(string programOfStudyCode)
+    {
+        IList<CourseFrameworkDTO> courseFrameworks = await getCourseFrameworksByProgramOfStudyUseCase.Execute(programOfStudyCode);
+        return Ok(courseFrameworks);
+    }
+
+    [Authorize(Roles = Roles.Competency)]
+    [HttpPut("{programOfStudyCode}/courseFramework/{courseFrameworkCode}")]
+    public async Task<ActionResult<CompetencyDTO>> UpdateCourseFramework(string programOfStudyCode, string courseFrameworkCode, [FromBody] CompetencyDTO updateCompetencyDTO)
+    {
+        throw new NotImplementedException();
+
+        //User user = userControllerService.GetUserFromHttpContext();
+        //if (updateCompetencyDTO.ChangeRecordNumber == 1 && updateCompetencyDTO.IsDraft)
+        //{
+        //    CompetencyDTO competency = await updateDraftV1CompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO, user);
+        //    return Ok(competency);
+        //}
+        //else
+        //{
+        //    CompetencyDTO competency = await updatePublishedCompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO, user);
+        //    return Ok(competency);
+        //}
+    }
+
+    [Authorize(Roles = Roles.Competency)]
+    [HttpDelete("{programOfStudyCode}/courseFramework/{courseFrameworkCode}")]
+    public async Task<ActionResult> DeleteCourseFramework(string courseFrameworkCode, string competencyCode)
+    {
+        throw new NotImplementedException();
+        //await deleteCompetencyUseCase.Execute(programOfStudyCode, competencyCode);
+        //return NoContent();
     }
     #endregion
 }
