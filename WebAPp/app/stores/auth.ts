@@ -8,6 +8,7 @@ export const useAuthStore = defineStore(
     const isAuthenticated = computed(() => user.value !== null);
 
     const authenticate = async () => {
+      // TODO storer le user en cache pour ne pas le fetch à chaque fois
       user.value = await fetchUser();
     };
 
