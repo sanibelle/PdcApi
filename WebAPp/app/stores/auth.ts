@@ -2,14 +2,18 @@ import { useApi } from '~/composables/services/ApiClient';
 export const useAuthStore = defineStore(
   'auth',
   () => {
+    const timeBetweenUserRefetch = useRuntimeConfig().public.timeBetweenUserRefetch as number;
+
+    let lastFetch: number = 0;
     const { fetchUser } = useUserClient();
     const user = ref<User | null>(null);
 
     const isAuthenticated = computed(() => user.value !== null);
 
     const authenticate = async () => {
-      // TODO storer le user en cache pour ne pas le fetch à chaque fois
+      if (isAuthenticated && Date.now() - lastFetch < timeBetweenUserRefetch) return; // Kindof a cache
       user.value = await fetchUser();
+      lastFetch = Date.now();
     };
 
     const logout = async () => {

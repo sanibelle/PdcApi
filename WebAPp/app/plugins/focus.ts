@@ -7,5 +7,8 @@ export default defineNuxtPlugin((nuxtApp) => {
         el.focus();
       }
     },
+    getSSRProps() {
+      return {};
+    },
   });
 });

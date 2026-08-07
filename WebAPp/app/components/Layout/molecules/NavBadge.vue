@@ -66,7 +66,7 @@
       outline-offset: 2px;
     }
 
-    border-radius: 999px; /* any huge value = perfect pill */
+    border-radius: 999px;
     padding: 1rem 2.5rem;
     min-width: 160px;
   }

@@ -2,16 +2,7 @@
   <div class="grid-container">
     <LayoutTemplateHeader class="header" />
     <LayoutTemplateMainNav class="main-nav" />
-    <div class="menu">
-      <ul>
-        <li>
-          <NuxtLink to="/modules">Modules</NuxtLink>
-        </li>
-        <li>
-          <NuxtLink to="/students">Students</NuxtLink>
-        </li>
-      </ul>
-    </div>
+    <LayoutTemplateMenu class="menu" />
     <div class="content">
       <slot />
     </div>

@@ -23,14 +23,14 @@
   <CommonMoleculesACreatedText v-else-if="isAdded">
     {{ changeable.value }}
   </CommonMoleculesACreatedText>
-  <CommonOrganismAModifedText v-else-if="isModified">
+  <CommonOrganismsAModifedText v-else-if="isModified">
     <template #created>
       {{ changeable.value }}
     </template>
     <template #deleted>
       {{ changeDetail?.oldValue }}
     </template>
-  </CommonOrganismAModifedText>
+  </CommonOrganismsAModifedText>
   <CommonAtomsAText v-else>
     {{ changeable.value }}
   </CommonAtomsAText>

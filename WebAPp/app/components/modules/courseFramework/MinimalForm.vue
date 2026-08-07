@@ -23,8 +23,6 @@
     },
   });
 
-  const { createCourseFramework } = useCourseFrameworkClient();
-
   const onSubmit = handleSubmit(async () => {
     try {
       // TODO valider qui crée la compétence.... Le parent?

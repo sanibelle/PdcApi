@@ -119,7 +119,7 @@
       class="form-container"
       @submit="onSubmit"
     >
-      <CommonOrganismATopRow>
+      <CommonOrganismsATopRow>
         <template #left>
           <div class="flex">
             <FormACheckboxInput
@@ -152,7 +152,7 @@
           <span class="obj">{{ t('objective') }}</span>
           <span class="std">{{ t('standard') }}</span>
         </template>
-      </CommonOrganismATopRow>
+      </CommonOrganismsATopRow>
       <CommonTemplateAPanel>
         <template #header-col-left>
           {{ t('statementOfCompetency') }}
