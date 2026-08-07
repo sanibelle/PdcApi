@@ -13,7 +13,6 @@ export class ApiClient {
   private baseURL: string;
 
   constructor() {
-    // TODO from config
     this.baseURL = useRuntimeConfig().public.apiBaseUrl as string;
   }
 

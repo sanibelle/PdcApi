@@ -1,0 +1,19 @@
+<script setup lang="ts">
+  const localePath = useLocalePath();
+  const props = defineProps({
+    to: {
+      type: String,
+      required: true,
+    },
+  });
+</script>
+<template>
+  <NuxtLink
+    class="link"
+    :to="localePath(props.to)"
+  >
+    <slot />
+  </NuxtLink>
+</template>
+
+<style scoped></style>

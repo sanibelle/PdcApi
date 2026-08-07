@@ -72,7 +72,7 @@
     <h1>
       {{ t('title') }}
     </h1>
-    <CommonOrganismAChangeRecord
+    <CommonOrganismsAChangeRecord
       v-if="competency?.changeRecordNumber"
       :change-record-number="competency?.changeRecordNumber"
       :is-draft="competency?.isDraft"

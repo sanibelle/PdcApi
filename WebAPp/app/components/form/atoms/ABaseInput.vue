@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { FormContextKey, useField } from 'vee-validate';
+  import { useField } from 'vee-validate';
 
   const props = defineProps({
     name: {
@@ -87,7 +87,7 @@
   />
 </template>
 
-<style scoped>
+<style scoped lang="scss">
   .base-input {
     width: 100%;
     padding: 8px 12px;

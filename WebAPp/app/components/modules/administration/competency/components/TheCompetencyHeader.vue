@@ -9,7 +9,7 @@
 </script>
 
 <template>
-  <CommonOrganismATopRow>
+  <CommonOrganismsATopRow>
     <template #left>
       {{ competency.isMandatory ? t('mandatoryCompetency') : t('optionalCompetency') }}
     </template>
@@ -18,7 +18,7 @@
       <span class="obj">{{ t('objective') }}</span>
       <span class="std">{{ t('standard') }}</span>
     </template>
-  </CommonOrganismATopRow>
+  </CommonOrganismsATopRow>
 </template>
 
 <i18n lang="json">

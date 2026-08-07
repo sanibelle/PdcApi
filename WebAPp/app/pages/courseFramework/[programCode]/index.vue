@@ -79,9 +79,7 @@
         <td>{{ courseFramework.courseCode }}</td>
         <td>{{ courseFramework.name }}</td>
         <td>
-          <NuxtLink :to="localePath({ name: 'courseFramework-courseFrameworkCode', params: { programCode: programCode, courseFrameworkCode: courseFramework.courseCode } })">
-            CLIKCMEEEEEEEEEE GOOOOOOOOOOOO
-          </NuxtLink>
+          <NuxtLink :to="localePath({ name: 'courseFramework-courseCode', params: { programCode: programCode, courseCode: courseFramework.courseCode } })">CLIKCMEEEEEEEEEE GOOOOOOOOOOOO</NuxtLink>
         </td>
       </tr>
     </tbody>
