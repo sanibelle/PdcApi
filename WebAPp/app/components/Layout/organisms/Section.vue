@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import type { PropType } from 'vue';
+
   const props = defineProps({
     slug: {
       type: String,
@@ -13,7 +15,7 @@
       default: null,
     },
     selectedItem: {
-      type: String,
+      type: String as PropType<string | null>,
       default: null,
     },
   });
@@ -29,11 +31,11 @@
   const emit = defineEmits(['onSelectItemClick', 'onRemoveItemClick']);
 </script>
 <template>
-  <div class="wrapper">
-    <LayoutMoleculesSectionHeader
-      v-if="!props.displayOnlyWhenAuthenticated || authStore.isAuthenticated"
-      :slug="props.slug"
-    >
+  <div
+    v-if="!props.displayOnlyWhenAuthenticated || authStore.isAuthenticated"
+    class="wrapper"
+  >
+    <LayoutMoleculesSectionHeader :slug="props.slug">
       <LayoutAtomsSectionHeaderTitle
         v-if="selectedItem"
         class="selected-item"
@@ -55,7 +57,9 @@
           v-for="item in filteredItems"
           :key="item.id"
         >
-          <li @click="emit('onSelectItemClick', item)">{{ item.shortName }} - {{ item.name }}</li>
+          <li @click="emit('onSelectItemClick', item)">
+            <button>{{ item.shortName }} - {{ item.name }}</button>
+          </li>
         </ul>
       </div>
     </slot>

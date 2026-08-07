@@ -6,7 +6,6 @@
       required: true,
     },
   });
-  console.log('props.to', props.to);
 </script>
 <template>
   <NuxtLink

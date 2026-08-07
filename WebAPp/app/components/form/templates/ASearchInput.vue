@@ -10,7 +10,7 @@
     },
     placeholder: {
       type: String,
-      default: '',
+      default: '🔍',
     },
     disabled: {
       type: Boolean,
@@ -78,7 +78,7 @@
     v-model="model"
     :name="props.name"
     :label="props.label"
-    :placeholder="'🔍'"
+    :placeholder="props.placeholder"
     :disabled="props.disabled"
     :required="props.required"
     :rules="validationRules"
