@@ -3,7 +3,7 @@ using Pdc.Application.DTOS;
 using Pdc.Domain.DTOS.Common;
 using TestDataSeeder.Builders.DTOS;
 
-namespace Pdc.Tests.E2E;
+namespace Pdc.Tests.Utils;
 
 internal static class CompetencyUtils
 {

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
+using Pdc.Application.DTOS.CourseFramework;
 using Pdc.Domain.DTOS.Common;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.CourseFramework;
@@ -44,6 +45,19 @@ public class MappingProfile : Profile
         .ReverseMap()
         .ForMember(dest => dest.ChangeRecordNumber, opt => opt.MapFrom(src => src.WrittenOnChangeRecord != null ? src.WrittenOnChangeRecord.ChangeRecordNumber : (int?)default));
         // Course Framework
-        CreateMap<CourseFrameworkDTO, CourseFramework>().ReverseMap();
+
+        CreateMap<CourseFramework, UntrackedCourseFrameworkDTO>()
+            .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code.Value))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name.Value))
+            .ForMember(dest => dest.TheoryHours, opt => opt.MapFrom(src => int.Parse(src.Weighting.TheoryHours.Value)))
+            .ForMember(dest => dest.LaboratoryHours, opt => opt.MapFrom(src => int.Parse(src.Weighting.LaboratoryHours.Value)))
+            .ForMember(dest => dest.PersonnalWorkHours, opt => opt.MapFrom(src => int.Parse(src.Weighting.PersonnalWorkHours.Value)))
+            .ForMember(dest => dest.Semester, opt => opt.MapFrom(src => int.Parse(src.Semester.Value)));
+
+        CreateMap<CreateCourseFrameworkDTO, CourseFramework>()
+            .ForMember(dest => dest.Code, opt => opt.MapFrom(src => new Changeable(src.Code)))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => new Changeable(src.Name)))
+            .ForMember(dest => dest.Weighting, opt => opt.MapFrom(src => new Weighting(src.TheoryHours, src.LaboratoryHours, src.PersonnalWorkHours)))
+            .ForMember(dest => dest.Semester, opt => opt.MapFrom(src => new Changeable(src.Semester)));
     }
 }

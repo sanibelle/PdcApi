@@ -1,5 +1,6 @@
 ﻿using Pdc.Domain.Enums;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
+using Pdc.Infrastructure.Entities.Version;
 
 namespace Pdc.Infrastructure.Entities.CourseFramework;
 
@@ -25,6 +26,7 @@ public class ProgramOfStudyEntity // toujours issu d'un devis ministeriel
     /// Les unités des cours complémentaires
     /// </summary>
     public virtual UnitsEntity? ComplementaryUnits { get; set; }
+    public virtual ChangeRecordEntity? ChangeRecord { get; set; }
     public required string Name { get; set; } //Techniques de l'informatique
     public required ProgramType ProgramType { get; set; } //DEC, PRE-U
     public int MonthsDuration { get; set; } // 36 mois

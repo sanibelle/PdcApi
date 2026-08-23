@@ -3,15 +3,15 @@ using Pdc.Application.DTOS.Common;
 
 namespace Pdc.Application.Validators;
 
-public class CompetencyElementValidation : AbstractValidator<CompetencyElementDTO>
+public class CompetencyElementValidatior : AbstractValidator<CompetencyElementDTO>
 {
-    public CompetencyElementValidation()
+    public CompetencyElementValidatior()
     {
-        Include(new ChangeableValidation());
+        Include(new ChangeableValidatior());
 
         RuleFor(x => x.PerformanceCriterias)
             .NotEmpty()
             .WithMessage("Le critère de performance ne peut être vide")
-            .ForEach(y => y.SetValidator(new ChangeableValidation()));
+            .ForEach(y => y.SetValidator(new ChangeableValidatior()));
     }
 }

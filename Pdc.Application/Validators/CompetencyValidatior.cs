@@ -6,9 +6,9 @@ using Pdc.Domain.DTOS.Common;
 
 namespace Pdc.Application.Validators;
 
-public class CompetencyValidation : AbstractValidator<CompetencyDTO>
+public class CompetencyValidatior : AbstractValidator<CompetencyDTO>
 {
-    public CompetencyValidation()
+    public CompetencyValidatior()
     {
         RuleFor(x => x.Code)
             .NotEmpty()
@@ -19,12 +19,12 @@ public class CompetencyValidation : AbstractValidator<CompetencyDTO>
             .MaximumLength(500);
 
         RuleFor(x => x.RealisationContexts)
-            .ForEach(y => y.SetValidator(new ChangeableValidation()))
+            .ForEach(y => y.SetValidator(new ChangeableValidatior()))
             .When(x => x.RealisationContexts is not null);
 
         RuleFor(x => x.CompetencyElements)
             .Custom((x, context) => ThrowIfPositionsInvalid(x, context))
-            .ForEach(y => y.SetValidator(new CompetencyElementValidation()));
+            .ForEach(y => y.SetValidator(new CompetencyElementValidatior()));
     }
 
 

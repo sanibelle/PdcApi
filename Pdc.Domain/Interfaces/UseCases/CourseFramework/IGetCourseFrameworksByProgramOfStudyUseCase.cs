@@ -1,8 +1,8 @@
-﻿using Pdc.Application.DTOS;
+﻿using Pdc.Application.DTOS.CourseFramework;
 
-namespace Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
+namespace Pdc.Domain.Interfaces.UseCases.CourseFramework;
 
 public interface IGetCourseFrameworksByProgramOfStudyUseCase
 {
-    Task<IList<CourseFrameworkDTO>> Execute(string programOfStudyCode);
+    Task<IList<UntrackedCourseFrameworkDTO>> Execute(string programOfStudyCode);
 }

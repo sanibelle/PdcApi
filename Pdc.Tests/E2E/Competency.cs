@@ -3,7 +3,7 @@ using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
 using Pdc.Application.Validators;
 using Pdc.Domain.DTOS.Common;
-using Pdc.Tests.E2E;
+using Pdc.Tests.Utils;
 using System.Net;
 using System.Net.Http.Json;
 using TestDataSeeder;
@@ -38,7 +38,7 @@ public class CompetencyApiTests : ApiTestBase
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
         CompetencyDTO competencyDTO = CompetencyUtils.CreateCompetency();
-        CompetencyValidation validation = new();
+        CompetencyValidatior validation = new();
         competencyDTO.Code = DataSeeder.CompetencyEntity.Code;
         validation.Validate(competencyDTO).IsValid.Should().BeTrue();
         var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);

@@ -11,3 +11,7 @@
 dotnet ef migrations add InitialCreate
 dotnet ef database update
 ```
+
+# Pour restaurer un backup
+
+```"D:\Program Files\PostgreSQL\18\bin\psql.exe" -U postgres -d BASE_DE_DONNEE -f "backup.sql"```

@@ -166,6 +166,35 @@ public class MappingProfile : Profile
                 opt => opt.MapFrom(src => src.ComplementaryInformations))
             .PreserveReferences();
 
+        // CourseFramework
+        CreateMap<CourseFrameworkChangeableEntity, Changeable>()
+            .PreserveReferences()
+            .ReverseMap()
+            .PreserveReferences();
+
+        CreateMap<CourseFramework, CourseFrameworkEntity>()
+            .PreserveReferences()
+            .ForMember(x => x.CourseFrameworkPerformanceCriterias, opt => opt.Ignore())
+            .ForMember(x => x.CourseFrameworkCompetencies, opt => opt.Ignore())
+            .ForMember(x => x.ProgramOfStudy, opt => opt.Ignore())
+            .ForMember(dest => dest.ChangeRecord, opt => opt.Ignore())
+            .ForMember(dest => dest.ChangeRecordId, opt => opt.Ignore())
+            .ForMember(x => x.TheoryHours, opt => opt.MapFrom(src => src.Weighting.TheoryHours))
+            .ForMember(x => x.LaboratoryHours, opt => opt.MapFrom(src => src.Weighting.LaboratoryHours))
+            .ForMember(x => x.PersonnalWorkHours, opt => opt.MapFrom(src => src.Weighting.PersonnalWorkHours));
+
+        CreateMap<CourseFrameworkEntity, CourseFramework>()
+            .PreserveReferences()
+            .ForMember(x => x.CourseFrameworkPerformanceCriterias, opt => opt.Ignore())// TODO
+            .ForMember(x => x.Competencies, opt => opt.Ignore())// TODO
+            .ForMember(x => x.CreatedOn, opt => opt.Ignore())// TODO
+            .ForMember(x => x.Hours, opt => opt.Ignore())// TODO
+            .ForMember(x => x.Weighting, opt => opt.Ignore())
+            .ForMember(x => x.Units, opt => opt.MapFrom(src => new Units(src.TheoryHours.Value, src.LaboratoryHours.Value, src.PersonnalWorkHours.Value)))
+            .ForPath(x => x.Weighting.TheoryHours, opt => opt.MapFrom(src => src.TheoryHours))
+            .ForPath(x => x.Weighting.LaboratoryHours, opt => opt.MapFrom(src => src.LaboratoryHours))
+            .ForPath(x => x.Weighting.PersonnalWorkHours, opt => opt.MapFrom(src => src.PersonnalWorkHours));
+
         // CourseFrameworkCompetency
         CreateMap<CourseFrameworkCompetency, CourseFrameworkCompetencyEntity>()
             .PreserveReferences()

@@ -2,7 +2,7 @@
 using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
 using Pdc.Domain.DTOS.Common;
-using Pdc.Tests.E2E;
+using Pdc.Tests.Utils;
 using System.Net.Http.Json;
 using TestDataSeeder;
 using TestDataSeeder.Builders.DTOS;

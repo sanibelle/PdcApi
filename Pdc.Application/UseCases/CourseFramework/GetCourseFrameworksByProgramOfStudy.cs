@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Pdc.Application.DTOS;
+using Pdc.Application.DTOS.CourseFramework;
 using Pdc.Domain.Interfaces.Repositories;
-using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
+using Pdc.Domain.Interfaces.UseCases.CourseFramework;
 
 namespace Pdc.Application.UseCases;
 
@@ -16,9 +16,9 @@ public class GetCourseFrameworksByProgramOfStudy : IGetCourseFrameworksByProgram
         _mapper = mapper;
     }
 
-    public async Task<IList<CourseFrameworkDTO>> Execute(string programOfStudyCode)
+    public async Task<IList<UntrackedCourseFrameworkDTO>> Execute(string programOfStudyCode)
     {
         var programs = await _courseFrameworksRepository.GetByProgramOfStudy(programOfStudyCode);
-        return _mapper.Map<IList<CourseFrameworkDTO>>(programs);
+        return _mapper.Map<IList<UntrackedCourseFrameworkDTO>>(programs);
     }
 }

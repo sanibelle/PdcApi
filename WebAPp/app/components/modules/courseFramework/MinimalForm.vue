@@ -7,6 +7,13 @@
   const emit = defineEmits(['submitted']);
   const codeExistingErrorMessage = ref('');
 
+  const props = defineProps({
+    programCode: {
+      type: String,
+      default: '',
+    },
+  });
+
   const courseFramework = reactive<Partial<CourseFramework>>({
     courseCode: '',
     name: '',
@@ -16,16 +23,8 @@
     validateOnMount: false,
   });
 
-  const props = defineProps({
-    programCode: {
-      type: String,
-      default: '',
-    },
-  });
-
   const onSubmit = handleSubmit(async () => {
     try {
-      // TODO valider qui crée la compétence.... Le parent?
       emit('submitted', await createCourseFramework(props.programCode, courseFramework));
     } catch (e) {
       if (e instanceof DuplicateException) {
@@ -54,7 +53,8 @@
         v-model="courseFramework.courseCode"
         name="code"
         :label="t('code')"
-        placeholder="Ex : 00SU"
+        :placeholder="t('codePlaceholder')"
+        :hint="t('codeHint')"
         :min="3"
         :max="50"
         :required="true"
@@ -82,8 +82,10 @@
   "fr": {
     "title": "Créer un plan cadre",
     "formTitle": "Créer un plan cadre",
-    "name": "Nom du cours",
-    "code": "Code du cours",
+    "name": "Titre du cours",
+    "code": "Numéro du cours",
+    "codeHint": "Programme-Code-Établissement",
+    "codePlaceholder": "XXX-XXX-XX",
     "statementOfCompetency": "Énoncé de plan cadre",
     "statementOfCompetencyPlaceholder": "Ex : Effectuer le développement d'applications Web transactionnelles",
     "competencyDescriptionPlaceholder": "Description détaillée du plan cadre",

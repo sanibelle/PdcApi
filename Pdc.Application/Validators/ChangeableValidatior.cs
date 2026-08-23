@@ -4,9 +4,9 @@ using Pdc.Domain.DTOS.Common;
 
 namespace Pdc.Application.Validators;
 
-public class ChangeableValidation : AbstractValidator<ChangeableDTO>
+public class ChangeableValidatior : AbstractValidator<ChangeableDTO>
 {
-    public ChangeableValidation()
+    public ChangeableValidatior()
     {
         RuleFor(x => x.Value)
             .MaximumLength(Constants.MaxChangeableLength)

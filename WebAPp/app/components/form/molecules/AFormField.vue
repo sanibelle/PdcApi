@@ -111,7 +111,7 @@
     </div>
     <FormAtomsAHint
       v-if="hint"
-      :text="hint"
+      :hint="hint"
     />
   </div>
   <FormAtomsAErrorMessage :message="error" />

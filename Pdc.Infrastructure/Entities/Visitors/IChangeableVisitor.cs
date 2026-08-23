@@ -1,5 +1,6 @@
 ﻿using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
+using Pdc.Infrastructure.Entities.Version;
 
 namespace Pdc.Infrastructure.Entities.Visitors;
 
@@ -9,4 +10,5 @@ public interface IChangeableVisitor<T>
     T Visit(RealisationContextEntity realisationContext);
     T Visit(ContentElementEntity contentElementEntity);
     T Visit(PerformanceCriteriaEntity performanceCriteriaEntity);
+    T Visit(CourseFrameworkChangeableEntity courseFrameworkChangeableEntity);
 }

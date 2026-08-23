@@ -4,9 +4,9 @@ using Pdc.Domain.Enums;
 
 namespace Pdc.Application.Validators;
 
-public class ProgramOfStudyValidation : AbstractValidator<ProgramOfStudyDTO>
+public class ProgramOfStudyValidator : AbstractValidator<ProgramOfStudyDTO>
 {
-    public ProgramOfStudyValidation()
+    public ProgramOfStudyValidator()
     {
         RuleFor(x => x.Code)
             .NotEmpty()

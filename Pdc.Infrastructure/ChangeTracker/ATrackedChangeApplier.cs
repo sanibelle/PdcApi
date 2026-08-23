@@ -34,7 +34,7 @@ internal abstract class ATrackedChangeApplier<T, TParent, TEntity> : AUntrackedC
 
         ChangeDetailEntity? changeDetail = await Context.ChangeDetails.SingleOrDefaultAsync(x => x.ChangeRecordId == changeRecord.Id.Value && x.Changeable.Id == toUpdate.Id);
 
-        //When not traced on this version, then normal tracking is used
+        //When not tracked on this version, then normal tracking is used
         if (changeDetail == null)
         {
             return await base.Update(changeRecord, toUpdate, tracker);

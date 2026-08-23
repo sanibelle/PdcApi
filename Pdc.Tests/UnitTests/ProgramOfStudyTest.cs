@@ -39,7 +39,7 @@ public class ProgramOfStudyTest
             cfg.LicenseKey = Environment.GetEnvironmentVariable("AutoMapper:LicenseKey");
             cfg.AddProfile<MappingProfile>();
         }, LoggerFactory.Create(_ => { })).CreateMapper();
-        _validator = new ProgramOfStudyValidation();
+        _validator = new ProgramOfStudyValidator();
 
         _createProgramOfStudyUseCase = new AddProgramOfStudy(_programOfStudyRepositoryMock.Object, _mapper, _validator);
         _deleteProgramOfStudyUseCase = new DeleteProgramOfStudy(_programOfStudyRepositoryMock.Object);
