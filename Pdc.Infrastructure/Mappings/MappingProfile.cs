@@ -16,7 +16,6 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         // common
-
         CreateMap<Competency, CompetencyEntity>()
             .ForMember(x => x.RealisationContexts, opt => opt.Ignore())
             .ForMember(dest => dest.ProgramOfStudy, opt => opt.Ignore())
@@ -41,6 +40,7 @@ public class MappingProfile : Profile
             .PreserveReferences();
 
         CreateMap<Changeable, ChangeableEntity>()
+            .ForMember(dest => dest.Id, opt => opt.Condition(src => src.Id.HasValue))
             .PreserveReferences()
             .ReverseMap()
             .PreserveReferences();
@@ -168,20 +168,24 @@ public class MappingProfile : Profile
 
         // CourseFramework
         CreateMap<CourseFrameworkChangeableEntity, Changeable>()
-            .PreserveReferences()
-            .ReverseMap()
+            .PreserveReferences();
+
+        CreateMap<Changeable, CourseFrameworkChangeableEntity>()
             .PreserveReferences();
 
         CreateMap<CourseFramework, CourseFrameworkEntity>()
             .PreserveReferences()
+            .ForMember(x => x.Code, opt => opt.Ignore())
+            .ForMember(x => x.Name, opt => opt.Ignore())
+            .ForMember(x => x.Semester, opt => opt.Ignore())
             .ForMember(x => x.CourseFrameworkPerformanceCriterias, opt => opt.Ignore())
             .ForMember(x => x.CourseFrameworkCompetencies, opt => opt.Ignore())
             .ForMember(x => x.ProgramOfStudy, opt => opt.Ignore())
-            .ForMember(dest => dest.ChangeRecord, opt => opt.Ignore())
-            .ForMember(dest => dest.ChangeRecordId, opt => opt.Ignore())
-            .ForMember(x => x.TheoryHours, opt => opt.MapFrom(src => src.Weighting.TheoryHours))
-            .ForMember(x => x.LaboratoryHours, opt => opt.MapFrom(src => src.Weighting.LaboratoryHours))
-            .ForMember(x => x.PersonnalWorkHours, opt => opt.MapFrom(src => src.Weighting.PersonnalWorkHours));
+            .ForMember(x => x.ChangeRecord, opt => opt.Ignore())
+            .ForMember(x => x.ChangeRecordId, opt => opt.Ignore())
+            .ForMember(x => x.TheoryHours, opt => opt.Ignore())
+            .ForMember(x => x.LaboratoryHours, opt => opt.Ignore())
+            .ForMember(x => x.PersonnalWorkHours, opt => opt.Ignore());
 
         CreateMap<CourseFrameworkEntity, CourseFramework>()
             .PreserveReferences()

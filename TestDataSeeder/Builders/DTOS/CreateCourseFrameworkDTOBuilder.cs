@@ -2,7 +2,7 @@ using Pdc.Application.DTOS.CourseFramework;
 
 namespace TestDataSeeder.Builders.DTOS;
 
-public class CourseFrameworkDTOBuilder
+public class CreateCourseFrameworkDTOBuilder
 {
     private Guid? _id = null;
     private int _laboratoyHours = 1;
@@ -12,43 +12,43 @@ public class CourseFrameworkDTOBuilder
     private string _code = "Default code";
     private string _name = "Default name";
 
-    public CourseFrameworkDTOBuilder WithId(Guid? id)
+    public CreateCourseFrameworkDTOBuilder WithId(Guid? id)
     {
         _id = id;
         return this;
     }
 
-    public CourseFrameworkDTOBuilder WithCode(string code)
+    public CreateCourseFrameworkDTOBuilder WithCode(string code)
     {
         _code = code;
         return this;
     }
 
-    public CourseFrameworkDTOBuilder WithLaboratoryHours(int laboratoryHours)
+    public CreateCourseFrameworkDTOBuilder WithLaboratoryHours(int laboratoryHours)
     {
         _laboratoyHours = laboratoryHours;
         return this;
     }
 
-    public CourseFrameworkDTOBuilder WithTheoryHours(int theoryHours)
+    public CreateCourseFrameworkDTOBuilder WithTheoryHours(int theoryHours)
     {
         _theoryHours = theoryHours;
         return this;
     }
 
-    public CourseFrameworkDTOBuilder WithName(string name)
+    public CreateCourseFrameworkDTOBuilder WithName(string name)
     {
         _name = name;
         return this;
     }
 
-    public CourseFrameworkDTOBuilder WithPersonnalWorkHours(int personnalWorkHours)
+    public CreateCourseFrameworkDTOBuilder WithPersonnalWorkHours(int personnalWorkHours)
     {
         _personnalWorkHours = personnalWorkHours;
         return this;
     }
 
-    public CourseFrameworkDTOBuilder WithSemester(int semester)
+    public CreateCourseFrameworkDTOBuilder WithSemester(int semester)
     {
         _semester = semester;
         return this;

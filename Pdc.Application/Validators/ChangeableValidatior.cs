@@ -4,7 +4,7 @@ using Pdc.Domain.DTOS.Common;
 
 namespace Pdc.Application.Validators;
 
-public class ChangeableValidatior : AbstractValidator<ChangeableDTO>
+public class ChangeableValidatior : AbstractValidator<ChangeableDTO<string>>
 {
     public ChangeableValidatior()
     {

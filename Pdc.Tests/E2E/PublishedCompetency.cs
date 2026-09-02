@@ -185,7 +185,7 @@ public class PublishedCompetencyApiTest : ApiTestBase
         getResponse = await _Client.GetAsync($"/api/programofstudy/{_programCode}/competency/{updatedCompetency.Code}");
         updatedCompetency = await getResponse.Content.ReadFromJsonAsync<CompetencyDTO>();
         updatedCompetency.RealisationContexts.ElementAt(1).Value = v3UpdatedValue;
-        updatedCompetency.RealisationContexts.Add(new ChangeableDTOBuilder().WithPosition(2).WithValue("Created on v3").Build());
+        updatedCompetency.RealisationContexts.Add(new ChangeableDTOBuilder<string>().WithPosition(2).WithValue("Created on v3").Build());
         updatedCompetency.CompetencyElements.ElementAt(0).Value = v3UpdatedValue;
         updatedCompetency.CompetencyElements.ElementAt(0).PerformanceCriterias.ElementAt(0).Value = v3UpdatedValue;
 
@@ -241,7 +241,7 @@ public class PublishedCompetencyApiTest : ApiTestBase
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
         ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
-        ChangeableDTO realisationContext, performanceCriteria;
+        ChangeableDTO<string> realisationContext, performanceCriteria;
         CompetencyElementDTO competencyElement;
         CompetencyDTO competencyToCreateDTO = CompetencyUtils.CreateCompetency();
 
@@ -264,17 +264,17 @@ public class PublishedCompetencyApiTest : ApiTestBase
 
         // updating the one left and then adding
         competencyToUpdateDTO.RealisationContexts.First().Value = "Updated realisation context of the existing element";
-        competencyToUpdateDTO.RealisationContexts.Add(realisationContext =new ChangeableDTOBuilder()
+        competencyToUpdateDTO.RealisationContexts.Add(realisationContext =new ChangeableDTOBuilder<string>()
             .WithValue("New realisation Context")
             .Build());
 
         competencyToUpdateDTO.CompetencyElements.First().Value = "Updated competency element of the existing element";
         competencyToUpdateDTO.CompetencyElements.First().Position = 1;
-        competencyToUpdateDTO.CompetencyElements.First().PerformanceCriterias.Add(new ChangeableDTOBuilder().WithPosition(1).WithValue("Added during update").Build());
+        competencyToUpdateDTO.CompetencyElements.First().PerformanceCriterias.Add(new ChangeableDTOBuilder<string>().WithPosition(1).WithValue("Added during update").Build());
         competencyToUpdateDTO.CompetencyElements.Add(competencyElement = new CompetencyElementDTOBuilder()
             .WithValue("New competency element")
             .WithPosition(competencyToUpdateDTO.CompetencyElements.Count() + 1)
-            .AddPerformanceCriteria(performanceCriteria = new ChangeableDTOBuilder()
+            .AddPerformanceCriteria(performanceCriteria = new ChangeableDTOBuilder<string>()
                 .WithValue("New performance criteria")
                 .WithPosition(1)
                 .AddComplementaryInformation(performanceCriteriaComplementaryInformation = new ComplementaryInformationDTOBuilder()

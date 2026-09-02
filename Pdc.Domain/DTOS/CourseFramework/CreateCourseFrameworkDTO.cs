@@ -1,6 +1,5 @@
 ﻿namespace Pdc.Application.DTOS.CourseFramework;
 
-
 public class CreateCourseFrameworkDTO
 {
     public required string Code { get; set; }

@@ -1,6 +1,8 @@
 ﻿namespace Pdc.Application.DTOS.CourseFramework;
 
-public class UntrackedCourseFrameworkDTO : CreateCourseFrameworkDTO
+public class UnTrackedCourseFrameworkDTO : CreateCourseFrameworkDTO
 {
     public Guid Id { get; set; }
+
+
 }

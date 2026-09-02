@@ -4,5 +4,5 @@ using Pdc.Domain.DTOS.Common;
 
 public interface IUpdateChangeableUseCase
 {
-    Task<ChangeableDTO> Execute(ChangeableDTO changeable, Guid changeableId);
+    Task<ChangeableDTO<string>> Execute(ChangeableDTO<string> changeable, Guid changeableId);
 }

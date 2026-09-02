@@ -1,10 +1,11 @@
 ﻿using Pdc.Domain.Interfaces.Propagables;
 using Pdc.Domain.Interfaces.Versioning;
 using Pdc.Domain.Models.Security;
+using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.Common;
 
-public class Competency : IChangeRecordPropagable, ICreatedByPropagable, ICreatedOnPropagable, IChangeablesContainer
+public class Competency : AChangeRecordable, ICreatedByPropagable, ICreatedOnPropagable, IChangeablesContainer
 {
     /// <summary>
     /// Code unique de la compétence. Ex 00SU
@@ -16,10 +17,9 @@ public class Competency : IChangeRecordPropagable, ICreatedByPropagable, ICreate
     public bool IsMandatory { get; set; }
     public bool IsOptional { get; set; }
     public string StatementOfCompetency { get; set; } = "";// Effectuer le déploiement de serveurs intranet
-    public Versioning.ChangeRecord? ChangeRecord { get; set; }
     public List<RealisationContext> RealisationContexts { get; set; } = new List<RealisationContext>(); // Critères de performance liés à l’ensemble de la compétence
 
-    public virtual void SetChangeRecordOnUntracked(Versioning.ChangeRecord changeRecord)
+    public override void SetChangeRecordOnUntracked(ChangeRecord changeRecord)
     {
         if (ChangeRecord == null)
         {

@@ -13,7 +13,7 @@ namespace Pdc.Application.UseCases;
 
 public class AddCourseFramework(ICourseFrameworkRepository courseFrameworksRepository, IMapper mapper, IValidator<CreateCourseFrameworkDTO> validator) : IAddCourseFrameworkUseCase
 {
-    public async Task<UntrackedCourseFrameworkDTO> Execute(string programOfStudyCode, CreateCourseFrameworkDTO courseFrameworkDto, User currentUser)
+    public async Task<TrackedCourseFrameworkDTO> Execute(string programOfStudyCode, CreateCourseFrameworkDTO courseFrameworkDto, User currentUser)
     {
         ValidationResult validationResult = await validator.ValidateAsync(courseFrameworkDto);
         if (!validationResult.IsValid)
@@ -28,7 +28,7 @@ public class AddCourseFramework(ICourseFrameworkRepository courseFrameworksRepos
         courseFramwork.ProgramOfStudyCode = programOfStudyCode;
         CourseFramework savedCourseFramework = await courseFrameworksRepository.Add(courseFramwork);
 
-        return mapper.Map<UntrackedCourseFrameworkDTO>(savedCourseFramework);
+        return mapper.Map<TrackedCourseFrameworkDTO>(savedCourseFramework);
 
     }
 

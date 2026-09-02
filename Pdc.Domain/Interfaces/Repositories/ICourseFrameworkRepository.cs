@@ -10,4 +10,5 @@ public interface ICourseFrameworkRepository
     Task<CourseFramework> Add(CourseFramework courseFramework);
     Task<IList<CourseFramework>> GetByProgramOfStudy(string code);
     Task DeleteById(Guid courseFramekworkId);
+    Task<CourseFramework> UpdateUntrackedChangeable(CourseFramework courseFrameworkToUpdate);
 }

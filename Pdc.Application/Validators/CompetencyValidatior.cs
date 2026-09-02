@@ -34,19 +34,19 @@ public class CompetencyValidatior : AbstractValidator<CompetencyDTO>
         {
             return;
         }
-        ThrowIfPositionsInvalid(competencyElements.Cast<ChangeableDTO>().ToList(), context);
+        ThrowIfPositionsInvalid(competencyElements.Cast<ChangeableDTO<string>>().ToList(), context);
         foreach (var competencyElement in competencyElements)
         {
             ThrowIfPositionsInvalid(competencyElement.PerformanceCriterias, context);
         }
     }
 
-    private static void ThrowIfPositionsInvalid(ICollection<ChangeableDTO> dtos, ValidationContext<CompetencyDTO> context)
+    private static void ThrowIfPositionsInvalid(ICollection<ChangeableDTO<string>> dtos, ValidationContext<CompetencyDTO> context)
     {
         // starts at 1
         for (int i = 1; i <= dtos.Count; i++)
         {
-            ChangeableDTO? dto = dtos.FirstOrDefault(x => x.Position == i);
+            ChangeableDTO<string>? dto = dtos.FirstOrDefault(x => x.Position == i);
             if (dto == null)
             {
                 context.AddFailure(new ValidationFailure(dtos.First().GetType().Name, $"Could not find expected position: {i}"));

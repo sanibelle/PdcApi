@@ -12,7 +12,7 @@ public class CompetencyDTOBuilder
     private bool _isMandatory = false;
     private bool _isOptional = false;
     private string _statementOfCompetency = "Default Statement";
-    private ICollection<ChangeableDTO> _realisationContexts = new List<ChangeableDTO>();
+    private ICollection<ChangeableDTO<string>> _realisationContexts = new List<ChangeableDTO<string>>();
     private ICollection<CompetencyElementDTO> _competencyElements = new List<CompetencyElementDTO>();
     private int? _changeRecordNumber = null;
 
@@ -46,7 +46,7 @@ public class CompetencyDTOBuilder
         return this;
     }
 
-    public CompetencyDTOBuilder WithRealisationContexts(ICollection<ChangeableDTO> realisationContexts)
+    public CompetencyDTOBuilder WithRealisationContexts(ICollection<ChangeableDTO<string>> realisationContexts)
     {
         _realisationContexts = realisationContexts;
         return this;

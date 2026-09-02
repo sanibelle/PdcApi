@@ -6,5 +6,5 @@ using Pdc.Domain.Models.Security;
 
 public interface IAddCourseFrameworkUseCase
 {
-    Task<UntrackedCourseFrameworkDTO> Execute(string programOfStudyCode, CreateCourseFrameworkDTO courseFramework, User createdBy);
+    Task<TrackedCourseFrameworkDTO> Execute(string programOfStudyCode, CreateCourseFrameworkDTO courseFramework, User createdBy);
 }

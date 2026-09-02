@@ -71,7 +71,7 @@ public class UserApiTests : ApiTestBase
         // Arrange - Get the user by id
         var response = await _Client.GetAsync($"/api/user");
         var users = await response.Content.ReadFromJsonAsync<List<User>>();
-        var user = users.FirstOrDefault(x => x.Id == DataSeeder.UserForRoleTest.Id);
+        var user = users!.FirstOrDefault(x => x.Id == DataSeeder.UserForRoleTest.Id);
         Assert.That(user, Is.Not.Null);
         Assert.That(user.Id, Is.EqualTo(DataSeeder.UserForRoleTest.Id));
         Assert.That(user.Roles.Any(x => x == _userRole.Name), Is.False);
@@ -86,7 +86,7 @@ public class UserApiTests : ApiTestBase
         Assert.That(user.Roles.Any(x => x == _userRole.Name), Is.True);
 
         // Act - Add admin role to the user
-        roles.Add(_adminRole.Name);
+        roles.Add(_adminRole.Name!);
         response = await _Client.PutAsJsonAsync($"/api/user/{DataSeeder.UserForRoleTest.Id}/roles", roles);
         user = await response.Content.ReadFromJsonAsync<User>();
 

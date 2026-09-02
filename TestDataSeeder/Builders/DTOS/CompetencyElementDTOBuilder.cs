@@ -9,7 +9,7 @@ public class CompetencyElementDTOBuilder
     private string _value = "Default Value";
     private int? _position = null;
     protected List<ComplementaryInformationDTO> ComplementaryInformations = [];
-    private ICollection<ChangeableDTO> _performanceCriterias = [];
+    private ICollection<ChangeableDTO<string>> _performanceCriterias = [];
 
     public CompetencyElementDTOBuilder WithId(Guid? id)
     {
@@ -35,12 +35,12 @@ public class CompetencyElementDTOBuilder
         return this;
     }
 
-    public CompetencyElementDTOBuilder AddPerformanceCriteria(ChangeableDTO performanceCriteria)
+    public CompetencyElementDTOBuilder AddPerformanceCriteria(ChangeableDTO<string> performanceCriteria)
     {
         _performanceCriterias.Add(performanceCriteria);
         return this;
     }
-    public CompetencyElementDTOBuilder WithPerformanceCriterias(List<ChangeableDTO> performanceCriterias)
+    public CompetencyElementDTOBuilder WithPerformanceCriterias(List<ChangeableDTO<string>> performanceCriterias)
     {
         _performanceCriterias = performanceCriterias;
         return this;

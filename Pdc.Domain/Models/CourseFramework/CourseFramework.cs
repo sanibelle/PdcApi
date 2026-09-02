@@ -7,7 +7,7 @@ using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.CourseFramework;
 
-public class CourseFramework : IChangeRecordPropagable, ICreatedByPropagable, ICreatedOnPropagable, IChangeablesContainer
+public class CourseFramework : AChangeRecordable, ICreatedByPropagable, ICreatedOnPropagable, IChangeablesContainer
 {
     public Guid? Id { get; set; }
     public string ProgramOfStudyCode { get; set; } = "";
@@ -56,9 +56,7 @@ public class CourseFramework : IChangeRecordPropagable, ICreatedByPropagable, IC
     ///</list>
     /// </summary>
     public required IEnumerable<Changeable> AssedElements { get; set; } = [];
-    public ChangeRecord? ChangeRecord { get; set; }
-
-    public void SetChangeRecordOnUntracked(ChangeRecord changeRecord)
+    public override void SetChangeRecordOnUntracked(ChangeRecord changeRecord)
     {
         ChangeRecord = changeRecord;
     }
@@ -89,5 +87,6 @@ public class CourseFramework : IChangeRecordPropagable, ICreatedByPropagable, IC
     {
         throw new NotImplementedException();
     }
+
 }
 

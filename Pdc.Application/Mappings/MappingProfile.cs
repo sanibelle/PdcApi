@@ -15,6 +15,13 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+
+        // common
+        CreateMap<Changeable, ChangeableDTO<int>>()
+            .ForMember(dest => dest.Value, opt => opt.MapFrom(src => int.Parse(src.Value)))
+            .ReverseMap()
+            .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Value.ToString()));
+
         // ProgramOfStudy  
         CreateMap<ProgramOfStudy, ProgramOfStudyDTO>().ReverseMap();
         // Comptency  
@@ -25,9 +32,9 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.ChangeRecordId, opt => opt.MapFrom(src => src.ChangeRecord != null ? src.ChangeRecord.Id : default))
             .ForMember(dest => dest.ChangeRecordNumber, opt => opt.MapFrom(src => src.ChangeRecord != null ? src.ChangeRecord.ChangeRecordNumber : (int?)null));
         CreateMap<CompetencyElementDTO, MinisterialCompetencyElement>().ReverseMap();
-        CreateMap<ChangeableDTO, RealisationContext>().ReverseMap();
-        CreateMap<ChangeableDTO, PerformanceCriteria>().ReverseMap();
-        CreateMap<ChangeableDTO, Changeable>().ReverseMap();
+        CreateMap<ChangeableDTO<string>, RealisationContext>().ReverseMap();
+        CreateMap<ChangeableDTO<string>, PerformanceCriteria>().ReverseMap();
+        CreateMap<ChangeableDTO<string>, Changeable>().ReverseMap();
         CreateMap<ChangeRecordDTO, ChangeRecord>().ReverseMap();
         CreateMap<ChangeDetailDTO, ChangeDetail>()
             .ReverseMap()
@@ -46,7 +53,12 @@ public class MappingProfile : Profile
         .ForMember(dest => dest.ChangeRecordNumber, opt => opt.MapFrom(src => src.WrittenOnChangeRecord != null ? src.WrittenOnChangeRecord.ChangeRecordNumber : (int?)default));
         // Course Framework
 
-        CreateMap<CourseFramework, UntrackedCourseFrameworkDTO>()
+        CreateMap<Weighting, WeightingDTO>()
+            .PreserveReferences()
+            .ReverseMap();
+
+
+        CreateMap<CourseFramework, UnTrackedCourseFrameworkDTO>()
             .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code.Value))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name.Value))
             .ForMember(dest => dest.TheoryHours, opt => opt.MapFrom(src => int.Parse(src.Weighting.TheoryHours.Value)))
@@ -54,10 +66,23 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.PersonnalWorkHours, opt => opt.MapFrom(src => int.Parse(src.Weighting.PersonnalWorkHours.Value)))
             .ForMember(dest => dest.Semester, opt => opt.MapFrom(src => int.Parse(src.Semester.Value)));
 
+        CreateMap<UnTrackedCourseFrameworkDTO, CourseFramework>()
+            .ForMember(dest => dest.Code, opt => opt.MapFrom(src => new Changeable(src.Code)))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => new Changeable(src.Name)))
+            .ForMember(dest => dest.Weighting, opt => opt.MapFrom(src => new Weighting(src.TheoryHours, src.LaboratoryHours, src.PersonnalWorkHours)))
+            .ForMember(dest => dest.Semester, opt => opt.MapFrom(src => new Changeable(src.Semester)));
+
         CreateMap<CreateCourseFrameworkDTO, CourseFramework>()
             .ForMember(dest => dest.Code, opt => opt.MapFrom(src => new Changeable(src.Code)))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => new Changeable(src.Name)))
             .ForMember(dest => dest.Weighting, opt => opt.MapFrom(src => new Weighting(src.TheoryHours, src.LaboratoryHours, src.PersonnalWorkHours)))
             .ForMember(dest => dest.Semester, opt => opt.MapFrom(src => new Changeable(src.Semester)));
+
+        CreateMap<CourseFramework, TrackedCourseFrameworkDTO>()
+            .ForMember(dest => dest.ChangeRecordNumber, opt => opt.MapFrom(src => src.ChangeRecord != null ? src.ChangeRecord.ChangeRecordNumber : (int?)default))
+            .ForMember(dest => dest.IsDraft, opt => opt.MapFrom(src => src.ChangeRecord != null ? src.ChangeRecord.IsDraft : default));
+
+        CreateMap<TrackedCourseFrameworkDTO, CourseFramework>()
+            .PreserveReferences();
     }
 }

@@ -149,12 +149,12 @@ public class ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
     public async Task<ActionResult<CompetencyDTO>> AddCourseFramework(string programOfStudyCode, [FromBody] CreateCourseFrameworkDTO createCourseFrameworkDTO)
     {
         User user = userControllerService.GetUserFromHttpContext();
-        UntrackedCourseFrameworkDTO courseFramework = await addCourseFrameworkUseCase.Execute(programOfStudyCode, createCourseFrameworkDTO, user);
+        TrackedCourseFrameworkDTO courseFramework = await addCourseFrameworkUseCase.Execute(programOfStudyCode, createCourseFrameworkDTO, user);
 
         return CreatedAtAction(
             nameof(CourseFrameworkController.GetCourseFrameworkByCode),
             "CourseFramework",
-            new { courseFrameworkCode = courseFramework.Code },
+            new { id = courseFramework.Id },
             courseFramework);
     }
     #endregion

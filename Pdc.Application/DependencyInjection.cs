@@ -57,7 +57,8 @@ public static class DependencyInjection
         services.AddScoped<IUpdateChangeableUseCase, UpdateChangeable>();
         // Course Framework
         services.AddScoped<IGetCourseFrameworksByProgramOfStudyUseCase, GetCourseFrameworksByProgramOfStudy>();
-        services.AddScoped<IGetCourseFrameworkByCodeUseCase, GetCourseFrameworkByCode>();
+        services.AddScoped<IGetCourseFrameworkByIdUseCase, GetCourseFrameworkById>();
+        services.AddScoped<IUpdateDraftV1CourseFramekworkUseCase, UpdateDraftV1CourseFramework>();
         services.AddScoped<IDeleteCourseFrameworkUseCase, DeleteCourseFramework>();
         services.AddScoped<IAddCourseFrameworkUseCase, AddCourseFramework>();
 

@@ -4,6 +4,7 @@ using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.CourseFramework;
 using Pdc.Domain.Interfaces.UseCases.CourseFramework;
 using Pdc.Domain.Models.Security;
+using Pdc.WebAPI.Services;
 
 namespace Pdc.WebAPI.Controllers;
 
@@ -11,17 +12,18 @@ namespace Pdc.WebAPI.Controllers;
 [Authorize]
 [Route("api/[controller]")]
 public class CourseFrameworkController(
-                                IGetCourseFrameworkByCodeUseCase getCourseFrameworkByCodeUseCase,
-                                IDeleteCourseFrameworkUseCase deleteCourseFrameworkUseCase
-    //UserControllerService userControllerService
+        IGetCourseFrameworkByIdUseCase getCourseFrameworkByCodeUseCase,
+        IDeleteCourseFrameworkUseCase deleteCourseFrameworkUseCase,
+        IUpdateDraftV1CourseFramekworkUseCase updateDraftV1CourseFramekworkUseCase,
+        UserControllerService userControllerService
     ) : ControllerBase
 {
 
     [Authorize(Roles = Roles.CourseFramework)]
-    [HttpGet("{courseFrameworkCode}")]
-    public async Task<ActionResult<UntrackedCourseFrameworkDTO>> GetCourseFrameworkByCode(string courseFrameworkCode)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<TrackedCourseFrameworkDTO>> GetCourseFrameworkByCode(Guid id)
     {
-        UntrackedCourseFrameworkDTO courseFramework = await getCourseFrameworkByCodeUseCase.Execute(courseFrameworkCode);
+        TrackedCourseFrameworkDTO courseFramework = await getCourseFrameworkByCodeUseCase.Execute(id);
         return Ok(courseFramework);
     }
 
@@ -37,17 +39,16 @@ public class CourseFrameworkController(
     }
 
     [Authorize(Roles = Roles.CourseFramework)]
-    [HttpPut("{programOfStudyCode}/courseFramework/{courseFrameworkCode}")]
-    public async Task<ActionResult<CompetencyDTO>> UpdateCourseFramework(string programOfStudyCode, string courseFrameworkCode, [FromBody] CompetencyDTO updateCompetencyDTO)
+    [HttpPut("{courseFrameworkId}")]
+    public async Task<ActionResult<CompetencyDTO>> UpdateCourseFramework(Guid courseFrameworkId, [FromBody] TrackedCourseFrameworkDTO updateCourseFrameworkDTO)
     {
-        throw new NotImplementedException();
-
-        //User user = userControllerService.GetUserFromHttpContext();
-        //if (updateCompetencyDTO.ChangeRecordNumber == 1 && updateCompetencyDTO.IsDraft)
-        //{
-        //    CompetencyDTO competency = await updateDraftV1CompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO, user);
-        //    return Ok(competency);
-        //}
+        User user = userControllerService.GetUserFromHttpContext();
+        if (updateCourseFrameworkDTO.ChangeRecordNumber == 1 && updateCourseFrameworkDTO.IsDraft)
+        {
+            TrackedCourseFrameworkDTO courseFramework = await updateDraftV1CourseFramekworkUseCase.Execute(courseFrameworkId, updateCourseFrameworkDTO, user);
+            return Ok(courseFramework);
+        }
+        return Problem("Not done yet");
         //else
         //{
         //    CompetencyDTO competency = await updatePublishedCompetencyUseCase.Execute(programOfStudyCode, competencyCode, updateCompetencyDTO, user);

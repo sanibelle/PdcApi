@@ -1,39 +1,11 @@
 ﻿using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.Security;
-using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Domain.Models.MinisterialSpecification;
 
 public class MinisterialCompetency : Competency
 {
     public List<MinisterialCompetencyElement> CompetencyElements { get; set; } = [];
-
-    public bool IsDraftAndV1OrNull()
-    {
-        if (ChangeRecord == null)
-        {
-            return true;
-        }
-        return ChangeRecord.IsDraft && ChangeRecord.ChangeRecordNumber == 1;
-    }
-
-    public bool IsPublished()
-    {
-        if (ChangeRecord == null)
-        {
-            return false;
-        }
-        return !ChangeRecord.IsDraft;
-    }
-
-    public bool IsLatestVersion()
-    {
-        if (ChangeRecord == null)
-        {
-            return false;
-        }
-        return ChangeRecord.NextChangeRecord == null;
-    }
 
     public override void SetCreatedByOnUntracked(User user)
     {

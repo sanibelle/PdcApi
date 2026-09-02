@@ -11,7 +11,7 @@ public class CompetencyDTO
     public bool IsMandatory { get; set; }
     public bool IsOptional { get; set; }
     public required string StatementOfCompetency { get; set; }
-    public ICollection<ChangeableDTO> RealisationContexts { get; set; } = new List<ChangeableDTO>();
+    public ICollection<ChangeableDTO<string>> RealisationContexts { get; set; } = new List<ChangeableDTO<string>>();
     public ICollection<CompetencyElementDTO> CompetencyElements { get; set; } = new List<CompetencyElementDTO>();
     public int? ChangeRecordNumber { get; set; }
     public Guid? ChangeRecordId { get; set; }
