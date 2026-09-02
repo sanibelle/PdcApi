@@ -171,11 +171,11 @@ public class MappingProfile : Profile
             .PreserveReferences();
 
         CreateMap<Changeable, CourseFrameworkChangeableEntity>()
+            .ForMember(x => x.CourseFramework, opt => opt.Ignore())
             .PreserveReferences();
 
         CreateMap<CourseFramework, CourseFrameworkEntity>()
             .PreserveReferences()
-            .ForMember(x => x.Code, opt => opt.Ignore())
             .ForMember(x => x.Name, opt => opt.Ignore())
             .ForMember(x => x.Semester, opt => opt.Ignore())
             .ForMember(x => x.CourseFrameworkPerformanceCriterias, opt => opt.Ignore())
