@@ -57,9 +57,14 @@
   );
 
   const onChange = (event: Event) => {
-    handleChange(event, !!errorMessage.value);
     const target = event.target as HTMLInputElement;
-    model.value = target.value;
+    // Trims the value if it is a string
+    if (props.type === 'text' || props.type === 'textarea' || props.type === 'email') {
+      const nextValue = target.value.trim();
+      target.value = nextValue; // changes the value in the input in the DOM
+    }
+    handleChange(event, !!errorMessage.value); // Vee-validate will validate that value.
+    model.value = target.value; // updates the vue model.
   };
 
   const onBlur = (event: Event) => {
