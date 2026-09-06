@@ -16,17 +16,14 @@ public class CreateCourseFrameworkValidator : AbstractValidator<CreateCourseFram
             .MaximumLength(255);
 
         RuleFor(x => x.TheoryHours)
-            .NotEmpty()
             .LessThan(25)
             .GreaterThanOrEqualTo(0);
 
         RuleFor(x => x.LaboratoryHours)
-            .NotEmpty()
             .LessThan(25)
             .GreaterThanOrEqualTo(0);
 
         RuleFor(x => x.PersonnalWorkHours)
-            .NotEmpty()
             .LessThan(25)
             .GreaterThanOrEqualTo(0);
 

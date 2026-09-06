@@ -27,6 +27,7 @@ public class UpdateDraftV1CourseFramework(ICourseFrameworkRepository courseFrame
             throw new InvalidChangeRecordException("Cannot update a non-draft course framework with change record greater than 1.");
         }
         mapper.Map(updateCourseFrameworkDto, courseFrameworkToUpdate);
+        courseFrameworkToUpdate.Id = courseFrameworkId;
         // On prend la version actuelle et on l'assigne à tous les objets qui ont une version.
         courseFrameworkToUpdate.SetChangeRecordOnUntracked(courseFrameworkToUpdate.ChangeRecord!);
         courseFrameworkToUpdate.SetCreatedByOnUntracked(currentUser);

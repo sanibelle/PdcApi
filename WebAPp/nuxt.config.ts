@@ -1,16 +1,18 @@
 import { resolve } from 'node:path';
 
-const isHTTPS = process.env.NUXT_PUBLIC_API_USE_HTTPS === 'true'
+const isHTTPS = process.env.NUXT_PUBLIC_API_USE_HTTPS === 'true';
 
 export default defineNuxtConfig({
   experimental: {
-    scanPageMeta: true
+    scanPageMeta: true,
   },
   devServer: {
-    https: isHTTPS ? {
-      key: 'certificates/localhost-key.pem',
-      cert: 'certificates/localhost.pem',
-    } : false,
+    https: isHTTPS
+      ? {
+          key: 'certificates/localhost-key.pem',
+          cert: 'certificates/localhost.pem',
+        }
+      : false,
   },
   build: {
     transpile: ['@vuepic/vue-datepicker'],
@@ -34,7 +36,7 @@ export default defineNuxtConfig({
   plugins: ['~/plugins/opentelemetry'],
   i18n: {
     bundle: {
-      runtimeOnly: false // Ensure macros are processed
+      runtimeOnly: false, // Ensure macros are processed
     },
     strategy: 'prefix_except_default',
     customRoutes: 'page',
@@ -51,20 +53,13 @@ export default defineNuxtConfig({
       register: { fr: '/inscription' },
     },
   },
-  modules: [
-    '@nuxtjs/i18n',
-    '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt',
-    'nuxt-security',
-    '@vee-validate/nuxt',
-    '@nuxt/eslint',
-  ],
+  modules: ['@nuxtjs/i18n', '@pinia/nuxt', 'pinia-plugin-persistedstate/nuxt', 'nuxt-security', '@vee-validate/nuxt', '@nuxt/eslint'],
   runtimeConfig: {
     public: {
       apiBaseUrl: '',
     },
   },
   imports: {
-    dirs: ['../shared/types/**', '../app/composables/**' ],
+    dirs: ['../shared/types/**', '../app/composables/**'],
   },
 });

@@ -66,6 +66,7 @@
         :label="t('competencyCode')"
         placeholder="Ex : 00SU"
         :min="3"
+        :trimmed="true"
         :max="50"
         :required="true"
         :error-message="codeExistingErrorMessage"

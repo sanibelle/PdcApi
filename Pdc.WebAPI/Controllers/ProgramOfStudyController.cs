@@ -136,17 +136,17 @@ public class ProgramOfStudyController(IAddProgramOfStudyUseCase createUseCase,
     #region CourseFramework
     [Authorize(Roles = Roles.CourseFramework)]
     [HttpGet("{programOfStudyCode}/courseFramework")]
-    public async Task<ActionResult<CompetencyDTO>> AddCourseFramework(string programOfStudyCode)
+    public async Task<ActionResult<IList<UnTrackedCourseFrameworkDTO>>> AddCourseFramework(string programOfStudyCode)
     {
         User user = userControllerService.GetUserFromHttpContext();
-        var courseFrameworks = await getCourseFrameworksByProgramOfStudyUseCase.Execute(programOfStudyCode);
+        IList<UnTrackedCourseFrameworkDTO> courseFrameworks = await getCourseFrameworksByProgramOfStudyUseCase.Execute(programOfStudyCode);
         return Ok(courseFrameworks);
     }
 
 
     [Authorize(Roles = Roles.CourseFramework)]
     [HttpPost("{programOfStudyCode}/courseFramework")]
-    public async Task<ActionResult<CompetencyDTO>> AddCourseFramework(string programOfStudyCode, [FromBody] CreateCourseFrameworkDTO createCourseFrameworkDTO)
+    public async Task<ActionResult<TrackedCourseFrameworkDTO>> AddCourseFramework(string programOfStudyCode, [FromBody] CreateCourseFrameworkDTO createCourseFrameworkDTO)
     {
         User user = userControllerService.GetUserFromHttpContext();
         TrackedCourseFrameworkDTO courseFramework = await addCourseFrameworkUseCase.Execute(programOfStudyCode, createCourseFrameworkDTO, user);

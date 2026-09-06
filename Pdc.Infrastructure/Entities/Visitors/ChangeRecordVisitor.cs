@@ -11,7 +11,7 @@ public class ChangeRecordVisitor : IChangeableVisitor<ChangeRecordEntity?>
     public ChangeRecordEntity? Visit(RealisationContextEntity rc) => rc.Competency?.ChangeRecord;
 
     public ChangeRecordEntity? Visit(PerformanceCriteriaEntity pc) => Visit(pc.CompetencyElement);
-    public ChangeRecordEntity? Visit(CourseFrameworkChangeableEntity cf) => cf.CourseFramework.ChangeRecord;
+    public ChangeRecordEntity? Visit(CourseFrameworkChangeableEntity cf) => cf.CourseFramework?.ChangeRecord;
 
     public ChangeRecordEntity? Visit(ContentElementEntity ce)
     {

@@ -52,8 +52,7 @@ public class Units
 
     private int ConvertWholeUnitsValue(string value)
     {
-        // TODO s'assurer que le format des heures a une , ou un . pour séparer les décimales
-        string numerator = value.Split(",")[0];
+        string numerator = value.Replace('.', ',').Split(",")[0];
         if (int.TryParse(numerator, out int result))
         {
             return result;

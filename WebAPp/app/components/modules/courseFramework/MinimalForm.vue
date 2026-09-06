@@ -58,6 +58,7 @@
         :min="3"
         :max="50"
         :required="true"
+        :trimmed="true"
         :error-message="codeExistingErrorMessage"
       />
       <FormATextInput
