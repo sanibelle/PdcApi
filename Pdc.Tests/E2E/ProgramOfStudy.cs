@@ -101,8 +101,8 @@ public class ProgramOfStudyApiTests : ApiTestBase
             .WithPublishedOn(createdProgram.PublishedOn)
             .WithOptionalUnits(optionalUnits)
             .WithSpecificUnits(createdProgram.SpecificUnits)
-            .WithGeneralUnits(createdProgram.GeneralUnits)
-            .WithComplementaryUnits(createdProgram.ComplementaryUnits)
+            .WithGeneralUnits(createdProgram.GeneralUnits!)
+            .WithComplementaryUnits(createdProgram.ComplementaryUnits!)
             .Build();
         // Act - Update the program
         updatedProgramData.Code = createdProgram!.Code;

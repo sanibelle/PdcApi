@@ -8,6 +8,7 @@ using Pdc.Application.UseCases;
 using Pdc.Application.UseCases.Competency;
 using Pdc.Application.UseCases.Versioning;
 using Pdc.Domain.Interfaces.UseCases.Competency;
+using Pdc.Domain.Interfaces.UseCases.CourseFramework;
 using Pdc.Domain.Interfaces.UseCases.ProgramOfStudy;
 using Pdc.Domain.Interfaces.UseCases.Role;
 using Pdc.Domain.Interfaces.UseCases.User;
@@ -56,6 +57,10 @@ public static class DependencyInjection
         services.AddScoped<IUpdateChangeableUseCase, UpdateChangeable>();
         // Course Framework
         services.AddScoped<IGetCourseFrameworksByProgramOfStudyUseCase, GetCourseFrameworksByProgramOfStudy>();
+        services.AddScoped<IGetCourseFrameworkByIdUseCase, GetCourseFrameworkById>();
+        services.AddScoped<IUpdateDraftV1CourseFramekworkUseCase, UpdateDraftV1CourseFramework>();
+        services.AddScoped<IDeleteCourseFrameworkUseCase, DeleteCourseFramework>();
+        services.AddScoped<IAddCourseFrameworkUseCase, AddCourseFramework>();
 
         services.AddAutoMapper(cfg =>
         {

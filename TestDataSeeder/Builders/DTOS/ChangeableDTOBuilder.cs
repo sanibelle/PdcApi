@@ -2,38 +2,38 @@ using Pdc.Domain.DTOS.Common;
 
 namespace TestDataSeeder.Builders.DTOS;
 
-public class ChangeableDTOBuilder
+public class ChangeableDTOBuilder<T>
 {
     private Guid? _id = null;
-    private string _value = "Default Value";
+    private T _value;
     private int? _position = null;
     protected List<ComplementaryInformationDTO>? _complementaryInformations = null;
 
-    public ChangeableDTOBuilder WithId(Guid? id)
+    public ChangeableDTOBuilder<T> WithId(Guid? id)
     {
         _id = id;
         return this;
     }
 
-    public ChangeableDTOBuilder WithValue(string value)
+    public ChangeableDTOBuilder<T> WithValue(T value)
     {
         _value = value;
         return this;
     }
 
-    public ChangeableDTOBuilder WithPosition(int position)
+    public ChangeableDTOBuilder<T> WithPosition(int position)
     {
         _position = position;
         return this;
     }
 
-    public ChangeableDTOBuilder WithComplementaryInformations(List<ComplementaryInformationDTO> complementaryInformations)
+    public ChangeableDTOBuilder<T> WithComplementaryInformations(List<ComplementaryInformationDTO> complementaryInformations)
     {
         _complementaryInformations = complementaryInformations;
         return this;
     }
 
-    public ChangeableDTOBuilder AddComplementaryInformation(ComplementaryInformationDTO complementaryInformation)
+    public ChangeableDTOBuilder<T> AddComplementaryInformation(ComplementaryInformationDTO complementaryInformation)
     {
         if (_complementaryInformations == null)
             _complementaryInformations = new List<ComplementaryInformationDTO>();
@@ -42,9 +42,9 @@ public class ChangeableDTOBuilder
     }
 
 
-    public ChangeableDTO Build()
+    public ChangeableDTO<T> Build()
     {
-        return new ChangeableDTO
+        return new ChangeableDTO<T>
         {
             Id = _id,
             Value = _value,

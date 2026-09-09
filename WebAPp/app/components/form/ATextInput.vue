@@ -32,6 +32,10 @@
       type: Number,
       default: null,
     },
+    trimmed: {
+      type: Boolean,
+      default: false,
+    },
     pattern: {
       type: String,
       default: null,
@@ -63,6 +67,10 @@
 
     if (props.pattern) {
       rules.push(`regex:${props.pattern}`);
+    }
+
+    if (props.trimmed) {
+      rules.push(`trimmed`);
     }
 
     return rules.join('|');

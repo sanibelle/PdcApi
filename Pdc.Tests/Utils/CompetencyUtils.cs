@@ -3,7 +3,7 @@ using Pdc.Application.DTOS;
 using Pdc.Domain.DTOS.Common;
 using TestDataSeeder.Builders.DTOS;
 
-namespace Pdc.Tests.E2E;
+namespace Pdc.Tests.Utils;
 
 internal static class CompetencyUtils
 {
@@ -19,19 +19,19 @@ internal static class CompetencyUtils
         var competencyElementComplementaryInformation = new ComplementaryInformationDTOBuilder()
             .WithText("competencyElementComplementaryInformation")
             .Build();
-        var realisationContext = new ChangeableDTOBuilder()
+        var realisationContext = new ChangeableDTOBuilder<string>()
             .WithValue("realisationContext1")
             .AddComplementaryInformation(realisationContextComplementaryInformation)
             .Build();
-        var realisationContext2 = new ChangeableDTOBuilder()
+        var realisationContext2 = new ChangeableDTOBuilder<string>()
             .WithValue("realisationContext2")
             .Build();
-        var performanceCriteria = new ChangeableDTOBuilder()
+        var performanceCriteria = new ChangeableDTOBuilder<string>()
             .WithValue("performanceCriteria1.1")
             .AddComplementaryInformation(performanceCriteriaComplementaryInformation)
             .WithPosition(1)
             .Build();
-        var performanceCriteria2 = new ChangeableDTOBuilder()
+        var performanceCriteria2 = new ChangeableDTOBuilder<string>()
             .WithValue("performanceCriteria2.1")
             .WithPosition(1)
             .Build();
@@ -49,7 +49,7 @@ internal static class CompetencyUtils
         var competencyDTO = new CompetencyDTOBuilder()
             .AddCompetencyElements(competencyElement)
             .AddCompetencyElements(competencyElement2)
-            .WithRealisationContexts(new List<ChangeableDTO> { realisationContext, realisationContext2 })
+            .WithRealisationContexts(new List<ChangeableDTO<string>> { realisationContext, realisationContext2 })
             .Build();
 
         return competencyDTO;

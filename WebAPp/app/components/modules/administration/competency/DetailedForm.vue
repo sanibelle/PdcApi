@@ -144,6 +144,7 @@
             placeholder="Ex : 00SU"
             :min="3"
             :max="50"
+            :trimmed="true"
             :required="true"
             :error-message="codeExistingErrorMessage"
           />

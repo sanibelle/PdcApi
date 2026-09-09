@@ -25,6 +25,9 @@ export default defineNuxtPlugin(() => {
   defineRule('min_value', min_value);
   defineRule('numeric', numeric);
   defineRule('integer', integer);
+  defineRule('trimmed', (value: unknown) => {
+    return typeof value !== 'string' || value === value.trim();
+  });
 
   // Exemple de custom rule
   defineRule('date', (value: any) => {
@@ -63,6 +66,7 @@ export default defineNuxtPlugin(() => {
               : 'Cette valeur est trop basse',
           numeric: 'Ce champ doit être un nombre',
           integer: 'Ce champ doit être un nombre entier',
+          trimmed: 'Ce champ ne doit pas commencer ou se terminer par un espace',
           date: 'La date saisie est invalide',
         },
       },

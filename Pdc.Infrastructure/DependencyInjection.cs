@@ -5,7 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Domain.Models.Common;
 using Pdc.Domain.Models.MinisterialSpecification;
+using Pdc.Domain.Models.Versioning;
 using Pdc.Infrastructure.Data;
+using Pdc.Infrastructure.Entities.CourseFramework;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Infrastructure.Identity;
 using Pdc.Infrastructure.Interfaces;
@@ -53,12 +55,15 @@ public static class DependencyInjection
         services.AddScoped<ICourseFrameworkRepository, CourseFrameworkRepository>();
 
         //ChangeTracker
+        //                                     Domain,                 ParentEntity,              ChildEntity
         services.AddKeyedScoped<IChangeApplier<RealisationContext, CompetencyEntity, RealisationContextEntity>, UntrackedRealisationContextChangeApplier>("untracked");
         services.AddKeyedScoped<IChangeApplier<MinisterialCompetencyElement, CompetencyEntity, CompetencyElementEntity>, UntrackedCompetencyElementChangeApplier>("untracked");
         services.AddKeyedScoped<IChangeApplier<PerformanceCriteria, CompetencyElementEntity, PerformanceCriteriaEntity>, UntrackedPerformanceCriteriaChangeApplier>("untracked");
+        services.AddKeyedScoped<IChangeApplier<Changeable, CourseFrameworkEntity, CourseFrameworkChangeableEntity>, UntrackedCourseFrameworkChangeableChangeApplier>("untracked");
         services.AddKeyedScoped<IChangeApplier<RealisationContext, CompetencyEntity, RealisationContextEntity>, TrackedRealisationContextChangeApplier>("tracked");
         services.AddKeyedScoped<IChangeApplier<MinisterialCompetencyElement, CompetencyEntity, CompetencyElementEntity>, TrackedCompetencyElementChangeApplier>("tracked");
         services.AddKeyedScoped<IChangeApplier<PerformanceCriteria, CompetencyElementEntity, PerformanceCriteriaEntity>, TrackedPerformanceCriteriaChangeApplier>("tracked");
+        services.AddKeyedScoped<IChangeApplier<Changeable, CourseFrameworkEntity, CourseFrameworkChangeableEntity>, TrackedCourseFrameworkChangeableChangeApplier>("tracked");
 
         // Mapper
         services.AddAutoMapper((serviceProvider, automapper) =>

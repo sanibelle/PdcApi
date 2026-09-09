@@ -333,7 +333,7 @@ test.describe("ministerial competency", () => {
   }
 
   const addAndTestDetailsToCompetency = async (adminPage, code) => {
-    await adminPage.goto("/administration/programme/Seededprogram/competence/" + code);
+    await adminPage.goto("/administration/programme/Seededprogram/competence/" + code.trim());
     await adminPage.waitForLoadState("networkidle");
     await adminPage.getByTestId("edit-button").first().click();
 

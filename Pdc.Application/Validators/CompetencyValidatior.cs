@@ -6,9 +6,9 @@ using Pdc.Domain.DTOS.Common;
 
 namespace Pdc.Application.Validators;
 
-public class CompetencyValidation : AbstractValidator<CompetencyDTO>
+public class CompetencyValidatior : AbstractValidator<CompetencyDTO>
 {
-    public CompetencyValidation()
+    public CompetencyValidatior()
     {
         RuleFor(x => x.Code)
             .NotEmpty()
@@ -19,12 +19,12 @@ public class CompetencyValidation : AbstractValidator<CompetencyDTO>
             .MaximumLength(500);
 
         RuleFor(x => x.RealisationContexts)
-            .ForEach(y => y.SetValidator(new ChangeableValidation()))
+            .ForEach(y => y.SetValidator(new ChangeableValidatior()))
             .When(x => x.RealisationContexts is not null);
 
         RuleFor(x => x.CompetencyElements)
             .Custom((x, context) => ThrowIfPositionsInvalid(x, context))
-            .ForEach(y => y.SetValidator(new CompetencyElementValidation()));
+            .ForEach(y => y.SetValidator(new CompetencyElementValidatior()));
     }
 
 
@@ -34,19 +34,19 @@ public class CompetencyValidation : AbstractValidator<CompetencyDTO>
         {
             return;
         }
-        ThrowIfPositionsInvalid(competencyElements.Cast<ChangeableDTO>().ToList(), context);
+        ThrowIfPositionsInvalid(competencyElements.Cast<ChangeableDTO<string>>().ToList(), context);
         foreach (var competencyElement in competencyElements)
         {
             ThrowIfPositionsInvalid(competencyElement.PerformanceCriterias, context);
         }
     }
 
-    private static void ThrowIfPositionsInvalid(ICollection<ChangeableDTO> dtos, ValidationContext<CompetencyDTO> context)
+    private static void ThrowIfPositionsInvalid(ICollection<ChangeableDTO<string>> dtos, ValidationContext<CompetencyDTO> context)
     {
         // starts at 1
         for (int i = 1; i <= dtos.Count; i++)
         {
-            ChangeableDTO? dto = dtos.FirstOrDefault(x => x.Position == i);
+            ChangeableDTO<string>? dto = dtos.FirstOrDefault(x => x.Position == i);
             if (dto == null)
             {
                 context.AddFailure(new ValidationFailure(dtos.First().GetType().Name, $"Could not find expected position: {i}"));

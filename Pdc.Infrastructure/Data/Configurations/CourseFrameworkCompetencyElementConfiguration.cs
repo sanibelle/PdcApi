@@ -4,6 +4,7 @@ using Pdc.Domain.Enums;
 using Pdc.Infrastructure.Entities.CourseFramework;
 
 namespace Pdc.Infrastructure.Data.Configurations;
+
 public class CourseFrameworkCompetencyElementConfiguration : IEntityTypeConfiguration<CourseFrameworkCompetencyElementEntity>
 {
     public void Configure(EntityTypeBuilder<CourseFrameworkCompetencyElementEntity> builder)
@@ -11,7 +12,6 @@ public class CourseFrameworkCompetencyElementConfiguration : IEntityTypeConfigur
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
-
 
         builder.HasOne(x => x.CompetencyElement)
             .WithMany()

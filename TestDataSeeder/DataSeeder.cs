@@ -13,6 +13,7 @@ public class DataSeeder : IDataSeeder
 {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public static ProgramOfStudyEntity ProgramOfStudyEntity { get; set; }
+    public static CourseFrameworkEntity CourseFrameworkEntity { get; set; }
     public static CompetencyEntity CompetencyEntity { get; set; }
     public static IdentityUserEntity SimpleUser { get; set; }
     public static IdentityUserEntity UserForRoleTest { get; set; }
@@ -39,7 +40,7 @@ public class DataSeeder : IDataSeeder
         _roleManager = roleManager;
     }
 
-    public async Task SeedAsync()
+    public async Task SeedAsync()  
     {
         await _context.Database.EnsureCreatedAsync();
         ExistingRoles = await new Role(_roleManager).SeedAsync();
@@ -48,6 +49,7 @@ public class DataSeeder : IDataSeeder
         UserForRoleTest = await new SeededUser(_userManager).SeedAsync();
 
         ProgramOfStudyEntity = await new ProgramOfStudy(_context).SeedAsync();
+        CourseFrameworkEntity = await new CourseFramework(ProgramOfStudyEntity, _context).SeedAsync();
         CompetencyEntity =  await new Competency(ProgramOfStudyEntity, _context).SeedAsync();
         await _context.SaveChangesAsync();
     }

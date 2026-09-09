@@ -3,7 +3,7 @@ using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.Common;
 using Pdc.Application.Validators;
 using Pdc.Domain.DTOS.Common;
-using Pdc.Tests.E2E;
+using Pdc.Tests.Utils;
 using System.Net;
 using System.Net.Http.Json;
 using TestDataSeeder;
@@ -38,7 +38,7 @@ public class CompetencyApiTests : ApiTestBase
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
         CompetencyDTO competencyDTO = CompetencyUtils.CreateCompetency();
-        CompetencyValidation validation = new();
+        CompetencyValidatior validation = new();
         competencyDTO.Code = DataSeeder.CompetencyEntity.Code;
         validation.Validate(competencyDTO).IsValid.Should().BeTrue();
         var createResponse = await _Client.PostAsJsonAsync($"/api/programofstudy/{_programCode}/competency", competencyDTO);
@@ -51,7 +51,7 @@ public class CompetencyApiTests : ApiTestBase
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
         ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
-        ChangeableDTO realisationContext, performanceCriteria;
+        ChangeableDTO<string> realisationContext, performanceCriteria;
         CompetencyElementDTO competencyElement;
         CompetencyDTO competencyToCreateDTO = CompetencyUtils.CreateCompetency();
 
@@ -65,14 +65,14 @@ public class CompetencyApiTests : ApiTestBase
         competencyToUpdateDTO.IsOptional = true;
 
         competencyToUpdateDTO.RealisationContexts.First().Value = "Updated realisation context of the existing element";
-        competencyToUpdateDTO.RealisationContexts.Add(realisationContext =new ChangeableDTOBuilder()
+        competencyToUpdateDTO.RealisationContexts.Add(realisationContext =new ChangeableDTOBuilder<string>()
             .WithValue("New realisation Context")
             .Build());
 
         competencyToUpdateDTO.CompetencyElements.Add(competencyElement = new CompetencyElementDTOBuilder()
             .WithValue("New competency element")
             .WithPosition(competencyToUpdateDTO.CompetencyElements.Count() + 1)
-            .AddPerformanceCriteria(performanceCriteria = new ChangeableDTOBuilder()
+            .AddPerformanceCriteria(performanceCriteria = new ChangeableDTOBuilder<string>()
                 .WithValue("New performance criteria")
                 .WithPosition(1)
                 .AddComplementaryInformation(performanceCriteriaComplementaryInformation = new ComplementaryInformationDTOBuilder()
@@ -95,7 +95,7 @@ public class CompetencyApiTests : ApiTestBase
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
         ComplementaryInformationDTO performanceCriteriaComplementaryInformation, competencyElementComplementaryInformation;
-        ChangeableDTO performanceCriteria;
+        ChangeableDTO<string> performanceCriteria;
         CompetencyElementDTO competencyElement;
         CompetencyDTO competencyToCreateDTO = CompetencyUtils.CreateCompetency();
 
@@ -134,7 +134,7 @@ public class CompetencyApiTests : ApiTestBase
         competencyToUpdateDTO.CompetencyElements.Add(competencyElement = new CompetencyElementDTOBuilder()
             .WithValue("New competency element")
             .WithPosition(1)
-            .AddPerformanceCriteria(performanceCriteria = new ChangeableDTOBuilder()
+            .AddPerformanceCriteria(performanceCriteria = new ChangeableDTOBuilder<string>()
                 .WithValue("New performance criteria")
                 .WithPosition(1)
                 .AddComplementaryInformation(performanceCriteriaComplementaryInformation = new ComplementaryInformationDTOBuilder()
@@ -177,7 +177,7 @@ public class CompetencyApiTests : ApiTestBase
     public async Task GivenExistingV1DraftCompetency_WhenUpdatingTheCode_ThenShouldFailTheUpdate()
     {
         string _programCode = DataSeeder.ProgramOfStudyEntity.Code;
-        ChangeableDTO realisationContext;
+        ChangeableDTO<string> realisationContext;
         CompetencyDTO competencyToCreateDTO = CompetencyUtils.CreateCompetency();
 
         // Act - Create the competency
@@ -187,7 +187,7 @@ public class CompetencyApiTests : ApiTestBase
         var oldCode = competencyToUpdateDTO.Code;
         // Update the competency
         competencyToUpdateDTO.Code = "BADCOD";
-        competencyToUpdateDTO.RealisationContexts.Add(realisationContext =new ChangeableDTOBuilder()
+        competencyToUpdateDTO.RealisationContexts.Add(realisationContext =new ChangeableDTOBuilder<string>()
             .WithValue("New realisation Context")
             .Build());
 

@@ -8,9 +8,9 @@ using Pdc.Domain.Models.Versioning;
 
 namespace Pdc.Application.UseCases.Versioning;
 
-public class UpdateChangeable(IChangeableRepository changeableRepository, IValidator<ChangeableDTO> validator, IMapper mapper) : IUpdateChangeableUseCase
+public class UpdateChangeable(IChangeableRepository changeableRepository, IValidator<ChangeableDTO<string>> validator, IMapper mapper) : IUpdateChangeableUseCase
 {
-    public async Task<ChangeableDTO> Execute(ChangeableDTO changeableDTO, Guid changeableId)
+    public async Task<ChangeableDTO<string>> Execute(ChangeableDTO<string> changeableDTO, Guid changeableId)
     {
         ValidationResult validationResult = await validator.ValidateAsync(changeableDTO);
         if (!validationResult.IsValid)
@@ -21,6 +21,6 @@ public class UpdateChangeable(IChangeableRepository changeableRepository, IValid
         mapper.Map(changeableDTO, changeableToUpdate);
         changeableToUpdate.Id = changeableId;
         Changeable updatedChangeable = await changeableRepository.Update(changeableToUpdate);
-        return mapper.Map<ChangeableDTO>(updatedChangeable);
+        return mapper.Map<ChangeableDTO<string>>(updatedChangeable);
     }
 }

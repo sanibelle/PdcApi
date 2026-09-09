@@ -28,9 +28,9 @@ public class ChangeableController(
     }
 
     [HttpPut("{changeableId}")]
-    public async Task<ActionResult<ChangeableDTO>> Update(Guid changeableId, [FromBody] ChangeableDTO changeableDTO)
+    public async Task<ActionResult<ChangeableDTO<string>>> Update(Guid changeableId, [FromBody] ChangeableDTO<string> changeableDTO)
     {
-        ChangeableDTO updatedChangeable = await updateChangeableUseCase.Execute(changeableDTO, changeableId);
+        ChangeableDTO<string> updatedChangeable = await updateChangeableUseCase.Execute(changeableDTO, changeableId);
         return Ok(updatedChangeable);
     }
 }
