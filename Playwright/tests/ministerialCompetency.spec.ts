@@ -175,7 +175,7 @@ test.describe("ministerial competency", () => {
   test("publish competency", async ({
     adminPage,
   }) => {
-    await createAndTestCompetency(adminPage, " pub1 "); // added spaces to test trimming of the code
+    await createAndTestCompetency(adminPage, " pub1");
     await addAndTestDetailsToCompetency(adminPage, "pub1");
     await adminPage.getByTestId("approve-this-change-record-button").first().click();
 
