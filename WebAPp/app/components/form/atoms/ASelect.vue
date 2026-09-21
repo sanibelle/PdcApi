@@ -25,7 +25,7 @@
       default: '',
     },
     options: {
-      type: Array as () => SelectOption[],
+      type: Array as () => (string | number | object)[],
       required: true,
     },
     required: {
@@ -42,7 +42,7 @@
     },
     trackBy: {
       type: String,
-      default: 'value',
+      default: '',
     },
   });
 
@@ -100,7 +100,7 @@
       :selected-label="t('selectedLabel')"
       :deselect-label="t('deselectLabel')"
       :class="{ error: errorMessage }"
-      :hide-selected="true"
+      :hide-selected="required"
       @select="onChange"
       @remove="onChange"
       @close="handleBlur"
@@ -127,7 +127,7 @@
   "fr": {
     "selectLabel": "✚",
     "selectedLabel": "Sélectionné",
-    "deselectLabel": "Désélectionner",
+    "deselectLabel": "✖",
     "noResult": "Aucun résultat",
     "noOptions": "Aucune option"
   }

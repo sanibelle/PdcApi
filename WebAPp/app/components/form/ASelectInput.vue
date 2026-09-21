@@ -38,7 +38,7 @@
     },
     trackBy: {
       type: String,
-      default: 'value',
+      default: '',
     },
   });
 

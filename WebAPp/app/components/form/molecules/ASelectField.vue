@@ -34,7 +34,7 @@
       default: '',
     },
     options: {
-      type: Array as PropType<SelectOption[]>,
+      type: Array as PropType<(string | number | object)[]>,
       required: true,
     },
     multiple: {
@@ -47,7 +47,7 @@
     },
     trackBy: {
       type: String,
-      default: 'value',
+      default: '',
     },
   });
 
