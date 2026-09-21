@@ -1,151 +1,135 @@
 <script setup lang="ts">
-import { useField } from 'vee-validate';
-defineOptions({
-  inheritAttrs: false
-});
+  import { useField } from 'vee-validate';
+  defineOptions({
+    inheritAttrs: false,
+  });
 
-const attrs = useAttrs();
-const props = defineProps({
-  name: {
-    type: String,
+  const { t } = useI18n();
+
+  const attrs = useAttrs();
+  const props = defineProps({
+    name: {
+      type: String,
+      required: true,
+    },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    rules: {
+      type: [String, Object],
+      default: '',
+    },
+    options: {
+      type: Array as () => SelectOption[],
+      required: true,
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
+    searchable: {
+      type: Boolean,
+      default: false,
+    },
+    trackBy: {
+      type: String,
+      default: 'value',
+    },
+  });
+
+  const emit = defineEmits(['update:errorMessage']);
+
+  type SelectValue = string | number | undefined | null | object | (string | number | object)[];
+
+  const model = defineModel<SelectValue>({
     required: true,
-  },
-  placeholder: {
-    type: String,
-    default: '',
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  rules: {
-    type: [String, Object],
-    default: '',
-  },
-  options: {
-    type: Array as () => SelectOption[],
-    required: true,
-  }
-});
+  });
 
-const emit = defineEmits(['update:errorMessage']);
-
-const model = defineModel<string | number | undefined | null>({
-  required: true,
-})
-
-const { value, errorMessage, handleBlur, setValue, handleChange } = useField<string | number | undefined | null>(props.name, props.rules,
-  {
+  const { value, errorMessage, handleBlur, setValue, handleChange } = useField<SelectValue>(props.name, props.rules, {
     validateOnMount: false,
     initialValue: model.value,
     validateOnValueUpdate: false,
   });
 
-// Computed bridge: maps between string-based <select> and typed model
-const selectModel = computed({
-  get: () => model.value ?? '',
-  set: (val: string) => {
-    if (val === '') {
-      model.value = null;
-    } else {
-      const num = Number(val);
-      model.value = isNaN(num) ? val : num;
-    }
-  }
-});
+  watch(
+    () => model.value,
+    async (newVal) => {
+      // Devrait prévenir la recursion infinie
+      if (newVal !== value.value) {
+        await setValue(newVal);
+      }
+    },
+  );
 
-// Watch parent → field
-watch(
-  () => model.value,
-  async (newVal) => {
-    // Devrait prévenir la recursion infinie
-    if (newVal !== value.value) {
-      await setValue(newVal);
-    }
-  }
-);
+  const onChange = async (): Promise<void> => {
+    handleChange(model.value, !!errorMessage.value);
+  };
 
-const onChange = async (event: Event): Promise<void> => {
-  handleChange(event, !!errorMessage.value);
-};
-
-watch(
-  errorMessage,
-  (newErrorMessage) => {
+  watch(errorMessage, (newErrorMessage) => {
     emit('update:errorMessage', newErrorMessage);
-  }
-);
+  });
 </script>
 
 <template>
-  <div class="select-wrapper" :class="{ 'is-disabled': disabled }">
-    <select v-bind="attrs" :name="name" v-model="selectModel" :disabled="disabled" class="base-select"
-      :class="{ error: errorMessage }" @change="onChange" @blur="handleBlur">
-      <option v-if="placeholder" value="" disabled>
-        {{ placeholder }}
-      </option>
-      <option v-for="({ value, label }, index) in options" :key="`${value}-option-${index}`" :value="value ?? ''">
-        {{ label }}
-      </option>
-    </select>
-    <div class="select-arrow">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-        <path fill-rule="evenodd"
-          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-          clip-rule="evenodd" />
-      </svg>
-    </div>
+  <div
+    class="select-wrapper"
+    :class="{ 'is-disabled': disabled }"
+  >
+    <VueMultiselect
+      v-bind="attrs"
+      v-model="model"
+      :name="name"
+      :disabled="disabled"
+      :options="options"
+      :multiple="multiple"
+      :label="trackBy"
+      :track-by="trackBy"
+      :placeholder="placeholder"
+      :searchable="searchable"
+      :allow-empty="!required"
+      :select-label="t('selectLabel')"
+      :selected-label="t('selectedLabel')"
+      :deselect-label="t('deselectLabel')"
+      :class="{ error: errorMessage }"
+      :hide-selected="true"
+      @select="onChange"
+      @remove="onChange"
+      @close="handleBlur"
+    >
+      <template #noResult>
+        <span>{{ t('noResult') }}</span>
+      </template>
+      <template #noOptions>
+        <span>{{ t('noOptions') }}</span>
+      </template>
+    </VueMultiselect>
   </div>
 </template>
 
 <style scoped>
-.select-wrapper {
-  position: relative;
-  width: 100%;
-
-  .is-disabled {
-    opacity: 0.7;
+  :deep(.multiselect.error) {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 0 1px rgb(239, 68, 68);
   }
-
-  .base-select {
-    width: 100%;
-    appearance: none;
-    padding: 8px 12px;
-    padding-right: 32px;
-    border: 1px solid #e2e8f0;
-    border-radius: 4px;
-    font-size: 14px;
-    background-color: white;
-    cursor: pointer;
-    transition:
-      border-color 0.2s ease,
-      box-shadow 0.2s ease;
-
-    &:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.5);
-    }
-
-    &:disabled {
-      background-color: #f1f5f9;
-      color: #64748b;
-      cursor: not-allowed;
-    }
-  }
-}
-
-/* Custom arrow styling */
-.select-arrow {
-  position: absolute;
-  top: 70%;
-  right: 10px;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: #64748b;
-
-  &.is-disabled {
-    opacity: 0.5;
-  }
-}
 </style>
+
+<i18n lang="json">
+{
+  "fr": {
+    "selectLabel": "✚",
+    "selectedLabel": "Sélectionné",
+    "deselectLabel": "Désélectionner",
+    "noResult": "Aucun résultat",
+    "noOptions": "Aucune option"
+  }
+}
+</i18n>
