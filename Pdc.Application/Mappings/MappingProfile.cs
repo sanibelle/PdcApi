@@ -66,6 +66,11 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.PersonnalWorkHours, opt => opt.MapFrom(src => int.Parse(src.Weighting.PersonnalWorkHours.Value)))
             .ForMember(dest => dest.Semester, opt => opt.MapFrom(src => int.Parse(src.Semester.Value)));
 
+        CreateMap<CourseFramework, TrackedCourseFrameworkDTO>()
+            .ForMember(dest => dest.Code, opt => opt.MapFrom(src => src.Code.Value))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name.Value))
+            .ForMember(dest => dest.Semester, opt => opt.MapFrom(src => int.Parse(src.Semester.Value)));
+
         CreateMap<UnTrackedCourseFrameworkDTO, CourseFramework>()
             .ForMember(dest => dest.Code, opt => opt.MapFrom(src => new Changeable(src.Code)))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => new Changeable(src.Name)))
@@ -77,6 +82,15 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => new Changeable(src.Name)))
             .ForMember(dest => dest.Weighting, opt => opt.MapFrom(src => new Weighting(src.TheoryHours, src.LaboratoryHours, src.PersonnalWorkHours)))
             .ForMember(dest => dest.Semester, opt => opt.MapFrom(src => new Changeable(src.Semester)));
+
+        CreateMap<UpdateCourseFrameworkDTO, CourseFramework>();
+
+        CreateMap<CourseFrameworkCompetency, CourseFrameworkCompetencyDTO>()
+            .PreserveReferences();
+
+        CreateMap<Competency, CourseFrameworkCompetencyDTO>()
+            .ForMember(dest => dest.ChangeRecordNumber, opt => opt.MapFrom(src => src.ChangeRecord != null ? src.ChangeRecord.ChangeRecordNumber : (int?)default))
+            .ForMember(dest => dest.IsDraft, opt => opt.MapFrom(src => src.ChangeRecord != null ? src.ChangeRecord.IsDraft : default));
 
         CreateMap<CourseFramework, TrackedCourseFrameworkDTO>()
             .ForMember(dest => dest.ChangeRecordNumber, opt => opt.MapFrom(src => src.ChangeRecord != null ? src.ChangeRecord.ChangeRecordNumber : (int?)default))

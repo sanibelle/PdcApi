@@ -6,7 +6,8 @@ namespace Pdc.Domain.Interfaces.Repositories;
 public interface ICompetencyRepository
 {
     Task<List<MinisterialCompetency>> GetAll();
-    Task<MinisterialCompetency> FindByCode(string competencyCode);
+    Task<MinisterialCompetency> FindByCodes(string competencyCode);
+    Task<List<MinisterialCompetency>> FindByCodes(string[] competencyCodes);
     Task<MinisterialCompetency> UpdateUntrackedChangeable(MinisterialCompetency entity);
     Task<MinisterialCompetency> UpdateTrackedChangeable(MinisterialCompetency entity);
     Task Delete(string programOfStudyCode, string competencyCode);

@@ -53,6 +53,7 @@ public static class DependencyInjection
         services.AddScoped<IChangeableRepository, ChangeableRepository>();
         services.AddScoped<IChangeDetailsRepository, ChangeDetailsRepository>();
         services.AddScoped<ICourseFrameworkRepository, CourseFrameworkRepository>();
+        services.AddScoped<ICourseFrameworkCompetencyRepository, CourseFrameworkCompetencyRepository>();
 
         //ChangeTracker
         //                                     Domain,                 ParentEntity,              ChildEntity

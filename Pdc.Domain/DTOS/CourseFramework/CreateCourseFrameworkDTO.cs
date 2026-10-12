@@ -8,4 +8,5 @@ public class CreateCourseFrameworkDTO
     public int LaboratoryHours { get; set; }
     public int PersonnalWorkHours { get; set; }
     public int Semester { get; set; }
+    public string[] CompetencyCodes { get; set; } = [];
 }

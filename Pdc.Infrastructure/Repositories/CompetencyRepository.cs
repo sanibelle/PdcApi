@@ -100,7 +100,7 @@ internal class CompetencyRepository(
             logger.LogDebug($"Commiting competency with code {competency.Code}");
             await transaction.CommitAsync();
             logger.LogDebug($"Comitted competency with code {competency.Code}");
-            return await FindByCode(competency.Code);
+            return await FindByCodes(competency.Code);
         }
         catch
         {
@@ -124,7 +124,7 @@ internal class CompetencyRepository(
             logger.LogInformation($"Commiting competency with code {competency.Code}");
             await transaction.CommitAsync();
             logger.LogInformation($"Comitted competency with code {competency.Code}");
-            return await FindByCode(competency.Code);
+            return await FindByCodes(competency.Code);
         }
         catch
         {
@@ -205,10 +205,20 @@ internal class CompetencyRepository(
     }
 
     // XXX Question client: Est-ce qu'une compétence peut avoir le même code dans un autre programme?
-    public async Task<MinisterialCompetency> FindByCode(string competencyCode)
+    public async Task<MinisterialCompetency> FindByCodes(string competencyCode)
     {
         CompetencyEntity entity = await FindDetailedEntityByCode(competencyCode);
         return mapper.Map<MinisterialCompetency>(entity);
+    }
+
+    public async Task<List<MinisterialCompetency>> FindByCodes(string[] competencyCodes)
+    {
+        List<CompetencyEntity> entities = await context.Competencies.
+            Where(x => competencyCodes.Any(code => x.Code == code))
+            .AsNoTracking()
+            .ToListAsync();
+
+        return mapper.Map<List<MinisterialCompetency>>(entities);
     }
 
     public async Task<bool> ExistsEntityByCode(string programOfStudyCode, string competencyCode)

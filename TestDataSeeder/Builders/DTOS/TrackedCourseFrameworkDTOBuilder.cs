@@ -1,3 +1,4 @@
+using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.CourseFramework;
 using Pdc.Domain.DTOS.Common;
 
@@ -14,6 +15,7 @@ public class TrackedCourseFrameworkDTOBuilder
     private ChangeableDTO<int> _personnalWorkHours = new ChangeableDTOBuilder<int>().WithValue(1).Build();
     private ChangeableDTO<string> _code = new ChangeableDTOBuilder<string>().WithValue("Default code").Build();
     private ChangeableDTO<string> _name = new ChangeableDTOBuilder<string>().WithValue("Default name").Build();
+    private IList<CourseFrameworkCompetencyDTO> _competencies = [];
 
     public TrackedCourseFrameworkDTOBuilder WithId(Guid id)
     {
@@ -105,6 +107,13 @@ public class TrackedCourseFrameworkDTOBuilder
         return this;
     }
 
+    public TrackedCourseFrameworkDTOBuilder WithCompetencies(IList<CourseFrameworkCompetencyDTO> competencies)
+    {
+        _competencies = competencies;
+        return this;
+    }
+
+
     public TrackedCourseFrameworkDTO Build()
     {
         return new TrackedCourseFrameworkDTO
@@ -116,6 +125,7 @@ public class TrackedCourseFrameworkDTOBuilder
             Semester = _semester,
             IsDraft = _isDraft,
             ChangeRecordNumber = _changeRecordNumber,
+            Competencies = _competencies
         };
     }
 

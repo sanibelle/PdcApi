@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Pdc.Infrastructure.Entities.CourseFramework;
 
 namespace Pdc.Infrastructure.Data.Configurations;
+
 public class CourseFrameworkCompetencyConfiguration : IEntityTypeConfiguration<CourseFrameworkCompetencyEntity>
 {
     public void Configure(EntityTypeBuilder<CourseFrameworkCompetencyEntity> builder)
@@ -13,11 +14,14 @@ public class CourseFrameworkCompetencyConfiguration : IEntityTypeConfiguration<C
 
         builder.HasOne(x => x.Competency)
             .WithMany()
-            .HasForeignKey("CompetencyId")
+            .HasForeignKey(nameof(CourseFrameworkCompetencyEntity.CompetencyCode))
             .OnDelete(DeleteBehavior.NoAction)
             .IsRequired();
 
-        builder.Property(x => x.Hours)
+        builder.HasOne(x => x.CourseFramework)
+            .WithMany(x => x.CourseFrameworkCompetencies)
+            .HasForeignKey(nameof(CourseFrameworkCompetencyEntity.CourseFrameworkId))
+            .OnDelete(DeleteBehavior.NoAction)
             .IsRequired();
 
         builder.Property(x => x.CompetencyDistribution)

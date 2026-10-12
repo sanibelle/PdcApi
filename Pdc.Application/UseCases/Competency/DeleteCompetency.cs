@@ -9,7 +9,7 @@ public class DeleteCompetency(ICompetencyRepository competencyRepository) : IDel
 
     public async Task Execute(string programOfStudyCode, string competencyCode)
     {
-        var competency = await _competencyRepository.FindByCode(competencyCode);
+        var competency = await _competencyRepository.FindByCodes(competencyCode);
         if (!competency.IsDraftAndV1OrNull())
         {
             throw new InvalidOperationException("Cannot delete a non-draft competency with change record greater than 1.");

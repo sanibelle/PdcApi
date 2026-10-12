@@ -1,4 +1,5 @@
 ﻿using Pdc.Domain.Models.Common;
+using Pdc.Domain.Models.Security;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Infrastructure.Entities.Version;
 
@@ -7,7 +8,7 @@ namespace Pdc.Infrastructure.Entities.CourseFramework;
 public class CourseFrameworkEntity : ChangeRecordableEntity
 {
     public Guid? Id { get; set; }
-    public virtual IList<CourseFrameworkCompetencyEntity>? CourseFrameworkCompetencies { get; set; } = [];
+    public virtual IList<CourseFrameworkCompetencyEntity> CourseFrameworkCompetencies { get; set; } = [];
     public virtual ProgramOfStudyEntity? ProgramOfStudy { get; set; }
     public string? ProgramOfStudyCode { get; set; }
     public virtual IList<CourseFrameworkPerformanceCriteriaEntity>? CourseFrameworkPerformanceCriterias { get; set; } = [];
@@ -48,5 +49,8 @@ public class CourseFrameworkEntity : ChangeRecordableEntity
     public string OtherSpecifications { get; set; } = "";
     public string StatementOfComplexAuthenticTask { get; set; } = "";
     public string TaskPresentation { get; set; } = "";
+    public DateTime CreatedOn { get; set; } // TODO pour cette PR
+    public virtual User? CreatedBy { get; set; } // TODO pour cette PR
+    public Guid CreatedById { get; set; } // TODO pour cette PR
 }
 

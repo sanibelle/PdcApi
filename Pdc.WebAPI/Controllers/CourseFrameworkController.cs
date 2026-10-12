@@ -40,7 +40,7 @@ public class CourseFrameworkController(
 
     [Authorize(Roles = Roles.CourseFramework)]
     [HttpPut("{courseFrameworkId}")]
-    public async Task<ActionResult<CompetencyDTO>> UpdateCourseFramework(Guid courseFrameworkId, [FromBody] TrackedCourseFrameworkDTO updateCourseFrameworkDTO)
+    public async Task<ActionResult<CompetencyDTO>> UpdateCourseFramework(Guid courseFrameworkId, [FromBody] UpdateCourseFrameworkDTO updateCourseFrameworkDTO)
     {
         User user = userControllerService.GetUserFromHttpContext();
         if (updateCourseFrameworkDTO.ChangeRecordNumber == 1 && updateCourseFrameworkDTO.IsDraft)
