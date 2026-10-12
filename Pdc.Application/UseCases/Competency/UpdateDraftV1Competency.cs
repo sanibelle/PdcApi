@@ -17,7 +17,7 @@ public class UpdateDraftV1Competency(ICompetencyRepository competencyRepository,
     public async Task<CompetencyDTO> Execute(string programOfStudyCode, string competencyCode, CompetencyDTO updateCompetencyDto, User currentUser)
     {
         await competencyService.ValidateCompetencyAsync(competencyCode, updateCompetencyDto);
-        MinisterialCompetency competencyToUpdate = await competencyRepository.FindByCodes(updateCompetencyDto.Code);
+        MinisterialCompetency competencyToUpdate = await competencyRepository.FindByCode(updateCompetencyDto.Code);
         if (!competencyToUpdate.IsDraftAndV1OrNull())
         {
             throw new InvalidChangeRecordException("Cannot update a non-draft competency with change record greater than 1.");

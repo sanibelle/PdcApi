@@ -49,8 +49,8 @@ public class CourseFrameworkEntity : ChangeRecordableEntity
     public string OtherSpecifications { get; set; } = "";
     public string StatementOfComplexAuthenticTask { get; set; } = "";
     public string TaskPresentation { get; set; } = "";
-    public DateTime CreatedOn { get; set; } // TODO pour cette PR
-    public virtual User? CreatedBy { get; set; } // TODO pour cette PR
-    public Guid CreatedById { get; set; } // TODO pour cette PR
+    public DateTime CreatedOn { get; set; }
+    public virtual User? CreatedBy { get; set; }
+    public Guid CreatedById { get; set; }
 }
 

@@ -24,6 +24,8 @@ public class CourseFrameworkCompetencyConfiguration : IEntityTypeConfiguration<C
             .OnDelete(DeleteBehavior.NoAction)
             .IsRequired();
 
+        builder.HasIndex(x => new { x.CourseFrameworkId, x.CompetencyCode }).IsUnique();
+
         builder.Property(x => x.CompetencyDistribution)
             .HasMaxLength(5000);
     }

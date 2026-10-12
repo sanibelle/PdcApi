@@ -11,7 +11,7 @@ public class GetCompetency(ICompetencyRepository competencyRepository, Competenc
 {
     public async Task<CompetencyDTO> Execute(string programOfStudyCode, string competencyCode)
     {
-        MinisterialCompetency competency = await competencyRepository.FindByCodes(competencyCode);
+        MinisterialCompetency competency = await competencyRepository.FindByCode(competencyCode);
         if (!competency.ChangeRecord.Id.HasValue)
         {
             throw new NullReferenceException("Competency must have a valid ChangeRecord with an Id.");

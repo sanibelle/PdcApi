@@ -17,7 +17,7 @@ public class UpdatePublishedCompetency(ICompetencyRepository competencyRepositor
     public async Task<CompetencyDTO> Execute(string programOfStudyCode, string competencyCode, CompetencyDTO updateCompetencyDto, User currentUser)
     {
         await competencyService.ValidateCompetencyAsync(competencyCode, updateCompetencyDto);
-        MinisterialCompetency competencyToUpdate = await competencyRepository.FindByCodes(updateCompetencyDto.Code);
+        MinisterialCompetency competencyToUpdate = await competencyRepository.FindByCode(updateCompetencyDto.Code);
         if (competencyToUpdate.ChangeRecord == null)
         {
             throw new InvalidChangeRecordException("Missing changeRecord on a competency to update.");

@@ -40,7 +40,7 @@ public class Weighting : ICreatedByPropagable, ICreatedOnPropagable
 
     public int GetTotalHours()
     {
-        if (TheoryHours == null || LaboratoryHours == null || PersonnalWorkHours == null)
+        if (TheoryHours == null || LaboratoryHours == null)
         {
             throw new InvalidOperationException("Weighting properties are null. Impossible to calculate total hours.");
         }

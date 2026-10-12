@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Pdc.Domain.Exceptions;
 using Pdc.Domain.Interfaces.Repositories;
 using Pdc.Infrastructure.Data;
@@ -7,7 +6,7 @@ using Pdc.Infrastructure.Entities.CourseFramework;
 
 namespace Pdc.Infrastructure.Repositories;
 
-public class CourseFrameworkCompetencyRepository(AppDbContext context, IMapper mapper) : ICourseFrameworkCompetencyRepository
+public class CourseFrameworkCompetencyRepository(AppDbContext context) : ICourseFrameworkCompetencyRepository
 {
     public async Task Link(string competencyCode, Guid courseFrameworkId)
     {
