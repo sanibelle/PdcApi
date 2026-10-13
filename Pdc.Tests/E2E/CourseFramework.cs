@@ -35,6 +35,7 @@ public class CourseFramework : ApiTestBase
             .WithTheoryHours(3)
             .WithPersonnalWorkHours(4)
             .WithSemester(5)
+            .WithCompetencyCodes([DataSeeder.CompetencyEntity.Code])
             .Build();
 
         // Act
@@ -55,7 +56,11 @@ public class CourseFramework : ApiTestBase
         createdCourseFramework.Should().BeEquivalentTo(fetchedCourseFramework, options =>
             options.ExcludingMissingMembers()
             .Excluding(x => x!.Id)
+            .Excluding(x => x.Competencies)
             );
+
+        createdCourseFramework.Competencies.First().Code.Should().BeEquivalentTo(DataSeeder.CompetencyEntity.Code);
+
     }
 
     [Test]
@@ -106,22 +111,14 @@ public class CourseFramework : ApiTestBase
         Assert.That(createdCourseFramework, Is.Not.Null);
 
         // Arrange
-        TrackedCourseFrameworkDTO courseFrameworkDTOToUpdate = new TrackedCourseFrameworkDTOBuilder()
-            .WithId(createdCourseFramework.Id)
-            .WithCode(createdCourseFramework.Code)
-            .WithName(createdCourseFramework.Name)
-            .WithLaboratoryHours(createdCourseFramework.Weighting.LaboratoryHours)
-            .WithTheoryHours(createdCourseFramework.Weighting.TheoryHours)
-            .WithPersonnalWorkHours(createdCourseFramework.Weighting.PersonnalWorkHours)
-            .WithSemester(createdCourseFramework.Semester)
-            .WithCode("YY-UPD-YY")
-            .WithName("Updated course framework name")
-            .WithLaboratoryHours(6)
-            .WithTheoryHours(7)
-            .WithPersonnalWorkHours(8)
-            .WithSemester(9)
-            .WithChangeRecordNumber(1)
-            .WithIsDraft(true)
+        UpdateCourseFrameworkDTO courseFrameworkDTOToUpdate = new UpdateCourseFrameworkDTOBuilder(createdCourseFramework)
+            .WithCompetencyCodes([DataSeeder.CompetencyEntity.Code])
+            .UpdateCode("XX-UPD-01")
+            .UpdateName("Test Course F update updated")
+            .UpdateLaboratoryHours(5)
+            .UpdateTheoryHours(5)
+            .UpdatePersonnalWorkHours(5)
+            .UpdateSemester(5)
             .Build();
 
         var updateResponse = await _Client.PutAsJsonAsync($"/api/courseFramework/{createdCourseFramework.Id}", courseFrameworkDTOToUpdate);
@@ -135,7 +132,19 @@ public class CourseFramework : ApiTestBase
         updatedCourseFramework.Weighting.LaboratoryHours.Value.Should().Be(courseFrameworkDTOToUpdate.Weighting.LaboratoryHours.Value);
         updatedCourseFramework.Weighting.PersonnalWorkHours.Value.Should().Be(courseFrameworkDTOToUpdate.Weighting.PersonnalWorkHours.Value);
         updatedCourseFramework.Semester.Value.Should().Be(courseFrameworkDTOToUpdate.Semester.Value);
+        updatedCourseFramework.Competencies.Should().HaveCount(1);
+        updatedCourseFramework.Competencies.First().Code.Should().BeEquivalentTo(DataSeeder.CompetencyEntity.Code);
 
+        // Then remove the competencyCode
+        UpdateCourseFrameworkDTO courseFrameworkDTOToUpdateWithNoCompetencies = new UpdateCourseFrameworkDTOBuilder(createdCourseFramework)
+            .WithCompetencyCodes([])
+            .Build();
+
+        updateResponse = await _Client.PutAsJsonAsync($"/api/courseFramework/{createdCourseFramework.Id}", courseFrameworkDTOToUpdateWithNoCompetencies);
+        updateResponse.EnsureSuccessStatusCode();
+        // Verify it was updated
+        updatedCourseFramework = await updateResponse.Content.ReadFromJsonAsync<TrackedCourseFrameworkDTO>();
+        updatedCourseFramework.Competencies.Should().BeEmpty();
     }
 }
 

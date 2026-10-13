@@ -228,28 +228,26 @@ namespace Pdc.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("CompetencyCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("CompetencyDistribution")
                         .HasMaxLength(5000)
                         .HasColumnType("character varying(5000)");
 
-                    b.Property<string>("CompetencyId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid?>("CourseFrameworkId")
+                    b.Property<Guid>("CourseFrameworkId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Hours")
+                    b.Property<int?>("Hours")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("IsAssedElement")
-                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompetencyId");
+                    b.HasIndex("CompetencyCode");
 
-                    b.HasIndex("CourseFrameworkId");
+                    b.HasIndex("CourseFrameworkId", "CompetencyCode")
+                        .IsUnique();
 
                     b.ToTable("CourseFrameworkCompetencies");
                 });
@@ -269,6 +267,12 @@ namespace Pdc.Infrastructure.Migrations
                     b.Property<string>("CourseCharacteristics")
                         .HasMaxLength(5000)
                         .HasColumnType("character varying(5000)");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FinalCourseObjective")
                         .HasMaxLength(5000)
@@ -311,6 +315,8 @@ namespace Pdc.Infrastructure.Migrations
 
                     b.HasIndex("CodeId")
                         .IsUnique();
+
+                    b.HasIndex("CreatedById");
 
                     b.HasIndex("LaboratoryHoursId")
                         .IsUnique();
@@ -854,13 +860,15 @@ namespace Pdc.Infrastructure.Migrations
                 {
                     b.HasOne("Pdc.Infrastructure.Entities.MinisterialSpecification.CompetencyEntity", "Competency")
                         .WithMany()
-                        .HasForeignKey("CompetencyId")
+                        .HasForeignKey("CompetencyCode")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CourseFramework")
                         .WithMany("CourseFrameworkCompetencies")
-                        .HasForeignKey("CourseFrameworkId");
+                        .HasForeignKey("CourseFrameworkId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Competency");
 
@@ -877,6 +885,12 @@ namespace Pdc.Infrastructure.Migrations
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CodeId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkChangeableEntity", "LaboratoryHours")
@@ -918,6 +932,8 @@ namespace Pdc.Infrastructure.Migrations
                     b.Navigation("ChangeRecord");
 
                     b.Navigation("Code");
+
+                    b.Navigation("CreatedBy");
 
                     b.Navigation("LaboratoryHours");
 

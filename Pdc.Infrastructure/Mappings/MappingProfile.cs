@@ -185,19 +185,20 @@ public class MappingProfile : Profile
             .ForMember(x => x.ChangeRecordId, opt => opt.Ignore())
             .ForMember(x => x.TheoryHours, opt => opt.Ignore())
             .ForMember(x => x.LaboratoryHours, opt => opt.Ignore())
-            .ForMember(x => x.PersonnalWorkHours, opt => opt.Ignore());
+            .ForMember(x => x.PersonnalWorkHours, opt => opt.Ignore())
+            .ForMember(x => x.CreatedBy, opt => opt.Ignore())
+            .ForMember(x => x.CreatedById, opt => opt.MapFrom(src => src.CreatedBy.Id));
 
         CreateMap<CourseFrameworkEntity, CourseFramework>()
             .PreserveReferences()
+            .ForMember(dest => dest.Competencies, opt => opt.MapFrom(src => src.CourseFrameworkCompetencies))
             .ForMember(x => x.CourseFrameworkPerformanceCriterias, opt => opt.Ignore())// TODO
-            .ForMember(x => x.Competencies, opt => opt.Ignore())// TODO
-            .ForMember(x => x.CreatedOn, opt => opt.Ignore())// TODO
-            .ForMember(x => x.Hours, opt => opt.Ignore())// TODO
             .ForMember(x => x.Weighting, opt => opt.Ignore())
-            .ForMember(x => x.Units, opt => opt.MapFrom(src => new Units(src.TheoryHours.Value, src.LaboratoryHours.Value, src.PersonnalWorkHours.Value)))
-            .ForPath(x => x.Weighting.TheoryHours, opt => opt.MapFrom(src => src.TheoryHours))
-            .ForPath(x => x.Weighting.LaboratoryHours, opt => opt.MapFrom(src => src.LaboratoryHours))
-            .ForPath(x => x.Weighting.PersonnalWorkHours, opt => opt.MapFrom(src => src.PersonnalWorkHours));
+                .ForPath(x => x.Weighting.TheoryHours, opt => opt.MapFrom(src => src.TheoryHours))
+                .ForPath(x => x.Weighting.LaboratoryHours, opt => opt.MapFrom(src => src.LaboratoryHours))
+                .ForPath(x => x.Weighting.PersonnalWorkHours, opt => opt.MapFrom(src => src.PersonnalWorkHours))
+            .ForMember(x => x.TotalSemestersHour, opt => opt.Ignore())
+            .ForMember(x => x.Units, opt => opt.MapFrom(src => new Units(src.TheoryHours.Value, src.LaboratoryHours.Value, src.PersonnalWorkHours.Value)));
 
         // CourseFrameworkCompetency
         CreateMap<CourseFrameworkCompetency, CourseFrameworkCompetencyEntity>()
@@ -205,13 +206,35 @@ public class MappingProfile : Profile
             .ForMember(x => x.Id, opt => opt.Ignore())
             .ForMember(x => x.Competency, opt => opt.Ignore())
             .ForMember(x => x.CourseFramework, opt => opt.Ignore())
-            .ForMember(x => x.IsAssedElement, opt => opt.Ignore())
-            .ReverseMap();
+            .ForMember(x => x.CompetencyCode, opt => opt.Ignore())
+            .ForMember(x => x.CourseFrameworkId, opt => opt.Ignore());
+
+        CreateMap<CourseFrameworkCompetencyEntity, CourseFrameworkCompetency>()
+            .PreserveReferences()
+            .IncludeMembers(s => s.Competency)
+            .ForMember(x => x.Code, opt => opt.Ignore())// TODO on garde le ignore?
+            .ForMember(x => x.UnitsID, opt => opt.Ignore())
+            .ForMember(x => x.RealisationContexts, opt => opt.Ignore())
+            .ForMember(x => x.ReachedTaxonomyLevel, opt => opt.Ignore())
+            .ForMember(x => x.CompetencyElements, opt => opt.Ignore())
+            .ForMember(x => x.ChangeRecord, opt => opt.Ignore());
+
+        CreateMap<CourseFrameworkCompetencyEntity, MinisterialCompetency>() // Requis parce que CourseFrameworkCompetencyEntity hérite de CompetencyEntity
+            .PreserveReferences()
+            .IncludeMembers(s => s.Competency);
+
+        CreateMap<CompetencyEntity, CourseFrameworkCompetency>()
+            .ForMember(x => x.Hours, opt => opt.Ignore())
+            .ForMember(x => x.ReachedTaxonomyLevel, opt => opt.Ignore())
+            .ForMember(x => x.CompetencyDistribution, opt => opt.Ignore())
+            .IncludeBase<CompetencyEntity, MinisterialCompetency>();
 
         CreateMap<CourseFrameworkCompetencyElement, CourseFrameworkCompetencyElementEntity>()
             .PreserveReferences()
             .ForMember(x => x.CompetencyElement, opt => opt.Ignore())
+            .ForMember(x => x.CompetencyElementId, opt => opt.Ignore())
             .ForMember(x => x.CourseFramework, opt => opt.Ignore())
+            .ForMember(x => x.CourseFrameworkId, opt => opt.Ignore())
             .ForMember(x => x.Hours, opt => opt.Ignore())
             .ReverseMap()
             .PreserveReferences();

@@ -1,84 +1,75 @@
 <script setup lang="ts">
+  const { t } = useI18n();
 
-const { t } = useI18n();
+  const props = defineProps({
+    name: {
+      type: String,
+      required: true,
+    },
+    label: {
+      type: String,
+      default: '',
+    },
+    hint: {
+      type: String,
+      default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
+  });
 
-const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    default: '',
-  },
-  hint: {
-    type: String,
-    default: '',
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  }
-});
+  const unit = defineModel<Unit>({
+    default: () => ({ wholeUnit: null, numerator: null, denominator: null }),
+  });
 
-const unit = defineModel<Unit>({
-  default: () => ({ wholeUnit: null, numerator: null, denominator: null }),
-})
-
-
-const validationRules = computed(() => {
-  const rules = [];
-  if (props.required) {
-    rules.push('required');
-  }
-  return rules.join('|');
-});
-
-const numeratorAndDenominatorRules = computed(() => {
-  const rules = [];
-  if (unit.value?.denominator || unit.value?.numerator) {
-    rules.push('required');
-  }
-  return rules.join('|');
-});
-
-const options: SelectOption[] = [
-  { label: '-', value: null },
-  { label: '1', value: 1 },
-  { label: '2', value: 2 },
-  { label: '3', value: 3 },
-];
-
-const denominatorOption: SelectOption[] = options.filter((x) => x.value !== 1);
-
-const numeratorOptions = computed(() =>
-  options.filter((x) => {
-    if (unit.value?.denominator && typeof x.value === 'number') {
-      return x.value < unit.value.denominator;
+  const validationRules = computed(() => {
+    const rules = [];
+    if (props.required) {
+      rules.push('required');
     }
-    return true;
-  })
-);
+    return rules.join('|');
+  });
+
+  const numeratorOptions = [2, 3];
+
+  const denominatorOption = [2, 3];
 </script>
 
 <template>
   <div>
-    <FormAtomsABaseLabel forId="">
+    <FormAtomsABaseLabel for-id="">
       {{ label }}
     </FormAtomsABaseLabel>
     <div class="flex">
-      <FormANumberInput :name="`${name}.wholeUnit`" :label="t('wholeUnit')" :disabled="props.disabled"
-        :required="props.required" :integer="true" :rules="validationRules" v-model="unit.wholeUnit" />
-      <FormMoleculesASelectField :name="`${name}.numerator`" :label="t('numerator')"
-        :disabled="props.disabled" :required="numeratorAndDenominatorRules.length > 0"
-        :rules="numeratorAndDenominatorRules" :options="numeratorOptions" v-model="unit.numerator" />
-      <FormMoleculesASelectField :name="`${name}.denominator`" :label="t('denominator')"
-        :required="numeratorAndDenominatorRules.length > 0" :disabled="props.disabled"
-        :rules="numeratorAndDenominatorRules" :options="denominatorOption" v-model="unit.denominator" />
+      <FormANumberInput
+        v-model="unit.wholeUnit"
+        :name="`${name}.wholeUnit`"
+        :label="t('wholeUnit')"
+        :disabled="props.disabled"
+        :required="props.required"
+        :integer="true"
+        :rules="validationRules"
+      />
+      <FormMoleculesASelectField
+        v-model="unit.numerator"
+        :name="`${name}.numerator`"
+        :label="t('numerator')"
+        :disabled="props.disabled"
+        :options="numeratorOptions"
+      />
+      <FormMoleculesASelectField
+        v-model="unit.denominator"
+        :name="`${name}.denominator`"
+        :label="t('denominator')"
+        :disabled="props.disabled"
+        :options="denominatorOption"
+      />
     </div>
     <FormAtomsAHint :hint="hint" />
   </div>
@@ -95,22 +86,22 @@ const numeratorOptions = computed(() =>
 </i18n>
 
 <style scoped>
-.flex {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  justify-content: flex-start;
+  .flex {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: flex-start;
 
-  &:not(:last-child) {
-    margin-right: 0.5rem;
-  }
+    &:not(:last-child) {
+      margin-right: 0.5rem;
+    }
 
-  div {
-    flex-grow: 1;
-
-    &:first-child {
+    div {
       flex-grow: 1;
+
+      &:first-child {
+        flex-grow: 1;
+      }
     }
   }
-}
 </style>
