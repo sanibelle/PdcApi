@@ -1,5 +1,5 @@
 ﻿using Pdc.Domain.Models.Common;
-using Pdc.Domain.Models.Security;
+using Pdc.Infrastructure.Entities.Identity;
 using Pdc.Infrastructure.Entities.MinisterialSpecification;
 using Pdc.Infrastructure.Entities.Version;
 
@@ -50,7 +50,7 @@ public class CourseFrameworkEntity : ChangeRecordableEntity
     public string StatementOfComplexAuthenticTask { get; set; } = "";
     public string TaskPresentation { get; set; } = "";
     public DateTime CreatedOn { get; set; }
-    public virtual User? CreatedBy { get; set; }
+    public virtual IdentityUserEntity? CreatedBy { get; set; }
     public Guid CreatedById { get; set; }
 }
 
