@@ -87,6 +87,8 @@
     <VueMultiselect
       v-bind="attrs"
       v-model="model"
+      :close-on-select="!multiple"
+      :data-test-id="name"
       :name="name"
       :disabled="disabled"
       :options="options"

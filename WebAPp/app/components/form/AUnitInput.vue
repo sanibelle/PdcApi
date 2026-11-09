@@ -36,9 +36,31 @@
     return rules.join('|');
   });
 
-  const numeratorOptions = [2, 3];
+  const numeratorOptions = [1, 2];
 
-  const denominatorOption = [2, 3];
+  const denominatorOption = [3];
+
+  watch(
+    () => unit.value.numerator,
+    (newValue) => {
+      if (newValue) {
+        unit.value.denominator = 3;
+      } else {
+        unit.value.denominator = null;
+      }
+    },
+  );
+
+  watch(
+    () => unit.value.denominator,
+    (newValue) => {
+      if (!newValue && unit.value.numerator) {
+        unit.value.numerator = null;
+      } else if (newValue && !unit.value.numerator) {
+        unit.value.numerator = 1;
+      }
+    },
+  );
 </script>
 
 <template>

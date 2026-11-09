@@ -53,7 +53,10 @@ public class TestAuthenticationHandler : AuthenticationHandler<TestAuthenticatio
         // Add role claims
         foreach (var role in roles)
         {
-            claimsList.Add(new Claim(ClaimTypes.Role, role));
+            if (!claimsList.Any(x => x.Type == ClaimTypes.Role && x.Value == role))
+            {
+                claimsList.Add(new Claim(ClaimTypes.Role, role));
+            }
         }
 
         var identity = new ClaimsIdentity(claimsList, "Test");

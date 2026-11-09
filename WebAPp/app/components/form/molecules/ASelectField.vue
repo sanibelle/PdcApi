@@ -70,6 +70,7 @@
     </FormAtomsABaseLabel>
     <FormAtomsASelect
       v-bind="$attrs"
+      :id="id"
       v-model="model"
       :name="name"
       :options="options"

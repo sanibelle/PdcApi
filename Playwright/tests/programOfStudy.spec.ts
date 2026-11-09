@@ -11,27 +11,31 @@ test('Creating a full valid program of study', async ({ adminPage }) => {
    
   await adminPage.locator('input[name="name"]').fill('Creating a full valid program of study')
   await adminPage.locator('input[name="code"]').fill('code3')
-  await adminPage.locator('select[name="programType"]').selectOption('1');
+
+  await adminPage.locator('[data-test-id="programType"]').click();
+  await adminPage.locator('[data-test-id="programType"] .multiselect__content .multiselect__option').first().click();
+
   await adminPage.locator('input[name="monthsDuration"]').fill('24')
   await adminPage.locator('input[name="specificDurationHours"]').fill('123')
   await adminPage.locator('input[name="totalDurationHours"]').fill('123')
   await adminPage.locator('[data-test-id="dp-input"]').fill("06/13/2025");
   // units
   await adminPage.locator('input[name="specificUnits.wholeUnit"]').fill('1')
-  await adminPage.locator('select[name="specificUnits.numerator"]').selectOption('1');
-  await adminPage.locator('select[name="specificUnits.denominator"]').selectOption('2');
+  
+    // units
+  await adminPage.locator('[data-test-id="specificUnits.numerator"]').click();
+  await adminPage.locator('[data-test-id="specificUnits.numerator"] .multiselect__content .multiselect__option').first().click();
+  
 
   await adminPage.locator('input[name="optionalUnits.wholeUnit"]').fill('2')
-  await adminPage.locator('select[name="optionalUnits.numerator"]').selectOption('1');
-  await adminPage.locator('select[name="optionalUnits.denominator"]').selectOption('2');
+  await adminPage.locator('[data-test-id="optionalUnits.denominator"]').click();
+  await adminPage.locator('[data-test-id="optionalUnits.denominator"] .multiselect__content .multiselect__option').first().click();
 
   await adminPage.locator('input[name="generalUnits.wholeUnit"]').fill('3')
-  await adminPage.locator('select[name="generalUnits.numerator"]').selectOption('2');
-  await adminPage.locator('select[name="generalUnits.denominator"]').selectOption('3');
   
   await adminPage.locator('input[name="complementaryUnits.wholeUnit"]').fill('4')
-  await adminPage.locator('select[name="complementaryUnits.numerator"]').selectOption('1');
-  await adminPage.locator('select[name="complementaryUnits.denominator"]').selectOption('3');
+  await adminPage.locator('[data-test-id="complementaryUnits.numerator"]').click();
+  await adminPage.locator('[data-test-id="complementaryUnits.numerator"] .multiselect__content .multiselect__option').nth(1).click();
 
   const [response] = await Promise.all([
     adminPage.waitForResponse(response => response.url().includes('/ProgramOfStudy') && response.request().method() === 'POST'),
