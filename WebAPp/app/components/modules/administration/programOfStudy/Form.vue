@@ -36,8 +36,11 @@
   });
 
   const { createProgram } = useProgramOfStudyClient();
+  const programType = ref<SelectOption | null>(null);
+
   const onSubmit = handleSubmit(async () => {
     try {
+      programOfStudy.programType = programType.value?.value as number;
       emit('submitted', await createProgram(programOfStudy as ProgramOfStudy));
     } catch (e) {
       if (e instanceof DuplicateException) {
@@ -84,12 +87,13 @@
         :error-message="codeExistingErrorMessage"
       />
       <FormASelectInput
-        v-model="programOfStudy.programType"
+        v-model="programType"
         name="programType"
         :placeholder="t('programTypePlaceholder')"
         :label="t('programType')"
         :required="true"
         :options="options"
+        :track-by="'label'"
       />
       <FormANumberInput
         v-model="programOfStudy.monthsDuration"

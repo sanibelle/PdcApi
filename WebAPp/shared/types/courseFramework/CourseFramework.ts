@@ -1,9 +1,9 @@
 export type CourseFramework = {
-  courseCode: string;
-  units?: Unit | null;
+  code: string;
   name: string;
-  competencyElements: CompetencyElement[];
-  isDraft: boolean;
-  changeRecordNumber?: number;
-  changeRecordId?: string;
+  theoryHours: number;
+  laboratoryHours: number;
+  personalWorkHours: number;
+  semester: number;
+  competencies: Competency[];
 };

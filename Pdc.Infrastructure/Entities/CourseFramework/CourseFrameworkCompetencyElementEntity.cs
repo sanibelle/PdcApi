@@ -22,4 +22,6 @@ public class CourseFrameworkCompetencyElementEntity
     public BloomTaxonomy ReachedTaxonomyLevel { get; set; }
     public TeachedLevelType TeachedLevel { get; set; }
     public bool IsAssedElement { get; set; } = false;
+    public required Guid CompetencyElementId { get; set; }
+    public required Guid CourseFrameworkId { get; set; }
 }

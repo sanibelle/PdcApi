@@ -4,28 +4,46 @@
 
   const { t } = useI18n();
 
-  const emit = defineEmits(['submitted']);
+  const emit = defineEmits(['submitted', 'close']);
   const codeExistingErrorMessage = ref('');
+  const submitAnotherAfterThisOne = ref(false);
 
-  const props = defineProps({
+  defineProps({
     programCode: {
       type: String,
       default: '',
     },
+    competencies: {
+      type: Array as PropType<Competency[]>,
+      required: true,
+    },
   });
 
   const courseFramework = reactive<Partial<CourseFramework>>({
-    courseCode: '',
-    name: '',
+    competencies: [],
   });
 
   const { handleSubmit, isSubmitting } = useForm<CourseFramework>({
     validateOnMount: false,
   });
 
+  const { createCourseFramework } = useCourseFrameworkClient();
+
   const onSubmit = handleSubmit(async () => {
     try {
-      emit('submitted', await createCourseFramework(props.programCode, courseFramework));
+      const newCourseFramework = await createCourseFramework(courseFramework as CourseFramework);
+      emit('submitted', newCourseFramework);
+      if (submitAnotherAfterThisOne.value) {
+        courseFramework.code = '';
+        courseFramework.name = '';
+        courseFramework.semester = undefined;
+        courseFramework.theoryHours = undefined;
+        courseFramework.laboratoryHours = undefined;
+        courseFramework.personalWorkHours = undefined;
+        courseFramework.competencies = [];
+      } else {
+        emit('close');
+      }
     } catch (e) {
       if (e instanceof DuplicateException) {
         codeExistingErrorMessage.value = t('codeExistingErrorMessage');
@@ -36,7 +54,7 @@
   });
 
   watch(
-    () => courseFramework.courseCode,
+    () => courseFramework.code,
     () => {
       codeExistingErrorMessage.value = '';
     },
@@ -50,7 +68,7 @@
       @submit.prevent="onSubmit"
     >
       <FormATextInput
-        v-model="courseFramework.courseCode"
+        v-model="courseFramework.code"
         name="code"
         :label="t('code')"
         :placeholder="t('codePlaceholder')"
@@ -65,10 +83,54 @@
         v-model="courseFramework.name"
         name="name"
         :label="t('name')"
-        :placeholder="t('namePlaceholder')"
         :required="true"
       />
+      <FormANumberInput
+        v-model="courseFramework.semester"
+        name="semester"
+        :label="t('semester')"
+        :required="true"
+        :min="1"
+      />
+      <FormANumberInput
+        v-model="courseFramework.theoryHours"
+        name="theoryHours"
+        :label="t('theoryHours')"
+        :required="true"
+        :min="1"
+      />
+      <FormANumberInput
+        v-model="courseFramework.laboratoryHours"
+        name="laboratoryHours"
+        :label="t('laboratoryHours')"
+        :required="true"
+        :min="1"
+      />
+      <FormANumberInput
+        v-model="courseFramework.personalWorkHours"
+        name="personalWorkHours"
+        :label="t('personalWorkHours')"
+        :required="true"
+        :min="1"
+      />
+      <FormASelectInput
+        v-model="courseFramework.competencies"
+        name="competencies"
+        :multiple="true"
+        :options="competencies as any /*TODO changer le type dans le drop down*/"
+        :label="t('targettedCompetencies')"
+        :required="true"
+        :track-by="'statementOfCompetency'"
+        :searchable="true"
+        :min="1"
+      />
       <div class="modal-footer">
+        <FormACheckboxInput
+          v-model="submitAnotherAfterThisOne"
+          name="submitAnotherAfterThisOne"
+          :label="t('submitAnotherAfterThisOne')"
+          data-testid="submit-competency"
+        />
         <FormMoleculesASubmitButton
           :is-submitting="isSubmitting"
           data-testid="submit-competency"
@@ -81,24 +143,32 @@
 <i18n lang="json">
 {
   "fr": {
-    "title": "Créer un plan cadre",
-    "formTitle": "Créer un plan cadre",
     "name": "Titre du cours",
     "code": "Numéro du cours",
     "codeHint": "Programme-Code-Établissement",
     "codePlaceholder": "XXX-XXX-XX",
-    "statementOfCompetency": "Énoncé de plan cadre",
-    "statementOfCompetencyPlaceholder": "Ex : Effectuer le développement d'applications Web transactionnelles",
-    "competencyDescriptionPlaceholder": "Description détaillée du plan cadre",
     "codeExistingErrorMessage": "Le code de plan cadre existe déjà.",
-    "optionnalCompetency": "Compétence optionnelle",
-    "mandatoryCompetency": "Compétence obligatoire"
+    "theoryHours": "Heures de théorie",
+    "laboratoryHours": "Heures de laboratoire",
+    "personalWorkHours": "Heures de travail personnel",
+    "semester": "Semestre (session)",
+    "targettedCompetencies": "Compétences visées",
+    "submitAnotherAfterThisOne": "Créer un autre"
   }
 }
 </i18n>
 
-<style scoped>
+<style lang="scss" scoped>
   .form {
     padding: 0.5rem;
+  }
+
+  .modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    :deep(> div) {
+      flex-grow: 1;
+    }
   }
 </style>

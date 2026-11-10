@@ -12,4 +12,5 @@ public class TrackedCourseFrameworkDTO
     public required WeightingDTO Weighting { get; set; }
     public int ChangeRecordNumber { get; set; }
     public bool IsDraft { get; set; }
+    public IList<CourseFrameworkCompetencyDTO> Competencies { get; set; } = [];
 }

@@ -100,6 +100,7 @@
       :placeholder="placeholder"
       :disabled="disabled"
       :rules="rules"
+      :type="type"
       :focus-on-mount="focusOnMount"
       @update:error-message="error = $event"
     />

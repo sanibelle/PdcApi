@@ -37,4 +37,22 @@ public class Weighting : ICreatedByPropagable, ICreatedOnPropagable
         LaboratoryHours.SetCreatedOnOnUntracked();
         PersonnalWorkHours.SetCreatedOnOnUntracked();
     }
+
+    public int GetTotalHours()
+    {
+        if (TheoryHours == null || LaboratoryHours == null)
+        {
+            throw new InvalidOperationException("Weighting properties are null. Impossible to calculate total hours.");
+        }
+        if (!int.TryParse(TheoryHours.Value, out int theoryHoursValue))
+        {
+            throw new InvalidOperationException("Weighting properties are not valid integers. Impossible to calculate total hours.");
+        }
+        if (!int.TryParse(LaboratoryHours.Value, out int laboratoryHoursValue))
+        {
+            throw new InvalidOperationException("Weighting properties are not valid integers. Impossible to calculate total hours.");
+        }
+
+        return theoryHoursValue + laboratoryHoursValue;
+    }
 }

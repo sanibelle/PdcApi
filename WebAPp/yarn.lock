@@ -8998,6 +8998,11 @@ vue-i18n@^11.1.11:
     "@intlify/shared" "11.3.0"
     "@vue/devtools-api" "^6.5.0"
 
+vue-multiselect@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/vue-multiselect/-/vue-multiselect-3.5.0.tgz#83efef15b1db9e7f6d492309d8bcb71a23c46d1d"
+  integrity sha512-i758SEqWFcFshL1eAg0F3EFeFQ1mOCmh2mgnGCZv1XpHFVIAv8fxo8bQQ4ZnMoaPhMp8KI1A6gPBVHh3YzRg/Q==
+
 vue-router@5.0.2:
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-5.0.2.tgz#34e4ebb10069fc44e15570eddd9baabba942e07b"
