@@ -32,6 +32,9 @@
 
   const handleSubmitted = async (courseFramework: CourseFramework) => {
     courseFrameworks.value.unshift(courseFramework);
+  };
+
+  const handleCloseModal = async () => {
     modal.close();
   };
 
@@ -45,6 +48,7 @@
       componentProps: {
         programCode,
         competencies: competencies.value,
+        onClose: handleCloseModal,
         onSubmitted: handleSubmitted,
       },
     });
