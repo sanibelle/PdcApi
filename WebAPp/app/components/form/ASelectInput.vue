@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import type { PropType } from 'vue';
+
   const props = defineProps({
     name: {
       type: String,
@@ -25,7 +27,7 @@
       default: '',
     },
     options: {
-      type: Array<SelectOption>,
+      type: Array as PropType<SelectOption[] | object[]>,
       required: true,
     },
     multiple: {

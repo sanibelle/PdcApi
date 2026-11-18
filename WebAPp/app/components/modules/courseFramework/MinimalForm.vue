@@ -8,7 +8,7 @@
   const codeExistingErrorMessage = ref('');
   const submitAnotherAfterThisOne = ref(false);
 
-  defineProps({
+  const props = defineProps({
     programCode: {
       type: String,
       default: '',
@@ -31,7 +31,7 @@
 
   const onSubmit = handleSubmit(async () => {
     try {
-      const newCourseFramework = await createCourseFramework(courseFramework as CourseFramework);
+      const newCourseFramework = await createCourseFramework(courseFramework as CourseFramework, props.programCode);
       emit('submitted', newCourseFramework);
       if (submitAnotherAfterThisOne.value) {
         courseFramework.code = '';
@@ -117,7 +117,7 @@
         v-model="courseFramework.competencies"
         name="competencies"
         :multiple="true"
-        :options="competencies as any /*TODO changer le type dans le drop down*/"
+        :options="competencies"
         :label="t('targettedCompetencies')"
         :required="true"
         :track-by="'statementOfCompetency'"
@@ -129,11 +129,11 @@
           v-model="submitAnotherAfterThisOne"
           name="submitAnotherAfterThisOne"
           :label="t('submitAnotherAfterThisOne')"
-          data-testid="submit-competency"
+          data-testid="sumbmit-another"
         />
         <FormMoleculesASubmitButton
           :is-submitting="isSubmitting"
-          data-testid="submit-competency"
+          data-testid="submit-course-framework"
         />
       </div>
     </form>
