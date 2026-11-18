@@ -211,6 +211,16 @@ internal class CompetencyRepository(
         return mapper.Map<MinisterialCompetency>(entity);
     }
 
+    public async Task<List<MinisterialCompetency>> FindByCodes(string[] competencyCodes)
+    {
+        List<CompetencyEntity> entities = await context.Competencies.
+            Where(x => competencyCodes.Any(code => x.Code == code))
+            .AsNoTracking()
+            .ToListAsync();
+
+        return mapper.Map<List<MinisterialCompetency>>(entities);
+    }
+
     public async Task<bool> ExistsEntityByCode(string programOfStudyCode, string competencyCode)
     {
         return await context.Competencies

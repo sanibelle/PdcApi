@@ -19,12 +19,12 @@ export const useCourseFrameworkClient = () => {
     return courseFramework;
   };
 
-  const createCourseFramework = async (courseFramework: CourseFramework): Promise<CourseFramework> => {
+  const createCourseFramework = async (courseFramework: CourseFramework, programCode: string): Promise<CourseFramework> => {
     const api = useApi();
     const preparedCourseFramework: CourseFramework = {
       ...courseFramework,
     };
-    const createdCourseFramework = await api.Post<CourseFramework>('/programOfStudy/courseFramework', preparedCourseFramework);
+    const createdCourseFramework = await api.Post<CourseFramework>(`/programOfStudy/${programCode}/courseFramework`, preparedCourseFramework);
 
     if (createdCourseFramework == null) {
       throw new Error('Course frameworks not found or not authenticated');

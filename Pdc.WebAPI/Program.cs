@@ -78,33 +78,6 @@ public class Program
 
         var app = builder.Build();
 
-        app.Use(async (context, next) =>
-        {
-            try
-            {
-                await next();
-            }
-            catch (Exception ex)
-            {
-                var sb = new System.Text.StringBuilder();
-                var current = ex;
-                while (current != null)
-                {
-                    sb.AppendLine("=== Exception ===");
-                    sb.AppendLine(current.GetType().FullName);
-                    sb.AppendLine(current.Message);
-                    sb.AppendLine(current.StackTrace);
-                    current = current.InnerException;
-                }
-                await File.WriteAllTextAsync("C:/temp/mapper_error.txt", sb.ToString());
-
-                context.Response.StatusCode = 500;
-                context.Response.ContentType = "text/plain";
-                await context.Response.WriteAsync(sb.ToString());
-            }
-        });
-
-
         if (builder.Environment.IsProduction()) // because of ngnix
         {
             app.UseForwardedHeaders();

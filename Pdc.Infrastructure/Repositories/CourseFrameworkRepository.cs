@@ -18,6 +18,7 @@ internal class CourseFrameworkRepository(
         AppDbContext context,
         IMapper mapper,
         IChangeRecordRepository changeRecordRepository,
+        ICourseFrameworkCompetencyRepository courseFrameworkCompetencyRepository,
         ILogger<CourseFrameworkRepository> logger,
         //[FromKeyedServices("tracked")] IChangeApplier<Changeable, CourseFrameworkEntity, CourseFrameworkChangeableEntity> trackedPerformanceCriteriaChangeApplier,
         [FromKeyedServices("untracked")] IChangeApplier<Changeable, CourseFrameworkEntity, CourseFrameworkChangeableEntity> untrackedourseFrameworkContextChangeApplier)
@@ -66,7 +67,19 @@ internal class CourseFrameworkRepository(
                 courseFramework.Weighting.PersonnalWorkHours!,
                 tracker);
 
+            var toAdd = courseFramework.Competencies
+                .Where(c => !addedCourseFrameworkEntity.Entity.CourseFrameworkCompetencies.Any(e => e.Competency.Code == c.Code))
+                .ToList();
+
             await context.SaveChangesAsync(); // one last save to track the last field added to CourseFramework
+
+            foreach (var code in toAdd.Select(x => x.Code))
+            {
+                await courseFrameworkCompetencyRepository.Link(code, addedCourseFrameworkEntity.Entity.Id!.Value);
+            }
+
+            await LoadCourseFrameworkCompetencies(addedCourseFrameworkEntity.Entity);
+
             logger.LogInformation($"Before commit transaction with code {addedCourseFrameworkEntity.Entity.Code} to database");
 
             await transaction.CommitAsync();
@@ -78,6 +91,15 @@ internal class CourseFrameworkRepository(
             await transaction.RollbackAsync();
             throw;
         }
+    }
+
+    private async Task LoadCourseFrameworkCompetencies(CourseFrameworkEntity addedCourseFrameworkEntity)
+    {
+        var competenciesCollection = context.Entry(addedCourseFrameworkEntity)
+            .Collection(x => x.CourseFrameworkCompetencies);
+        await competenciesCollection.Query()
+            .Include(cfc => cfc.Competency)
+            .LoadAsync();
     }
 
     public async Task<bool> ExistsEntityByCode(string courseFrameworkCode)
@@ -120,7 +142,7 @@ internal class CourseFrameworkRepository(
         {
             IChangeTracker tracker = new NoOpChangeDetailsTracker();
             logger.LogInformation($"Updating courseFramework {courseFramework.Code} with id {courseFramework.Id}");
-            CourseFrameworkEntity existingCourseFramework = await FindEntityById(courseFramework.Id!.Value);
+            CourseFrameworkEntity existingCourseFramework = await FindEntityById(courseFramework.Id!.Value, false);
 
             await UpdateCourseFrameworkAndChilds(courseFramework, tracker, existingCourseFramework, untrackedourseFrameworkContextChangeApplier);
             logger.LogInformation($"Commiting courseFramework {courseFramework.Code} with id {courseFramework.Id}");
@@ -136,18 +158,24 @@ internal class CourseFrameworkRepository(
         }
     }
 
-    private async Task<CourseFrameworkEntity> FindEntityById(Guid id)
+    private async Task<CourseFrameworkEntity> FindEntityById(Guid id, bool asNoTracking = true)
     {
-        var test = await context.CourseFrameworks
-            .SingleOrDefaultAsync(x => x.Id == id);
+        IQueryable<CourseFrameworkEntity> query = context.CourseFrameworks;
+        if (asNoTracking)
+        {
+            query = query.AsNoTracking();
+        }
 
-        return await context.CourseFrameworks
+        return await query
+            .AsNoTracking()
             .Include(x => x.Code)
             .Include(x => x.Name)
             .Include(x => x.Semester)
             .Include(x => x.TheoryHours)
             .Include(x => x.LaboratoryHours)
             .Include(x => x.PersonnalWorkHours)
+            .Include(x => x.CourseFrameworkCompetencies)
+                .ThenInclude(y => y.Competency)
             .SingleOrDefaultAsync(x => x.Id == id)
             ?? throw new NotFoundException("CourseFramework not found", id);
     }
@@ -163,7 +191,24 @@ internal class CourseFrameworkRepository(
         await realisationContextChangeApplier.Update(changeRecord, courseFramework.Weighting.TheoryHours!, tracker);
         await realisationContextChangeApplier.Update(changeRecord, courseFramework.Weighting.LaboratoryHours!, tracker);
         await realisationContextChangeApplier.Update(changeRecord, courseFramework.Weighting.PersonnalWorkHours!, tracker);
+        var toAdd = courseFramework.Competencies
+            .Where(c => !existingCourseFramework.CourseFrameworkCompetencies.Any(e => e.Competency.Code == c.Code))
+            .ToList();
+        var toRemove = existingCourseFramework.CourseFrameworkCompetencies
+            .Where(c => !courseFramework.Competencies.Any(e => e.Code == c.Competency.Code))
+            .ToList();
 
+        foreach (var code in toAdd.Select(x => x.Code))
+        {
+            await courseFrameworkCompetencyRepository.Link(code, existingCourseFramework.Id!.Value);
+        }
+
+        foreach (var code in toRemove.Select(x => x.Competency.Code))
+        {
+            await courseFrameworkCompetencyRepository.Unlink(code, existingCourseFramework.Id!.Value);
+        }
+
+        await LoadCourseFrameworkCompetencies(existingCourseFramework);
         await context.SaveChangesAsync();
     }
 }

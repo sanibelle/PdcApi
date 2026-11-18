@@ -28,7 +28,6 @@ public static class TestAuthenticationExtensions
             options.DefaultScheme = "Test";
         })
         .AddScheme<TestAuthenticationOptions, TestAuthenticationHandler>("Test", options => { });
-        // TOOD passer ca dans program.cs si jamais cest le meme que azure. Sinon, faire le mien.
         return services;
     }
 }

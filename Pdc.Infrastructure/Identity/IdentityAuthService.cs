@@ -31,30 +31,33 @@ public class IdentityAuthService : IAuthService
 
     public async Task<User> GetCurrentUserAsync()
     {
-        ClaimsPrincipal? user = _httpContextAccessor.HttpContext?.User;
-        if (user == null || user.Identity?.IsAuthenticated != true)
+        ClaimsPrincipal? userFromHttpContext = _httpContextAccessor.HttpContext?.User;
+        if (userFromHttpContext == null || userFromHttpContext.Identity?.IsAuthenticated != true)
         {
             throw new NotFoundException(nameof(IdentityUserEntity), "current user not found");
         }
 
-
-        string? userId = user.FindFirstValue(ClaimTypes.NameIdentifier)
+        string? userId = userFromHttpContext.FindFirstValue(ClaimTypes.NameIdentifier)
             ?? throw new ClaimNotFoundException(ClaimTypes.NameIdentifier);
 
-        IdentityUserEntity? identityUser = await _userManager.FindByIdAsync(userId)
+        IdentityUserEntity? user = await _userManager.FindByIdAsync(userId)
             ?? throw new NotFoundException(nameof(IdentityUserEntity), "userId not found");
 
-        IList<Claim> claims = await _userManager.GetClaimsAsync(identityUser)
+        IList<Claim> claims = await _userManager.GetClaimsAsync(user)
             ?? throw new ClaimNotFoundException("ClaimsList");
 
-        var claim = claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)
+        string userName = user.UserName
+            ?? claims.FirstOrDefault(x => x.Type == ClaimTypes.Name).Value
             ?? throw new ClaimNotFoundException(ClaimTypes.Name);
+
+        IList<string> roles = await _userManager.GetRolesAsync(user);
 
         return new User
         {
-            Id = identityUser.Id,
-            Email = identityUser.Email,
-            UserName =  claim.Value
+            Id = user.Id,
+            Email = user.Email,
+            UserName =  user.UserName!,
+            Roles = roles,
         };
     }
 

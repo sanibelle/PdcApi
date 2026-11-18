@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Pdc.Application.DTOS;
 using Pdc.Application.DTOS.CourseFramework;
 using Pdc.Domain.Interfaces.UseCases.CourseFramework;
 using Pdc.Domain.Models.Security;
@@ -30,7 +29,7 @@ public class CourseFrameworkController(
 
     [Authorize(Roles = Roles.CourseFramework)]
     [HttpGet("{programOfStudyCode}/courseFramework/{courseFrameworkCode}/v{versionNumber}")]
-    public async Task<ActionResult<CompetencyDTO>> GetCourseFramework(string programOfStudyCode, string courseFrameworkCode, int versionNumber)
+    public async Task<ActionResult<TrackedCourseFrameworkDTO>> GetCourseFramework(string programOfStudyCode, string courseFrameworkCode, int versionNumber)
     {
         throw new NotImplementedException();
 
@@ -40,7 +39,7 @@ public class CourseFrameworkController(
 
     [Authorize(Roles = Roles.CourseFramework)]
     [HttpPut("{courseFrameworkId}")]
-    public async Task<ActionResult<CompetencyDTO>> UpdateCourseFramework(Guid courseFrameworkId, [FromBody] TrackedCourseFrameworkDTO updateCourseFrameworkDTO)
+    public async Task<ActionResult<TrackedCourseFrameworkDTO>> UpdateCourseFramework(Guid courseFrameworkId, [FromBody] UpdateCourseFrameworkDTO updateCourseFrameworkDTO)
     {
         User user = userControllerService.GetUserFromHttpContext();
         if (updateCourseFrameworkDTO.ChangeRecordNumber == 1 && updateCourseFrameworkDTO.IsDraft)

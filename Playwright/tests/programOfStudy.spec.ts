@@ -1,4 +1,5 @@
 import { test, expect } from './test-fixtures';
+import { selectWithDataTestId } from './testUtils';
 
 test('Creating a full valid program of study', async ({ adminPage }) => {
   await adminPage.goto('/administration/programmes');
@@ -11,27 +12,27 @@ test('Creating a full valid program of study', async ({ adminPage }) => {
    
   await adminPage.locator('input[name="name"]').fill('Creating a full valid program of study')
   await adminPage.locator('input[name="code"]').fill('code3')
-  await adminPage.locator('select[name="programType"]').selectOption('1');
+
+  await selectWithDataTestId(adminPage, 'programType');
+
   await adminPage.locator('input[name="monthsDuration"]').fill('24')
   await adminPage.locator('input[name="specificDurationHours"]').fill('123')
   await adminPage.locator('input[name="totalDurationHours"]').fill('123')
   await adminPage.locator('[data-test-id="dp-input"]').fill("06/13/2025");
   // units
   await adminPage.locator('input[name="specificUnits.wholeUnit"]').fill('1')
-  await adminPage.locator('select[name="specificUnits.numerator"]').selectOption('1');
-  await adminPage.locator('select[name="specificUnits.denominator"]').selectOption('2');
+  
+    // units
+  await selectWithDataTestId(adminPage, 'specificUnits.numerator');
+  
 
   await adminPage.locator('input[name="optionalUnits.wholeUnit"]').fill('2')
-  await adminPage.locator('select[name="optionalUnits.numerator"]').selectOption('1');
-  await adminPage.locator('select[name="optionalUnits.denominator"]').selectOption('2');
+  await selectWithDataTestId(adminPage, 'optionalUnits.denominator');
 
   await adminPage.locator('input[name="generalUnits.wholeUnit"]').fill('3')
-  await adminPage.locator('select[name="generalUnits.numerator"]').selectOption('2');
-  await adminPage.locator('select[name="generalUnits.denominator"]').selectOption('3');
   
   await adminPage.locator('input[name="complementaryUnits.wholeUnit"]').fill('4')
-  await adminPage.locator('select[name="complementaryUnits.numerator"]').selectOption('1');
-  await adminPage.locator('select[name="complementaryUnits.denominator"]').selectOption('3');
+  await selectWithDataTestId(adminPage, 'complementaryUnits.numerator', 1);
 
   const [response] = await Promise.all([
     adminPage.waitForResponse(response => response.url().includes('/ProgramOfStudy') && response.request().method() === 'POST'),

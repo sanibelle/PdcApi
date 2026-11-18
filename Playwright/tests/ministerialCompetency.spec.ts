@@ -286,7 +286,7 @@ test.describe("ministerial competency", () => {
 
   });
 
-  const createAndTestCompetency = async (adminPage, code) => {
+  const createAndTestCompetency = async (adminPage: Page, code: string) => {
     await adminPage.goto("/administration/programmes");
     await adminPage.waitForLoadState("networkidle");
 

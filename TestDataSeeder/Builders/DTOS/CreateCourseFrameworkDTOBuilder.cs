@@ -11,6 +11,7 @@ public class CreateCourseFrameworkDTOBuilder
     private int _personnalWorkHours = 1;
     private string _code = "Default code";
     private string _name = "Default name";
+    private string[] _competencyCodes = [];
 
     public CreateCourseFrameworkDTOBuilder WithId(Guid? id)
     {
@@ -54,6 +55,12 @@ public class CreateCourseFrameworkDTOBuilder
         return this;
     }
 
+    public CreateCourseFrameworkDTOBuilder WithCompetencyCodes(string[] competencyCodes)
+    {
+        _competencyCodes = competencyCodes;
+        return this;
+    }
+
     public CreateCourseFrameworkDTO Build()
     {
         return new CreateCourseFrameworkDTO
@@ -63,8 +70,8 @@ public class CreateCourseFrameworkDTOBuilder
             LaboratoryHours = _laboratoyHours,
             TheoryHours = _theoryHours,
             PersonnalWorkHours = _personnalWorkHours,
-            Semester = _semester
-
+            Semester = _semester,
+            CompetencyCodes = _competencyCodes
         };
     }
 

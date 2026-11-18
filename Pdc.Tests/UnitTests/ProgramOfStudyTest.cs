@@ -96,7 +96,7 @@ public class ProgramOfStudyTest
             SpecificUnits = new Units(26, 2, 3)
         };
         // Act
-        Assert.CatchAsync<DuplicateException>(async () => await _createProgramOfStudyUseCase.Execute(createProgramDto), "Duplicate program exception is thrown");
+        await Assert.CatchAsync<DuplicateException>(async () => await _createProgramOfStudyUseCase.Execute(createProgramDto), "Duplicate program exception is thrown");
     }
 
     [Test]

@@ -11,18 +11,25 @@ public class CourseFramework : AChangeRecordable, ICreatedByPropagable, ICreated
 {
     public Guid? Id { get; set; }
     public string ProgramOfStudyCode { get; set; } = "";
-    public IEnumerable<MinisterialCompetency> Competencies { get; set; } = [];
-    public IEnumerable<CourseFrameworkCompetencyElement> CourseFrameworkPerformanceCriterias { get; set; } = [];
-    public IEnumerable<CourseFramework> Prerequisites = [];
+    public IList<MinisterialCompetency> Competencies { get; set; } = [];
+    public IList<CourseFrameworkCompetencyElement> CourseFrameworkPerformanceCriterias { get; set; } = [];
+    public IList<CourseFramework> Prerequisites = [];
     public required Changeable Name { get; set; }
     public DateTime CreatedOn { get; set; }
+    public User? CreatedBy { get; set; }
     public required Changeable Code { get; set; }
     public required Weighting Weighting { get; set; }
     public required Changeable Semester { get; set; }
     /// <summary>
     /// Durée du cours en heures
     /// </summary>
-    public int Hours { get; set; }
+    public int TotalSemestersHour
+    {
+        get
+        {
+            return Weighting.GetTotalHours();
+        }
+    }
     public required Units Units { get; set; }
     public string FinalCourseObjective { get; set; } = string.Empty;
     public string CourseCharacteristics { get; set; } = string.Empty;
@@ -63,6 +70,7 @@ public class CourseFramework : AChangeRecordable, ICreatedByPropagable, ICreated
 
     public void SetCreatedByOnUntracked(User createdBy)
     {
+        CreatedBy = CreatedBy ?? createdBy;
         Name.SetCreatedByOnUntracked(createdBy);
         Code.SetCreatedByOnUntracked(createdBy);
         Weighting.SetCreatedByOnUntracked(createdBy);

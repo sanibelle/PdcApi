@@ -3,9 +3,9 @@ using Pdc.Application.DTOS.CourseFramework;
 
 namespace Pdc.Application.Validators;
 
-public class TrackedCourseFrameworkValidator : AbstractValidator<TrackedCourseFrameworkDTO>
+public class UpdateCourseFrameworkValidator : AbstractValidator<UpdateCourseFrameworkDTO>
 {
-    public TrackedCourseFrameworkValidator()
+    public UpdateCourseFrameworkValidator()
     {
         RuleFor(x => x.Code.Value)
             .NotEmpty()

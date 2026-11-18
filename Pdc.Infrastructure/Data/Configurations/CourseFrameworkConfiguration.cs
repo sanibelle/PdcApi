@@ -81,6 +81,12 @@ public class CourseFrameworkConfiguration : IEntityTypeConfiguration<CourseFrame
 
         builder.HasMany(x => x.AssedElements)
             .WithMany();
+
+        builder.HasOne(x => x.CreatedBy)
+            .WithMany()
+            .HasForeignKey(c => c.CreatedById)
+            .OnDelete(DeleteBehavior.Restrict)
+            .IsRequired();
     }
 }
 
