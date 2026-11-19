@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
   import { ref, onMounted } from 'vue';
   import { Calendar, type EventDropArg, type EventInput } from '@fullcalendar/core';
   import multiMonthPlugin from '@fullcalendar/multimonth';
@@ -97,4 +97,4 @@
       style="width: 500px"
     ></div>
   </div>
-</template>
+</template> -->

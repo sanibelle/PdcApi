@@ -79,7 +79,7 @@ export default defineConfig({
       timeout: 120000,
     },
     {
-      command: "cd ../WebAPp && yarn run playwright",
+      command: "cd ../WebAPp && pnpm run playwright",
       url: "http://localhost:3000",
       reuseExistingServer: !process.env.CI,
       timeout: 120000,
