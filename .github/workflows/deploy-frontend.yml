@@ -45,7 +45,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           source: "WebAPp/.output/*"
-          target: "/var/www/front-end.new"
+          target: "/var/www/front-end/"
           strip_components: 2 # Removes WebAPp/.output/ from path
           overwrite: true
 
