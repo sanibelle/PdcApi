@@ -10,7 +10,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "playwright": "nuxt dev --dotenv .env.playwright"
   },
   "dependencies": {
     "@fullcalendar/core": "^7.1.5",
