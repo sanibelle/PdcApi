@@ -5,19 +5,11 @@ on:
     branches: [main]
     paths:
       - "WebAPp/**"
-      - ".github/workflows/deploy-frontend.yml"
   workflow_dispatch:
-
-concurrency:
-  group: deploy-frontend
-  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: WebAPp
 
     steps:
       - uses: actions/checkout@v6
@@ -28,17 +20,29 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version: 'latest'
           cache: pnpm
           cache-dependency-path: WebAPp/pnpm-lock.yaml
 
-      - name: Install dependencies
+      - name: Install dependencies in WebAPp
         run: pnpm install --frozen-lockfile
+        working-directory: WebAPp
 
-      - name: Build
+      - name: Build WebAPp
         run: pnpm build
+        working-directory: WebAPp
 
-      - name: Upload build to staging folder
+      - name: Stop front-end
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -e
+            systemctl stop front-end
+
+      - name: Deploy to VPS
         uses: appleboy/scp-action@v1
         with:
           host: ${{ secrets.HOST }}
