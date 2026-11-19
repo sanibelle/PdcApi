@@ -32,7 +32,7 @@ jobs:
         run: pnpm build
         working-directory: WebAPp
 
-      - name: Stop front-end
+      - name: Stop front-end and clear old build
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.HOST }}
@@ -41,6 +41,7 @@ jobs:
           script: |
             set -e
             systemctl stop front-end
+            rm -rf /var/www/front-end/*
 
       - name: Deploy to VPS
         uses: appleboy/scp-action@v1
@@ -51,9 +52,9 @@ jobs:
           source: "WebAPp/.output/*"
           target: "/var/www/front-end/"
           strip_components: 2 # Removes WebAPp/.output/ from path
-          overwrite: true
 
       - name: Restart front-end service
+        if: always()
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.HOST }}
