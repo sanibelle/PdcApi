@@ -32,8 +32,8 @@
       default: false,
     },
     rules: {
-      type: [String, Object, Function],
-      default: '',
+      type: Object as PropType<Record<string, boolean | number | string[]>>,
+      default: () => ({}),
     },
     errorMessage: {
       type: String,

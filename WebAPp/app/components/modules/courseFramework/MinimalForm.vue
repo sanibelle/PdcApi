@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import '~/assets/css/form.css';
   import { useForm } from 'vee-validate';
-
   const { t } = useI18n();
 
   const emit = defineEmits(['submitted', 'close']);
@@ -32,7 +31,7 @@
   const onSubmit = handleSubmit(async () => {
     try {
       const newCourseFramework = await createCourseFramework(courseFramework as CourseFramework, props.programCode);
-      emit('submitted', newCourseFramework);
+      emit('submitted', trackedCourseFrameworkToCourseFramework(newCourseFramework));
       if (submitAnotherAfterThisOne.value) {
         courseFramework.code = '';
         courseFramework.name = '';
@@ -75,6 +74,8 @@
         :hint="t('codeHint')"
         :min="3"
         :max="50"
+        pattern="^[0-9]{3}-[A-Za-z0-9]{3}-[A-Za-z]{2}$"
+        :pattern-message="t('courseCodePatternError')"
         :required="true"
         :trimmed="true"
         :error-message="codeExistingErrorMessage"
@@ -147,6 +148,7 @@
     "code": "Numéro du cours",
     "codeHint": "Programme-Code-Établissement",
     "codePlaceholder": "XXX-XXX-XX",
+    "courseCodePatternError": "Le code du cours doit être au format 000-XXX-AA, où X est un chiffre ou une lettre.",
     "codeExistingErrorMessage": "Le code de plan cadre existe déjà.",
     "theoryHours": "Heures de théorie",
     "laboratoryHours": "Heures de laboratoire",

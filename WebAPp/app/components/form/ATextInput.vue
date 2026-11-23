@@ -40,6 +40,10 @@
       type: String,
       default: null,
     },
+    patternMessage: {
+      type: String,
+      default: null,
+    },
     errorMessage: {
       type: String,
       default: '',
@@ -51,29 +55,21 @@
   });
 
   const validationRules = computed(() => {
-    const rules = [];
+    const rules: Record<string, boolean | number | string[]> = {};
 
-    if (props.required) {
-      rules.push('required');
-    }
-
-    if (props.min) {
-      rules.push(`min:${props.min}`);
-    }
-
-    if (props.max) {
-      rules.push(`max:${props.max}`);
-    }
+    if (props.required) rules.required = true;
+    if (props.min) rules.min = props.min;
+    if (props.max) rules.max = props.max;
+    if (props.trimmed) rules.trimmed = true;
 
     if (props.pattern) {
-      rules.push(`regex:${props.pattern}`);
+      if (props.patternMessage) {
+        rules.patternWithMessage = [props.pattern, props.patternMessage];
+      } else {
+        rules.regex = [props.pattern];
+      }
     }
-
-    if (props.trimmed) {
-      rules.push(`trimmed`);
-    }
-
-    return rules.join('|');
+    return rules;
   });
 
   const model = defineModel<string | number | undefined>({
