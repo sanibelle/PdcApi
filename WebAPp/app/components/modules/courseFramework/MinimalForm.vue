@@ -74,7 +74,7 @@
         :hint="t('codeHint')"
         :min="3"
         :max="50"
-        pattern="^[0-9]{3}-[A-Za-z0-9]{3}-[A-Za-z]{2}$"
+        pattern="^[0-9]{3}-[A-Z0-9]{3}-[A-Z]{2}$"
         :pattern-message="t('courseCodePatternError')"
         :required="true"
         :trimmed="true"
