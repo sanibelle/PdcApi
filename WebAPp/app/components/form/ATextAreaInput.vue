@@ -47,25 +47,14 @@
   });
 
   const validationRules = computed(() => {
-    const rules = [];
+    const rules: Record<string, boolean | number | string[]> = {};
 
-    if (props.required) {
-      rules.push('required');
-    }
+    if (props.required) rules.required = true;
+    if (props.pattern) rules.pattern = true;
+    if (props.min) rules.min = props.min;
+    if (props.max) rules.max = props.max;
 
-    if (props.min) {
-      rules.push(`min:${props.min}`);
-    }
-
-    if (props.max) {
-      rules.push(`max:${props.max}`);
-    }
-
-    if (props.pattern) {
-      rules.push(`regex:${props.pattern}`);
-    }
-
-    return rules.join('|');
+    return rules;
   });
 
   const model = defineModel<string | number | undefined>({

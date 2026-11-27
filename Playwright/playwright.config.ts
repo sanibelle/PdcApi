@@ -80,7 +80,7 @@ export default defineConfig({
     },
     {
       command: "cd ../WebAPp && pnpm run playwright",
-      url: "http://localhost:3000",
+      url: "http://localhost:3000/administration",
       reuseExistingServer: !process.env.CI,
       timeout: 120000,
     },

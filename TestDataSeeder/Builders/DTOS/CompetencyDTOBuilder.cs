@@ -7,7 +7,7 @@ namespace TestDataSeeder.Builders.DTOS;
 
 public class CompetencyDTOBuilder
 {
-    private string _code = $"TEST{Random.Shared.Next(0, 10000)}";
+    private string _code = $"0{Random.Shared.Next(0, 1000):D3}";
     private Units? _units = new Units(2);
     private bool _isMandatory = false;
     private bool _isOptional = false;

@@ -15,8 +15,8 @@
       default: false,
     },
     rules: {
-      type: [String, Object],
-      default: '',
+      type: Object as PropType<Record<string, boolean | number | string[]>>,
+      default: () => ({}),
     },
     focusOnMount: {
       type: Boolean,

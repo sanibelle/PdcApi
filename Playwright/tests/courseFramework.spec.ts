@@ -5,7 +5,7 @@ test.describe("course framework", () => {
   test("Creating a full valid course framework", async ({
     adminPage,
   }) => {
-    await createAndTestCourseFramework(adminPage, "TE-ST0-01");
+    await createAndTestCourseFramework(adminPage, "123-A1B-AB");
   });
 });
 
@@ -30,6 +30,14 @@ const createAndTestCourseFramework = async (adminPage: Page, code: string) => {
   await adminPage.locator('input[name="personalWorkHours"]').fill("3");
   await selectWithDataTestId(adminPage, 'competencies');
 
+  const codeInput = adminPage.locator('input[name="code"]');
+  for (const invalidCode of ["12A-ABC-DE", "123-AB--DE", "123-ABC-D1", "123-ABC-DEF"]) {
+    await codeInput.fill(invalidCode);
+    await adminPage.getByTestId("submit-course-framework").first().click();
+    await expect(codeInput).toHaveClass(/error/);
+  }
+  await codeInput.fill(code);
+  await expect(codeInput).not.toHaveClass(/error/);
 
   const [response] = await Promise.all([
     adminPage.waitForResponse(

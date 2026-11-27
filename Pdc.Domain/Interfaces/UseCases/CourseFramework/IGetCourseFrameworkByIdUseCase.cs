@@ -4,5 +4,5 @@ namespace Pdc.Domain.Interfaces.UseCases.CourseFramework;
 
 public interface IGetCourseFrameworkByIdUseCase
 {
-    Task<TrackedCourseFrameworkDTO> Execute(Guid id);
+    Task<TrackedCourseFrameworkDTO> Execute(string code);
 }

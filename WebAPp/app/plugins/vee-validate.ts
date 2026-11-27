@@ -1,15 +1,5 @@
 import { defineRule, configure } from 'vee-validate';
-import {
-  required,
-  email,
-  min,
-  max,
-  regex,
-  max_value,
-  min_value,
-  numeric,
-  integer,
-} from '@vee-validate/rules';
+import { required, email, min, max, regex, max_value, min_value, numeric, integer } from '@vee-validate/rules';
 import { localize, setLocale } from '@vee-validate/i18n';
 
 export default defineNuxtPlugin(() => {
@@ -28,6 +18,7 @@ export default defineNuxtPlugin(() => {
   defineRule('trimmed', (value: unknown) => {
     return typeof value !== 'string' || value === value.trim();
   });
+  defineRule('patternWithMessage', (value: unknown, [pattern, message]: [string, string]) => regex(value, [pattern]) || message);
 
   // Exemple de custom rule
   defineRule('date', (value: any) => {
@@ -47,23 +38,11 @@ export default defineNuxtPlugin(() => {
         messages: {
           required: 'Ce champ est requis',
           email: 'Veuillez saisir une adresse e-mail valide',
-          min: ({ rule }) =>
-            rule?.params
-              ? `Ce champ doit contenir au moins ${rule?.params} caractères`
-              : 'Ce champ est trop court',
-          max: ({ rule }) =>
-            rule?.params
-              ? `Ce champ ne doit pas dépasser ${rule?.params} caractères`
-              : 'Ce champ est trop long',
+          min: ({ rule }) => (rule?.params ? `Ce champ doit contenir au moins ${rule?.params} caractères` : 'Ce champ est trop court'),
+          max: ({ rule }) => (rule?.params ? `Ce champ ne doit pas dépasser ${rule?.params} caractères` : 'Ce champ est trop long'),
           regex: 'Le format de ce champ est invalide',
-          max_value: ({ rule }) =>
-            rule?.params
-              ? `La valeur ne doit pas dépasser ${rule?.params}`
-              : 'Cette valeur est trop élevée',
-          min_value: ({ rule }) =>
-            rule?.params
-              ? `La valeur doit être au moins ${rule?.params}`
-              : 'Cette valeur est trop basse',
+          max_value: ({ rule }) => (rule?.params ? `La valeur ne doit pas dépasser ${rule?.params}` : 'Cette valeur est trop élevée'),
+          min_value: ({ rule }) => (rule?.params ? `La valeur doit être au moins ${rule?.params}` : 'Cette valeur est trop basse'),
           numeric: 'Ce champ doit être un nombre',
           integer: 'Ce champ doit être un nombre entier',
           trimmed: 'Ce champ ne doit pas commencer ou se terminer par un espace',

@@ -46,11 +46,9 @@
 
   // Computed validation rules based on props
   const validationRules = computed(() => {
-    const rules = [];
-    if (props.required) {
-      rules.push('required');
-    }
-    return rules.join('|');
+    const rules: Record<string, boolean | number | string[]> = {};
+    if (props.required) rules.required = true;
+    return rules;
   });
 
   const model = defineModel<number | string | undefined | null | object | (string | number | object)[]>({

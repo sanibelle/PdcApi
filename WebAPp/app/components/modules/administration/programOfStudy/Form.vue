@@ -78,6 +78,8 @@
       <FormATextInput
         v-model="programOfStudy.code"
         name="code"
+        pattern="^\d{3}\.?[A-Z0-9]\d$"
+        :pattern-message="t('code-pattern-message-error')"
         :trimmed="true"
         :label="t('programCode')"
         placeholder="Ex : 300.A1"
@@ -160,15 +162,15 @@
   </div>
 </template>
 
-<i18n>
+<i18n lang="json">
 {
   "fr": {
     "title": "Programme d'étude",
     "programName": "Titre du programme",
     "programCode": "Code du programme",
     "programType": "Type de programme",
-    "programTypePlaceholder":"Sélectionner un type de programme",
-    "programNamePlaceholder":"Ex : Sciences humaines",
+    "programTypePlaceholder": "Sélectionner un type de programme",
+    "programNamePlaceholder": "Ex : Sciences humaines",
     "monthsDuration": "Durée en mois",
     "totalDurationHours": "Durée totale en heures",
     "specificDurationHours": "Durée spécifique en heures",
@@ -186,6 +188,7 @@
     "programType.DEC": "Technique",
     "programType.AEC": "Attestation d'études collégiales",
     "programType.PREU": "Préuniversitaire",
+    "code-pattern-message-error": "Le code du programme doit être au format 000.X0 ou XXXX0, où X est un chiffre ou une lettre et 0 un chiffre."
   }
 }
 </i18n>

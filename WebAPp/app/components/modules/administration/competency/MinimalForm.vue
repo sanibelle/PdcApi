@@ -67,6 +67,8 @@
         placeholder="Ex : 00SU"
         :min="3"
         :trimmed="true"
+        pattern="^0[A-Z0-9]{3}$"
+        :pattern-message="t('code-pattern-message-error')"
         :max="50"
         :required="true"
         :error-message="codeExistingErrorMessage"
@@ -100,9 +102,10 @@
   </div>
 </template>
 
-<i18n>
+<i18n lang="json">
 {
   "fr": {
+    "code-pattern-message-error": "Le code de compétence doit être au format 0XXX, où X est un chiffre ou une lettre et 0 un chiffre.",
     "title": "Créer une compétence",
     "competencyCode": "Code de compétence",
     "statementOfCompetency": "Énoncé de compétence",
@@ -110,7 +113,7 @@
     "competencyDescriptionPlaceholder": "Description détaillée de la compétence",
     "codeExistingErrorMessage": "Le code de compétence existe déjà.",
     "optionnalCompetency": "Compétence optionnelle",
-    "mandatoryCompetency": "Compétence obligatoire",
+    "mandatoryCompetency": "Compétence obligatoire"
   }
 }
 </i18n>

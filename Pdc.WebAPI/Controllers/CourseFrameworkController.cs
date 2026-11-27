@@ -19,10 +19,10 @@ public class CourseFrameworkController(
 {
 
     [Authorize(Roles = Roles.CourseFramework)]
-    [HttpGet("{id}")]
-    public async Task<ActionResult<TrackedCourseFrameworkDTO>> GetCourseFrameworkByCode(Guid id)
+    [HttpGet("{code}")]
+    public async Task<ActionResult<TrackedCourseFrameworkDTO>> GetCourseFrameworkByCode(string code)
     {
-        TrackedCourseFrameworkDTO courseFramework = await getCourseFrameworkByCodeUseCase.Execute(id);
+        TrackedCourseFrameworkDTO courseFramework = await getCourseFrameworkByCodeUseCase.Execute(code);
         return Ok(courseFramework);
     }
 

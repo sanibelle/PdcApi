@@ -11,7 +11,7 @@ test('Creating a full valid program of study', async ({ adminPage }) => {
   await expect(adminPage.locator('.modal-overlay')).toBeVisible();
    
   await adminPage.locator('input[name="name"]').fill('Creating a full valid program of study')
-  await adminPage.locator('input[name="code"]').fill('code3')
+  await adminPage.locator('input[name="code"]').fill('123.A4')
 
   await selectWithDataTestId(adminPage, 'programType');
 

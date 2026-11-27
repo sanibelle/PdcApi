@@ -55,8 +55,10 @@
   }
 
   .content {
-    justify-self: center;
-    align-self: start;
+    grid-area: content;
+    justify-self: stretch;
+    align-self: stretch;
+    min-width: 0;
   }
 
   .footer {
