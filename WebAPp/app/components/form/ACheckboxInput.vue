@@ -30,9 +30,9 @@
   });
 
   const validationRules = computed(() => {
-    const rules: [] = [];
+    const rules: Record<string, boolean | number | string[]> = {};
     // no required rules for the checkbox input since it can be false by default
-    return rules.join('|');
+    return rules;
   });
 </script>
 

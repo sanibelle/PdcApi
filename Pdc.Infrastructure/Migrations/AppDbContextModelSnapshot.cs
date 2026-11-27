@@ -17,7 +17,7 @@ namespace Pdc.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.9")
+                .HasAnnotation("ProductVersion", "10.0.15")
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true)
@@ -261,7 +261,7 @@ namespace Pdc.Infrastructure.Migrations
                     b.Property<Guid?>("ChangeRecordId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CodeId")
+                    b.Property<Guid?>("CodeId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("CourseCharacteristics")
@@ -278,24 +278,24 @@ namespace Pdc.Infrastructure.Migrations
                         .HasMaxLength(5000)
                         .HasColumnType("character varying(5000)");
 
-                    b.Property<Guid>("LaboratoryHoursId")
+                    b.Property<Guid?>("LaboratoryHoursId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("NameId")
+                    b.Property<Guid?>("NameId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("OtherSpecifications")
                         .HasMaxLength(5000)
                         .HasColumnType("character varying(5000)");
 
-                    b.Property<Guid>("PersonnalWorkHoursId")
+                    b.Property<Guid?>("PersonnalWorkHoursId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ProgramOfStudyCode")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("SemesterId")
+                    b.Property<Guid?>("SemesterId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("StatementOfComplexAuthenticTask")
@@ -306,7 +306,7 @@ namespace Pdc.Infrastructure.Migrations
                         .HasMaxLength(5000)
                         .HasColumnType("character varying(5000)");
 
-                    b.Property<Guid>("TheoryHoursId")
+                    b.Property<Guid?>("TheoryHoursId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -884,8 +884,7 @@ namespace Pdc.Infrastructure.Migrations
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkChangeableEntity", "Code")
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "CodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Pdc.Infrastructure.Entities.Identity.IdentityUserEntity", "CreatedBy")
                         .WithMany()
@@ -896,20 +895,17 @@ namespace Pdc.Infrastructure.Migrations
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkChangeableEntity", "LaboratoryHours")
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "LaboratoryHoursId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkChangeableEntity", "Name")
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "NameId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkChangeableEntity", "PersonnalWorkHours")
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "PersonnalWorkHoursId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.ProgramOfStudyEntity", "ProgramOfStudy")
                         .WithMany()
@@ -920,14 +916,12 @@ namespace Pdc.Infrastructure.Migrations
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkChangeableEntity", "Semester")
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "SemesterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkChangeableEntity", "TheoryHours")
                         .WithOne()
                         .HasForeignKey("Pdc.Infrastructure.Entities.CourseFramework.CourseFrameworkEntity", "TheoryHoursId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("ChangeRecord");
 

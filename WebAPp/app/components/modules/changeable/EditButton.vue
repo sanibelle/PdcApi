@@ -3,9 +3,11 @@
 
   const { t } = useI18n();
 
-  const model = defineModel<Changeable>({
+  const model = defineModel<Changeable<String | Number>>({
     required: true,
   });
+
+  // TODO seuls les admins on accès à la modification mineure
 
   const { open, close } = useModal();
 
@@ -16,7 +18,7 @@
       hideFooter: true,
       componentProps: {
         modelValue: model,
-        'onUpdate:modelValue': (val: Changeable) => {
+        'onUpdate:modelValue': (val: Changeable<String | Number>) => {
           model.value = val;
         },
         onClose: close,

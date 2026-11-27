@@ -10,7 +10,7 @@ public class ProgramOfStudyValidator : AbstractValidator<ProgramOfStudyDTO>
     {
         RuleFor(x => x.Code)
             .NotEmpty()
-            .MaximumLength(8);
+            .Matches(@"^\d{3}\.?[A-Z0-9]\d$");
 
         RuleFor(x => x.Name)
             .NotEmpty()

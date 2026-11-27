@@ -43,25 +43,13 @@
   });
 
   const validationRules = computed(() => {
-    const rules = ['integer'];
+    const rules: Record<string, boolean | number | string[]> = {};
 
-    if (props.required) {
-      rules.push('required');
-    }
-
-    if (props.integer) {
-      rules.push('integer');
-    }
-
-    if (props.min !== null) {
-      rules.push(`min_value:${props.min}`);
-    }
-
-    if (props.max !== null) {
-      rules.push(`max_value:${props.max}`);
-    }
-
-    return rules.join('|');
+    if (props.required) rules.required = true;
+    if (props.integer) rules.integer = true;
+    if (props.min !== null) rules.min = props.min;
+    if (props.max !== null) rules.max = props.max;
+    return rules;
   });
 </script>
 

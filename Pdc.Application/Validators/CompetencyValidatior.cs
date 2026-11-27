@@ -12,7 +12,7 @@ public class CompetencyValidatior : AbstractValidator<CompetencyDTO>
     {
         RuleFor(x => x.Code)
             .NotEmpty()
-            .MaximumLength(8);
+            .Matches(@"^0[A-Z0-9]{3}$");
 
         RuleFor(x => x.StatementOfCompetency)
             .NotEmpty()

@@ -9,6 +9,7 @@ public class CreateCourseFrameworkValidator : AbstractValidator<CreateCourseFram
     {
         RuleFor(x => x.Code)
             .NotEmpty()
+            .Matches(@"^[0-9]{3}-[A-Z0-9]{3}-[A-Z]{2}$")
             .MaximumLength(11);
 
         RuleFor(x => x.Name)

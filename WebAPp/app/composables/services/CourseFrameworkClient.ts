@@ -12,7 +12,7 @@ export const useCourseFrameworkClient = () => {
 
   const fetchCourseFrameworkByCode = async (code: string): Promise<TrackedCourseFramework> => {
     const api = useApi();
-    const courseFramework = await api.Get<CourseFramework>(`/programOfStudy/${code}/courseFramework`);
+    const courseFramework = await api.Get<TrackedCourseFramework>(`/courseFramework/${code}`);
     if (courseFramework == null) {
       throw new Error(`Program with code ${code} not found`);
     }

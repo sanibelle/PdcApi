@@ -7,7 +7,7 @@ namespace TestDataSeeder.Builders.Models;
 
 public class ProgramOfStudyBuilder
 {
-    private string _code = "TES" + new Random().Next(1000, 9999);
+    private string _code = $"{Random.Shared.Next(100, 1000)}.A{Random.Shared.Next(0, 10)}";
     private string _name = "Default Program";
     private ProgramType _programType = ProgramType.DEC;
     private int _monthsDuration = 36;

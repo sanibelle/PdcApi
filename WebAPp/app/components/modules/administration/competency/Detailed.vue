@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <ModulesAdministrationCompetencyComponentsTheCompetencyHeader :competency="competency" />
+  <ModulesAdministrationCompetencyComponentsTheHeader :competency="competency" />
   <CommonTemplateAPanel>
     <template #header-col-left>
       {{ t('statementOfCompetency') }}

@@ -8,7 +8,7 @@ public class ProgramOfStudyDTOBuilder
 {
     private Units _generalUnits = new Units(1);
     private Units _complementaryUnits = new Units(2);
-    private string _code = $"TES{Random.Shared.Next(100, 1000)}";
+    private string _code = $"{new Random().Next(100, 1000)}.A{new Random().Next(0, 10)}";
     private string _name = "Default Test Program Of Study";
     private ProgramType _programType = ProgramType.DEC;
     private int _monthsDuration = 30;

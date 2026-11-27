@@ -5,7 +5,7 @@
       default: () => [],
     },
     changeable: {
-      type: Object as PropType<Changeable>,
+      type: Object as PropType<Changeable<String | Number>>,
       required: true,
     },
   });

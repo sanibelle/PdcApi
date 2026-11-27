@@ -21,20 +21,17 @@ public class CourseFrameworkConfiguration : IEntityTypeConfiguration<CourseFrame
         builder.HasOne(x => x.Name)
             .WithOne()
             .HasForeignKey<CourseFrameworkEntity>("NameId")
-            .OnDelete(DeleteBehavior.Cascade)
-            .IsRequired();
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Code)
             .WithOne()
             .HasForeignKey<CourseFrameworkEntity>("CodeId")
-            .OnDelete(DeleteBehavior.Cascade)
-            .IsRequired();
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Semester)
             .WithOne()
             .HasForeignKey<CourseFrameworkEntity>("SemesterId")
-            .OnDelete(DeleteBehavior.Cascade)
-            .IsRequired();
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(x => x.FinalCourseObjective)
             .HasMaxLength(5000)
@@ -60,20 +57,17 @@ public class CourseFrameworkConfiguration : IEntityTypeConfiguration<CourseFrame
         builder.HasOne(x => x.PersonnalWorkHours)
             .WithOne()
             .HasForeignKey<CourseFrameworkEntity>("PersonnalWorkHoursId")
-            .OnDelete(DeleteBehavior.Cascade)
-            .IsRequired();
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.LaboratoryHours)
             .WithOne()
             .HasForeignKey<CourseFrameworkEntity>("LaboratoryHoursId")
-            .OnDelete(DeleteBehavior.Cascade)
-            .IsRequired();
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.TheoryHours)
             .WithOne()
             .HasForeignKey<CourseFrameworkEntity>("TheoryHoursId")
-            .OnDelete(DeleteBehavior.Cascade)
-            .IsRequired();
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(x => x.Prerequisites)
             .WithMany()
